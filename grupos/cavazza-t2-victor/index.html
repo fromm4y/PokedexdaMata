@@ -163,7 +163,7 @@ nav button.active{color:#fff}
             <div style="font-size:45px">📷</div>
             <strong>Escolha uma foto</strong>
             <p class="small">JPG ou imagem tirada pela câmera.</p>
-            <button class="btn" onclick="document.getElementById('foto').click()">Selecionar foto</button>
+            <button class="btn" id="btnTirarFoto" onclick="document.getElementById('foto').click()">📷 Tirar foto</button>
             <input id="foto" type="file" accept="image/jpeg,image/jpg,image/png,image/webp" capture="environment" hidden>
           </div>
         </div>
@@ -393,12 +393,30 @@ renderAlbum();
 const tutorialSlides=[{title:'Olá, explorador!',text:'Eu sou seu guia bigodudo. Vou mostrar como usar o Cogumelo Explorer antes de começarmos a aventura.',button:'Vamos lá →'},{title:'1. Fotografe com cuidado',text:'Toque em Escanear e escolha uma foto nítida. Mostre o cogumelo inteiro e tente usar boa iluminação.',button:'Próximo →'},{title:'2. Confira o resultado',text:'O app só mostra uma identificação quando a confiança chega a 80%. Se não tiver certeza, tente outra foto.',button:'Próximo →'},{title:'3. Colecione e aprenda',text:'Guarde novas descobertas no Álbum, veja a raridade e visite os Guias. Nunca coma um cogumelo desconhecido!',button:'Entrar no app 🍄'}];let tutorialIndex=0;function paintTutorial(){const s=tutorialSlides[tutorialIndex];document.getElementById('tutorialStep').textContent='PASSO '+(tutorialIndex+1)+' DE '+tutorialSlides.length;document.getElementById('tutorialTitle').textContent=s.title;document.getElementById('tutorialText').textContent=s.text;document.getElementById('tutorialNext').textContent=s.button;document.querySelectorAll('.tutorialDots i').forEach((d,i)=>d.classList.toggle('on',i===tutorialIndex))}function finishTutorial(){document.getElementById('tutorialOverlay').classList.add('done');try{localStorage.setItem('ce_tutorial_seen','yes')}catch(e){}}document.getElementById('tutorialNext').addEventListener('click',()=>{if(tutorialIndex<tutorialSlides.length-1){tutorialIndex++;paintTutorial()}else finishTutorial()});document.getElementById('tutorialSkip').addEventListener('click',finishTutorial);try{if(localStorage.getItem('ce_tutorial_seen')==='yes')finishTutorial()}catch(e){}paintTutorial();
 </script>
 
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+.scanner{grid-template-columns:1fr!important}
+.drop{min-height:260px}
+nav button{font-size:15px;min-height:48px}
+nav button.active{color:#fff;background:#3a1418;border-radius:12px}
+.btn{min-height:46px}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
 <script src="/comum/adaptador.js"></script>
 <script>
+/* A barra de baixo agora marca a aba em que você está. */
+(function () {
+  const original = window.mostrar;
+  window.mostrar = function (id) {
+    original(id);
+    document.querySelectorAll("nav button").forEach(b => b.classList.toggle("active", (b.getAttribute("onclick") || "").includes("'" + id + "'")));
+  };
+})();
 PokedexAdaptador.iniciar({
+  galeria: { depoisDe: "#btnTirarFoto", input: "#foto", classe: "btn secondary", texto: "🖼️ Galeria" },
   icone: "🍄", fauna: false,
   cor: "#e31b23", cor2: "#f7eadb",
   escuro: () => true,

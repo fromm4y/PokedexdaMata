@@ -257,6 +257,8 @@
       });
     });
     ref.insertAdjacentElement("afterend", b);
+    // sem flex/grid no pai, os botões ficariam grudados
+    if (!/flex|grid/.test(getComputedStyle(ref.parentElement).display)) b.style.marginLeft = "8px";
   }
 
   /* Mostra de novo o resultado antigo do front (ex.: para usar um minigame
