@@ -11,6 +11,7 @@
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
 //   - Missões 1 e 2: o documento dizia "ornitólogos" e "Aves brasileiras", mas os dois fronts do grupo (Réptisfera e All Star 🐍) são de RÉPTEIS; ajustado para répteis (confirmado pela professora).
 //   - Missões 3 a 6: o documento tinha erros de aspas e o nome "const A" no lugar de CERTEZA_MINIMA; as frases e o número (80) do grupo foram mantidos.
+//   - Missão 5: a frase do grupo foi completada para fazer sentido ("Estou em dúvida 95" → "Só tenho 95% de certeza de qual réptil é esse…").
 //   - O front (Réptisfera) não tinha identificação por IA; foi ligado o botão "Identificar réptil".
 // ============================================================================
 
@@ -42,7 +43,7 @@ function conferirFoto(foto) {
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "Estou em dúvida " + r.confianca + " Escolha outra foto";
+  return "🦎 Estou em dúvida! Só tenho " + r.confianca + "% de certeza de qual réptil é esse. Escolha outra foto, mais de pertinho e mostrando o bicho inteiro! 🐢";
 }
 
 // Missão 6: quando a IA acerta

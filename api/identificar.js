@@ -537,6 +537,11 @@ function aplicarMissoes(missoes, data) {
     r.mensagem_backend = `🚫 Não reconhecemos porque isso parece ser ${oque}, e aqui a gente só reconhece ${missoes.O_QUE_PROCURAR}.`;
     r.mensagem = r.mensagem_backend;
   } else if (!r.identificado || r.confianca < missoes.CERTEZA_MINIMA) {
+    // Às vezes a IA tem certeza de que é do tema ("é um réptil") mas não de
+    // QUAL espécie; aí a confiança vem alta (95%) e a mensagem de dúvida
+    // ficava sem sentido ("Estou em dúvida 95"). Na dúvida, o número mostrado
+    // fica sempre abaixo da certeza mínima do grupo.
+    if (r.confianca >= missoes.CERTEZA_MINIMA) r.confianca = Math.max(0, Math.min(r.confianca, missoes.CERTEZA_MINIMA - 10));
     r.identificado = false;
     r.mensagem_backend = String(missoes.mensagemDeDuvida(r));
     r.mensagem = r.mensagem_backend;
