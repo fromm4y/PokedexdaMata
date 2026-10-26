@@ -29,6 +29,7 @@ h1{margin:0 0 4px;font-size:28px}
 .ok{color:var(--ok)}.bad{color:var(--bad)}
 .meta{color:var(--dim);font-size:13px;margin-top:4px}
 .prob{margin:8px 0 0;padding-left:18px;color:var(--bad);font-size:13px}
+.pend{margin-top:8px;font-size:13px;color:#ffd166}
 .vazio{color:var(--dim);padding:30px;text-align:center;border:1px dashed var(--line);border-radius:14px}
 </style>
 </head>
@@ -52,6 +53,7 @@ function desenhar(){
         <span class="st ${g.tudo_certo?"ok":"bad"}">${g.tudo_certo?"✅ pronto":"⚠️ falta arrumar"}</span></div>
       <div class="meta">${[g.escola,g.turma,g.procurar&&("procura: "+g.procurar),g.integrantes].filter(Boolean).map(esc).join(" · ")}</div>
       ${g.problemas?`<ul class="prob">${g.problemas.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>`:""}
+      ${g.pendencias?`<div class="pend">⚠️ Completar com o grupo: ${esc(g.pendencias.join(", "))}</div>`:""}
     </a>`).join(""):`<div class="vazio">Nenhum grupo encontrado.</div>`;
 }
 fetch("/api/identificar").then(r=>r.json()).then(d=>{

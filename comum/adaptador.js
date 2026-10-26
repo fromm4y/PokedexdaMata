@@ -88,14 +88,21 @@
     }
   }
 
+  /* "Tentar outra foto": zera os seletores de arquivo (senão escolher a MESMA
+     foto de novo não faz nada) e chama o "nova foto" do front, se houver. */
+  function novaFoto() {
+    document.querySelectorAll('input[type="file"]').forEach(i => { try { i.value = ""; } catch (e) {} });
+    if (CFG.novaFoto) CFG.novaFoto();
+  }
+
   function acoesFinais(info) {
     const lista = [];
     if (CFG.salvar) lista.push({ texto: "💾 Salvar no álbum", principal: true, aoClicar: () => CFG.salvar(info) });
     if (CFG.acoesExtras) lista.push(...(CFG.acoesExtras(info) || []));
-    lista.push({ texto: "🔍 Reconhecer outra", principal: !CFG.salvar, aoClicar: () => CFG.novaFoto && CFG.novaFoto() });
+    lista.push({ texto: "🔍 Reconhecer outra", principal: !CFG.salvar, aoClicar: novaFoto });
     return lista;
   }
-  const tentarOutra = () => [{ texto: "Tentar outra foto", principal: true, aoClicar: () => CFG.novaFoto && CFG.novaFoto() }];
+  const tentarOutra = () => [{ texto: "Tentar outra foto", principal: true, aoClicar: novaFoto }];
 
   /* ---------- 1) a conversa com a IA vira pop-up ---------- */
   const fetchOriginal = window.fetch.bind(window);

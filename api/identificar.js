@@ -326,6 +326,7 @@ function painelDosGrupos(chaves) {
       link: `/grupos/${slug}/`,
       nome: info.nome || slug,
       escola: info.escola, turma: info.turma, integrantes: info.integrantes,
+      pendencias: info.pendencias && info.pendencias.length ? info.pendencias : undefined,
       procurar: missoes ? missoes.O_QUE_PROCURAR : undefined,
       tudo_certo: problemas.length === 0,
       problemas: problemas.length ? problemas : undefined
