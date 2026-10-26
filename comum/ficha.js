@@ -364,40 +364,50 @@
     const toque = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
     return !toque && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) && window.isSecureContext;
   }
-  function webcam() {
-    return new Promise(resolve => {
-      const { pop, corpo, acoes } = abrirPopup("fp-box-aviso");
-      corpo.innerHTML = `<div class="fp-aviso"><video class="fp-video" autoplay playsinline muted></video><p class="fp-detalhe">Enquadre bem e toque em Capturar.</p></div>`;
-      const video = corpo.querySelector("video");
-      let fluxo = null, entregue = false;
-      pop._aoFechar = () => { if (fluxo) fluxo.getTracks().forEach(t => t.stop()); if (!entregue) resolve(null); };
-      botoes(acoes, [{ texto: "📁 Escolher arquivo", aoClicar: () => { entregue = true; resolve("arquivo"); } },
-        { texto: "📸 Capturar", principal: true, fechar: false, aoClicar: () => {
-        if (!video.videoWidth) return;
-        const c = document.createElement("canvas");
-        c.width = video.videoWidth; c.height = video.videoHeight;
-        c.getContext("2d").drawImage(video, 0, 0);
-        c.toBlob(b => { entregue = true; fechar(); resolve(new File([b], "webcam.jpg", { type: "image/jpeg" })); }, "image/jpeg", .9);
-      } }]);
-      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false })
-        .then(s => { fluxo = s; video.srcObject = s; })
-        .catch(() => { entregue = true; fechar(); resolve("sem-camera"); });
-    });
+  /* escolherArquivo(): abre a pasta de arquivos NA HORA do toque (o navegador
+     só deixa abrir dentro do próprio clique) com um campo sem "capture", para
+     abrir a galeria/pasta, e não a câmera. */
+  function escolherArquivo(aoEscolher) {
+    const i = document.createElement("input");
+    i.type = "file"; i.accept = "image/*"; i.style.display = "none";
+    document.body.appendChild(i);
+    i.addEventListener("change", () => { const f = i.files && i.files[0]; i.remove(); if (f) aoEscolher(f); });
+    i.click();
+  }
+  function webcam(aoEscolher) {
+    const { pop, corpo, acoes } = abrirPopup("fp-box-aviso");
+    corpo.innerHTML = `<div class="fp-aviso"><video class="fp-video" autoplay playsinline muted></video><p class="fp-detalhe">Enquadre bem e toque em Capturar.</p></div>`;
+    const video = corpo.querySelector("video");
+    let fluxo = null;
+    pop._aoFechar = () => { if (fluxo) fluxo.getTracks().forEach(t => t.stop()); };
+    const arquivo = { texto: "📁 Escolher arquivo", aoClicar: () => escolherArquivo(aoEscolher) };
+    botoes(acoes, [arquivo, { texto: "📸 Capturar", principal: true, fechar: false, aoClicar: () => {
+      if (!video.videoWidth) return;
+      const c = document.createElement("canvas");
+      c.width = video.videoWidth; c.height = video.videoHeight;
+      c.getContext("2d").drawImage(video, 0, 0);
+      c.toBlob(b => { fechar(); aoEscolher(new File([b], "webcam.jpg", { type: "image/jpeg" })); }, "image/jpeg", .9);
+    } }]);
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false })
+      .then(s => { fluxo = s; video.srcObject = s; })
+      .catch(() => {
+        // sem webcam (ou permissão negada): fica só o botão de escolher arquivo
+        corpo.innerHTML = `<div class="fp-aviso"><div class="fp-aviso-ic">📷</div><h3>Não consegui abrir a câmera</h3><p class="fp-detalhe">Escolha uma foto do computador.</p></div>`;
+        acoes.innerHTML = "";
+        botoes(acoes, [Object.assign({}, arquivo, { principal: true })]);
+      });
   }
   /* ligarCamera(input, aoEscolher): no computador, o clique no "Tirar foto"
      abre a webcam em vez da pasta de arquivos. No tablet, nada muda. */
   function ligarCamera(input, aoEscolher) {
     if (!input) return;
     input.addEventListener("click", e => {
-      if (!temWebcam() || input._fpPular) { input._fpPular = false; return; }
+      if (!temWebcam()) return;
       e.preventDefault();
-      webcam().then(f => {
-        // "📁 Escolher arquivo" (ou câmera bloqueada): abre a pasta normal
-        if (f === "arquivo" || f === "sem-camera") { input._fpPular = true; input.click(); return; }
-        if (f) aoEscolher(f);
-      });
+      webcam(aoEscolher);
     });
   }
+
 
   /* ---------- fotos nítidas e certas das espécies ----------
      Busca a foto principal do artigo da Wikipédia da espécie (pelo nome
