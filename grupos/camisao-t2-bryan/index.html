@@ -213,6 +213,18 @@ const oldScreen=screen;screen=function(id){oldScreen(id);if(id==='jogo'&&!docume
 })();
 </script>
 
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+/* imagem do detetive numa moldura só, alinhada com o texto */
+.hero-art{align-self:center!important;padding:0!important;overflow:hidden}
+.character-slot{border:0!important;background:none!important;height:auto!important;min-height:0!important;aspect-ratio:3/2}
+.character-image-slot img{object-fit:cover!important;border-radius:30px!important}
+/* a barra de baixo não cobre mais os botões */
+main{padding-bottom:120px!important}
+.nav button{font-size:13px!important}
+.action,.primary{min-height:46px}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
