@@ -117,6 +117,10 @@
     // sem o nome, o back-end usa o modelo atual.
     if (/^gemini-(1|2)\./.test(pedido.modelo || "")) delete pedido.modelo;
     if (ultimoArquivo) { pedido.tipo = ultimoArquivo.type || "application/octet-stream"; pedido.tamanho = ultimoArquivo.size; }
+    if (CFG.instrucaoExtra) {
+      const t = pedido.body && pedido.body.contents && pedido.body.contents[0] && (pedido.body.contents[0].parts || []).find(p => typeof p.text === "string");
+      if (t) t.text += "\n" + CFG.instrucaoExtra;
+    }
     FichaPokedex.carregando(CFG.carregando);
     await reduzirSeGrande(pedido);
 
@@ -143,6 +147,9 @@
       FichaPokedex.aviso({ tipo: "erro", texto: "A IA não devolveu uma resposta. Tente outra foto.", acoes: tentarOutra() });
       return resp;
     }
+    // Front de texto livre: ele recebe o texto (texto_front), não o JSON.
+    const devolver = texto => { parte.text = texto; return new Response(JSON.stringify(dados), { status: 200, headers: { "Content-Type": "application/json" } }); };
+    const textoFront = typeof info.texto_front === "string" ? info.texto_front : null;
     if (info.fora_do_tema) {
       FichaPokedex.aviso({ tipo: "fora", texto: info.mensagem_backend, acoes: tentarOutra() });
     } else if (!info.identificado) {
@@ -158,10 +165,9 @@
       // é a Missão 3 no back-end; então, quando o back-end aceitou, o front
       // também aceita (senão o álbum e os pontos do front não funcionariam).
       const paraFront = Object.assign({}, info, { confianca: Math.max(Number(info.confianca) || 0, CFG.limiarFront) });
-      parte.text = JSON.stringify(paraFront);
-      return new Response(JSON.stringify(dados), { status: 200, headers: { "Content-Type": "application/json" } });
+      return devolver(textoFront !== null ? textoFront : JSON.stringify(paraFront));
     }
-    return resp;
+    return textoFront !== null ? devolver(textoFront) : resp;
   };
 
   /* ---------- 2) arquivo que não é foto: o porteiro decide ---------- */

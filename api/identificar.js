@@ -267,17 +267,25 @@ function personalizarPedido(missoes, original, aviso) {
   const body = JSON.parse(JSON.stringify(original));
   const partes = body?.contents?.[0]?.parts || [];
   const texto = partes.find(p => typeof p.text === "string");
+  // Front que pede a resposta em TEXTO LIVRE (sem formato JSON): pedimos o
+  // JSON da ficha e, num campo à parte (texto_front), o texto que o front lê.
+  const textoLivre = !(body.generationConfig && body.generationConfig.responseSchema);
   const extra =
     `Você é ${missoes.ESPECIALISTA}. Procure na foto: ${missoes.O_QUE_PROCURAR}.\n` +
     `Em "confianca", dê um número de 0 a 100 dizendo o quanto você tem certeza; seja honesto. ` +
     `Em "nome_popular", escreva o nome popular em português do que você identificou. ` +
     `Se a foto não mostra ${missoes.O_QUE_PROCURAR}, use "identificado": false.` +
     `\nAlém dos campos pedidos abaixo, preencha também:` + regrasTema(missoes.O_QUE_PROCURAR) + REGRAS_FICHA +
-    (aviso ? `\nInclua este aviso de segurança na resposta: "${aviso}"` : "");
+    (aviso ? `\nInclua este aviso de segurança na resposta: "${aviso}"` : "") +
+    (textoLivre ? `\nResponda em JSON. No campo "texto_front", escreva a resposta em texto corrido, do jeito que as instruções do grupo abaixo pedem.` : "");
   if (texto) texto.text = extra + "\n\n" + texto.text;
   else partes.unshift({ text: extra });
 
   const cfg = body.generationConfig = body.generationConfig || {};
+  if (textoLivre) {
+    cfg.responseMimeType = "application/json";
+    cfg.responseSchema = { type: "object", properties: { texto_front: { type: "string" } }, required: ["texto_front"] };
+  }
   const schema = cfg.responseSchema;
   if (schema && schema.type === "object") {
     // Campos que o grupo já definiu ficam do jeito dele (ex.: curiosidades
