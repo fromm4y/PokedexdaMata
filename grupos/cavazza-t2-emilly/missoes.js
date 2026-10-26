@@ -12,7 +12,7 @@
 //   - O grupo não entregou o documento do back-end: as 6 missões foram preenchidas pela professora, seguindo a ideia do app (a elfa especialista em flores).
 //   - Front usado: Dattflower_nova_versao_ajustada.html (a versão mais nova).
 //   - O histórico guardava a foto em tamanho original e enchia o espaço do navegador: agora guarda uma versão menor.
-//   - Em branco no documento (usada a mensagem do exemplo; completar com o grupo): Missão 1, Missão 2, Missão 3, Nome do grupo e integrantes, Missão 4 (mensagem de não é foto), Missão 4 (mensagem de foto grande), Missão 5, Missão 6.
+//   - Escritas pela professora (estavam em branco ou incompletas no documento): Missão 1, Missão 2, Missão 3, Nome do grupo e integrantes, Missão 4 (mensagem de não é foto), Missão 4 (mensagem de foto grande), Missão 5, Missão 6.
 // ============================================================================
 
 // Quem é o grupo (aparece no painel)
@@ -21,8 +21,7 @@ const GRUPO = {
   integrantes: "Emilly",
   escola: "Cavazza",
   turma: "Turma 2",
-  tema: "Flores",
-  pendencias: ["Missão 1", "Missão 2", "Missão 3", "Nome do grupo e integrantes", "Missão 4 (mensagem de não é foto)", "Missão 4 (mensagem de foto grande)", "Missão 5", "Missão 6"]
+  tema: "Flores"
 };
 
 // Missão 1: quem a IA vai fingir ser
@@ -37,19 +36,19 @@ const CERTEZA_MINIMA = 60;
 
 // Missão 4: o porteiro
 function conferirFoto(foto) {
-  if (!foto.type.startsWith("image/")) return "📷 Isso não é uma foto!";
-  if (foto.size > 10000000) return "🐘 Foto grande demais! Escolha outra.";
+  if (!foto.type.startsWith("image/")) return "🧝‍♀️ A elfa avisou: isso não é uma foto! Mostre uma flor pra ela.";
+  if (foto.size > 10000000) return "🌸 Essa foto é grande demais pro jardim da elfa! Escolha uma menor.";
   return "ok";
 }
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "🤔 Tenho só " + r.confianca + "% de certeza. Tenta outra foto, mais de perto!";
+  return "🧝‍♀️ A elfa está com só " + r.confianca + "% de certeza… mostre a flor mais de pertinho!";
 }
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "🎉 Achei! É " + r.nome_popular + "! Que demais!";
+  return "🌷 A elfa descobriu: essa flor é " + r.nome_popular + "! Que lindeza!";
 }
 
 // ----------------------------------------------------------------------------

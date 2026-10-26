@@ -11,7 +11,7 @@
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
 //   - O grupo não entregou o documento do back-end (só o README): as 6 missões foram preenchidas pela professora para o app funcionar.
 //   - Nome e integrantes vieram do README do grupo (o nome do projeto ficou em branco lá; usado o nome do app).
-//   - Em branco no documento (usada a mensagem do exemplo; completar com o grupo): Missão 1, Missão 2, Missão 3, Missão 4 (mensagem de não é foto), Missão 4 (mensagem de foto grande), Missão 5, Missão 6.
+//   - Escritas pela professora (estavam em branco ou incompletas no documento): Missão 1, Missão 2, Missão 3, Missão 4 (mensagem de não é foto), Missão 4 (mensagem de foto grande), Missão 5, Missão 6.
 // ============================================================================
 
 // Quem é o grupo (aparece no painel)
@@ -20,8 +20,7 @@ const GRUPO = {
   integrantes: "Victor, Kaun, Miguel e Bruno",
   escola: "Cavazza",
   turma: "Turma 2",
-  tema: "Cogumelos (venenoso ou não)",
-  pendencias: ["Missão 1", "Missão 2", "Missão 3", "Missão 4 (mensagem de não é foto)", "Missão 4 (mensagem de foto grande)", "Missão 5", "Missão 6"]
+  tema: "Cogumelos (venenoso ou não)"
 };
 
 // Missão 1: quem a IA vai fingir ser
@@ -36,19 +35,19 @@ const CERTEZA_MINIMA = 80;
 
 // Missão 4: o porteiro
 function conferirFoto(foto) {
-  if (!foto.type.startsWith("image/")) return "📷 Isso não é uma foto!";
-  if (foto.size > 10000000) return "🐘 Foto grande demais! Escolha outra.";
+  if (!foto.type.startsWith("image/")) return "🍄 O guia bigodudo diz: isso não é uma foto! Mostre um cogumelo.";
+  if (foto.size > 10000000) return "🎩 Essa foto é grande demais pro chapéu do guia! Escolha uma menor.";
   return "ok";
 }
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "🤔 Tenho só " + r.confianca + "% de certeza. Tenta outra foto, mais de perto!";
+  return "🍄 Hmm… só " + r.confianca + "% de certeza. Mostre o cogumelo inteiro, com bastante luz!";
 }
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "🎉 Achei! É " + r.nome_popular + "! Que demais!";
+  return "🍄 Descoberta: é " + r.nome_popular + "! Lembre: só observar, nunca comer!";
 }
 
 // ----------------------------------------------------------------------------

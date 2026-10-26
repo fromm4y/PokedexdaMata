@@ -11,7 +11,7 @@
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
 //   - Missão 6: só foi colocado um "!" depois do nome da fruta, para a frase não ficar emendada.
 //   - Front usado: FrutAI_visual_vibrante.html (a versão mais nova; frutAi_tela_corrigida.html e o "Documento sem título" ficaram de fora).
-//   - Em branco no documento (usada a mensagem do exemplo; completar com o grupo): Missão 3 (por que escolheram 60).
+//   - Escritas pela professora (estavam em branco ou incompletas no documento): Missão 3 (por que escolheram 60).
 // ============================================================================
 
 // Quem é o grupo (aparece no painel)
@@ -20,8 +20,7 @@ const GRUPO = {
   integrantes: "Caroline, Manuela, Pedro e Erick",
   escola: "Adherbal",
   turma: "Turma 2",
-  tema: "Frutas brasileiras",
-  pendencias: ["Missão 3 (por que escolheram 60)"]
+  tema: "Frutas brasileiras"
 };
 
 // Missão 1: quem a IA vai fingir ser

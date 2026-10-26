@@ -12,7 +12,7 @@
 //   - Missões 1, 2 e 6: só ajustes de escrita ("em", vírgula e pontuação); as ideias são do grupo.
 //   - O álbum guardava a foto de cada ave e podia encher o espaço do navegador: agora guarda só os dados (o álbum desenha a ave, não usa a foto).
 //   - Corrigido um erro do front: faltava criar STATS_KEY e PROFILE_KEY (a tela de Perfil e as Conquistas de som não funcionavam).
-//   - Em branco no documento (usada a mensagem do exemplo; completar com o grupo): Missão 3 (por que escolheram 80).
+//   - Escritas pela professora (estavam em branco ou incompletas no documento): Missão 3 (por que escolheram 80).
 // ============================================================================
 
 // Quem é o grupo (aparece no painel)
@@ -21,8 +21,7 @@ const GRUPO = {
   integrantes: "Victor, Henzo e Lara",
   escola: "Camisão",
   turma: "Turma 2",
-  tema: "Aves do Brasil",
-  pendencias: ["Missão 3 (por que escolheram 80)"]
+  tema: "Aves do Brasil"
 };
 
 // Missão 1: quem a IA vai fingir ser

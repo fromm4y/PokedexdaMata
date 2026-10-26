@@ -12,17 +12,16 @@
 //   - O grupo entregou o documento do back-end quase em branco: as missões foram preenchidas pela professora.
 //   - O front do grupo era só um catálogo de animais: foi adicionada a parte "Descobrir pela foto" (com câmera) e o "Meu Codex" (álbum), no mesmo visual do grupo.
 //   - As fotos do catálogo vinham de links soltos (o tucano e a ararinha usavam a mesma foto de outra arara): agora cada animal busca a foto certa pela espécie.
-//   - Em branco no documento (usada a mensagem do exemplo; completar com o grupo): Missão 1, Missão 2, Missão 3 (o número), Missão 4 (mensagem de não é foto), Missão 4 (mensagem de foto grande), Missão 5, Missão 6.
+//   - Escritas pela professora (estavam em branco ou incompletas no documento): Missão 1, Missão 2, Missão 3 (o número), Missão 4 (mensagem de não é foto), Missão 4 (mensagem de foto grande), Missão 5, Missão 6.
 // ============================================================================
 
 // Quem é o grupo (aparece no painel)
 const GRUPO = {
   nome: "Blinkis (Codex)",
-  integrantes: "Anna Laynara, Evelyn e Ester",
+  integrantes: "Anna Laynara, Evelyn e Sther",
   escola: "Camisão",
   turma: "Turma 2 - M",
-  tema: "Animais",
-  pendencias: ["Missão 1", "Missão 2", "Missão 3 (o número)", "Missão 4 (mensagem de não é foto)", "Missão 4 (mensagem de foto grande)", "Missão 5", "Missão 6"]
+  tema: "Animais"
 };
 
 // Missão 1: quem a IA vai fingir ser
@@ -37,19 +36,19 @@ const CERTEZA_MINIMA = 80;
 
 // Missão 4: o porteiro
 function conferirFoto(foto) {
-  if (!foto.type.startsWith("image/")) return "📷 Isso não é uma foto!";
-  if (foto.size > 10000000) return "🐘 Foto grande demais! Escolha outra.";
+  if (!foto.type.startsWith("image/")) return "💙 Ops! Isso não é uma foto! Mostre um animal pro Codex.";
+  if (foto.size > 10000000) return "💗 Essa foto é grande demais pro Codex! Escolha uma menor.";
   return "ok";
 }
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "🤔 Tenho só " + r.confianca + "% de certeza. Tenta outra foto, mais de perto!";
+  return "💛 O Codex tem só " + r.confianca + "% de certeza… tente outra foto do animal mais pertinho!";
 }
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "🎉 Achei! É " + r.nome_popular + "! Que demais!";
+  return "⭐ Novo animal no Codex: é " + r.nome_popular + "! Que fofura!";
 }
 
 // ----------------------------------------------------------------------------

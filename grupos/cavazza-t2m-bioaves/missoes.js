@@ -11,7 +11,7 @@
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
 //   - O histórico guardava a foto em tamanho original e enchia o espaço do navegador: agora guarda uma versão menor.
 //   - O front fala em aves, animais, plantas e frutas, mas o documento escolheu "aves do mundo": valeu o documento.
-//   - Em branco no documento (usada a mensagem do exemplo; completar com o grupo): Missão 5, Missão 6.
+//   - Escritas pela professora (estavam em branco ou incompletas no documento): Missão 5, Missão 6.
 // ============================================================================
 
 // Quem é o grupo (aparece no painel)
@@ -20,8 +20,7 @@ const GRUPO = {
   integrantes: "Miguel e Clara",
   escola: "Cavazza",
   turma: "Turma 2 - Manhã",
-  tema: "Aves do mundo",
-  pendencias: ["Missão 5", "Missão 6"]
+  tema: "Aves do mundo"
 };
 
 // Missão 1: quem a IA vai fingir ser
@@ -43,12 +42,12 @@ function conferirFoto(foto) {
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "🤔 Tenho só " + r.confianca + "% de certeza. Tenta outra foto, mais de perto!";
+  return "🐦 Piu? Só tenho " + r.confianca + "% de certeza… tente outra foto com a ave mais pertinho!";
 }
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "🎉 Achei! É " + r.nome_popular + "! Que demais!";
+  return "🦜 Achei! Essa ave é " + r.nome_popular + "! Que penas lindas!";
 }
 
 // ----------------------------------------------------------------------------

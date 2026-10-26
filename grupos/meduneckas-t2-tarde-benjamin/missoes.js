@@ -9,7 +9,7 @@
 //    https://SEU-PROJETO.vercel.app/api/identificar?grupo=meduneckas-t2-tarde-benjamin
 //
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
-//   - Missões 1 e 2: o documento dizia "ornitólogos" e "Aves brasileiras", mas os dois fronts do grupo (Réptisfera e All Star 🐍) são de RÉPTEIS; ajustado para répteis. Vale conversar com o grupo.
+//   - Missões 1 e 2: o documento dizia "ornitólogos" e "Aves brasileiras", mas os dois fronts do grupo (Réptisfera e All Star 🐍) são de RÉPTEIS; ajustado para répteis (confirmado pela professora).
 //   - Missões 3 a 6: o documento tinha erros de aspas e o nome "const A" no lugar de CERTEZA_MINIMA; as frases e o número (80) do grupo foram mantidos.
 //   - O front (Réptisfera) não tinha identificação por IA; foi ligado o botão "Identificar réptil".
 // ============================================================================
@@ -27,7 +27,7 @@ const GRUPO = {
 const ESPECIALISTA = "um herpetólogo especialista em répteis do Brasil";
 
 // Missão 2: o que procurar na foto
-const O_QUE_PROCURAR = "réptil";
+const O_QUE_PROCURAR = "répteis";
 
 // Missão 3: quanta certeza a IA precisa ter (número de 0 a 100, sem aspas)
 // Por que o grupo escolheu: "Por que nunca é 100% de certeza"

@@ -10,7 +10,7 @@
 //
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
 //   - O grupo não entregou o documento do back-end: as 6 missões foram preenchidas pela professora para o app funcionar.
-//   - Em branco no documento (usada a mensagem do exemplo; completar com o grupo): Missão 1, Missão 2, Missão 3, Missão 4 (mensagem de não é foto), Missão 4 (mensagem de foto grande), Missão 5, Missão 6.
+//   - Escritas pela professora (estavam em branco ou incompletas no documento): Missão 1, Missão 2, Missão 3, Missão 4 (mensagem de não é foto), Missão 4 (mensagem de foto grande), Missão 5, Missão 6.
 // ============================================================================
 
 // Quem é o grupo (aparece no painel)
@@ -19,8 +19,7 @@ const GRUPO = {
   integrantes: "Guilherme",
   escola: "Cavazza",
   turma: "Turma 1",
-  tema: "Animais da Amazônia",
-  pendencias: ["Missão 1", "Missão 2", "Missão 3", "Missão 4 (mensagem de não é foto)", "Missão 4 (mensagem de foto grande)", "Missão 5", "Missão 6"]
+  tema: "Animais da Amazônia"
 };
 
 // Missão 1: quem a IA vai fingir ser
@@ -35,19 +34,19 @@ const CERTEZA_MINIMA = 80;
 
 // Missão 4: o porteiro
 function conferirFoto(foto) {
-  if (!foto.type.startsWith("image/")) return "📷 Isso não é uma foto!";
-  if (foto.size > 10000000) return "🐘 Foto grande demais! Escolha outra.";
+  if (!foto.type.startsWith("image/")) return "🐒 Ih! Isso não é uma foto! Mostre um bicho da Amazônia pra gente.";
+  if (foto.size > 10000000) return "🐊 Essa foto é maior que um jacaré-açu! Escolha uma menor.";
   return "ok";
 }
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "🤔 Tenho só " + r.confianca + "% de certeza. Tenta outra foto, mais de perto!";
+  return "🌳 A floresta está escondendo o bicho: só tenho " + r.confianca + "% de certeza. Tente outra foto!";
 }
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "🎉 Achei! É " + r.nome_popular + "! Que demais!";
+  return "🦜 Achei na Amazônia: é " + r.nome_popular + "! Que animal incrível!";
 }
 
 // ----------------------------------------------------------------------------

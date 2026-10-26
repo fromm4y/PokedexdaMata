@@ -12,7 +12,7 @@
 //   - Missões 1, 2 e 4: só correções de digitação ("frulticultor especilista", "a a a imagem").
 //   - O álbum guardava a foto em tamanho original e enchia o espaço do navegador: agora guarda uma versão menor.
 //   - Corrigido um erro do front: a variável lastDiscovery nunca era criada, então o botão "🗺️ Ver no mapa" não funcionava.
-//   - Em branco no documento (usada a mensagem do exemplo; completar com o grupo): Missão 4 (a mensagem de foto grande não fala do tamanho), Missão 5, Missão 6.
+//   - Escritas pela professora (estavam em branco ou incompletas no documento): Missão 4 (a mensagem de foto grande não fala do tamanho), Missão 5, Missão 6.
 // ============================================================================
 
 // Quem é o grupo (aparece no painel)
@@ -21,8 +21,7 @@ const GRUPO = {
   integrantes: "Ana e Bryan",
   escola: "Camisão",
   turma: "Turma 2",
-  tema: "Frutas do Brasil",
-  pendencias: ["Missão 4 (a mensagem de foto grande não fala do tamanho)", "Missão 5", "Missão 6"]
+  tema: "Frutas do Brasil"
 };
 
 // Missão 1: quem a IA vai fingir ser
@@ -38,18 +37,18 @@ const CERTEZA_MINIMA = 70;
 // Missão 4: o porteiro
 function conferirFoto(foto) {
   if (!foto.type.startsWith("image/")) return "n foi possivel carregar a imagem";
-  if (foto.size > 10000000) return "imagem n encontrada na verificação";
+  if (foto.size > 10000000) return "🕵️ Essa foto é grande demais pra lupa do detetive! Escolha uma menor.";
   return "ok";
 }
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "🤔 Tenho só " + r.confianca + "% de certeza. Tenta outra foto, mais de perto!";
+  return "🧐 O detetive tem só " + r.confianca + "% de certeza… tente outra foto com a fruta bem visível!";
 }
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "🎉 Achei! É " + r.nome_popular + "! Que demais!";
+  return "🕵️ Mistério resolvido! A fruta é " + r.nome_popular + "!";
 }
 
 // ----------------------------------------------------------------------------

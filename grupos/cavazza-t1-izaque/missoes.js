@@ -10,7 +10,7 @@
 //
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
 //   - Missão 2: "planta medicinais" virou "planta medicinal" (concordância).
-//   - Em branco no documento (usada a mensagem do exemplo; completar com o grupo): Missão 4 (mensagem de não é foto), Missão 4 (mensagem de foto grande), Missão 5, Missão 6.
+//   - Escritas pela professora (estavam em branco ou incompletas no documento): Missão 4 (mensagem de não é foto), Missão 4 (mensagem de foto grande), Missão 5, Missão 6.
 // ============================================================================
 
 // Quem é o grupo (aparece no painel)
@@ -19,8 +19,7 @@ const GRUPO = {
   integrantes: "Izaque, David, Nicy, Dav e Ana",
   escola: "Cavazza",
   turma: "Turma 1",
-  tema: "Plantas medicinais",
-  pendencias: ["Missão 4 (mensagem de não é foto)", "Missão 4 (mensagem de foto grande)", "Missão 5", "Missão 6"]
+  tema: "Plantas medicinais"
 };
 
 // Missão 1: quem a IA vai fingir ser
@@ -35,19 +34,19 @@ const CERTEZA_MINIMA = 60;
 
 // Missão 4: o porteiro
 function conferirFoto(foto) {
-  if (!foto.type.startsWith("image/")) return "📷 Isso não é uma foto!";
-  if (foto.size > 10000000) return "🐘 Foto grande demais! Escolha outra.";
+  if (!foto.type.startsWith("image/")) return "🏹 Caçador, isso não é uma foto! Mire numa planta e tente de novo.";
+  if (foto.size > 10000000) return "🎒 Essa foto é pesada demais pra mochila do caçador! Escolha uma menor.";
   return "ok";
 }
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "🤔 Tenho só " + r.confianca + "% de certeza. Tenta outra foto, mais de perto!";
+  return "🔎 A pista está fraca: só " + r.confianca + "% de certeza. Chegue mais perto da planta!";
 }
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "🎉 Achei! É " + r.nome_popular + "! Que demais!";
+  return "🏹 Caçada concluída! Essa planta é " + r.nome_popular + "! (Planta medicinal só com um adulto, viu?)";
 }
 
 // ----------------------------------------------------------------------------

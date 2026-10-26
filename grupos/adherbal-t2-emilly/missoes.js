@@ -12,7 +12,7 @@
 //   - Missão 3 estava em branco: usado 80, o mesmo número que o front do grupo já usava.
 //   - Missão 5: só foi colocado o "%" depois do número.
 //   - Missão 6: o grupo escreveu só "Para" no final (provavelmente "Parabéns") — conferir com o grupo.
-//   - Em branco no documento (usada a mensagem do exemplo; completar com o grupo): Missão 3 (número e por quê), Missão 6 (confirmar o final da frase).
+//   - Escritas pela professora (estavam em branco ou incompletas no documento): Missão 3 (número e por quê), Missão 6 (confirmar o final da frase).
 // ============================================================================
 
 // Quem é o grupo (aparece no painel)
@@ -21,8 +21,7 @@ const GRUPO = {
   integrantes: "Leonardo, Emilly e Ana",
   escola: "Adherbal",
   turma: "Turma 2",
-  tema: "Aves",
-  pendencias: ["Missão 3 (número e por quê)", "Missão 6 (confirmar o final da frase)"]
+  tema: "Aves"
 };
 
 // Missão 1: quem a IA vai fingir ser

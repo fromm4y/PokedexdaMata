@@ -10,8 +10,8 @@
 //
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
 //   - Missão 1: o documento misturava um nome de pessoa e "ornitólogo" (especialista em aves) com frutas; ficou "um especialista em frutas brasileiras".
-//   - Em branco no documento (usada a mensagem do exemplo; completar com o grupo): Missão 3 (por que escolheram 85), Missão 6.
 //   - Missão 5: o grupo escreveu só a 1ª parte; foi completada com "(…% de certeza)".
+//   - Escritas pela professora (estavam em branco ou incompletas no documento): Missão 3 (por que escolheram 85), Missão 6, Missão 5 (2ª parte da mensagem).
 // ============================================================================
 
 // Quem é o grupo (aparece no painel)
@@ -20,8 +20,7 @@ const GRUPO = {
   integrantes: "Henrique, Bryan e Laís",
   escola: "Adherbal",
   turma: "Turma 2",
-  tema: "Frutas brasileiras",
-  pendencias: ["Missão 3 (por que escolheram 85)", "Missão 6", "Missão 5 (2ª parte da mensagem)"]
+  tema: "Frutas brasileiras"
 };
 
 // Missão 1: quem a IA vai fingir ser
@@ -48,7 +47,7 @@ function mensagemDeDuvida(r) {
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "🎉 Achei! É " + r.nome_popular + "! Que demais!";
+  return "🍌 Uhuuul! Achamos: é " + r.nome_popular + "! Que fruta incrível do Brasil!";
 }
 
 // ----------------------------------------------------------------------------
