@@ -732,19 +732,93 @@ document.getElementById('messageAgain').onclick=reset;
 </script>
 
 
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+/* O grupo empilhou três temas; vale o último (branco, estilo Google).
+   Aqui arrumamos a grade, as conquistas e os textos que ficaram sem estilo. */
+.hero{grid-template-columns:280px minmax(0,1fr)!important;align-items:stretch}
+@media (max-width:760px){.hero{grid-template-columns:1fr!important}}
+.side{position:relative}
+.scientist{display:block!important;position:static!important;white-space:nowrap;font-size:58px!important;margin-top:16px;text-align:center}
+.camera{min-height:380px}
+.camera h2{font-size:28px}
+.pick{min-height:50px;display:inline-flex;align-items:center;padding:0 22px;font-size:16px}
+.photo-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.plant small{color:#3c4043!important;font-weight:700}
+/* faixa "Expedição" */
+.forest-hero{margin-top:22px;padding:26px 28px;border-radius:18px;background:linear-gradient(120deg,#e6f4ea,#fef7e0);border:1px solid #cfe5d4}
+.forest-hero .eyebrow{display:inline-block;font-size:12px;font-weight:900;letter-spacing:1.5px;color:#188038;margin-bottom:6px}
+.forest-hero h2{margin:4px 0 6px;font-size:26px;color:#202124}
+.forest-hero p{margin:0;color:#3c4043;font-size:16px}
+/* conquistas em cartões */
+.feature-grid{margin-top:22px}
+.feature-card{background:#fff;border:1px solid #dadce0;border-radius:18px;padding:22px 24px;box-shadow:0 1px 4px rgba(60,64,67,.16)}
+.feature-card h2{margin:0 0 4px;font-size:24px;color:#202124}
+.feature-card .hint{margin:0 0 14px;color:#5f6368}
+.achievements{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.achievement{display:flex;flex-direction:column;gap:4px;padding:14px;border-radius:14px;border:1px solid #dadce0;background:#f8f9fa}
+.achievement .icon{font-size:30px}
+.achievement strong{color:#202124;font-size:15px}
+.achievement small{color:#5f6368;font-size:13.5px}
+.achievement.unlocked{background:#e6f4ea;border-color:#81c995}
+.achievement.locked{opacity:.6;filter:grayscale(.6)}
+/* mini-app de baixo: textos legíveis */
+.home-mini-hero{background:linear-gradient(120deg,#e8f0fe,#e6f4ea)!important;border-color:#cfe5d4!important}
+.home-mini-copy h3{color:#202124!important;font-size:24px}
+.home-mini-copy p{color:#3c4043!important}
+.home-mini-copy span{color:#188038!important}
+.app-tab{min-height:56px;font-size:14px}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
 <script src="/comum/adaptador.js"></script>
 <script>
+/* Coleção e conquistas de verdade (antes eram só exemplos). */
+(function () {
+  const CHAVE = "cacadores_colecao";
+  const ler = () => { try { return JSON.parse(localStorage.getItem(CHAVE) || "[]"); } catch (e) { return []; } };
+  function desenhar() {
+    const lista = ler(), caixa = document.querySelector("#app-collection .collection");
+    if (lista.length && caixa) {
+      caixa.innerHTML = "";
+      lista.forEach(p => {
+        const d = document.createElement("div"); d.className = "collection-item";
+        d.innerHTML = '<div class="emoji">🌿</div><strong></strong><small></small>';
+        d.querySelector("strong").textContent = p.nome; d.querySelector("small").textContent = "Descoberta em " + p.data;
+        caixa.appendChild(d);
+      });
+    }
+    document.querySelectorAll("#achievements .achievement").forEach(a => {
+      const ok = lista.length >= Number(a.dataset.needed || 99);
+      a.classList.toggle("unlocked", ok); a.classList.toggle("locked", !ok);
+    });
+    const barra = document.querySelector("#app-achievements .progress span"), txt = document.querySelector("#app-achievements .mini-card span");
+    if (barra) barra.style.width = Math.min(100, lista.length / 3 * 100) + "%";
+    if (txt) txt.textContent = Math.min(lista.length, 3) + " de 3 descobertas";
+  }
+  window.salvarPlanta = info => {
+    const nome = info.nome_popular || info.nome || "Planta";
+    const lista = ler().filter(p => p.nome.toLowerCase() !== nome.toLowerCase());
+    lista.unshift({ nome, data: new Date().toLocaleDateString("pt-BR") });
+    try { localStorage.setItem(CHAVE, JSON.stringify(lista.slice(0, 40))); } catch (e) {}
+    desenhar();
+    const aba = document.querySelector('.app-tab[data-page="app-collection"]');
+    if (aba) aba.click();
+    document.querySelector(".app-shell").scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  desenhar();
+})();
 PokedexAdaptador.iniciar({
   icone: "🌿", fauna: false,
-  cor: "#e4bb45", cor2: "#ffd96a",
-  escuro: () => true,
-  noturno: { fundo: "#141210", texto: "#fffaf0", suave: "#d6d0c2" },
+  cor: "#1a73e8", cor2: "#34a853",
+  escuro: () => false,
+  claro: { fundo: "#ffffff", texto: "#202124", suave: "#5f6368" },
   carregando: "🔎 O cientista está analisando a planta...",
   esconder: ["#result", "#message"],
   alerta: info => (info.perigo === true ? "Atenção: esta planta pode ser perigosa. " : "") + "Nunca use uma planta como remédio sem orientação de um profissional de saúde.",
+  salvar: info => salvarPlanta(info),
   novaFoto: () => document.getElementById("newPhoto").click()
 });
 </script>
