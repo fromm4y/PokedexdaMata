@@ -135,6 +135,13 @@ document.querySelectorAll("[data-category]").forEach(btn=>btn.addEventListener("
 render();
 </script>
 
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+@media (min-width:700px){body>header,body>main{zoom:1.1}}
+button,.chip{min-height:44px}
+.category small{font-size:13.5px}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
