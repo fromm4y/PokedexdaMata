@@ -106,6 +106,9 @@
     let pedido;
     try { pedido = JSON.parse(opt.body); } catch (e) { return fetchOriginal(url, opt); }
     pedido.grupo = pedido.grupo || GRUPO;
+    // Modelos antigos (gemini-1.x e 2.x) já foram aposentados pelo Google:
+    // sem o nome, o back-end usa o modelo atual.
+    if (/^gemini-(1|2)\./.test(pedido.modelo || "")) delete pedido.modelo;
     if (ultimoArquivo) { pedido.tipo = ultimoArquivo.type || "application/octet-stream"; pedido.tamanho = ultimoArquivo.size; }
     FichaPokedex.carregando(CFG.carregando);
     await reduzirSeGrande(pedido);
