@@ -24,10 +24,10 @@ let saved=JSON.parse(localStorage.getItem('mamiferosAlbum')||'[]');
 function go(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.getElementById(id).classList.add('on');document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.id===id));if(id==='albumPage')album();if(id==='explorar')explore();if(id==='conquistas')achievements();scrollTo(0,0)}
 function mode(x,b){document.getElementById('gal').style.display=x==='gal'?'block':'none';document.getElementById('cam').style.display=x==='cam'?'block':'none';document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on')}
 function gallery(){let box=document.getElementById('cards');box.innerHTML='';A.forEach((a,i)=>{let c=document.createElement('article');c.className='card';c.innerHTML=`<img src="${a[2]}" alt="Fotografia real de ${a[0]}"><h3>${a[0]}</h3><p>${a[9]}</p>`;let b=document.createElement('button');b.className='btn';b.textContent='Descobrir';b.onclick=()=>detail(i);c.append(b);box.append(c)})}
-function detail(i){let a=A[i],d=document.getElementById('details');d.innerHTML=`<div class="paper detail"><div><img class="bigphoto" src="${a[2]}" alt="Fotografia real de ${a[0]}"><div class="hab"><img src="${a[3]}" alt="Fotografia real do habitat de ${a[0]}"><span>🌿 Habitat real: ${a[11]}</span></div></div><div><h2>📋 Ficha de pesquisador: ${a[0]}</h2><p><em>${a[1]}</em></p><div class="facts">${[['🌎 Onde mora',a[4]],['⚖️ Peso',a[5]],['📏 Altura',a[6]],['⏳ Tempo de vida',a[7]],['🍃 Alimentação',a[8]],['🐾 Dia a dia',a[9]],['💡 Curiosidade',a[10]]].map(x=>`<div class="fact"><b>${x[0]}</b>${x[1]}</div>`).join('')}</div><button id="add" class="btn" style="margin-top:12px" onclick="add(${i})">${saved.includes(i)?'✓ Já está no álbum':'📖 Adicionar ao meu álbum'}</button></div></div>`;d.scrollIntoView({behavior:'smooth'})}
+function detail(i){let a=A[i],d=document.getElementById('details');d.innerHTML=`<div class="paper detail"><div><img class="bigphoto" src="${a[2]}" alt="Fotografia real de ${a[0]}"><div class="hab"><img src="${a[3]}" alt="Fotografia real do habitat de ${a[0]}"><span>🌿 Habitat real: ${a[11]}</span></div></div><div><h2>📋 Ficha de pesquisador: ${a[0]}</h2><p><em>${a[1]}</em></p><div class="facts">${[['🌎 Onde mora',a[4]],['⚖️ Peso',a[5]],['📏 Altura',a[6]],['⏳ Tempo de vida',a[7]],['🍃 Alimentação',a[8]],['🐾 Dia a dia',a[9]],['💡 Curiosidade',a[10]]].filter(x=>x[1]).map(x=>`<div class="fact"><b>${x[0]}</b>${x[1]}</div>`).join('')}</div><button id="add" class="btn" style="margin-top:12px" onclick="add(${i})">${saved.includes(i)?'✓ Já está no álbum':'📖 Adicionar ao meu álbum'}</button></div></div>`;d.scrollIntoView({behavior:'smooth'})}
 function add(i){if(!saved.includes(i)){saved.push(i);localStorage.setItem('mamiferosAlbum',JSON.stringify(saved));toast('🏆 Nova descoberta! '+A[i][0]+' entrou no álbum.');check(i)}else toast('Esse mamífero já foi descoberto.');album();explore();achievements();document.getElementById('add').textContent='✓ Já está no álbum'}
-function album(){let box=document.getElementById('album');box.innerHTML='';document.getElementById('count').textContent='🐾 Mamíferos descobertos: '+saved.length;if(!saved.length){box.innerHTML='<p>Ainda não há descobertas. Vá para Reconhecer e comece sua aventura!</p>';return}saved.forEach(i=>{let a=A[i],c=document.createElement('article');c.className='card';c.innerHTML=`<img src="${a[2]}" alt="Foto real de ${a[0]}"><h3>${a[0]}</h3><p>✓ Descoberto! ${a[11]}</p>`;c.onclick=()=>{go('reconhecer');detail(i)};box.append(c)})}
-function explore(){let box=document.getElementById('world');box.innerHTML='';if(!saved.length){box.innerHTML='<p>Descubra mamíferos primeiro. Eles aparecerão aqui em seus habitats.</p>';return}saved.forEach(i=>{let a=A[i],s=document.createElement('div');s.className='scene';s.innerHTML=`<img src="${a[3]}" alt="Habitat real de ${a[0]}"><label>${a[12]} ${a[0]}</label><div class="walker">${a[12]}</div>`;s.onclick=()=>{go('reconhecer');detail(i)};box.append(s)})}
+function album(){let box=document.getElementById('album');box.innerHTML='';document.getElementById('count').textContent='🐾 Mamíferos descobertos: '+saved.length;if(!saved.length){box.innerHTML='<p>Ainda não há descobertas. Vá para Reconhecer e comece sua aventura!</p>';return}saved.forEach(i=>{let a=A[i];if(!a)return;let c=document.createElement('article');c.className='card';c.innerHTML=`<img src="${a[2]}" alt="Foto real de ${a[0]}"><h3>${a[0]}</h3><p>✓ Descoberto! ${a[11]}</p>`;c.onclick=()=>{go('reconhecer');detail(i)};box.append(c)})}
+function explore(){let box=document.getElementById('world');box.innerHTML='';if(!saved.length){box.innerHTML='<p>Descubra mamíferos primeiro. Eles aparecerão aqui em seus habitats.</p>';return}saved.forEach(i=>{let a=A[i];if(!a)return;let s=document.createElement('div');s.className='scene';s.innerHTML=`<img src="${a[3]}" alt="Habitat real de ${a[0]}"><label>${a[12]} ${a[0]}</label><div class="walker">${a[12]}</div>`;s.onclick=()=>{go('reconhecer');detail(i)};box.append(s)})}
 function achievements(){let box=document.getElementById('ach'),goals=[[1,'🐾','Primeira Descoberta','Você deu o primeiro passo na sua jornada!'],[5,'🔎','Explorador Iniciante','Você começou a conhecer a diversidade!'],[10,'🌎','Explorador da Natureza','Você está virando um verdadeiro explorador!'],[15,'🧭','Grande Explorador','Continue sua jornada!'],[20,'🏆','Mestre dos Mamíferos','Parabéns, Mestre dos Mamíferos!']];box.innerHTML='';goals.forEach(g=>{let ok=saved.length>=g[0],c=document.createElement('div');c.className='achievement '+(ok?'ok':'');c.innerHTML=`<div style="font-size:2rem">${ok?g[1]:'🔒'}</div><h3>${g[2]}</h3><p>${g[3]}</p><small>${Math.min(saved.length,g[0])}/${g[0]}</small><div class="bar"><i style="width:${Math.min(100,saved.length/g[0]*100)}%"></i></div>`;box.append(c)})}
 function camera(){['s1','s2','s3','s4'].forEach(x=>document.getElementById(x).classList.remove('ok'));['s1','s2','s3','s4'].forEach((x,i)=>setTimeout(()=>document.getElementById(x).classList.add('ok'),i*700));setTimeout(()=>detail(Math.floor(Math.random()*A.length)),3000)}
 function check(i){let old=JSON.parse(localStorage.getItem('mamiferosConquistas')||'[]'),n=saved.length;[[1,'Primeira Descoberta'],[5,'Explorador Iniciante'],[10,'Explorador da Natureza'],[15,'Grande Explorador'],[20,'Mestre dos Mamíferos']].forEach(x=>{if(n>=x[0]&&!old.includes(x[1])){old.push(x[1]);localStorage.setItem('mamiferosConquistas',JSON.stringify(old));setTimeout(()=>toast('🏆 CONQUISTA DESBLOQUEADA! '+x[1]),300)}})}
@@ -89,30 +89,47 @@ nav button.on,#nav button.on{background:#2f6b3d;color:#fff;border-color:#2f6b3d}
 <script>
 /* A câmera de verdade: a foto vai para a IA (/api/identificar) e os 4
    passos da tela acompanham o progresso. Se o mamífero estiver no catálogo
-   do grupo, "Salvar no álbum" ganha a figurinha dele. */
+   do grupo, "Salvar no álbum" ganha a figurinha dele. Se não estiver, ele
+   vira uma figurinha NOVA (com a foto tirada) e entra no álbum também. */
 (function () {
+  const EXTRAS = "mamiferosExtras";
+  JSON.parse(localStorage.getItem(EXTRAS) || "[]").forEach(a => A.push(a));
+  gallery(); album(); explore(); achievements();
   const passos = ["s1", "s2", "s3", "s4"];
   const marca = n => passos.forEach((x, i) => document.getElementById(x).classList.toggle("ok", i < n));
   const norm = t => String(t || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
-  let indice = -1;
-  function reduzir(f) {
-    return new Promise(res => { const img = new Image(); img.onload = () => { const k = Math.min(1, 1600 / Math.max(img.width, img.height)); const c = document.createElement("canvas"); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); res(c.toDataURL("image/jpeg", .85)); }; img.onerror = () => res(""); img.src = URL.createObjectURL(f); });
+  let indice = -1, novo = null;
+  function reduzir(f, lado = 1600, q = .85) {
+    return new Promise(res => { const img = new Image(); img.onload = () => { const k = Math.min(1, lado / Math.max(img.width, img.height)); const c = document.createElement("canvas"); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); res(c.toDataURL("image/jpeg", q)); }; img.onerror = () => res(""); img.src = URL.createObjectURL(f); });
   }
   ["fotoCamera", "fotoGaleria"].forEach(id => document.getElementById(id).addEventListener("change", async e => {
     const f = e.target.files && e.target.files[0];
     if (!f || !f.type.startsWith("image/")) return;
-    indice = -1; marca(1);
+    indice = -1; novo = null; marca(1);
     const foto = await reduzir(f); marca(2);
     try {
       const r = await fetch("/api/identificar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ modelo: "gemini-3.6-flash", mime: "image/jpeg", imagem: foto.split(",")[1] }) });
       marca(3);
       const d = await r.json(); const info = JSON.parse(d.candidates[0].content.parts[0].text);
-      if (info.identificado) { marca(4); indice = A.findIndex(a => norm(a[0]) === norm(info.nome_popular) || norm(a[1]) === norm(info.nome_cientifico)); }
+      if (info.identificado) {
+        marca(4); indice = A.findIndex(a => norm(a[0]) === norm(info.nome_popular) || norm(a[1]) === norm(info.nome_cientifico));
+        if (indice < 0) {
+          const mini = await reduzir(f, 480, .72), cur = info.curiosidades || [], lista = x => (x || []).join(", ");
+          novo = [info.nome_popular, info.nome_cientifico || "", mini, mini, lista(info.regioes) || "Brasil", "", "", "", "",
+            info.habitat_descricao || "", cur[0] || "", lista(info.biomas) || "Natureza", "🐾"];
+        }
+      }
     } catch (err) { marca(0); }
   }));
   window.salvarMamifero = () => {
-    if (indice >= 0) { detail(indice); document.getElementById("add").click(); }
-    else toast("Esse mamífero ainda não tem figurinha no álbum, mas a descoberta foi incrível! 🐾");
+    if (indice < 0 && novo) {
+      A.push(novo); indice = A.length - 1; novo = null;
+      try { localStorage.setItem(EXTRAS, JSON.stringify(A.slice(10))); }
+      catch (e) { A.pop(); indice = -1; return toast("O álbum está cheio neste aparelho! 📦"); }
+      gallery();
+    }
+    if (indice >= 0) { go("reconhecer"); detail(indice); document.getElementById("add").click(); }
+    else toast("Tire uma foto de um mamífero para salvar no álbum! 🐾");
   };
 })();
 /* Fotos: os links do Wikimedia apontavam para a foto em tamanho original
