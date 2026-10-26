@@ -887,6 +887,17 @@ async function identifyFlower(){
 identifyBtn.addEventListener('click', identifyFlower);
 </script>
 
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+@media (max-width:900px){
+  #home .intro{grid-template-columns:1fr!important}
+  #home .elf{order:-1;min-height:0!important;max-height:46vh}
+  #home .elf img{max-height:46vh;width:100%;object-fit:cover}
+  #home .intro-text h2{font-size:44px!important}
+}
+button{min-height:46px}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
