@@ -589,5 +589,5 @@ html.fp-travado,html.fp-travado body{overflow:hidden}
 @media (max-width:420px){.fp-corpo{padding:0 14px 14px}.fp-pop{padding:8px}.fp{padding:16px}.fp-name{font-size:22px}.fp-foto{width:52px;height:52px}.fp-tab{font-size:11.5px;gap:4px}}
 `;
 
-  window.FichaPokedex = { configurar, mostrar, aviso, carregando, fechar, ligarCamera, trocarFotos, urlDaEspecie, BIOMAS };
+  window.FichaPokedex = { configurar, mostrar, aviso, carregando, fechar, ligarCamera, escolherArquivo, trocarFotos, urlDaEspecie, BIOMAS };
 })();

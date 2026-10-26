@@ -111,7 +111,7 @@ footer{text-align:center;color:#aeb8e7;font-size:.9rem;padding:26px 8px 10px}
       </div>
       <input id="photoInput" class="hidden" type="file" accept="image/*" capture="environment">
       <div class="actions">
-        <label class="file-label" for="photoInput" style="cursor:pointer;border-radius:13px;padding:12px 16px;font-weight:800">📷 Escolher foto</label>
+        <label class="file-label" for="photoInput" style="cursor:pointer;border-radius:13px;padding:12px 16px;font-weight:800">📷 Tirar foto</label>
         <button class="primary" id="identifyBtn" type="button" disabled>🔬 Identificar inseto</button>
         <button class="ghost" id="newPhotoBtn" type="button">Nova foto</button>
       </div>
@@ -337,12 +337,22 @@ $("clearAlbumBtn").addEventListener("click",()=>{
 });
 </script>
 
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+html{font-size:17px}
+.layout{align-items:start}
+button,.file-label{min-height:46px}
+.actions{gap:10px}
+@media (max-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  galeria: { depoisDe: "label.file-label", input: "#photoInput" },
   icone: "🐛", fauna: true,
   cor: "#48d9ff", cor2: "#a78bfa",
   escuro: () => true,

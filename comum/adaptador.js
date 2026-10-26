@@ -15,6 +15,7 @@
    2) Se o aluno escolher um arquivo que NÃO é foto, o adaptador chama o
       porteiro do grupo na hora (o "grande teste" do documento das missões).
    3) No computador, o botão de câmera abre a webcam.
+   4) Opcional: um botão "🖼️ Galeria" ao lado do botão de foto do grupo.
 
    COMO USAR (no fim do index.html do grupo):
      <script src="/comum/ficha.js"></script>
@@ -229,8 +230,33 @@
       document.head.appendChild(s);
       document.documentElement.classList.add("fp-esconder");
     }
-    const pronto = () => { ligarWebcams(); FichaPokedex.trocarFotos(); };
+    const pronto = () => { ligarWebcams(); botaoGaleria(); FichaPokedex.trocarFotos(); };
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", pronto); else pronto();
+  }
+
+  /* 4) Botão "🖼️ Galeria": quando o único botão de foto do grupo usa um campo
+     com capture, no tablet ele só abre a câmera. Este botão (com a mesma cara
+     do botão do grupo) abre a galeria e entrega a foto ao mesmo campo.
+     Uso: galeria: { depoisDe: "label.file-label", input: "#photoInput" } */
+  function botaoGaleria() {
+    const g = CFG.galeria;
+    if (!g) return;
+    const ref = document.querySelector(g.depoisDe), input = document.querySelector(g.input);
+    if (!ref || !input || document.querySelector(".fp-galeria")) return;
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = (g.classe != null ? g.classe : ref.className) + " fp-galeria";
+    b.textContent = g.texto || "🖼️ Galeria";
+    b.addEventListener("click", e => {
+      e.preventDefault();
+      FichaPokedex.escolherArquivo(arquivo => {
+        const dt = new DataTransfer();
+        dt.items.add(arquivo);
+        input.files = dt.files;
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+    });
+    ref.insertAdjacentElement("afterend", b);
   }
 
   /* Mostra de novo o resultado antigo do front (ex.: para usar um minigame
