@@ -383,6 +383,13 @@ function renderPersonagem(){
 renderLoja();renderAlbum();renderPersonagem();atualizarPontos();mostrarTela('inicio');
 </script>
 
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+/* o app todo um pouco maior no tablet (as letras eram miúdas) */
+@media (min-width:700px){main.app{zoom:1.15}}
+.button,.menu-button{min-height:44px}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
