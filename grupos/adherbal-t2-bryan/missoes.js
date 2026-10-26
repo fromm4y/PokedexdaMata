@@ -1,0 +1,58 @@
+// ============================================================================
+//  AS 6 MISSÕES DO GRUPO  —  o back-end deste grupo
+// ============================================================================
+//  Cópia do documento "Meu Back-End — Pokédex" que o grupo preencheu. O resto
+//  do back-end (as chaves da IA, o revezamento, a conversa com o Google) mora
+//  em api/identificar.js e é igual para todos.
+//
+//  Para conferir se ficou certo depois de publicar, abra no navegador:
+//    https://SEU-PROJETO.vercel.app/api/identificar?grupo=adherbal-t2-bryan
+//
+//  Ajustes feitos pela professora (o resto é como o grupo escreveu):
+//   - Missão 1: o documento misturava um nome de pessoa e "ornitólogo" (especialista em aves) com frutas; ficou "um especialista em frutas brasileiras".
+//   - Em branco no documento (usada a mensagem do exemplo; completar com o grupo): Missão 3 (por que escolheram 85), Missão 6.
+//   - Missão 5: o grupo escreveu só a 1ª parte; foi completada com "(…% de certeza)".
+// ============================================================================
+
+// Quem é o grupo (aparece no painel)
+const GRUPO = {
+  nome: "Guardiões da Floresta",
+  integrantes: "Henrique, Bryan e Laís",
+  escola: "Adherbal",
+  turma: "Turma 2",
+  tema: "Frutas brasileiras",
+  pendencias: ["Missão 3 (por que escolheram 85)", "Missão 6", "Missão 5 (2ª parte da mensagem)"]
+};
+
+// Missão 1: quem a IA vai fingir ser
+const ESPECIALISTA = "um especialista em frutas brasileiras";
+
+// Missão 2: o que procurar na foto
+const O_QUE_PROCURAR = "frutas do brasil";
+
+// Missão 3: quanta certeza a IA precisa ter (número de 0 a 100, sem aspas)
+// Por que o grupo escolheu: ""
+const CERTEZA_MINIMA = 85;
+
+// Missão 4: o porteiro
+function conferirFoto(foto) {
+  if (!foto.type.startsWith("image/")) return "fruta não encontradas";
+  if (foto.size > 10000000) return "esta imagem de fruta esta muito grande";
+  return "ok";
+}
+
+// Missão 5: quando a IA fica em dúvida
+function mensagemDeDuvida(r) {
+  return "não consegui indentificar a imagem da fruta (" + r.confianca + "% de certeza)";
+}
+
+// Missão 6: quando a IA acerta
+function mensagemDeAcerto(r) {
+  return "🎉 Achei! É " + r.nome_popular + "! Que demais!";
+}
+
+// ----------------------------------------------------------------------------
+//  DAQUI PARA BAIXO, NÃO MEXA. Esta linha entrega as missões para o
+//  api/identificar.js usar.
+// ----------------------------------------------------------------------------
+module.exports = { GRUPO, ESPECIALISTA, O_QUE_PROCURAR, CERTEZA_MINIMA, conferirFoto, mensagemDeDuvida, mensagemDeAcerto };
