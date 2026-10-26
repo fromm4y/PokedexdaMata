@@ -146,7 +146,7 @@
       <div class="subtitle">Tire uma foto de uma fruta brasileira e deixe a Frutaria BR descobrir. 🔎</div>
 
       <div class="buttons">
-        <label class="fileBtn" for="foto">📷 Escolher foto</label>
+        <label class="fileBtn" for="foto">📷 Tirar foto</label>
         <input id="foto" type="file" accept="image/jpeg,image/png,image/webp,image/*" capture="environment">
         <button id="analisar" disabled>✨ Descobrir</button>
       </div>
@@ -374,6 +374,14 @@ analisar.addEventListener("click", async () => {
 });
 </script>
 
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+main{align-items:center!important;padding-top:20px!important}
+.nav button{font-size:15px!important;padding:12px 15px!important;min-height:46px}
+.buttons button,.fileBtn{min-height:50px}
+.subtitle{font-size:19px}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
@@ -398,6 +406,7 @@ analisar.addEventListener("click", async () => {
   };
 })();
 PokedexAdaptador.iniciar({
+  galeria: { depoisDe: "label.fileBtn", input: "#foto", classe: "fileBtn", texto: "🖼️ Galeria" },
   icone: "🍌", fauna: false,
   cor: "#8fe33d", cor2: "#1f8f31",
   escuro: () => true,
