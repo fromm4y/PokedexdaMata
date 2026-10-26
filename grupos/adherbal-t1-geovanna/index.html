@@ -681,11 +681,41 @@
   });
 </script>
 
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+.intro-card{margin-left:auto;margin-right:auto}
+.content{align-items:start}
+.menu button{min-height:48px;font-size:15px}
+@media (max-width:850px){
+  aside{order:0!important}
+  .menu{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+  .menu::-webkit-scrollbar{display:none}
+  .menu button{width:auto;flex:1 0 auto;margin:0;white-space:nowrap;text-align:center}
+}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
 <script src="/comum/adaptador.js"></script>
 <script>
+/* O menu do grupo era só enfeite: agora cada botão leva até a parte certa. */
+(function () {
+  const botoes = [...document.querySelectorAll(".menu button")];
+  const card = texto => [...document.querySelectorAll(".card h2, .card h3")].find(h => h.textContent.includes(texto));
+  const ir = el => el && el.closest(".card").scrollIntoView({ behavior: "smooth", block: "start" });
+  const acoes = [
+    () => window.scrollTo({ top: 0, behavior: "smooth" }),
+    () => ir(card("Álbum")),
+    () => ir(card("Conquistas")),
+    () => FichaPokedex.aviso({ tipo: "info", icone: "🥇", titulo: "Ranking", texto: "Você tem " + (document.getElementById("points").textContent || "0") + " pontos! Cada ave descoberta vale pontos. Será que você chega ao topo? 🧚‍♀️", acoes: [{ texto: "Bora explorar!", principal: true }] }),
+    () => FichaPokedex.aviso({ tipo: "info", icone: "🐦", titulo: "Sobre o Asas do Brasil", texto: "Um app para conhecer as aves do Brasil com a ajuda da fadinha da natureza. Feito por Geovanna, Geovana, Alberto e Daniel. 💜", acoes: [{ texto: "Fechar", principal: true }] })
+  ];
+  botoes.forEach((b, i) => b.addEventListener("click", () => {
+    botoes.forEach(x => x.classList.toggle("active", x === b));
+    if (acoes[i]) acoes[i]();
+  }));
+})();
 PokedexAdaptador.iniciar({
   icone: "🐦", fauna: true,
   cor: "#ef4fa4", cor2: "#7c63f6",
