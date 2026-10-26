@@ -33,6 +33,17 @@ function camera(){['s1','s2','s3','s4'].forEach(x=>document.getElementById(x).cl
 function check(i){let old=JSON.parse(localStorage.getItem('mamiferosConquistas')||'[]'),n=saved.length;[[1,'Primeira Descoberta'],[5,'Explorador Iniciante'],[10,'Explorador da Natureza'],[15,'Grande Explorador'],[20,'Mestre dos Mamíferos']].forEach(x=>{if(n>=x[0]&&!old.includes(x[1])){old.push(x[1]);localStorage.setItem('mamiferosConquistas',JSON.stringify(old));setTimeout(()=>toast('🏆 CONQUISTA DESBLOQUEADA! '+x[1]),300)}})}
 function toast(t){let x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),2800)}gallery();album();explore();achievements();
 </script>
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+body{min-height:100vh;background-attachment:fixed}
+nav button,#nav button{min-height:44px;font-size:14px}
+.btn{min-height:46px}
+/* fotos com fundo enquanto carregam */
+.card img,.hab img,.bigphoto{background:#e9e1d2}
+.card img,.hab img{display:block}
+@media (max-width:900px){#nav{flex-wrap:nowrap;gap:4px}#nav button{white-space:nowrap;font-size:13px;padding:8px 9px}}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
@@ -65,6 +76,26 @@ function toast(t){let x=document.getElementById('toast');x.textContent=t;x.class
     if (indice >= 0) { detail(indice); document.getElementById("add").click(); }
     else toast("Esse mamífero ainda não tem figurinha no álbum, mas a descoberta foi incrível! 🐾");
   };
+})();
+/* Fotos: os links do Wikimedia apontavam para a foto em tamanho original
+   (vários MB cada) e alguns arquivos não existem. Cada foto agora é buscada
+   pelo nome científico do animal (e o habitat pelo nome do ambiente). */
+(function () {
+  const HAB = { "African_savanna.jpg": "Savanna", "Amazon_rainforest.jpg": "Amazon rainforest", "Bear_habitat_in_Yellowstone.jpg": "Yellowstone National Park",
+    "Wolf_habitat.jpg": "Taiga", "Pantanal_Mato_Grosso_Brazil.jpg": "Pantanal", "Borneo_rainforest.jpg": "Borneo lowland rain forests",
+    "Australian_outback.jpg": "Outback", "Tropical_rainforest.jpg": "Tropical rainforest" };
+  function trocar(img) {
+    const s = img.getAttribute("src") || "", m = s.match(/Special:FilePath\/(.+)$/);
+    if (!m || img.dataset.fpFoto) return;
+    img.dataset.fpFoto = "1";
+    const animal = A.find(a => a[2] === s), termo = animal ? animal[1] : HAB[decodeURIComponent(m[1])];
+    if (!termo) return;
+    img.removeAttribute("src");
+    FichaPokedex.urlDaEspecie(termo).then(u => { if (u) img.src = u; });
+  }
+  const varrer = () => document.querySelectorAll('img[src*="Special:FilePath"]').forEach(trocar);
+  new MutationObserver(varrer).observe(document.body, { childList: true, subtree: true });
+  varrer();
 })();
 PokedexAdaptador.iniciar({
   icone: "🐾", fauna: true,
