@@ -208,7 +208,7 @@ footer{text-align:center;color:#759895;padding:30px 0;font-size:13px}
 <div class="app">
 
 <header>
-  <div class="logo"><span class="logo-mark">🐦</span><span>BRASILIAN BIRD</span></div>
+  <div class="logo"><span class="logo-mark"><img src="/grupos/meduneckas-t1-tarde-davi/tokoyami.svg" alt=""></span><span>BRASILIAN BIRD</span></div>
   <nav>
     <button class="nav-btn active" data-go="inicio">🏠 Início</button>
     <button class="nav-btn" data-go="explorar">🌳 Explorar</button>
@@ -226,7 +226,7 @@ footer{text-align:center;color:#759895;padding:30px 0;font-size:13px}
       <button class="primary start" id="startBtn">🚀 Começar aventura</button>
     </div>
     <div class="tokoyami">
-      <div class="tokoyami-avatar">🐦‍⬛</div>
+      <div class="tokoyami-avatar"><img src="/grupos/meduneckas-t1-tarde-davi/tokoyami.svg" alt="Tokoyami, o pássaro guia"></div>
       <div class="tokoyami-name">Tokoyami</div>
       <div class="tokoyami-note">Seu guia explorador de aves</div>
     </div>
@@ -239,7 +239,7 @@ footer{text-align:center;color:#759895;padding:30px 0;font-size:13px}
     <span class="badge">🌿 SUA AVENTURA COMEÇA AQUI</span>
     <h2 id="welcomeTitle">Bem-vindo, explorador!</h2>
     <p class="muted" id="welcomeText">Tokoyami vai acompanhar você na descoberta das aves brasileiras.</p>
-    <div class="welcome-guide"><span aria-hidden="true">🐦‍⬛</span><p><strong>Tokoyami diz:</strong> Observe com calma, respeite os animais e registre cada descoberta no seu álbum!</p></div>
+    <div class="welcome-guide"><img class="guia-img" src="/grupos/meduneckas-t1-tarde-davi/tokoyami.svg" alt=""><p><strong>Tokoyami diz:</strong> Observe com calma, respeite os animais e registre cada descoberta no seu álbum!</p></div>
     <button class="primary start" id="continueBtn" type="button">Continuar ➜</button>
   </div>
 </section>
@@ -262,13 +262,13 @@ footer{text-align:center;color:#759895;padding:30px 0;font-size:13px}
     <p class="muted">Quem vai acompanhar você pela floresta? Escolha um personagem para começar.</p>
     <div class="character-grid">
       <button class="card character" data-character="Menina">
-        <div class="char-art elf">🧝‍♀️</div>
+        <div class="char-art elf"><img src="/grupos/meduneckas-t1-tarde-davi/menina.svg" alt="Menina elfa cientista"></div>
         <h3>Menina — Elfa cientista</h3>
         <p class="muted">Uma exploradora curiosa que ama natureza, aves e descobertas.</p>
         <div class="char-tags"><span class="tag">🌿 Natureza</span><span class="tag">🔬 Ciência</span><span class="tag">🦋 Exploração</span></div>
       </button>
       <button class="card character" data-character="Menino">
-        <div class="char-art">🧑‍🔬</div>
+        <div class="char-art"><img src="/grupos/meduneckas-t1-tarde-davi/menino.svg" alt="Menino cientista explorador"></div>
         <h3>Menino — Cientista explorador</h3>
         <p class="muted">Um pesquisador aventureiro com mochila, caderno e equipamentos para observar aves.</p>
         <div class="char-tags"><span class="tag">🎒 Mochila</span><span class="tag">🔭 Observação</span><span class="tag">📓 Pesquisa</span></div>
@@ -287,15 +287,15 @@ footer{text-align:center;color:#759895;padding:30px 0;font-size:13px}
     </div>
     <aside class="card">
       <div class="guide">
-        <div class="guide-face">🐦‍⬛</div>
-        <div><strong>Tokoyami</strong><p id="guideText">Clique no passarinho da floresta para fazer uma descoberta!</p></div>
+        <div class="guide-face"><img src="/grupos/meduneckas-t1-tarde-davi/tokoyami.svg" alt="Tokoyami"></div>
+        <div><strong>Tokoyami</strong><p id="guideText">Toque em 📸 Fazer descoberta para reconhecer uma ave pela foto!</p></div>
       </div>
       <h3>🧭 Sua expedição</h3>
       <div class="stat"><span>Cientista</span><strong id="chosenName">Não escolhido</strong></div>
       <div class="stat"><span>Aves descobertas</span><strong id="foundCount">0 / 6</strong></div>
       <div class="progress"><span id="progressBar"></span></div>
-      <p class="muted" style="margin-top:15px">Dica: clique nas aves que aparecerem no ambiente. Depois você poderá observar, investigar e registrar cada descoberta.</p>
-      <button class="secondary" id="photoBtn" type="button">📸 Identificar uma foto</button>
+      <p class="muted" style="margin-top:15px">Dica: os biomas vão se revezando aqui do lado. Toque numa ave para ver a ficha dela, ou em <b>📸 Fazer descoberta</b> para reconhecer uma ave nova pela foto!</p>
+      <button class="primary descobrir-grande" id="photoBtn" type="button">📸 Fazer descoberta</button>
     </aside>
   </div>
 </section>
@@ -438,9 +438,20 @@ function renderAlbum(){
     card.append(img,title,habitat,fact,status);
     grid.appendChild(card);
   });
-  $("albumCount").textContent=`${discovered.size}/${birds.length}`;
-  $("foundCount").textContent=`${discovered.size} / ${birds.length}`;
-  $("progressBar").style.width=(discovered.size/birds.length*100)+"%";
+  extras.forEach(b=>{
+    const card=document.createElement("article"); card.className="sticker nova"; card.onclick=()=>verAve(b);
+    const img=document.createElement("div"); img.className="sticker-img";
+    if(b.img){const f=document.createElement("img");f.src=b.img;f.alt=b.name;img.appendChild(f);}else img.textContent="🐦";
+    const title=document.createElement("h3"); title.textContent=b.name;
+    const habitat=document.createElement("p"); habitat.textContent="🌳 "+b.habitat;
+    const fact=document.createElement("p"); fact.textContent="💡 "+b.fact;
+    const status=document.createElement("div"); status.className="status"; status.textContent="📸 DESCOBERTA PELA FOTO";
+    card.append(img,title,habitat,fact,status); grid.appendChild(card);
+  });
+  const total=discovered.size+extras.length;
+  $("albumCount").textContent=`${total} ${total===1?"ave":"aves"}`;
+  $("foundCount").textContent=`${total}`;
+  $("progressBar").style.width=Math.min(100,discovered.size/birds.length*100)+"%";
 }
 
 function selectCharacter(name, button){
@@ -515,7 +526,7 @@ document.querySelectorAll("[data-action]").forEach(btn=>btn.addEventListener("cl
     register:`📸 Registro feito! ${currentBird.name} já está no seu álbum.`
   };
   $("dialogue").textContent=messages[btn.dataset.action];
-  if(btn.dataset.action==="register"){discovered.add(currentBird.id);try{localStorage.setItem("bb-discovered",JSON.stringify([...discovered]));}catch(e){}renderAlbum();}
+  if(btn.dataset.action==="register"&&birds.some(b=>b.id===currentBird.id)){discovered.add(currentBird.id);try{localStorage.setItem("bb-discovered",JSON.stringify([...discovered]));}catch(e){}renderAlbum();}
 }));
 
 /* ==========================================================
@@ -642,7 +653,8 @@ $("identifyBtn").addEventListener("click",async()=>{
     $("resultWarning").textContent=safeText(data.aviso,"Compare com fontes confiáveis antes de tomar decisões sobre a ave.");
     $("identificationResult").style.display="block";
     $("photoStatus").textContent="Resultado recebido do serviço de identificação. Confira as informações abaixo.";
-    window.lastIdentifiedBird={name:safeText(data.nome,"Ave identificada"),habitat:safeText(data.onde_vive),food:safeText(data.alimentacao),fact:safeText(data.curiosidades),features:safeText(data.caracteristicas),warning:safeText(data.aviso)};
+    window.lastIdentifiedBird={name:safeText(data.nome,"Ave identificada"),habitat:safeText(data.onde_vive),food:safeText(data.alimentacao),fact:safeText(data.curiosidades),features:safeText(data.caracteristicas),warning:safeText(data.aviso),biomas:Array.isArray(data.biomas)?data.biomas.filter(x=>typeof x==="string"):[]};
+    miniatura(String(dataUrl)).then(m=>{if(window.lastIdentifiedBird)window.lastIdentifiedBird.img=m;});
     toast("A análise foi concluída. Confira o resultado! 🐦✨");
   }catch(e){
     $("photoStatus").textContent="Ops! A conexão deu um probleminha. Tente novamente. 💚";
@@ -664,10 +676,16 @@ $("saveIdentifiedBtn")?.addEventListener("click",()=>{
   if(existing){
     discovered.add(existing.id);
     try{localStorage.setItem("bb-discovered",JSON.stringify([...discovered]));}catch(e){}
-    renderAlbum();
+    renderAlbum(); desenharBioma(true);
     toast("Ave salva no álbum! 📖");
   }else{
-    toast("Resultado verificado! Esta espécie ainda não tem figurinha no álbum básico. Você pode consultar o resultado acima.");
+    const id="foto-"+norm(result.name).replace(/[^a-z0-9]+/g,"-");
+    if(!extras.some(b=>b.id===id)){
+      extras.push(Object.assign({id},result));
+      try{localStorage.setItem("bb-extras",JSON.stringify(extras));}catch(e){extras.pop();toast("O álbum deste aparelho está cheio! 📦");return;}
+    }
+    renderAlbum(); desenharBioma(true);
+    toast("Nova ave no álbum: "+result.name+"! 📖✨");
   }
 });
 
@@ -677,10 +695,104 @@ if(chosenCharacter){
     card.classList.toggle("selected",card.dataset.character===chosenCharacter);
   });
 }
+/* ==========================================================
+   (professora) Aves novas no álbum + floresta que reveza os biomas,
+   cada vez um em destaque, com as aves já descobertas nele.
+   ========================================================== */
+const BIOMAS_AVES={tucano:["Amazônia","Mata Atlântica","Cerrado","Pantanal"],arara:["Amazônia","Cerrado","Pantanal"],"beija-flor":["Mata Atlântica","Amazônia","Cerrado","Caatinga"],coruja:["Cerrado","Caatinga","Pampa","Mata Atlântica"],"sabiá":["Mata Atlântica","Cerrado","Pampa"],"pica-pau":["Amazônia","Mata Atlântica","Cerrado","Caatinga"]};
+const FOTO_BIOMA={"Amazônia":"photo-1591081658714-f576fb7ea3ed","Mata Atlântica":"photo-1448375240586-882707db888b","Cerrado":"photo-1535940360221-641a69c43bac","Caatinga":"photo-1592521899562-172a1fda8059","Pampa":"photo-1758614685215-b1d7dbaca5c6","Pantanal":"photo-1566818421132-700d4b3ceeb7"};
+const COR_BIOMA={"Amazônia":"#1f7a4a","Mata Atlântica":"#2f8f4e","Cerrado":"#8f8a2e","Caatinga":"#a8682a","Pampa":"#5f9a3a","Pantanal":"#2a7f9a"};
+const ICONE_BIOMA={"Amazônia":"🌳","Mata Atlântica":"🌿","Cerrado":"🌾","Caatinga":"🌵","Pampa":"🌱","Pantanal":"💧"};
+const ORDEM_BIOMAS=Object.keys(FOTO_BIOMA);
+const norm=t=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+const escH=t=>String(t==null?"":t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let extras=[];
+try{const e=JSON.parse(localStorage.getItem("bb-extras")||"[]");if(Array.isArray(e))extras=e.filter(b=>b&&typeof b.name==="string");}catch(e){}
+
+function miniatura(src){
+  return new Promise(res=>{const im=new Image();im.onload=()=>{const k=Math.min(1,360/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.75));};im.onerror=()=>res("");im.src=src;});
+}
+function verAve(a){
+  currentBird=a;
+  $("modalTitle").textContent=a.name;
+  $("birdHabitat").textContent=a.habitat; $("birdFood").textContent=a.food;
+  $("birdFact").textContent=a.fact; $("birdFeatures").textContent=a.features;
+  $("discoveryText").textContent="Uma ave da sua coleção! 🌿";
+  const who=chosenCharacter==="Menina"?"A cientista elfa":"O cientista explorador";
+  $("dialogue").textContent=`${who} diz: “Vamos observar ${a.name} com calma e sem assustar a ave.”`;
+  $("birdModal").classList.add("show");
+}
+function abrirDescoberta(){ $("photoModal").classList.add("show"); }
+function avesConhecidas(){ return birds.filter(b=>discovered.has(b.id)).map(b=>Object.assign({},b,{biomas:BIOMAS_AVES[b.id]||[]})).concat(extras); }
+function doBioma(bioma){ return avesConhecidas().filter(a=>(a.biomas||[]).some(x=>norm(x)===norm(bioma))); }
+function listaBiomas(){ const com=ORDEM_BIOMAS.filter(b=>doBioma(b).length); return com.length?com:ORDEM_BIOMAS; }
+let biomaAtual=0, timerBioma=null;
+function posicoes(n){
+  const cols=Math.min(n,Math.ceil(Math.sqrt(n*1.8))), rows=Math.ceil(n/cols), out=[];
+  for(let i=0;i<n;i++){const c=i%cols,r=Math.floor(i/cols);out.push([ (cols===1?55:22+c*(58/(cols-1))) + (r%2?6:0), (rows===1?52:38+r*(40/(rows-1))) ]);}
+  return out;
+}
+function desenharBioma(reiniciar){
+  const forest=document.querySelector("#explorar .forest"); if(!forest) return;
+  const lista=listaBiomas(); if(biomaAtual>=lista.length) biomaAtual=0;
+  const bioma=lista[biomaAtual], aves=doBioma(bioma), pos=posicoes(aves.length);
+  forest.style.setProperty("--cor-bioma",COR_BIOMA[bioma]);
+  forest.innerHTML=`<div class="bioma-foto" style="background-image:url('https://images.unsplash.com/${FOTO_BIOMA[bioma]}?auto=format&fit=crop&w=1200&q=75')"></div><div class="bioma-veu"></div>
+    <div class="bioma-rotulo"><small>Bioma em destaque</small><b>${ICONE_BIOMA[bioma]} ${bioma}</b><span>${aves.length?aves.length+" "+(aves.length>1?"aves descobertas":"ave descoberta")+" aqui":"Nenhuma ave descoberta aqui ainda"}</span></div>
+    ${aves.map((a,i)=>`<button type="button" class="ave-voando" data-i="${i}" style="--x:${pos[i][0]}%;--y:${pos[i][1]}%;--d:${-(i*.7)}s"><span class="ave-foto">${a.img?`<img src="${escH(a.img)}" alt="">`:(a.emoji||"🐦")}</span><span class="ave-nome">${escH(a.name)}</span></button>`).join("")}
+    ${aves.length?"":`<div class="bioma-vazio"><p>${discovered.size+extras.length?`Ainda não tem ave descoberta no(a) <b>${bioma}</b>.`:"Sua floresta ainda está vazia! Cada ave que você reconhecer aparece aqui, no bioma onde ela vive."}</p><button type="button" class="primary" data-descobrir>📸 Fazer descoberta</button></div>`}
+    <div class="bioma-pontos">${lista.length>1?lista.map((b,i)=>`<button type="button" class="${i===biomaAtual?"on":""}" data-b="${i}" aria-label="${b}" title="${b}"></button>`).join(""):""}</div>`;
+  forest.querySelectorAll(".ave-voando").forEach(b=>b.onclick=()=>verAve(aves[+b.dataset.i]));
+  forest.querySelectorAll(".bioma-pontos button").forEach(b=>b.onclick=()=>{biomaAtual=+b.dataset.b;desenharBioma(true);});
+  const vazio=forest.querySelector("[data-descobrir]"); if(vazio) vazio.onclick=abrirDescoberta;
+  if(reiniciar||!timerBioma){
+    clearInterval(timerBioma);
+    timerBioma=setInterval(()=>{
+      if(!$("explorar").classList.contains("active")||document.querySelector(".modal.show")) return;
+      const n=listaBiomas().length; if(n<2) return;
+      biomaAtual=(biomaAtual+1)%n; desenharBioma();
+    },7000);
+  }
+}
+desenharBioma(true);
 renderAlbum();
 })();
 </script>
 
+<style id="brasilian-bird-novo">
+/* nav do topo de ponta a ponta */
+body{overflow-x:hidden}
+header{margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding-left:max(3vw,calc(50vw - 590px));padding-right:max(3vw,calc(50vw - 590px))}
+/* personagens desenhados (os emojis 🐦‍⬛ e 🧑‍🔬 viravam dois desenhos separados em alguns aparelhos) */
+.logo-mark img{width:36px;height:36px}
+.tokoyami-avatar{overflow:hidden}.tokoyami-avatar img{width:88%;height:88%;object-fit:contain;margin-top:4%}
+.guide-face img{width:66px;height:66px;border-radius:50%;background:radial-gradient(circle at 40% 30%,#31414d,#0a1117 65%);border:3px solid var(--aqua);padding:4px;display:block}
+.welcome-guide .guia-img{width:86px;height:86px;flex:0 0 auto;border-radius:50%;background:radial-gradient(circle at 40% 30%,#31414d,#0a1117 65%);border:3px solid var(--aqua);padding:5px}
+.char-art img{height:190px;width:auto;filter:drop-shadow(0 10px 12px #0b3e3a40);transition:transform .25s}
+.character:hover .char-art img,.character.selected .char-art img{transform:scale(1.06) rotate(-2deg)}
+/* floresta que reveza os biomas */
+.forest{background:var(--cor-bioma,#1f7a4a)!important;transition:background .6s}
+.bioma-foto{position:absolute;inset:0;background-size:cover;background-position:center;animation:biomaEntra .9s ease}
+.bioma-veu{position:absolute;inset:0;background:linear-gradient(180deg,#0006,transparent 32%,transparent 62%,#0008)}
+@keyframes biomaEntra{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:none}}
+.bioma-rotulo{position:absolute;left:18px;top:18px;z-index:2;background:#061a1de0;border:2px solid var(--aqua);border-radius:18px;padding:10px 16px;display:flex;flex-direction:column;gap:2px;animation:biomaEntra .6s}
+.bioma-rotulo small{color:var(--lime);font-weight:900;letter-spacing:1px;text-transform:uppercase;font-size:11px}
+.bioma-rotulo b{font-size:clamp(20px,3vw,28px)}
+.bioma-rotulo span{color:var(--muted);font-size:13px;font-weight:700}
+.ave-voando{position:absolute;left:var(--x);top:var(--y);z-index:2;background:none!important;border:0!important;padding:0!important;min-height:0!important;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transform:translate(-50%,-50%);animation:aveBalanca 3s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes aveBalanca{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,calc(-50% - 10px))}}
+.ave-foto{width:clamp(70px,9vw,92px);height:clamp(70px,9vw,92px);border-radius:50%;border:4px solid #fff;box-shadow:0 8px 20px #0007,0 0 0 4px var(--aqua);overflow:hidden;display:grid;place-items:center;font-size:44px;background:radial-gradient(circle,#c9f5e5,#55f2d0)}
+.ave-foto img{width:100%;height:100%;object-fit:cover}
+.ave-nome{background:#061a1de6;color:#fff;font-weight:900;font-size:13px;padding:4px 10px;border-radius:999px;border:1px solid var(--aqua);white-space:nowrap}
+.ave-voando:hover .ave-foto{box-shadow:0 8px 20px #0007,0 0 0 6px var(--lime)}
+.bioma-vazio{position:absolute;left:50%;top:56%;transform:translate(-50%,-50%);z-index:2;width:min(380px,84%);background:#061a1de6;border:2px dashed var(--aqua);border-radius:20px;padding:16px 20px;text-align:center;line-height:1.45}
+.bioma-pontos{position:absolute;bottom:14px;left:0;right:0;z-index:2;display:flex;justify-content:center;gap:8px}
+.bioma-pontos button{width:13px;height:13px;min-height:0!important;padding:0!important;border-radius:50%;border:2px solid #fff!important;background:#fff6!important;transition:width .3s}
+.bioma-pontos button.on{background:var(--lime)!important;width:32px;border-radius:8px}
+.descobrir-grande{width:100%;font-size:18px;min-height:58px;margin-top:6px}
+.sticker.nova{cursor:pointer}.sticker-img{position:relative;overflow:hidden}.sticker-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#album .sticker h3{color:#f4fffb}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
