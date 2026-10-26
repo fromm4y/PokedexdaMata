@@ -71,6 +71,14 @@ const canvas=$("confetti"),ctx=canvas.getContext("2d");let bits=[],raf=0;
 function resize(){const dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=innerWidth*dpr;canvas.height=innerHeight*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}window.addEventListener("resize",resize);resize();
 function startConfetti(){if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;canvas.style.display="block";bits=[];const colors=["#8cf0c5","#65c9f4","#fff","#f7dc6f","#ff9ecb","#53b879"];for(let i=0;i<150;i++)bits.push({x:Math.random()*innerWidth,y:-20-Math.random()*innerHeight*.4,size:4+Math.random()*7,vx:(Math.random()-.5)*3,vy:2+Math.random()*5,r:Math.random()*6,vr:(Math.random()-.5)*.18,c:colors[i%colors.length]});const start=performance.now();function frame(now){ctx.clearRect(0,0,innerWidth,innerHeight);bits.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.c;ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*1.6);ctx.restore()});bits=bits.filter(p=>p.y<innerHeight+30);if(now-start<1600&&bits.length)raf=requestAnimationFrame(frame);else{cancelAnimationFrame(raf);ctx.clearRect(0,0,innerWidth,innerHeight);canvas.style.display="none"}}cancelAnimationFrame(raf);raf=requestAnimationFrame(frame)}
 </script>
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+#exploreCards{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+@media (max-width:900px){#exploreCards{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+.navlinks button{min-height:44px;font-size:15px}
+.mainbtn,.altbtn{min-height:46px}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
