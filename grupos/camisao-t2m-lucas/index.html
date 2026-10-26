@@ -379,9 +379,31 @@ document.addEventListener("DOMContentLoaded", function () {
 <style id="ajustes-tablet">
 /* Ajustes de visual para tablet (deitado e em pé) e computador.
    O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800&display=swap');
 @media (min-width:700px){main.app{zoom:1.12}}
 .atalhos-leafeon{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .atalhos-leafeon button,.card button{min-height:44px}
+/* Tema Leafeon: verde-folha, creme e os raios do Rotom */
+body,#menuInicial{font-family:'Nunito',system-ui,sans-serif;background-color:#2c5a33;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cg opacity='.2'%3E%3Cpath d='M30 70C30 40 55 22 80 20c0 30-20 52-50 50z' fill='%23bfe59a'/%3E%3Cpath d='M30 70L72 28' stroke='%232f6b3d' stroke-width='2'/%3E%3Cpath d='M140 150c-22-6-32-28-28-48 20 4 34 24 28 48z' fill='%23f1dfb8'/%3E%3Cpath d='M128 30l-10 18h9l-6 16 16-22h-9l6-12z' fill='%23f6d743'/%3E%3Ccircle cx='50' cy='140' r='4' fill='%23f6d743'/%3E%3C/g%3E%3C/svg%3E"),radial-gradient(circle at 20% 0%,#6fae5c 0,transparent 45%),radial-gradient(circle at 90% 100%,#3f7a3a 0,transparent 50%),linear-gradient(160deg,#356b3b,#1d3f24)!important;
+  background-size:180px 180px,auto,auto,auto!important}
+h1,h2,h3,h4,.menu-botao,.menu-acesso,button,.tag{font-family:'Fredoka','Nunito',sans-serif}
+.top{background:linear-gradient(135deg,#f1dfb8,#e3c98f);color:#2b4a24;border-radius:26px;padding:14px 18px;box-shadow:0 6px 0 #a88a4f,0 14px 30px #0004}
+.top h1{color:#2f6b3d}.top p{color:#6b5226;font-weight:800}
+.logo{background:#fff;border:4px solid #8fd18a}
+.tag{background:#2f6b3d;color:#f1dfb8;box-shadow:0 4px 0 #1d4226}
+.card,.library-screen{border:3px solid #8fd18a;border-radius:28px;box-shadow:0 8px 0 #14301a,0 18px 40px #0006}
+.preview{border:3px dashed #8fd18a;background:linear-gradient(180deg,#183522,#0f2216)}
+.empty b{color:#f1dfb8;font-size:19px}
+.primary,.menu-botao{background:linear-gradient(180deg,#b5e6a0,#7fc46e);color:#14301a;box-shadow:0 5px 0 #3f7a3a}
+.secondary{background:linear-gradient(180deg,#b08657,#8d6a43);box-shadow:0 5px 0 #5c4128}
+button:active:not(:disabled){transform:translateY(3px)}
+.menu-caixa{border:3px solid #8fd18a;background:linear-gradient(180deg,rgba(33,58,36,.97),rgba(20,40,24,.98));box-shadow:0 10px 0 #14301a,0 24px 60px #0008;position:relative}
+.menu-caixa::before{content:"⚡";position:absolute;top:-22px;right:26px;font-size:40px;transform:rotate(12deg);filter:drop-shadow(0 3px 3px #0006)}
+.menu-leafeon{border:5px solid #8fd18a;box-shadow:0 8px 20px #0005;animation:flutua 3.5s ease-in-out infinite}
+@keyframes flutua{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.menu-caixa h1{color:#bfe59a;text-shadow:0 4px 0 #14301a}
+@media (prefers-reduced-motion:reduce){.menu-leafeon{animation:none}}
 </style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
