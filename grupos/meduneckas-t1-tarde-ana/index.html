@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#17113d">
+<title>Insecto Kaisen — Laboratório de Insetos</title>
+<style>
+:root{--bg:#0b1026;--panel:#151b3d;--panel2:#202653;--blue:#48d9ff;--purple:#a78bfa;--pink:#f472b6;--text:#f4f5ff;--muted:#b9c1e8;--danger:#ff5364;--green:#72f1b8}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at top right,#302064 0,transparent 36%),radial-gradient(circle at bottom left,#113c62 0,transparent 32%),var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer;border:0;border-radius:13px;padding:12px 16px;font-weight:800;transition:transform .15s,filter .15s}
+button:hover{filter:brightness(1.08);transform:translateY(-1px)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.app{max-width:1180px;margin:auto;padding:20px}
+header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 0 24px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:13px}
+.logo{display:grid;place-items:center;width:62px;height:62px;border-radius:18px;background:linear-gradient(135deg,var(--blue),var(--purple));font-size:32px;box-shadow:0 0 28px #48d9ff33}
+h1{font-size:clamp(1.65rem,4vw,2.5rem);line-height:1;margin:0;letter-spacing:-1px}
+h1 span{color:var(--blue)}
+.subtitle{color:var(--muted);margin:7px 0 0}
+.mascot{display:flex;align-items:center;gap:12px;max-width:370px;background:#171b3de8;border:1px solid #ffffff20;border-radius:18px;padding:10px 14px}
+.mascot-face{font-size:36px}
+.mascot p{margin:0;color:var(--muted);font-size:.92rem}
+.mascot strong{color:#fff}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.stat,.card{background:linear-gradient(145deg,#1a2149eF,#121832f5);border:1px solid #ffffff17;border-radius:20px;box-shadow:0 12px 35px #0002}
+.stat{padding:15px;display:flex;gap:12px;align-items:center}
+.stat .icon{font-size:26px}
+.stat strong{display:block;font-size:1.3rem}
+.stat small{color:var(--muted)}
+.progress-wrap{margin-bottom:20px;padding:14px 17px;background:#151b3d;border:1px solid #ffffff17;border-radius:16px}
+.progress-label{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:.9rem;margin-bottom:9px}
+.progress{height:10px;background:#080d22;border-radius:99px;overflow:hidden}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--purple),var(--pink));transition:width .3s}
+.layout{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:18px}
+.card{padding:20px}
+.card h2{margin:0 0 8px;font-size:1.25rem}
+.muted{color:var(--muted)}
+.upload-zone{display:grid;place-items:center;text-align:center;min-height:235px;border:2px dashed #6574bc;border-radius:18px;background:#0c1330;margin:17px 0;padding:18px;overflow:hidden}
+.upload-zone .camera{font-size:54px}
+.upload-zone img{max-width:100%;max-height:300px;border-radius:12px;object-fit:contain}
+.file-label{display:inline-flex;justify-content:center;align-items:center;gap:8px;background:#29305f;color:#fff;border:1px solid #7581cb}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.primary{background:linear-gradient(100deg,#35c8f5,#8875ff);color:#10152d}
+.secondary{background:#2a315e;color:#fff;border:1px solid #6574bc}
+.ghost{background:transparent;color:var(--muted);border:1px solid #56608e}
+.status{min-height:26px;margin:13px 0 0;color:var(--blue);font-weight:650}
+.status.error{color:#ffb4bc}
+.result{display:none;margin-top:18px;padding:18px;background:#0d1530;border:1px solid #5c6bb7;border-radius:18px}
+.result-top{display:flex;align-items:start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.result h3{font-size:1.5rem;margin:0}
+.badge{font-size:.78rem;padding:6px 10px;border-radius:99px;background:#26345b;color:#a9eaff}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.info-box{background:#171f43;padding:12px;border-radius:13px;min-width:0}
+.info-box strong{display:block;margin-bottom:5px}
+.info-box p{margin:0;color:#d6ddff;white-space:pre-wrap;overflow-wrap:anywhere}
+.danger{margin-top:12px;background:#421c35;border:1px solid #ff647c;border-radius:14px;padding:13px;color:#ffe4e8}
+.danger strong{display:block;margin-bottom:4px}
+.side-stack{display:grid;gap:18px;align-content:start}
+.feature-row{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #ffffff13}
+.feature-row:last-child{border:0}
+.feature-icon{font-size:25px}
+.feature-row p{margin:4px 0 0;color:var(--muted);font-size:.93rem}
+input[type=text]{width:100%;padding:12px 13px;border-radius:12px;background:#0c1330;border:1px solid #53629b;color:#fff;margin:8px 0}
+.album-list,.map-list{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:8px}
+.album-list li,.map-list li{padding:10px 12px;border-radius:12px;background:#0c1330;color:#dce4ff;display:flex;justify-content:space-between;gap:8px}
+.empty{color:var(--muted);font-size:.92rem;padding:8px 0}
+.battle-box{margin-top:12px;padding:14px;border-radius:15px;background:linear-gradient(135deg,#252153,#132d4b);border:1px solid #8c78ed55}
+.battle-box p{color:var(--muted);margin:8px 0}
+.battle-result{font-weight:800;color:var(--green);min-height:22px}
+footer{text-align:center;color:#aeb8e7;font-size:.9rem;padding:26px 8px 10px}
+.hidden{display:none!important}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.app{padding:14px}.card{padding:16px}}
+@media(max-width:430px){.info-grid{grid-template-columns:1fr}.stat{padding:11px}.stat .icon{font-size:22px}.mascot{max-width:100%}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true">🐛</div>
+      <div><h1>INSECTO <span>KAISEN</span></h1><p class="subtitle">Laboratório de descobertas • Ciência + anime</p></div>
+    </div>
+    <div class="mascot">
+      <div class="mascot-face" aria-hidden="true">😈</div>
+      <div><strong>Sukuna, mascote do laboratório</strong><p id="mascotLine" aria-live="polite">“Mostre sua descoberta. Vamos investigar!”</p><button class="secondary" id="talkBtn" type="button" style="padding:7px 10px;margin-top:7px">Falar com Sukuna</button></div>
+    </div>
+  </header>
+
+  <section class="stats" aria-label="Progresso do pesquisador">
+    <div class="stat"><span class="icon">⭐</span><div><strong id="points">0</strong><small>Pontos de pesquisa</small></div></div>
+    <div class="stat"><span class="icon">🏅</span><div><strong id="medals">0</strong><small>Medalhas</small></div></div>
+    <div class="stat"><span class="icon">📖</span><div><strong id="albumCount">0</strong><small>No álbum</small></div></div>
+    <div class="stat"><span class="icon">⚡</span><div><strong id="level">1</strong><small>Nível de cientista</small></div></div>
+  </section>
+  <div class="progress-wrap">
+    <div class="progress-label"><span id="levelText">Nível 1 — Aprendiz de Insetos</span><span id="xpText">0 / 50 XP</span></div>
+    <div class="progress" aria-label="Progresso de experiência"><div id="xpBar"></div></div>
+  </div>
+
+  <main class="layout">
+    <section class="card">
+      <h2>📸 Escaneador de insetos</h2>
+      <p class="muted">Escolha uma foto nítida de um inseto para tentar identificá-lo. A identificação precisa de um servidor conectado.</p>
+      <div class="upload-zone" id="uploadZone">
+        <div id="emptyUpload"><div class="camera">📷</div><strong>Coloque uma foto aqui</strong><p class="muted">Use a câmera ou escolha uma imagem do aparelho.</p></div>
+        <img id="preview" class="hidden" alt="Prévia da foto escolhida">
+      </div>
+      <input id="photoInput" class="hidden" type="file" accept="image/*" capture="environment">
+      <div class="actions">
+        <label class="file-label" for="photoInput" style="cursor:pointer;border-radius:13px;padding:12px 16px;font-weight:800">📷 Escolher foto</label>
+        <button class="primary" id="identifyBtn" type="button" disabled>🔬 Identificar inseto</button>
+        <button class="ghost" id="newPhotoBtn" type="button">Nova foto</button>
+      </div>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+      <div class="result" id="result" aria-live="polite">
+        <div class="result-top"><div><h3 id="resultName">Inseto</h3><p class="muted" id="confidence"></p></div><span class="badge">🔎 Registro científico</span></div>
+        <div class="info-grid">
+          <div class="info-box"><strong>✨ Curiosidades</strong><p id="curiosities"></p></div>
+          <div class="info-box"><strong>🌿 Onde vive</strong><p id="habitat"></p></div>
+          <div class="info-box"><strong>🔊 Som conhecido</strong><p id="soundInfo"></p><button id="soundBtn" class="secondary" type="button" style="margin-top:10px">Ouvir descrição</button></div>
+          <div class="info-box"><strong>🗺️ Local da descoberta</strong><p id="savedLocation">Adicione um local abaixo, se quiser.</p></div>
+        </div>
+        <div class="danger hidden" id="dangerBox"><strong>🚨 Sukuna avisa: cuidado!</strong><span id="dangerText"></span><p><strong>Não toque no inseto. Afaste-se e chame um adulto.</strong></p></div>
+        <div class="actions">
+          <button class="primary" id="albumBtn" type="button">📖 Salvar no álbum</button>
+          <button class="secondary" id="battleBtn" type="button">⚔️ Treinar no modo batalha</button>
+        </div>
+        <div class="battle-box hidden" id="battleBox">
+          <strong>⚔️ Arena de treinamento (jogo fictício)</strong>
+          <p>Os atributos são apenas para diversão; não indicam perigo real.</p>
+          <p id="battleStats"></p>
+          <button class="primary" id="battlePlayBtn" type="button">Começar desafio</button>
+          <p class="battle-result" id="battleResult" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="result" id="uncertainBox">
+        <div style="font-size:42px">🤔</div><h3>Não consegui ter certeza!</h3>
+        <p class="muted">Não vou adivinhar. Tente uma foto mais nítida, com boa luz e o inseto inteiro aparecendo.</p>
+        <button class="primary" id="retryBtn" type="button">🔁 Tentar identificar de novo</button>
+      </div>
+    </section>
+
+    <aside class="side-stack">
+      <section class="card">
+        <h2>🗺️ Mapa de descobertas</h2>
+        <p class="muted">Escreva um lugar geral, como “jardim de casa” ou “parque”. Não precisa colocar endereço.</p>
+        <label for="locationInput">Lugar (opcional)</label>
+        <input id="locationInput" type="text" maxlength="80" placeholder="Ex.: jardim ou parque">
+        <p class="muted" style="font-size:.85rem">O local será guardado junto com o próximo registro no álbum.</p>
+        <ul class="map-list" id="mapList"><li class="empty">Suas descobertas aparecerão aqui.</li></ul>
+      </section>
+      <section class="card">
+        <h2>📚 Álbum de insetos</h2>
+        <p class="muted">Guarde os nomes que você descobrir e complete sua coleção.</p>
+        <ul class="album-list" id="albumList"><li class="empty">Seu álbum ainda está vazio.</li></ul>
+        <div class="actions"><button class="secondary" id="clearAlbumBtn" type="button">Limpar álbum</button></div>
+      </section>
+      <section class="card">
+        <h2>🧪 Regras do laboratório</h2>
+        <div class="feature-row"><span class="feature-icon">🛑</span><div><strong>Observe sem tocar</strong><p>Insetos desconhecidos podem picar ou causar irritação. Peça ajuda a um adulto.</p></div></div>
+        <div class="feature-row"><span class="feature-icon">🔍</span><div><strong>Sem adivinhações</strong><p>Se a certeza for menor que 80%, o app pede outra foto.</p></div></div>
+        <div class="feature-row"><span class="feature-icon">🏆</span><div><strong>Ganhe experiência</strong><p>Descobertas confirmadas dão pontos, XP e podem liberar medalhas.</p></div></div>
+      </section>
+    </aside>
+  </main>
+  <footer>Insecto Kaisen • Explore com curiosidade e cuidado. As identificações por IA podem errar e não substituem um especialista.</footer>
+</div>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const photoInput = $("photoInput");
+const preview = $("preview");
+const identifyBtn = $("identifyBtn");
+const statusEl = $("status");
+const resultEl = $("result");
+const uncertainBox = $("uncertainBox");
+let selectedFile = null;
+let lastResult = null;
+let isSaved = false;
+let points = readNumber("ik_points", 0);
+let medals = readNumber("ik_medals", 0);
+let xp = readNumber("ik_xp", 0);
+let album = readJSON("ik_album", []);
+let discoveries = readJSON("ik_discoveries", []);
+let seenNames = readJSON("ik_seen", []);
+
+function readNumber(key, fallback){ try { const n = Number(localStorage.getItem(key)); return Number.isFinite(n) && n >= 0 ? n : fallback; } catch { return fallback; } }
+function readJSON(key, fallback){ try { const v = JSON.parse(localStorage.getItem(key) || "null"); return Array.isArray(v) ? v : fallback; } catch { return fallback; } }
+function store(key, value){ try { localStorage.setItem(key, JSON.stringify(value)); } catch {} }
+function saveNumber(key, value){ try { localStorage.setItem(key, String(value)); } catch {} }
+function safeText(value, fallback="Não informado."){ return typeof value === "string" && value.trim() ? value.trim() : fallback; }
+function escapeText(el, value){ el.textContent = value; }
+function currentLevel(){ return Math.floor(xp / 50) + 1; }
+function updateStats(){
+  $("points").textContent = points;
+  $("medals").textContent = medals;
+  $("albumCount").textContent = album.length;
+  const level = currentLevel(), progress = xp % 50;
+  $("level").textContent = level;
+  $("levelText").textContent = `Nível ${level} — ${level===1?"Aprendiz de Insetos":level<4?"Pesquisador da Mata":"Mestre do Laboratório"}`;
+  $("xpText").textContent = `${progress} / 50 XP`;
+  $("xpBar").style.width = `${progress/50*100}%`;
+}
+function renderAlbum(){
+  const list = $("albumList"); list.replaceChildren();
+  if(!album.length){ const li=document.createElement("li"); li.className="empty"; li.textContent="Seu álbum ainda está vazio."; list.append(li); }
+  album.forEach(item=>{const li=document.createElement("li"); const name=document.createElement("span"); name.textContent=item.nome; const loc=document.createElement("small"); loc.textContent=item.local ? "📍 "+item.local : "🐛 Descoberto"; li.append(name,loc); list.append(li);});
+  $("albumCount").textContent = album.length;
+}
+function renderMap(){
+  const list=$("mapList"); list.replaceChildren();
+  if(!discoveries.length){const li=document.createElement("li");li.className="empty";li.textContent="Suas descobertas aparecerão aqui.";list.append(li);return;}
+  discoveries.slice().reverse().forEach(d=>{const li=document.createElement("li");const a=document.createElement("span");a.textContent="🐛 "+d.nome;const b=document.createElement("small");b.textContent=d.local||"Local não informado";li.append(a,b);list.append(li);});
+}
+updateStats(); renderAlbum(); renderMap();
+
+$("talkBtn").addEventListener("click",()=>{
+ const lines=["“Mostre sua descoberta. Vamos investigar!”","“Olhos atentos, cientista! Uma boa foto ajuda muito.”","“Não toque em insetos desconhecidos. Inteligência também é poder.”","“Mais uma descoberta para o seu álbum!”","“Se eu não tiver certeza, não vou inventar uma resposta.”"];
+ $("mascotLine").textContent=lines[Math.floor(Math.random()*lines.length)];
+});
+photoInput.addEventListener("change",()=>{
+ const file=photoInput.files && photoInput.files[0]; if(!file)return;
+ if(!file.type.startsWith("image/")){setStatus("Escolha um arquivo de imagem, por favor.",true);return;}
+ selectedFile=file; isSaved=false; lastResult=null;
+ const reader=new FileReader();
+ reader.onload=()=>{preview.src=String(reader.result);preview.classList.remove("hidden");$("emptyUpload").classList.add("hidden");};
+ reader.onerror=()=>setStatus("Não consegui abrir essa imagem. Tente outra.",true);
+ reader.readAsDataURL(file);
+ identifyBtn.disabled=false; resultEl.style.display="none"; uncertainBox.style.display="none";
+ setStatus("Foto pronta! Agora vamos investigar. ✨");
+});
+function resetForNewPhoto(){
+ photoInput.value="";selectedFile=null;lastResult=null;isSaved=false;
+ preview.removeAttribute("src");preview.classList.add("hidden");$("emptyUpload").classList.remove("hidden");
+ identifyBtn.disabled=true;resultEl.style.display="none";uncertainBox.style.display="none";setStatus("");
+}
+$("newPhotoBtn").addEventListener("click",resetForNewPhoto);
+$("retryBtn").addEventListener("click",()=>{uncertainBox.style.display="none";if(selectedFile) identify(); else setStatus("Escolha uma foto primeiro.",true);});
+function setStatus(message,isError=false){statusEl.textContent=message;statusEl.classList.toggle("error",isError);}
+
+async function fileToJpegBase64(file){
+ const dataUrl = await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result));r.onerror=reject;r.readAsDataURL(file);});
+ const img = await new Promise((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=reject;i.src=dataUrl;});
+ const max=1200, scale=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));
+ const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));
+ const ctx=canvas.getContext("2d");ctx.drawImage(img,0,0,canvas.width,canvas.height);
+ const jpeg=canvas.toDataURL("image/jpeg",0.86);return jpeg.slice(jpeg.indexOf(",")+1);
+}
+identifyBtn.addEventListener("click",identify);
+async function identify(){
+ if(!selectedFile)return;
+ identifyBtn.disabled=true;$("retryBtn").disabled=true;resultEl.style.display="none";uncertainBox.style.display="none";
+ setStatus("😈 Sukuna está ajudando o laboratório a analisar a foto...");
+ try{
+  const base64=await fileToJpegBase64(selectedFile);
+  const pedido={
+   modelo:"gemini-3.6-flash",
+   body:{contents:[{parts:[
+    {text:"Você é o guia do app INSECTO KAISEN, uma Pokédex de insetos para crianças. Analise somente o que aparece na foto e tente identificar apenas um INSETO visível. Não identifique plantas, pessoas ou outros animais como insetos. Nunca invente uma identificação. Responda com dados curtos, simples e seguros em português. Informe nome comum, curiosidades, habitat, se pode ser perigoso para uma pessoa e um aviso de segurança. Se não houver certeza suficiente de que é um inseto e de sua identificação, use identificado=false. A confiança deve refletir a certeza real. Descreva o som apenas se fizer sentido e não invente sons. Campos: identificado (boolean), confianca (integer 0-100), nome (string), curiosidades (string), onde_vive (string), perigoso (boolean), aviso_perigo (string), som (string)."},
+    {inline_data:{mime_type:"image/jpeg",data:base64}}
+   ]}],generationConfig:{temperature:0.2,responseMimeType:"application/json",responseSchema:{
+    type:"object",properties:{
+     identificado:{type:"boolean"},confianca:{type:"integer"},nome:{type:"string"},curiosidades:{type:"string"},onde_vive:{type:"string"},perigoso:{type:"boolean"},aviso_perigo:{type:"string"},som:{type:"string"}
+    },required:["identificado","confianca"]
+   }}}
+  };
+  const resposta=await fetch("/api/identificar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(pedido)});
+  if(!resposta.ok)throw new Error("Servidor indisponível");
+  const dados=await resposta.json();
+  const texto=dados?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if(!texto)throw new Error("Resposta vazia");
+  const info=JSON.parse(texto);
+  if(info.identificado!==true || !Number.isFinite(Number(info.confianca)) || Number(info.confianca)<80){
+   setStatus("A foto ainda não deu certeza suficiente. Vamos tentar outra!");uncertainBox.style.display="block";return;
+  }
+  if(typeof info.nome!=="string" || !info.nome.trim()) {setStatus("Não consegui confirmar o nome. Tente outra foto.",true);uncertainBox.style.display="block";return;}
+  showResult(info);
+ }catch(error){
+  setStatus("Ops! Não consegui falar com o servidor. Confira a conexão e tente novamente.",true);
+  $("retryBtn").disabled=false;uncertainBox.style.display="block";
+ }finally{identifyBtn.disabled=!selectedFile;$("retryBtn").disabled=false;}
+}
+function showResult(info){
+ lastResult=info;isSaved=false;
+ $("resultName").textContent=safeText(info.nome,"Inseto identificado");
+ $("confidence").textContent=`Certeza estimada pela IA: ${Math.round(Number(info.confianca))}%`;
+ $("curiosities").textContent=safeText(info.curiosidades,"Não há curiosidades disponíveis.");
+ $("habitat").textContent=safeText(info.onde_vive,"Habitat não informado.");
+ $("soundInfo").textContent=safeText(info.som,"Não há uma descrição de som disponível.");
+ $("savedLocation").textContent=$("locationInput").value.trim()||"Local não informado.";
+ $("dangerBox").classList.toggle("hidden",info.perigoso!==true);
+ $("dangerText").textContent=info.perigoso===true?safeText(info.aviso_perigo,"Não toque no inseto. Afaste-se e chame um adulto."):"";
+ $("battleBox").classList.add("hidden");$("battleResult").textContent="";
+ const seed=String(info.nome).length+Number(info.confianca);
+ const stats={forca:20+(seed*7)%81,agilidade:20+(seed*11)%81,defesa:20+(seed*13)%81};
+ $("battleStats").textContent=`Força ${stats.forca} • Agilidade ${stats.agilidade} • Defesa ${stats.defesa}`;
+ $("battleBox").dataset.power=String(Math.round((stats.forca+stats.agilidade+stats.defesa)/3));
+ resultEl.style.display="block";uncertainBox.style.display="none";
+ if(!seenNames.includes(info.nome.toLowerCase())){
+  points+=10;xp+=10;seenNames.push(info.nome.toLowerCase());store("ik_seen",seenNames);
+  if(Number(info.confianca)>=90){medals+=1;}
+  saveNumber("ik_points",points);saveNumber("ik_xp",xp);saveNumber("ik_medals",medals);updateStats();
+ }
+ setStatus("✅ Descoberta analisada! Salve no álbum para registrá-la.");
+}
+$("albumBtn").addEventListener("click",()=>{
+ if(!lastResult)return;
+ const name=safeText(lastResult.nome,"Inseto descoberto");
+ if(album.some(x=>x.nome.toLowerCase()===name.toLowerCase())){$("albumBtn").textContent="✅ Já está no álbum";return;}
+ const local=$("locationInput").value.trim();
+ const item={nome:name,local,quando:new Date().toLocaleDateString("pt-BR")};
+ album.push(item);discoveries.push(item);store("ik_album",album);store("ik_discoveries",discoveries);
+ isSaved=true;renderAlbum();renderMap();$("savedLocation").textContent=local||"Local não informado.";
+ $("albumBtn").textContent="✅ Guardado no álbum";points+=5;xp+=5;saveNumber("ik_points",points);saveNumber("ik_xp",xp);updateStats();
+});
+$("battleBtn").addEventListener("click",()=>{if(!lastResult)return;$("battleBox").classList.toggle("hidden");});
+$("battlePlayBtn").addEventListener("click",()=>{
+ const power=Number($("battleBox").dataset.power||40),roll=Math.floor(Math.random()*61)+20;
+ const result=$("battleResult");
+ if(power+roll>=100){result.textContent="🏆 Vitória no treino! +5 XP";xp+=5;points+=5;saveNumber("ik_xp",xp);saveNumber("ik_points",points);updateStats();}
+ else result.textContent="💪 Quase! Treine com mais descobertas e tente novamente.";
+});
+$("soundBtn").addEventListener("click",()=>{
+ const text=safeText(lastResult?.som,"Não há descrição de som para ler.");
+ if("speechSynthesis" in window){window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance("Descrição do som: "+text);utterance.lang="pt-BR";window.speechSynthesis.speak(utterance);}
+ else alert(text);
+});
+$("clearAlbumBtn").addEventListener("click",()=>{
+ if(!album.length)return;
+ if(!confirm("Quer mesmo limpar o álbum e o mapa de descobertas deste navegador?"))return;
+ album=[];discoveries=[];store("ik_album",album);store("ik_discoveries",discoveries);renderAlbum();renderMap();
+});
+</script>
+
+<!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
+     (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
+<script src="/comum/ficha.js"></script>
+<script src="/comum/adaptador.js"></script>
+<script>
+PokedexAdaptador.iniciar({
+  icone: "🐛", fauna: true,
+  cor: "#48d9ff", cor2: "#a78bfa",
+  escuro: () => true,
+  noturno: { fundo: "#0d1530", texto: "#f4f5ff", suave: "#b9c1e8" },
+  carregando: "🔎 Sukuna está ajudando o laboratório a analisar a foto...",
+  esconder: ["#result", "#uncertainBox"],
+  extras: info => [["🌿 Onde vive", info.onde_vive], ["🔊 Som conhecido", info.som]],
+  alerta: info => info.perigoso === true ? (info.aviso_perigo || "Não toque no inseto. Afaste-se e chame um adulto.") : "",
+  salvar: () => document.getElementById("albumBtn").click(),
+  acoesExtras: () => [
+    { texto: "🔊 Ouvir descrição", fechar: false, aoClicar: () => document.getElementById("soundBtn").click() },
+    { texto: "⚔️ Modo batalha", aoClicar: () => { PokedexAdaptador.mostrarFront("#battleBox"); document.getElementById("battleBox").classList.remove("hidden"); } }
+  ],
+  novaFoto: () => document.getElementById("newPhotoBtn").click()
+});
+</script>
+</body>
+</html>

@@ -371,7 +371,8 @@
       const video = corpo.querySelector("video");
       let fluxo = null, entregue = false;
       pop._aoFechar = () => { if (fluxo) fluxo.getTracks().forEach(t => t.stop()); if (!entregue) resolve(null); };
-      botoes(acoes, [{ texto: "📸 Capturar", principal: true, fechar: false, aoClicar: () => {
+      botoes(acoes, [{ texto: "📁 Escolher arquivo", aoClicar: () => { entregue = true; resolve("arquivo"); } },
+        { texto: "📸 Capturar", principal: true, fechar: false, aoClicar: () => {
         if (!video.videoWidth) return;
         const c = document.createElement("canvas");
         c.width = video.videoWidth; c.height = video.videoHeight;
@@ -380,7 +381,7 @@
       } }]);
       navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false })
         .then(s => { fluxo = s; video.srcObject = s; })
-        .catch(() => { fechar(); aviso({ tipo: "erro", titulo: "Não consegui abrir a câmera", texto: "Permita o uso da câmera no navegador ou use o botão da galeria." }); });
+        .catch(() => { entregue = true; fechar(); resolve("sem-camera"); });
     });
   }
   /* ligarCamera(input, aoEscolher): no computador, o clique no "Tirar foto"
@@ -388,9 +389,13 @@
   function ligarCamera(input, aoEscolher) {
     if (!input) return;
     input.addEventListener("click", e => {
-      if (!temWebcam()) return;
+      if (!temWebcam() || input._fpPular) { input._fpPular = false; return; }
       e.preventDefault();
-      webcam().then(f => { if (f) aoEscolher(f); });
+      webcam().then(f => {
+        // "📁 Escolher arquivo" (ou câmera bloqueada): abre a pasta normal
+        if (f === "arquivo" || f === "sem-camera") { input._fpPular = true; input.click(); return; }
+        if (f) aoEscolher(f);
+      });
     });
   }
 
