@@ -85,6 +85,24 @@ function appendGroup(root,label,animals){
 $('groupBy').addEventListener('change',renderGroups);
 $('search').oninput=e=>{let q=e.target.value.toLowerCase();document.querySelectorAll('.animal').forEach(x=>x.style.display=x.textContent.toLowerCase().includes(q)?'block':'none')};stats();renderAlbum();
 </script>
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+html{background:#05070a}
+body{min-height:100vh;background-attachment:fixed}
+nav button{min-height:46px;font-size:15px}
+/* tablet em pé: menu vira uma barra no topo */
+@media (max-width:900px){
+  .side{position:sticky;top:0;z-index:6;width:auto;inset:auto;flex-direction:row;align-items:center;gap:6px;padding:8px 10px;border-right:0;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+  .side::-webkit-scrollbar{display:none}
+  .brand{padding:0 6px 0 0}
+  .navtitle,.profile{display:none!important}
+  .side nav{display:flex;gap:4px}
+  .side nav button{width:auto;white-space:nowrap;padding:10px 12px;font-size:14px}
+  .main{margin-left:0!important}
+  header{position:static}
+}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
