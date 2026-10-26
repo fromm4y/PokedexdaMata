@@ -386,9 +386,32 @@ renderLoja();renderAlbum();renderPersonagem();atualizarPontos();mostrarTela('ini
 <style id="ajustes-tablet">
 /* Ajustes de visual para tablet (deitado e em pé) e computador.
    O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800;900&display=swap');
 /* o app todo um pouco maior no tablet (as letras eram miúdas) */
 @media (min-width:700px){main.app{zoom:1.15}}
 .button,.menu-button{min-height:44px}
+/* Floresta encantada dos detetives: árvores, vaga-lumes e varal de folhas */
+body{font-family:'Nunito',system-ui,sans-serif;background-color:#1f3d26;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='180' viewBox='0 0 600 180'%3E%3Cg fill='%2316351f'%3E%3Cpath d='M0 180V120q40-30 80 0t80-10 90 10 100-20 90 15 80-10 80 15v80z'/%3E%3Ccircle cx='60' cy='95' r='38'/%3E%3Ccircle cx='95' cy='80' r='30'/%3E%3Crect x='70' y='110' width='12' height='50'/%3E%3Ccircle cx='300' cy='85' r='44'/%3E%3Ccircle cx='340' cy='100' r='30'/%3E%3Crect x='305' y='110' width='14' height='50'/%3E%3Cpath d='M500 160l-40 0 40-110 40 110z'/%3E%3Cpath d='M200 165l-28 0 28-80 28 80z'/%3E%3C/g%3E%3Cg fill='%23ffd5e1'%3E%3Ccircle cx='90' cy='70' r='4'/%3E%3Ccircle cx='320' cy='72' r='4'/%3E%3Ccircle cx='50' cy='100' r='3'/%3E%3Ccircle cx='345' cy='96' r='3'/%3E%3C/g%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cg fill='%23f6e58d'%3E%3Ccircle cx='30' cy='40' r='2.5' opacity='.7'/%3E%3Ccircle cx='150' cy='70' r='2' opacity='.5'/%3E%3Ccircle cx='90' cy='160' r='2.5' opacity='.6'/%3E%3Ccircle cx='200' cy='190' r='1.8' opacity='.5'/%3E%3C/g%3E%3Cg fill='%239caf68' opacity='.18'%3E%3Cpath d='M110 20c18-8 34 0 34 0s-10 16-30 14c-4 0-6-6-4-14z'/%3E%3Cpath d='M20 130c14 6 20 22 20 22s-18 2-26-12c-2-4 0-8 6-10z'/%3E%3C/g%3E%3C/svg%3E"),radial-gradient(ellipse at top,#4d7a3e 0,#2a4f2f 40%,#1a3220 100%);
+  background-repeat:repeat-x,repeat,no-repeat;background-position:bottom center,0 0,0 0;background-size:600px 180px,220px 220px,100% 100%;background-attachment:fixed,scroll,fixed}
+h1,h2,h3,.tree-name,.badge,.menu-button,.menu-tile,.button{font-family:'Fredoka','Nunito',sans-serif}
+header#cabecalho{position:relative;padding-top:38px}
+header#cabecalho::before{content:"";position:absolute;top:0;left:-16px;right:-16px;height:34px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='34'%3E%3Cpath d='M0 8q30 16 60 0t60 0' stroke='%236b8f3e' stroke-width='3' fill='none'/%3E%3Cpath d='M18 13c-6 8-2 18-2 18s9-6 7-15z' fill='%237fae4b'/%3E%3Cpath d='M48 10c4 9 14 12 14 12s0-11-9-14z' fill='%239caf68'/%3E%3Cpath d='M80 12c-6 8-2 18-2 18s9-6 7-15z' fill='%237fae4b'/%3E%3Ccircle cx='104' cy='12' r='5' fill='%23f08aa8'/%3E%3Ccircle cx='104' cy='12' r='2' fill='%23ffd5e1'/%3E%3C/svg%3E") repeat-x;background-size:120px 34px}
+h1{color:#ffe1ea;text-shadow:0 4px 0 #a64e69,0 10px 26px #0006;letter-spacing:.5px}
+.sub{color:#eef4dc;font-weight:700}
+.badge{background:#f08aa8;color:#fff;border-color:#ffd5e1;box-shadow:0 4px 0 #a64e69}
+.mascote{animation:balanca 3.2s ease-in-out infinite}
+.mascotes .mascote:nth-child(2){animation-delay:-1.6s}
+@keyframes balanca{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+.card{background:linear-gradient(180deg,rgba(43,66,40,.94),rgba(30,48,30,.96));border:3px solid #9caf68;border-radius:28px;box-shadow:0 8px 0 #14261a,0 18px 36px #0005}
+.card h2{color:#ffe1ea}
+.menu-tile{background:linear-gradient(180deg,#fff5f7,#ffe1ea);color:#5a3e2b;border:3px solid #f08aa8;box-shadow:0 6px 0 #c7718b}
+.menu-tile:nth-child(2n){background:linear-gradient(180deg,#f3f8e4,#dfeec0);border-color:#9caf68;box-shadow:0 6px 0 #6b8f3e}
+.menu-tile:hover{background:#fff;border-color:#f08aa8}
+.menu-tile .tile-icon{font-size:2.4rem}
+.settings-list label{background:#1b2a1c;border:2px solid #4c6b3b}
+.score-pill{background:#f6c445;color:#4a3000;border-color:#e0a21a}
+@media (prefers-reduced-motion:reduce){.mascote{animation:none}}
 </style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
