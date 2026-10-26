@@ -19,6 +19,7 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 - **câmera de verdade** no tablet, **webcam** no computador e **galeria** que abre a galeria (o botão "📁 Escolher arquivo" da webcam foi consertado);
 - revisado no **tablet deitado (1280×800) e em pé (800×1280)**: menus, botões do tamanho do dedo, letras legíveis e nada cortado;
 - testado: acerto, fora do tema, dúvida e arquivo que não é foto — **116 de 116 verificações passando, sem erros**;
+- na dúvida, a porcentagem mostrada fica sempre abaixo da certeza mínima do grupo (antes podia aparecer "Estou em dúvida 95");
 - os fronts mais simples (Izaque, Davi T2, Eduardo, Elisa e Lucas) ganharam um **visual mais colorido e infantil**, cada um no seu tema, com letras arredondadas — as ideias e telas continuam sendo dos alunos;
 - só o primeiro nome dos alunos no site; os arquivos originais (com nomes completos) foram apagados do repositório e do histórico.
 
@@ -29,12 +30,12 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 
 | Turma | Grupo | Tema | Integrantes | Visual no tablet |
 |---|---|---|---|---|
-| Turma 1 - Manhã | [Raízes do Amanhã](grupos/meduneckas-t1-manha-luciano/) | Répteis e anfíbios | Luciano e Enzo | Menu numa linha só; "Escolher da galeria" passou a abrir a galeria (abria a câmera); grades sem buracos. |
-| Turma 1 - Tarde | [Jujutsu](grupos/meduneckas-t1-tarde-ana/) | insetos | Saskhya, Ana, Maria Isadora e Guilherme | Botão 🖼️ Galeria no tablet (o único botão abria só a câmera); layout sem espaço vazio; letras maiores. |
-| Turma 1 - Tarde | [Brasilian Bird](grupos/meduneckas-t1-tarde-davi/) | Aves do Brasil | Bernardo N., Valentina, Ester, Theo A. e Davi | Já estava ótimo no tablet: nada mudou. |
-| Turma 1 - Tarde | [Os inteligentes](grupos/meduneckas-t1-tarde-thamires/) | flores | Thamires, Anna Isabela e Gabriel | Modo escuro com títulos e textos legíveis; barra de baixo maior e sem cobrir o fim da página. |
-| Turma 2 - Tarde | [All Star](grupos/meduneckas-t2-tarde-benjamin/) | Répteis | Paulo, Benjamin e Fernanda | Textos diziam que a IA "ainda não estava conectada" (corrigido); cards e barra de baixo ajustados. |
-| Turma 2 - Tarde | [Caçadores de Mamíferos](grupos/meduneckas-t2-tarde-davi/) | Mamíferos | Pedro, Davi e Nicolas | Fotos dos animais buscadas pela espécie (os links do Wikimedia eram pesados ou não existiam); menu e fundo no tablet. **Visual novo:** diário de campo do explorador (página de caderno com fita adesiva, pegadas, fotos tipo polaroide). |
+| Turma 1 - Manhã | [Raízes do Amanhã](grupos/meduneckas-t1-manha-luciano/) | Répteis e anfíbios | Luciano e Enzo | Menu numa linha só; "Escolher da galeria" passou a abrir a galeria (abria a câmera); grades sem buracos. **Novo:** aba 📚 Álbum no menu de cima (saiu de baixo da câmera); na câmera aparecem só os botões da etapa (câmera e galeria → tirar foto e desligar → descobrir ou trocar a foto). |
+| Turma 1 - Tarde | [Jujutsu](grupos/meduneckas-t1-tarde-ana/) | insetos | Saskhya, Ana, Maria Isadora e Guilherme | Botão 🖼️ Galeria no tablet (o único botão abria só a câmera); layout sem espaço vazio; letras maiores. **Refeito (InsectoKaisen):** 3 telas (Início, Reconhecer, Álbum); o Sukuna virou um chat que fica no canto da tela e responde perguntas sobre insetos (desenho de fã, a imagem pode ser trocada numa linha: `IMAGEM_SUKUNA`); o modo batalha virou um quiz contra o Sukuna que cabe na tela; mensagens das missões 4 a 6 ajustadas. |
+| Turma 1 - Tarde | [Brasilian Bird](grupos/meduneckas-t1-tarde-davi/) | Aves do Brasil | Bernardo N., Valentina, Ester, Theo A. e Davi | **Novo:** menu do topo de ponta a ponta; Tokoyami, a menina e o menino viraram desenhos (os emojis apareciam quebrados no Windows); a tela Explorar reveza os biomas, cada vez um em destaque com as aves já descobertas; "Fazer descoberta" abre o reconhecimento; aves fora das 6 figurinhas também entram no álbum. |
+| Turma 1 - Tarde | [Os inteligentes](grupos/meduneckas-t1-tarde-thamires/) | flores | Thamires, Anna Isabela e Gabriel | Modo escuro com títulos e textos legíveis; barra de baixo maior e sem cobrir o fim da página. **Novo:** Explorar com cartões compactos (os detalhes abrem em "Ver informações completas"), sem precisar descer muito. |
+| Turma 2 - Tarde | [All Star](grupos/meduneckas-t2-tarde-benjamin/) | Répteis | Paulo, Benjamin e Fernanda | Textos diziam que a IA "ainda não estava conectada" (corrigido); cards e barra de baixo ajustados. **Novo:** Card Game estilo Pokémon TCG: cada réptil identificado vira carta, a criança monta o deck (3 a 5) e batalha contra a máquina no fácil, médio ou difícil (tipos Veneno, Constrição, Água e Terra); mensagem de dúvida ajustada. |
+| Turma 2 - Tarde | [Caçadores de Mamíferos](grupos/meduneckas-t2-tarde-davi/) | Mamíferos | Pedro, Davi e Nicolas | Fotos dos animais buscadas pela espécie (os links do Wikimedia eram pesados ou não existiam); menu e fundo no tablet. **Visual novo:** diário de campo do explorador (página de caderno com fita adesiva, pegadas, fotos tipo polaroide). **Novo:** mamíferos fora do catálogo também entram no álbum (com a foto); mensagens de dúvida e acerto ajustadas. |
 
 <details><summary><b>Raízes do Amanhã</b> (Turma 1 - Manhã) — ajustes nas missões e no front</summary>
 
