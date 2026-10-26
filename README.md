@@ -63,7 +63,7 @@ O passo a passo completo, com onde clicar em cada tela, problemas comuns e como 
 
 | Endereço | O que mostra |
 |---|---|
-| `/` | O painel com todos os grupos: ✅ pronto ou ⚠️ falta arrumar (com o motivo) |
+| `/` | O painel com todos os grupos, com **filtro por escola** |
 | `/grupos/<grupo>/` | A Pokédex do grupo |
 | `/api/identificar` | O diagnóstico: as missões de todos os grupos e quantas chaves o servidor enxerga |
 | `/api/identificar?grupo=<grupo>` | O diagnóstico de um grupo só |

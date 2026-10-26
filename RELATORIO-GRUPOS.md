@@ -18,9 +18,12 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 - **Salvar no álbum** leva para o álbum do grupo;
 - **câmera de verdade** no tablet, **webcam** no computador e **galeria** que abre a galeria (o botão "📁 Escolher arquivo" da webcam foi consertado);
 - revisado no **tablet deitado (1280×800) e em pé (800×1280)**: menus, botões do tamanho do dedo, letras legíveis e nada cortado;
-- testado: acerto, fora do tema, dúvida e arquivo que não é foto — **145 de 145 verificações passando, sem erros**;
+- testado: acerto, fora do tema, dúvida e arquivo que não é foto — **116 de 116 verificações passando, sem erros**;
+- os fronts mais simples (Izaque, Davi T2, Eduardo, Elisa e Lucas) ganharam um **visual mais colorido e infantil**, cada um no seu tema, com letras arredondadas — as ideias e telas continuam sendo dos alunos;
 - só o primeiro nome dos alunos no site; os arquivos originais (com nomes completos) foram apagados do repositório e do histórico.
 
+
+**No painel (página inicial):** filtro por **escola** (fica lembrado no navegador) e grupos organizados por escola e turma.
 
 ## 🏫 Meduneckas
 
@@ -31,7 +34,7 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 | Turma 1 - Tarde | [Brasilian Bird](grupos/meduneckas-t1-tarde-davi/) | Aves do Brasil | Bernardo N., Valentina, Ester, Theo A. e Davi | Já estava ótimo no tablet: nada mudou. |
 | Turma 1 - Tarde | [Os inteligentes](grupos/meduneckas-t1-tarde-thamires/) | flores | Thamires, Anna Isabela e Gabriel | Modo escuro com títulos e textos legíveis; barra de baixo maior e sem cobrir o fim da página. |
 | Turma 2 - Tarde | [All Star](grupos/meduneckas-t2-tarde-benjamin/) | Répteis | Paulo, Benjamin e Fernanda | Textos diziam que a IA "ainda não estava conectada" (corrigido); cards e barra de baixo ajustados. |
-| Turma 2 - Tarde | [Caçadores de Mamíferos](grupos/meduneckas-t2-tarde-davi/) | Mamíferos | Pedro, Davi e Nicolas | Fotos dos animais buscadas pela espécie (os links do Wikimedia eram pesados ou não existiam); menu e fundo no tablet. |
+| Turma 2 - Tarde | [Caçadores de Mamíferos](grupos/meduneckas-t2-tarde-davi/) | Mamíferos | Pedro, Davi e Nicolas | Fotos dos animais buscadas pela espécie (os links do Wikimedia eram pesados ou não existiam); menu e fundo no tablet. **Visual novo:** diário de campo do explorador (página de caderno com fita adesiva, pegadas, fotos tipo polaroide). |
 
 <details><summary><b>Raízes do Amanhã</b> (Turma 1 - Manhã) — ajustes nas missões e no front</summary>
 
@@ -125,7 +128,7 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 | Turma | Grupo | Tema | Integrantes | Visual no tablet |
 |---|---|---|---|---|
 | Turma 1 | [Florestal](grupos/emidio-t1-arthur/) | Plantas medicinais | Arthur, Nicolas e Gabriel | Letras e barra de baixo maiores. |
-| Turma 1 | [Forest](grupos/emidio-t1-elisa/) | Árvores brasileiras | Heloisa, Elisa, Nicolly e Maria | App inteiro um pouco maior no tablet (letras miúdas). |
+| Turma 1 | [Forest](grupos/emidio-t1-elisa/) | Árvores brasileiras | Heloisa, Elisa, Nicolly e Maria | App inteiro um pouco maior no tablet (letras miúdas). **Visual novo:** floresta encantada (árvores desenhadas, vaga-lumes, varal de folhas, menu colorido e detetives balançando). |
 | Turma 1 | [Os sem sementes](grupos/emidio-t1-vitor/) | Frutas brasileiras | Mikael, Vitor, Matheus, Alexandre e Wellington | Mapa de biomas de verdade no lugar da imagem pixelada; botão Galeria abria a câmera (corrigido). |
 | Turma 2 | [FaunaVision](grupos/emidio-t2-lorenzo/) | Mamíferos | Aysha, Lorenzo e Maria | "Mapa de habitats" ganhou o mapa (o texto citava um mapa que não existia). |
 
@@ -156,8 +159,8 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 |---|---|---|---|---|
 | Turma 1 | [FrutaThech](grupos/cavazza-t1-enzo/) | Frutas brasileiras | Luckhas, Enzo, João e Ana | Cards em grade 2×2 (sobrava uma coluna vazia); mapa de verdade; o álbum era só enfeite e agora guarda as frutas. |
 | Turma 1 | [Animais da Amazônia](grupos/cavazza-t1-guilherme/) | Animais da Amazônia | Guilherme | Com tablet em pé, o menu vira barra no topo; fundo sem "cortes". |
-| Turma 1 | [Os Caçadores](grupos/cavazza-t1-izaque/) | Plantas medicinais | Izaque, David, Nicy, Dav e Ana | Visual reorganizado no tema branco do grupo (eram 3 temas misturados); conquistas e coleção funcionando de verdade. |
-| Turma 2 | [As Frutas Brasileiras](grupos/cavazza-t2-eduardo/) | Frutas brasileiras | Eduardo | Botões maiores; álbum vazio centralizado. |
+| Turma 1 | [Os Caçadores](grupos/cavazza-t1-izaque/) | Plantas medicinais | Izaque, David, Nicy, Dav e Ana | Visual reorganizado (eram 3 temas misturados); conquistas e coleção funcionando de verdade. **Visual novo:** tema de plantas medicinais (creme e verde, folhas, botões verdes e mel). |
+| Turma 2 | [As Frutas Brasileiras](grupos/cavazza-t2-eduardo/) | Frutas brasileiras | Eduardo | Botões maiores; álbum vazio centralizado. **Visual novo:** feira de frutas (a floresta continua no topo; o resto ficou claro e colorido, ficha clara). |
 | Turma 2 | [Dattflower](grupos/cavazza-t2-emilly/) | Flores | Emilly | Tela de entrada empilhada com tablet em pé. |
 | Turma 2 | [Cogumelo Explorer](grupos/cavazza-t2-victor/) | Cogumelos (venenoso ou não) | Victor, Kaun, Miguel e Bruno | Área da foto em largura total; galeria no tablet; a barra de baixo marca a aba atual. |
 | Turma 2 - Manhã | [BIOAVES](grupos/cavazza-t2m-bioaves/) | Aves do mundo | Miguel e Clara | Grade do "Explorar" sem card sobrando; botões maiores. |
@@ -225,7 +228,7 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 | Turma 1 - M | [Detetives de Penas](grupos/camisao-t1m-isabelly/) | Aves do Brasil | Hyan, Thales, Sophia e Isabelly | App um pouco maior no tablet. |
 | Turma 2 | [As Frutas](grupos/camisao-t2-bryan/) | Frutas do Brasil | Ana e Bryan | Imagem do detetive numa moldura só; a barra de baixo não cobre mais os botões. |
 | Turma 2 | [PassaroDex](grupos/camisao-t2-victor/) | Aves do Brasil | Victor, Henzo e Lara | "Escolher da galeria" abria a câmera (corrigido). O visual já estava ótimo. |
-| Turma 2 - M | [Jardim do Leafeon](grupos/camisao-t2m-lucas/) | Animais terrestres | Lucas, Kauã e Ruan | Atalhos para "Animais descobertos" e "Conquistas" (só existiam no menu de entrada); galeria no tablet; app maior. |
+| Turma 2 - M | [Jardim do Leafeon](grupos/camisao-t2m-lucas/) | Animais terrestres | Lucas, Kauã e Ruan | Atalhos para "Animais descobertos" e "Conquistas" (só existiam no menu de entrada); galeria no tablet; app maior. **Visual novo:** tema Leafeon (verde-folha e creme, raios do Rotom). |
 | Turma 2 - M | [Blinkis (Codex)](grupos/camisao-t2m-sther/) | Animais | Anna Laynara, Evelyn e Sther | App um pouco maior no tablet; nome da Sther corrigido. |
 
 <details><summary><b>Conjuntos da Floresta</b> (Turma 1) — ajustes nas missões e no front</summary>
