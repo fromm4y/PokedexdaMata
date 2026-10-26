@@ -32,7 +32,7 @@
 <article class="feature"><div class="feature-icon">🌼</div><h3>Ipê-amarelo</h3><p>É conhecido por suas flores amarelas que enfeitam a paisagem.</p></article><article class="feature"><div class="feature-icon">🌺</div><h3>Pau-brasil</h3><p>Árvore ligada à história do país, que deu nome ao Brasil.</p></article><article class="feature"><div class="feature-icon">🌲</div><h3>Araucária</h3><p>Também chamada de pinheiro-do-paraná, produz o pinhão.</p></article></div>
 </section>
 <section id="page-explorar" class="page hidden"><div class="section-head"><div><h2>📸 Central de investigação</h2><p>O esquilo detetive está pronto para analisar sua foto!</p></div><button class="btn btn-outline" data-go="inicio">← Voltar ao início</button></div>
-<div class="panel"><div class="upload-layout"><div><label for="photoInput" class="dropzone"><div><div class="camera-icon">📷</div><strong>Escolha uma foto da árvore</strong><span class="muted">Clique aqui para selecionar uma imagem do computador ou celular.</span><p class="small">Dica: uma foto nítida das folhas, flores, frutos ou do tronco pode ajudar.</p></div></label><input id="photoInput" type="file" accept="image/*" capture="environment" class="hidden"><img id="preview" class="preview hidden" alt="Prévia da foto selecionada"><div class="hero-actions"><button id="identifyBtn" class="btn btn-primary" disabled>🔎 Identificar árvore</button><button id="clearBtn" class="btn btn-outline" type="button">Limpar foto</button></div><div id="status" class="status hidden" role="status" aria-live="polite"></div></div><aside><div style="font-size:52px">🐿️🔎</div><h3 style="color:var(--forest);margin:4px 0 8px">Dica do esquilo</h3><p class="muted">Tente fotografar a árvore com boa iluminação. Se puder, inclua folhas e flores sem arrancar nada.</p><div class="tip">⚠️ <strong>Segurança primeiro!</strong><br>Não toque nem coma plantas desconhecidas. Tire fotos apenas de um lugar seguro e peça ajuda a um adulto quando necessário.</div><p class="small">A identificação por IA pode errar. Use o resultado como uma pista, não como confirmação científica.</p></aside></div>
+<div class="panel"><div class="upload-layout"><div><label for="photoInput" class="dropzone"><div><div class="camera-icon">📷</div><strong>Escolha uma foto da árvore</strong><span class="muted">Toque aqui para tirar a foto, ou use o botão 🖼️ Galeria.</span><p class="small">Dica: uma foto nítida das folhas, flores, frutos ou do tronco pode ajudar.</p></div></label><input id="photoInput" type="file" accept="image/*" capture="environment" class="hidden"><img id="preview" class="preview hidden" alt="Prévia da foto selecionada"><div class="hero-actions"><button id="identifyBtn" class="btn btn-primary" disabled>🔎 Identificar árvore</button><button id="clearBtn" class="btn btn-outline" type="button">Limpar foto</button></div><div id="status" class="status hidden" role="status" aria-live="polite"></div></div><aside><div style="font-size:52px">🐿️🔎</div><h3 style="color:var(--forest);margin:4px 0 8px">Dica do esquilo</h3><p class="muted">Tente fotografar a árvore com boa iluminação. Se puder, inclua folhas e flores sem arrancar nada.</p><div class="tip">⚠️ <strong>Segurança primeiro!</strong><br>Não toque nem coma plantas desconhecidas. Tire fotos apenas de um lugar seguro e peça ajuda a um adulto quando necessário.</div><p class="small">A identificação por IA pode errar. Use o resultado como uma pista, não como confirmação científica.</p></aside></div>
 <div id="resultCard" class="result-card hidden" aria-live="polite"><span class="pill">🔎 PISTA ENCONTRADA</span><h3 id="treeName">Árvore descoberta</h3><p id="treeDescription"></p><div class="result-two"><div class="fact"><strong>🍃 Curiosidades</strong><div id="curiosities"></div></div><div class="fact"><strong>🌦️ Curiosidade surpresa</strong><div id="surpriseText"></div></div></div><div id="warning" class="warning hidden">⚠️ Cuidado! Não toque nem coma esta planta. Peça ajuda a um adulto para saber mais.</div><div class="hero-actions"><button id="saveBtn" class="btn btn-primary">📚 Salvar no álbum</button><button id="againBtn" class="btn btn-outline">📸 Outra foto</button></div></div>
 </div></section>
 <section id="page-album" class="page hidden"><div class="section-head"><div><h2>📚 Meu álbum da mata</h2><p>Suas descobertas guardadas neste navegador.</p></div><button class="btn btn-primary" data-go="explorar">＋ Nova descoberta</button></div><div id="albumList" class="album-grid"></div><div id="albumEmpty" class="panel empty"><div class="big">🪹</div><h3>Seu álbum está esperando!</h3><p>Quando descobrir uma árvore, salve o resultado para vê-lo aqui.</p><button class="btn btn-primary" data-go="explorar">Começar a explorar</button></div><p class="small">As descobertas ficam salvas apenas neste navegador e dispositivo. Limpar os dados do navegador pode apagá-las.</p></section>
@@ -81,12 +81,19 @@ $('surpriseBtn').addEventListener('click',surprise);updateCounts();renderFacts()
 })();
 </script>
 
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+.text-button{min-height:44px;padding:10px 0;font-size:15px}
+.btn{min-height:46px}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  galeria: { depoisDe: "#identifyBtn", input: "#photoInput", classe: "btn btn-outline" },
   icone: "🌳", fauna: false,
   cor: "#24563b", cor2: "#8dcf62",
   escuro: () => false,
