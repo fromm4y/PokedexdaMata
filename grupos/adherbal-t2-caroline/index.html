@@ -161,6 +161,12 @@
     </section>
   </main>
 
+  <section class="card" id="minhasFrutas">
+    <h2 style="margin:0;color:#6b26d9">🍓 Minhas frutas</h2>
+    <p style="margin:4px 0 0;color:#634b80">As frutas que você descobriu ficam guardadas aqui (neste aparelho).</p>
+    <div class="album-frutas" id="albumFrutas"></div>
+  </section>
+
   <div class="footerMonkey">🐒〰️🌿〰️🐒〰️🌿〰️🐒 🍌</div>
   </section>
 </div>
@@ -299,11 +305,52 @@ again.addEventListener("click", () => {
 });
 </script>
 
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+.preview{max-height:260px;object-fit:contain}
+button,.labelBtn{min-height:48px}
+/* álbum novo, no visual do grupo */
+.album-frutas{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:12px}
+.album-frutas .fruta{background:#fff;border:2px solid #e1caff;border-radius:20px;overflow:hidden;box-shadow:0 6px 0 #873bff10;text-align:center}
+.album-frutas img{width:100%;height:120px;object-fit:cover;display:block}
+.album-frutas b{display:block;padding:8px 8px 2px;color:#6b26d9}
+.album-frutas small{display:block;padding:0 8px 10px;color:#634b80}
+.album-vazio{grid-column:1/-1;color:#634b80;text-align:center;padding:10px}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
 <script src="/comum/adaptador.js"></script>
 <script>
+/* Álbum "Minhas frutas" (o front do grupo não tinha álbum). */
+(function () {
+  const CHAVE = "frutai_album";
+  const ler = () => { try { return JSON.parse(localStorage.getItem(CHAVE) || "[]"); } catch (e) { return []; } };
+  function desenhar() {
+    const caixa = document.getElementById("albumFrutas"), lista = ler();
+    caixa.innerHTML = lista.length ? "" : '<div class="album-vazio">🐒 Ainda vazio! Descubra uma fruta e toque em “Salvar no álbum”.</div>';
+    lista.forEach(f => {
+      const d = document.createElement("div"); d.className = "fruta";
+      const img = document.createElement("img"); img.src = f.foto; img.alt = f.nome;
+      const b = document.createElement("b"); b.textContent = f.nome;
+      const sm = document.createElement("small"); sm.textContent = f.data;
+      d.append(img, b, sm); caixa.appendChild(d);
+    });
+  }
+  function miniatura(src) {
+    return new Promise(res => { const i = new Image(); i.onload = () => { const k = Math.min(1, 400 / Math.max(i.width, i.height)); const c = document.createElement("canvas"); c.width = Math.round(i.width * k); c.height = Math.round(i.height * k); c.getContext("2d").drawImage(i, 0, 0, c.width, c.height); res(c.toDataURL("image/jpeg", .8)); }; i.onerror = () => res(""); i.src = src; });
+  }
+  window.salvarFruta = async info => {
+    const nome = info.nome_popular || info.nome || "Fruta";
+    const lista = ler().filter(f => f.nome.toLowerCase() !== nome.toLowerCase());
+    lista.unshift({ nome, foto: await miniatura(document.getElementById("preview").src), data: new Date().toLocaleDateString("pt-BR") });
+    try { localStorage.setItem(CHAVE, JSON.stringify(lista.slice(0, 30))); } catch (e) {}
+    desenhar();
+    document.getElementById("minhasFrutas").scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  desenhar();
+})();
 PokedexAdaptador.iniciar({
   icone: "🍓", fauna: false,
   cor: "#873bff", cor2: "#a8f52a",
@@ -311,6 +358,7 @@ PokedexAdaptador.iniciar({
   noturno: { fundo: "#241044", texto: "#fff9ff", suave: "#d9b8ff" },
   carregando: "🐒 Hmm... estou procurando a fruta!",
   esconder: ["#result", "#status"],
+  salvar: info => salvarFruta(info),
   novaFoto: () => document.getElementById("again").click()
 });
 </script>
