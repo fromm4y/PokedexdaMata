@@ -35,7 +35,7 @@
 //  cota — não adianta nada. Duas chaves de PROJETOS DIFERENTES têm cotas
 //  separadas, e é isso que este arquivo aproveita: você configura várias
 //  chaves (uma de cada projeto) e, quando uma bate no limite, ele passa
-//  sozinho para a próxima. Ver o PASSO-A-PASSO-PROFESSORES.md.
+//  sozinho para a próxima. Ver o GUIA-PROFESSORES.md.
 //
 //  Onde colocar as chaves (no Vercel → Settings → Environment Variables):
 //    - GEMINI_API_KEY ......... a principal. Pode conter VÁRIAS chaves
