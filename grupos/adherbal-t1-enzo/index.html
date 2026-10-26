@@ -109,7 +109,7 @@
         <div class="eyebrow">GUIA DE CAMPO</div><h2>Identifique um mamífero</h2>
         <p class="section-sub">Escolha uma foto nítida de um mamífero. Se a IA não tiver certeza, ela vai pedir outra foto.</p>
         <div class="identify-card">
-          <label for="photoInput" class="upload-zone"><span>📷</span><strong>Escolher ou tirar foto</strong><small>JPG, PNG ou WebP</small></label>
+          <label for="photoInput" class="upload-zone"><span>📷</span><strong>Toque para tirar a foto</strong><small>JPG, PNG ou WebP</small></label>
           <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp" capture="environment">
           <img id="photoPreview" alt="Prévia da foto escolhida" class="photo-preview hidden">
           <button class="btn btn-gold" id="identifyButton">🔎 Identificar mamífero</button>
@@ -128,12 +128,20 @@
     <source src="https://deadsounds.com/wp-content/uploads/2023/08/jaguar-sound-2.mp3" type="audio/mpeg">
   </audio>
 
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+html{font-size:17.5px}
+.tab{min-height:44px;font-size:.95rem}
+.eyebrow{font-size:.78rem}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  galeria: { depoisDe: "label.upload-zone", input: "#photoInput", classe: "btn btn-outline", texto: "🖼️ Escolher da galeria" },
   icone: "🐾", fauna: true,
   cor: "#e7b95f", cor2: "#7fc28e",
   escuro: () => true,
