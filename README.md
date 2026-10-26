@@ -12,7 +12,8 @@ Este repositório publica **um site só**, com um **painel** na página inicial 
 - 🤖 **Reconhece a espécie** com a IA, usando as **6 missões** que o grupo escreveu no documento *"Meu Back-End — Pokédex"*;
 - 🗂️ Mostra a **ficha padrão** em um pop-up no meio da tela: nome popular e científico, curiosidades, **mapa dos biomas e regiões** do Brasil e o **habitat** com o ícone do tema, nas cores do grupo;
 - 🚫 Avisa quando a foto **não é do tema** ("isso parece ser uma melancia, e aqui a gente só reconhece flores"), quando a IA ficou em **dúvida** (foto pouco nítida) e quando o arquivo **não é uma foto**;
-- 💾 Guarda as descobertas no **álbum** do grupo.
+- 💾 Guarda as descobertas no **álbum** do grupo;
+- 📱 Funciona bem no **tablet** (deitado e em pé), no celular e no computador.
 
 O visual, as telas, os jogos e as ideias de cada Pokédex são dos alunos. 💚
 
@@ -62,7 +63,7 @@ O passo a passo completo, com onde clicar em cada tela, problemas comuns e como 
 
 | Endereço | O que mostra |
 |---|---|
-| `/` | O painel com todos os grupos: ✅ pronto, ⚠️ falta arrumar, 🟡 pendências para completar com o grupo |
+| `/` | O painel com todos os grupos: ✅ pronto ou ⚠️ falta arrumar (com o motivo) |
 | `/grupos/<grupo>/` | A Pokédex do grupo |
 | `/api/identificar` | O diagnóstico: as missões de todos os grupos e quantas chaves o servidor enxerga |
 | `/api/identificar?grupo=<grupo>` | O diagnóstico de um grupo só |
@@ -81,7 +82,7 @@ O passo a passo completo, com onde clicar em cada tela, problemas comuns e como 
 
 ## 🔒 Privacidade
 
-O site é público. Por isso, só aparece o **primeiro nome** dos alunos, e os arquivos originais entregues pelos grupos (que têm nomes completos) **não são publicados** (`.vercelignore`) e serão removidos do repositório.
+O site é público. Por isso, só aparece o **primeiro nome** dos alunos. Os arquivos originais entregues pelos grupos (que tinham nomes completos) foram **removidos do repositório e de todo o histórico**.
 
 ---
 

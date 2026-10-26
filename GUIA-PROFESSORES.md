@@ -179,6 +179,10 @@ Copie `modelo/missoes.js` para `grupos/<apelido>/missoes.js` e passe as resposta
 | chama o Gemini **direto** (com chave no código!) | Apague a chave e troque a chamada por `fetch("/api/identificar", { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify({ modelo: "gemini-3.6-flash", mime: "image/jpeg", imagem: base64 }) })` |
 | usa um modelo antigo (`gemini-1.5`, `gemini-2.0`, `gemini-2.5`…) | Nada: o adaptador troca pelo modelo atual sozinho |
 | não tem reconhecimento nenhum (só catálogo) | Crie uma seção "Descobrir pela foto" com um `<input type="file" accept="image/*" capture="environment">` e a chamada acima (veja `grupos/camisao-t2m-sther` como exemplo) |
+| tem **um botão só** de foto, ligado a um campo com `capture` (no tablet ele só abre a câmera, sem galeria) | No bloco do passo 4.3, adicione `galeria: { depoisDe: "#idDoBotaoDeFoto", input: "#idDoCampo" }`: aparece um botão "🖼️ Galeria" com a mesma cara do botão do grupo |
+| tem um botão "Galeria" que clica no campo da **câmera** | Troque o `onclick` dele por `FichaPokedex.escolherArquivo(f => { ... })` (veja `grupos/emidio-t1-vitor`) |
+| tem um "mapa" que é só desenho ou imagem borrada | Troque por `<div id="meuMapa"></div>` e chame `FichaPokedex.mapaBiomas(document.getElementById("meuMapa"))`: é o mapa de verdade dos biomas (veja `grupos/emidio-t2-lorenzo`) |
+| fica pequeno ou desalinhado no tablet | Coloque um `<style id="ajustes-tablet">` no fim da página com os ajustes (todos os grupos deste repositório têm um, de exemplo). Teste o tablet deitado **e** em pé |
 | guarda a **foto inteira** no álbum (`localStorage`) | Diminua antes de guardar (veja a função `reduzirParaAlbum` em `grupos/cavazza-t2-eduardo`). Sem isso, o álbum para de salvar depois de 1 ou 2 fotos |
 | tem imagens do Google borradas ou erradas | Troque por `<img data-especie="Nome científico">` e chame `FichaPokedex.trocarFotos()`: a página busca a foto certa da espécie na Wikipédia |
 | tem imagens embutidas de vários MB | Diminua (ou use `ferramentas/montar.py`, que faz isso sozinho) |
