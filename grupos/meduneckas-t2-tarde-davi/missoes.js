@@ -9,6 +9,7 @@
 //    https://SEU-PROJETO.vercel.app/api/identificar?grupo=meduneckas-t2-tarde-davi
 //
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
+//   - Missões 5 e 6: frases do grupo com acentos, o "%" e um emoji, para fazer sentido ("nao tenho tanta certeza 10" → "Não tenho tanta certeza: só 10%").
 //   - O front fazia uma "simulação" de câmera (sorteava um animal do catálogo); a câmera agora manda a foto de verdade para a IA.
 // ============================================================================
 
@@ -40,12 +41,12 @@ function conferirFoto(foto) {
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "nao tenho tanta certeza " + r.confianca + " tente outra foto";
+  return "🐾 Não tenho tanta certeza: só " + r.confianca + "%. Tente outra foto do mamífero, mais de pertinho!";
 }
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "encontrei " + r.nome_popular + "!";
+  return "🎉 Encontrei! É " + r.nome_popular + "!";
 }
 
 // ----------------------------------------------------------------------------
