@@ -541,9 +541,40 @@ renderAlbum();
 <style id="ajustes-tablet">
 /* Ajustes de visual para tablet (deitado e em pé) e computador.
    O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap');
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui deixamos mais colorido para as crianças:
+   a floresta continua no topo e o resto vira uma feira de frutas. */
 .empty{grid-column:1/-1;font-size:16px}
 button{min-height:48px;font-size:16px}
 .card p{font-size:16px}
+body{font-family:'Nunito',system-ui,sans-serif;color:#2b3a22;background-color:#fff7e6;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cg opacity='.22'%3E%3Ccircle cx='30' cy='34' r='11' fill='%23f4a72c'/%3E%3Cpath d='M30 23c2-6 7-8 11-7-2 5-6 7-11 7z' fill='%234caa62'/%3E%3Cpath d='M104 40c14-14 30-10 30-10s-2 18-18 24c-6 2-10 0-12-2z' fill='%234caa62'/%3E%3Ccircle cx='54' cy='108' r='9' fill='%23e94f37'/%3E%3Ccircle cx='68' cy='112' r='9' fill='%23e94f37'/%3E%3Cpath d='M60 100l2-10' stroke='%232f7d43' stroke-width='3'/%3E%3Cellipse cx='118' cy='118' rx='9' ry='14' fill='%23f6c445' transform='rotate%28-30 118 118%29'/%3E%3C/g%3E%3C/svg%3E"),linear-gradient(180deg,#fff7e6,#f3f9e4)!important;background-attachment:scroll!important}
+h1,h2,h3{font-family:'Fredoka','Nunito',sans-serif}
+header{border-bottom:6px solid #f4a72c}
+header::after{content:"🍌 🍍 🥭 🍊 🍇 🥥 🍓 🍉";position:absolute;left:0;right:0;bottom:10px;font-size:22px;letter-spacing:6px;opacity:.95}
+header .fox{background:#fff7e6;border:4px solid #f4a72c}
+h1{color:#fff;text-shadow:0 3px 0 #b35e12,0 7px 24px rgba(0,0,0,.6)}
+header p{font-weight:700;margin-bottom:22px}
+.card{background:#fffdf6;border:3px solid #cfe6b5;backdrop-filter:none;box-shadow:0 8px 0 #e3efcf,0 16px 30px #6b8a4a22;border-radius:26px}
+.card::before{height:8px;opacity:1;background:repeating-linear-gradient(90deg,#f4a72c 0 22px,#4caa62 22px 44px,#e94f37 44px 66px)}
+.card h2,.card h3{color:#2f7d43;text-shadow:none}
+.camera{background:linear-gradient(180deg,#ecf8df,#fffdf6);border:3px dashed #7cc36a}
+button{font-family:'Fredoka','Nunito',sans-serif;border:0;border-radius:18px;background:linear-gradient(180deg,#5cbf6d,#2f8a45);box-shadow:0 5px 0 #1f6531;letter-spacing:.3px}
+button.secondary{background:linear-gradient(180deg,#ffbe4d,#f08c1b);color:#4a2600;box-shadow:0 5px 0 #b35e12}
+button:disabled{filter:saturate(.3)}
+.preview{background:#fff;border:6px solid #fff;box-shadow:0 10px 24px #6b8a4a40}
+.status{background:#fff3d6;border:2px solid #f4c46b;color:#5a3a06}
+.stat{background:linear-gradient(180deg,#fff,#f2f9e8);border:2px solid #cfe6b5;color:#4f6b3a;font-weight:700}
+.stat:nth-child(2){background:linear-gradient(180deg,#fff,#fff1d8);border-color:#f6d39a}
+.stat strong{color:#e07a10;text-shadow:none}
+.album-item{background:#fff;border:3px solid #cfe6b5;box-shadow:0 6px 0 #e3efcf}
+.album-item p{color:#2f7d43}
+.empty{color:#6b7f58;opacity:1;background:#f6faef;border:2px dashed #cfe6b5;border-radius:18px}
+footer{background:#2f7d43;color:#fff8e6;border-top:6px solid #f4a72c;font-weight:700}
+.fruit-title{color:#2f7d43}
+body{background-size:150px 150px,auto!important;background-repeat:repeat!important}
+header{background-color:#1f5a33}
 </style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
@@ -555,9 +586,9 @@ button{min-height:48px;font-size:16px}
 window.reduzirParaAlbum = src => new Promise(res => { const img = new Image(); img.onload = () => { const k = Math.min(1, 700 / Math.max(img.width, img.height)); const c = document.createElement("canvas"); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); res(c.toDataURL("image/jpeg", .8)); }; img.onerror = () => res(src); img.src = src; });
 PokedexAdaptador.iniciar({
   icone: "🦊", fauna: false,
-  cor: "#4caa62", cor2: "#f2c66d",
-  escuro: () => true,
-  noturno: { fundo: "#092018", texto: "#f5f4e8", suave: "#c9dcc4" },
+  cor: "#2f8a45", cor2: "#f08c1b",
+  escuro: () => false,
+  claro: { fundo: "#fffdf6", texto: "#24361d", suave: "#55684a" },
   carregando: "🦊 A raposa está olhando a foto...",
   esconder: ["#result", "#status"],
   extras: info => [["🗺️ Onde ela vive?", info.regioes]],
