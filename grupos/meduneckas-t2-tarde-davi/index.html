@@ -36,6 +36,7 @@ function toast(t){let x=document.getElementById('toast');x.textContent=t;x.class
 <style id="ajustes-tablet">
 /* Ajustes de visual para tablet (deitado e em pé) e computador.
    O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap');
 body{min-height:100vh;background-attachment:fixed}
 nav button,#nav button{min-height:44px;font-size:14px}
 .btn{min-height:46px}
@@ -43,6 +44,43 @@ nav button,#nav button{min-height:44px;font-size:14px}
 .card img,.hab img,.bigphoto{background:#e9e1d2}
 .card img,.hab img{display:block}
 @media (max-width:900px){#nav{flex-wrap:nowrap;gap:4px}#nav button{white-space:nowrap;font-size:13px;padding:8px 9px}}
+/* Tema "diário de campo do explorador": mata, pegadas, papel de caderno */
+body{font-family:'Nunito',system-ui,sans-serif;background-color:#1d3a26;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='%23ffffff' fill-opacity='.06'%3E%3Cellipse cx='30' cy='40' rx='9' ry='11'/%3E%3Ccircle cx='18' cy='26' r='4'/%3E%3Ccircle cx='27' cy='21' r='4'/%3E%3Ccircle cx='36' cy='21' r='4'/%3E%3Ccircle cx='44' cy='27' r='4'/%3E%3Cellipse cx='100' cy='105' rx='9' ry='11'/%3E%3Ccircle cx='88' cy='91' r='4'/%3E%3Ccircle cx='97' cy='86' r='4'/%3E%3Ccircle cx='106' cy='86' r='4'/%3E%3Ccircle cx='114' cy='92' r='4'/%3E%3C/g%3E%3C/svg%3E"),radial-gradient(circle at 15% 0%,#3f6b45 0,transparent 45%),linear-gradient(160deg,#1d3a26,#132a1b)!important}
+h1,h2,h3,.brand{font-family:'Fredoka','Nunito',sans-serif}
+header{background:linear-gradient(180deg,#8a6038,#6d4a2a)!important;border-bottom:4px solid #4e3219;box-shadow:0 6px 18px #0005}
+.brand{font-size:20px;color:#fff6e6}
+.brand small{color:#f3dcb8;opacity:1}
+nav button,#nav button{background:#f6ead2;color:#5a3b1c;border:2px solid #e2c99c;border-radius:14px;font-weight:800}
+nav button.on,#nav button.on{background:#2f6b3d;color:#fff;border-color:#2f6b3d}
+/* página de caderno com fita adesiva */
+.paper{position:relative;background-color:#fffaf0;border:0;border-radius:18px;
+  background-image:repeating-linear-gradient(180deg,transparent 0 31px,#e9dcc4 31px 32px),linear-gradient(90deg,transparent 46px,#f3b8b0 46px 48px,transparent 48px);
+  box-shadow:0 2px 0 #e6d6b8,0 16px 40px #0006;padding-left:66px}
+.paper::before{content:"";position:absolute;top:-12px;left:50%;width:120px;height:28px;margin-left:-60px;background:#f4d36bcc;transform:rotate(-3deg);border-radius:3px;box-shadow:0 2px 4px #0002}
+.paper h1{color:#2f6b3d;font-size:clamp(2rem,4.2vw,3.4rem)}
+.paper h1::after{content:"";display:block;width:110px;height:7px;margin-top:6px;border-radius:9px;background:#f4b43c}
+.paper p{font-size:17px;line-height:1.6}
+.hero img{border:8px solid #fff;box-shadow:0 10px 24px #0003;transform:rotate(2deg);border-radius:6px}
+.btn{background:linear-gradient(180deg,#4f9a5b,#2f6b3d);box-shadow:0 5px 0 #1f4a29;border-radius:16px;font-size:16px;font-family:'Fredoka','Nunito',sans-serif;letter-spacing:.3px}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #1f4a29}
+.tabs button{background:#f6ead2;border:2px solid #e2c99c;border-radius:14px;min-height:44px;font-size:15px}
+.tabs button.on{background:#2f6b3d;border-color:#2f6b3d}
+/* cards como fotos de polaroide */
+.card{background:#fff;border:0;border-radius:6px;padding:10px 10px 14px;box-shadow:0 8px 20px #59472b33;transition:transform .2s}
+.cards .card:nth-child(odd){transform:rotate(-1.2deg)}
+.cards .card:nth-child(even){transform:rotate(1.2deg)}
+.card:hover{transform:rotate(0) scale(1.02)}
+.card img{border-radius:3px}
+.card h3{font-size:20px;color:#2f6b3d}
+.camera{background:linear-gradient(160deg,#2f6b3d,#1d4228);border-radius:22px}
+.step{background:#ffffff1f;border-radius:12px;font-weight:700}
+.step.ok{background:#f4b43c;color:#3b2a0a}
+.achievement{background:#fff7e3;border:2px dashed #e2c99c;border-radius:16px}
+.achievement.ok{background:#e4f3dc;border:2px solid #7cb37a}
+.bar i{background:linear-gradient(90deg,#f4b43c,#4f9a5b)}
+.fact{background:#fff3da;border-left:4px solid #f4b43c}
+@media (max-width:700px){.paper{padding-left:24px;background-image:repeating-linear-gradient(180deg,transparent 0 31px,#e9dcc4 31px 32px)}}
 </style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
