@@ -234,6 +234,15 @@ main{padding-bottom:120px}
 .secondary,.primary{min-height:46px}
 body:not([data-theme="light"]) main p{color:#dccbea}
 body[data-theme="light"] .section-head h2{color:#4b1a7d}
+/* Explorar mais enxuto (sem precisar descer muito): no cartão ficam foto,
+   nome, uma frase e o botão; luz, água e cuidados abrem em "Ver informações completas". */
+.plant-grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))!important;gap:14px}
+.plant-grid .facts{display:none}
+.plant-grid .plant-photo img{height:160px}
+.plant-grid .plant-content .desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:6px 0 0}
+.plant-grid .card-actions{margin-top:10px}
+.plant-grid .card-actions .primary{width:100%;font-size:14px}
+.plant-grid .info.warning{padding:8px 10px;margin-top:8px;font-size:13px}
 </style>
 <script src="/comum/ficha.js"></script>
 <script>
