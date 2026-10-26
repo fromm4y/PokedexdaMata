@@ -222,6 +222,19 @@ body[data-theme="light"] .status{background:#f3e8fa;color:#35105e}body[data-them
  </div>
 </div>
 
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+/* modo escuro: títulos e textos legíveis */
+body:not([data-theme="light"]) .section-head h2{color:#f6dcff}
+body:not([data-theme="light"]){--muted:#d9c6e8}
+/* barra de baixo: letras maiores e sem cobrir o fim da página */
+.nav-btn{font-size:13.5px;min-height:56px}
+main{padding-bottom:120px}
+.secondary,.primary{min-height:46px}
+body:not([data-theme="light"]) main p{color:#dccbea}
+body[data-theme="light"] .section-head h2{color:#4b1a7d}
+</style>
 <script src="/comum/ficha.js"></script>
 <script>
 /* Flores animadas */
