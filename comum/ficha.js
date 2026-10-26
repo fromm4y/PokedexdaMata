@@ -113,7 +113,7 @@
       const L = window.L;
       // Fundo do mapa: OpenStreetMap (gratuito, sem chave). No modo escuro o
       // CSS "inverte" as cores do mapa para combinar com a ficha.
-      const map = L.map(el, { scrollWheelZoom: false });
+      const map = L.map(el, { scrollWheelZoom: false, zoomSnap: 0.25 });
       map.attributionControl.setPrefix(false);
       L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 11, attribution: "© OpenStreetMap" }).addTo(map);
       const pts = [];
@@ -128,6 +128,37 @@
       else map.setView([-14.5, -52], 3.6);
       setTimeout(() => map.invalidateSize(), 80);
     }).catch(() => { el.innerHTML = '<div class="fp-map-fallback">Não consegui carregar o mapa (verifique a internet).</div>'; });
+  }
+
+  /* mapaBiomas(el, nomes, { aoClicar, escuro }): mapa de verdade do Brasil
+     com os biomas pedidos, para usar FORA da ficha (ex.: a aba "Mapa" de um
+     grupo). Tocar num bioma chama aoClicar(nome). */
+  function mapaBiomas(el, nomes, o) {
+    o = o || {};
+    if (!el) return Promise.resolve(null);
+    carregarRecursos();
+    el.classList.add("fp-mapa-solto");
+    if (o.escuro) el.classList.add("fp-mapa-escuro");
+    return carregarLeaflet().then(() => {
+      const L = window.L;
+      const map = L.map(el, { scrollWheelZoom: false, zoomSnap: 0.25 });
+      map.attributionControl.setPrefix(false);
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 11, attribution: "© OpenStreetMap" }).addTo(map);
+      const pts = [];
+      (nomes || Object.keys(BIOMAS)).filter(n => BIOMAS[n]).forEach(nome => {
+        const b = BIOMAS[nome];
+        pts.push(b.coord);
+        const c = L.circle(b.coord, { radius: b.raio, color: b.cor, weight: 2, opacity: .8, fillColor: b.cor, fillOpacity: .28 }).addTo(map);
+        const icon = L.divIcon({ className: "", iconSize: [140, 30], iconAnchor: [70, 15], html: `<div style="width:140px;text-align:center"><span class="fp-mapa-rotulo" style="--mc:${b.cor}">${esc(nome)}</span></div>` });
+        const m = L.marker(b.coord, { icon }).addTo(map);
+        if (o.aoClicar) [c, m].forEach(x => x.on("click", () => o.aoClicar(nome)));
+      });
+      const enquadrar = () => { map.invalidateSize(); if (pts.length) map.fitBounds(L.latLngBounds(pts).pad(.22)); };
+      map.setView([-14.5, -52], 4);
+      enquadrar();
+      if (window.ResizeObserver) new ResizeObserver(enquadrar).observe(el);
+      return map;
+    }).catch(() => { el.innerHTML = '<div class="fp-map-fallback">Não consegui carregar o mapa (verifique a internet).</div>'; return null; });
   }
 
   /* ---------- aba Habitat: a cena do bioma com a espécie ---------- */
@@ -556,6 +587,10 @@
    nos textos, para dar para ler no tablet */
 .fp:not(.fp-escuro) .fp-sci,.fp:not(.fp-escuro) .fp-badge{color:color-mix(in srgb,var(--glow-secondary) 50%,var(--text))}
 .fp:not(.fp-escuro) .fp-badge{color:color-mix(in srgb,var(--glow-primary) 55%,var(--text))}
+/* mapa solto (fora da ficha) */
+.fp-mapa-solto{position:relative;isolation:isolate;z-index:0;min-height:380px;border-radius:16px;overflow:hidden;background:#0e1512}
+.fp-mapa-solto.fp-mapa-escuro .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.85) contrast(.9) saturate(.6)}
+.fp-mapa-rotulo{display:inline-block;white-space:nowrap;padding:5px 10px;border-radius:999px;background:var(--mc);color:#0b130f;font:800 13px system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.35);cursor:pointer}
 /* pop-up */
 html.fp-travado,html.fp-travado body{overflow:hidden}
 .fp-pop{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:16px;background:rgba(10,6,18,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:fpFade .2s ease}
@@ -589,5 +624,5 @@ html.fp-travado,html.fp-travado body{overflow:hidden}
 @media (max-width:420px){.fp-corpo{padding:0 14px 14px}.fp-pop{padding:8px}.fp{padding:16px}.fp-name{font-size:22px}.fp-foto{width:52px;height:52px}.fp-tab{font-size:11.5px;gap:4px}}
 `;
 
-  window.FichaPokedex = { configurar, mostrar, aviso, carregando, fechar, ligarCamera, escolherArquivo, trocarFotos, urlDaEspecie, BIOMAS };
+  window.FichaPokedex = { configurar, mostrar, aviso, carregando, fechar, ligarCamera, escolherArquivo, trocarFotos, urlDaEspecie, mapaBiomas, BIOMAS };
 })();
