@@ -165,7 +165,7 @@
 
   <section class="card">
     <h2>🗺️ Mapa das descobertas</h2>
-    <div class="map"></div>
+    <div id="mapaFrutadex" class="mapa-frutadex" role="img" aria-label="Mapa dos biomas do Brasil"></div>
     <p class="small">As frutas descobertas aparecem nas regiões onde são encontradas.</p>
   </section>
 
@@ -302,11 +302,54 @@ function giveHint() {
 }
 </script>
 
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+/* foto em cima; os outros cards numa grade, sem coluna vazia */
+.dashboard{display:block!important}
+.primary-column{margin-bottom:22px}
+.secondary-column{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;align-items:stretch}
+@media (max-width:620px){.secondary-column{grid-template-columns:1fr}}
+.secondary-column .card{margin:0}
+.identify-card .primary{min-height:52px;font-size:17px}
+.mapa-frutadex{height:260px;min-height:260px}
+.album .fruit img{width:100%;height:80px;object-fit:cover;border-radius:10px;display:block;margin-bottom:6px}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
 <script src="/comum/adaptador.js"></script>
 <script>
+/* Mapa de verdade e álbum que guarda as frutas (antes era só enfeite). */
+FichaPokedex.mapaBiomas(document.getElementById("mapaFrutadex"), null, { escuro: true });
+(function () {
+  const CHAVE = "frutadex_album";
+  const ler = () => { try { return JSON.parse(localStorage.getItem(CHAVE) || "[]"); } catch (e) { return []; } };
+  const caixa = document.querySelector(".album");
+  function desenhar() {
+    const lista = ler();
+    if (!lista.length) return;   // sem descobertas: fica o "Aguardando..." do grupo
+    caixa.innerHTML = "";
+    lista.forEach(f => {
+      const d = document.createElement("div"); d.className = "fruit";
+      if (f.foto) { const i = document.createElement("img"); i.src = f.foto; i.alt = f.nome; d.appendChild(i); }
+      const n = document.createElement("div"); n.className = "small"; n.textContent = f.nome;
+      d.appendChild(n); caixa.appendChild(d);
+    });
+  }
+  function miniatura(src) {
+    return new Promise(res => { if (!src) return res(""); const i = new Image(); i.onload = () => { const k = Math.min(1, 300 / Math.max(i.width, i.height)); const c = document.createElement("canvas"); c.width = Math.round(i.width * k); c.height = Math.round(i.height * k); c.getContext("2d").drawImage(i, 0, 0, c.width, c.height); res(c.toDataURL("image/jpeg", .8)); }; i.onerror = () => res(""); i.src = src; });
+  }
+  window.salvarFrutaDex = async info => {
+    const nome = info.nome_popular || info.nome || "Fruta";
+    const lista = ler().filter(f => f.nome.toLowerCase() !== nome.toLowerCase());
+    lista.unshift({ nome, foto: await miniatura(document.getElementById("preview").src) });
+    try { localStorage.setItem(CHAVE, JSON.stringify(lista.slice(0, 24))); } catch (e) {}
+    desenhar();
+    caixa.closest(".card").scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+  desenhar();
+})();
 PokedexAdaptador.iniciar({
   icone: "🍓", fauna: false,
   cor: "#b6e52e", cor2: "#ffd52a",
@@ -315,7 +358,9 @@ PokedexAdaptador.iniciar({
   carregando: "🍓 Procurando a fruta na foto...",
   esconder: ["#result"],
   extras: info => [["👃 Cheiro e sabor", info.cheiro_sabor]],
-  alerta: info => info.perigosa === true ? "Cuidado: esta fruta pode fazer mal. Não coma sem um adulto." : ""
+  alerta: info => info.perigosa === true ? "Cuidado: esta fruta pode fazer mal. Não coma sem um adulto." : "",
+  salvar: info => salvarFrutaDex(info),
+  novaFoto: () => document.querySelector('label[for="photo"]').click()
 });
 </script>
 </body>
