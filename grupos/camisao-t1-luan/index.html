@@ -51,11 +51,11 @@ h1,h2,h3,p{margin-top:0}.title{font-size:clamp(32px,5vw,48px);margin-bottom:8px}
 <div style="text-align:center;padding:12px;color:var(--muted)">ou</div><label for="galleryInput" class="btn blue" style="display:block;text-align:center">🖼️ Escolher da galeria</label><input id="galleryInput" class="hidden" type="file" accept="image/*">
 <button id="identifyBtn" class="btn green" style="width:100%;margin-top:12px" disabled>🔎 Identificar ave</button>
 <div id="loading" class="notice"><span class="spinner">⏳</span> Analisando a foto...</div><div id="status" class="notice" role="status"></div></div>
-<div class="panel"><h2>👀 Prévia da foto</h2><div id="previewEmpty" class="empty">Sua foto aparecerá aqui.</div><img id="preview" class="preview hidden" alt="Prévia da foto selecionada"><div id="photoHint" class="subtitle" style="margin-top:12px">A identificação precisa do serviço do projeto em <code>/api/identificar</code>.</div></div></div>
+<div class="panel"><h2>👀 Prévia da foto</h2><div id="previewEmpty" class="empty">Sua foto aparecerá aqui.</div><img id="preview" class="preview hidden" alt="Prévia da foto selecionada"><div id="photoHint" class="subtitle" style="margin-top:12px">A inteligência artificial olha a foto e conta qual ave é! 🦜</div></div></div>
 <div id="result" class="panel resultbox hidden"><h2>🎉 Resultado da identificação</h2><div class="detail-layout"><img id="resultImage" class="preview" alt="Foto da ave identificada"><div><h2 id="resultName"></h2><p id="resultScientific" class="scientific"></p><p id="resultFacts" class="subtitle"></p><p><b>Habitat:</b> <span id="resultHabitat"></span></p><button id="openIdentified" class="btn blue">Abrir ficha da ave</button> <button id="saveDiscovery" class="btn primary">＋ Guardar descoberta</button></div></div></div>
 </section>
 
-<section id="pokedex" class="page"><h1 class="title">🦜 Pokédex de aves</h1><p class="subtitle">Explore um guia inicial de espécies brasileiras. Os desenhos são ícones ilustrativos; fotografias reais podem ser adicionadas depois.</p>
+<section id="pokedex" class="page"><h1 class="title">🦜 Pokédex de aves</h1><p class="subtitle">Explore um guia inicial de espécies brasileiras. As fotos de cada ave vêm da Wikipédia. 📸</p>
 <div class="filters"><input id="searchBird" class="field" type="search" placeholder="🔎 Buscar por nome ou nome científico..." aria-label="Buscar aves"><select id="filterBiome" class="field" aria-label="Filtrar por bioma"><option value="">Todos os biomas</option><option>Amazônia</option><option>Mata Atlântica</option><option>Cerrado</option><option>Caatinga</option><option>Pantanal</option><option>Pampa</option></select><select id="filterDiet" class="field" aria-label="Filtrar por alimentação"><option value="">Toda alimentação</option><option>Frutas</option><option>Insetos</option><option>Peixes</option><option>Carne</option><option>Néctar</option><option>Onívora</option><option>Sementes</option></select><select id="filterRegion" class="field" aria-label="Filtrar por região"><option value="">Todas as regiões</option><option>Norte</option><option>Nordeste</option><option>Centro-Oeste</option><option>Sudeste</option><option>Sul</option></select></div>
 <div id="pokedexCount" class="subtitle" aria-live="polite"></div><div id="pokedexGrid" class="birdgrid"></div><div class="small" style="margin-top:18px">As distribuições variam conforme a espécie. Os biomas listados são referências gerais, não pontos exatos de localização.</div></section>
 
@@ -63,7 +63,7 @@ h1,h2,h3,p{margin-top:0}.title{font-size:clamp(32px,5vw,48px);margin-bottom:8px}
 
 <section id="album" class="page"><h1 class="title">📚 Meu álbum</h1><p class="subtitle">Suas espécies descobertas e favoritas ficam guardadas neste navegador.</p><div class="panel" style="margin-bottom:18px"><div class="stats"><div class="stat"><strong id="albumCount">0</strong><span>Espécies únicas</span></div><div class="stat"><strong id="favoriteCount">0</strong><span>Favoritas</span></div><div class="stat"><strong id="albumPoints">0</strong><span>Pontos</span></div></div></div><div id="albumGrid" class="birdgrid"></div></section>
 
-<section id="mapa" class="page"><h1 class="title">🗺️ Mapa da biodiversidade</h1><p class="subtitle">Escolha um bioma para ver algumas aves associadas a ele. Este desenho é ilustrativo, não um mapa de distribuição exata.</p><div class="mapvisual" aria-label="Representação ilustrativa dos biomas brasileiros"><span class="biomelabel bio-amazonia">🌳 Amazônia</span><span class="biomelabel bio-cerrado">🌾 Cerrado</span><span class="biomelabel bio-caatinga">☀️ Caatinga</span><span class="biomelabel bio-mata">🌿 Mata Atlântica</span><span class="biomelabel bio-pantanal">💧 Pantanal</span><span class="biomelabel bio-pampa">🌱 Pampa</span></div><div id="biomeButtons" class="grid g3" style="margin:16px 0"></div><div id="biomeResults"></div><div class="sectionhead"><h2>📍 Habitats das suas descobertas</h2></div><div id="mapDiscoveries" class="grid g3"></div></section>
+<section id="mapa" class="page"><h1 class="title">🗺️ Mapa da biodiversidade</h1><p class="subtitle">Escolha um bioma para ver algumas aves associadas a ele. Toque num bioma no mapa para ver as aves de lá.</p><div id="mapaAves" class="mapa-aves" role="img" aria-label="Mapa dos biomas do Brasil"></div><div id="biomeButtons" class="grid g3" style="margin:16px 0"></div><div id="biomeResults"></div><div class="sectionhead"><h2>📍 Habitats das suas descobertas</h2></div><div id="mapDiscoveries" class="grid g3"></div></section>
 
 <section id="conquistas" class="page"><h1 class="title">🏆 Conquistas e missões</h1><p class="subtitle">Cada ação educativa conta. Os emblemas são liberados pelo seu progresso real.</p><div class="panel" style="margin-bottom:18px"><div class="stats"><div class="stat"><strong id="achPoints">0</strong><span>Pontos</span></div><div class="stat"><strong id="achLevel">1</strong><span>Nível</span></div><div class="stat"><strong id="achMedals">0</strong><span>Medalhas</span></div></div><div id="levelName" style="margin-top:15px;font-weight:900;color:var(--mint)"></div><div class="progress"><span id="levelProgress"></span></div><small id="levelText" class="subtitle"></small></div><div class="sectionhead"><h2>🎯 Missões do dia</h2></div><div id="missions" class="grid g3"></div><div class="sectionhead"><h2>🥇 Coleção de medalhas</h2></div><div id="achievementGrid" class="achievementgrid"></div></section>
 </main>
@@ -172,11 +172,49 @@ function renderAll(){renderHome();renderPokedex();renderAlbum();renderMap();rend
 renderAll();
 </script>
 
+<style id="ajustes-tablet">
+/* Ajustes de visual para tablet (deitado e em pé) e computador.
+   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
+.mapa-aves{height:min(50vh,440px);min-height:320px;border:1px solid rgba(255,255,255,.12)}
+/* foto real da ave: o emoji vira um selinho no canto */
+.birdpic.com-foto{background-size:cover!important;background-position:center!important}
+.birdpic.com-foto span:not(.number){position:absolute;right:8px;bottom:6px;font-size:28px;filter:drop-shadow(0 2px 4px #000)}
+.navbtn{min-height:44px;font-size:15px}
+.btn{min-height:46px}
+</style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
 <script src="/comum/adaptador.js"></script>
 <script>
+/* Fotos reais das aves (antes eram emojis parecidos) e mapa de verdade. */
+(function () {
+  const porNome = {};
+  BIRDS.forEach(b => porNome[b.name] = b);
+  function foto(card) {
+    const pic = card.querySelector(".birdpic");
+    if (!pic || pic.dataset.fpFoto) return;
+    const nome = (card.getAttribute("aria-label") || "").replace("Abrir ficha de ", "");
+    const ave = porNome[nome];
+    if (!ave) return;
+    pic.dataset.fpFoto = "1";
+    FichaPokedex.urlDaEspecie(ave.scientific).then(u => {
+      if (!u) return;
+      pic.style.backgroundImage = `linear-gradient(180deg,transparent 55%,rgba(0,0,0,.45)), url("${u}")`;
+      pic.classList.add("com-foto");
+    });
+  }
+  const varrer = () => document.querySelectorAll(".birdcard").forEach(foto);
+  new MutationObserver(varrer).observe(document.body, { childList: true, subtree: true });
+  varrer();
+  FichaPokedex.mapaBiomas(document.getElementById("mapaAves"), null, {
+    escuro: true,
+    aoClicar: nome => {
+      const b = [...document.querySelectorAll("#biomeButtons button")].find(x => x.textContent.includes(nome));
+      if (b) { b.click(); document.getElementById("biomeResults").scrollIntoView({ behavior: "smooth", block: "start" }); }
+    }
+  });
+})();
 PokedexAdaptador.iniciar({
   icone: "🐦", fauna: true,
   cor: "#25bd78", cor2: "#ffda48",
