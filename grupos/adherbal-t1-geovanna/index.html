@@ -462,21 +462,14 @@
 
             <div class="card" style="margin-top:18px">
               <h3 class="pink">📚 Álbum das aves</h3>
-              <div class="album">
-                <div class="bird"><span>🐦</span><small>Saíra</small></div>
-                <div class="bird"><span>🐤</span><small>Bem-te-vi</small></div>
-                <div class="bird"><span>🦜</span><small>Arara</small></div>
-                <div class="bird"><span>🦤</span><small>Tucano</small></div>
-                <div class="bird"><span>🐦</span><small>Beija-flor</small></div>
-                <div class="bird"><span>❓</span><small>Descubra mais</small></div>
-              </div>
+              <div id="albumComum"></div>
             </div>
           </div>
 
           <div class="card">
             <h3 class="pink">🏆 Conquistas</h3>
-            <p>⭐ <strong>0</strong> pontos</p>
-            <p>🥉 Primeira descoberta: ainda esperando uma ave!</p>
+            <p>⭐ <strong id="pontosConq">0</strong> pontos</p>
+            <p id="conqPrimeira">🥉 Primeira descoberta: ainda esperando uma ave!</p>
             <p>✨ Encontre uma ave rara para receber uma surpresa.</p>
           </div>
 
@@ -725,8 +718,20 @@ PokedexAdaptador.iniciar({
   esconder: ["#result", "#error", "#loading"],
   extras: info => [["🌳 Habitat", info.habitat], ["✨ Ave rara?", info.raro === true ? "Sim! Essa é uma ave rara de ver." : ""]],
   acoesExtras: info => info.somUrl ? [{ texto: "🔊 Ouvir o som", fechar: false, aoClicar: () => document.getElementById("soundBtn").click() }] : [],
+  album: { el: "#albumComum", compacto: true, depois: () => document.getElementById("albumComum").closest(".card").scrollIntoView({ behavior: "smooth", block: "start" }) },
   novaFoto: () => document.getElementById("photoBtn").click()
 });
+/* Conquistas de verdade: pontos do topo e a primeira ave salva no álbum. */
+(function () {
+  const pts = document.getElementById("points");
+  const atualizar = () => {
+    document.getElementById("pontosConq").textContent = pts.textContent || "0";
+    if (PokedexAdaptador.lerAlbum().length) document.getElementById("conqPrimeira").textContent = "🥉 Primeira descoberta: conquistada! 🎉";
+  };
+  new MutationObserver(atualizar).observe(pts, { childList: true, characterData: true, subtree: true });
+  new MutationObserver(atualizar).observe(document.getElementById("albumComum"), { childList: true });
+  atualizar();
+})();
 </script>
 </body>
 </html>

@@ -99,7 +99,7 @@
 
   /* ---------- 5) Álbum comum (para grupos sem álbum, ou cujo álbum só
      aceitava as espécies do catálogo). Uso:
-       album: { el: "#meuAlbum", depois: () => abrirAbaDoAlbum() }
+       album: { el: "#meuAlbum", depois: () => abrirAbaDoAlbum(), compacto: true }   (compacto: figurinhas pequenas)
      Guarda nome, foto, data e a ficha inteira (tocar na figurinha reabre a ficha). ---------- */
   const chaveAlbum = () => "pokedex-album-" + GRUPO;
   const lerAlbum = () => { try { const l = JSON.parse(localStorage.getItem(chaveAlbum()) || "[]"); return Array.isArray(l) ? l : []; } catch (e) { return []; } };
@@ -128,8 +128,10 @@
       .fp-album-foto img{width:100%;height:100%;object-fit:cover;display:block}
       .fp-album-txt{padding:10px 12px 12px;display:flex;flex-direction:column;gap:2px}
       .fp-album-txt b{font-size:16px;line-height:1.2}.fp-album-txt i,.fp-album-txt small{font-size:12.5px;color:${t.suave || (escuro ? "#bbb" : "#666")}}
+      .fp-album.compacto{grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:9px}.fp-album.compacto .fp-album-foto{aspect-ratio:1;font-size:34px}
+      .fp-album.compacto .fp-album-txt{padding:6px 8px 8px}.fp-album.compacto .fp-album-txt b{font-size:13px}.fp-album.compacto .fp-album-txt i{display:none}.fp-album.compacto .fp-album-txt small{font-size:11px}
       .fp-album-vazio{grid-column:1/-1;text-align:center;padding:28px 16px;border:2px dashed ${CFG.cor || "#5c9"}88;border-radius:18px;color:${t.suave || "inherit"}}</style>
-      <div class="fp-album">${lista.length ? lista.map((x, i) => `<button type="button" class="fp-album-item" data-i="${i}" title="Ver a ficha">
+      <div class="fp-album${CFG.album.compacto ? " compacto" : ""}">${lista.length ? lista.map((x, i) => `<button type="button" class="fp-album-item" data-i="${i}" title="Ver a ficha">
         <span class="fp-album-foto">${x.foto ? `<img src="${escA(x.foto)}" alt="">` : escA(CFG.icone || "🌿")}</span>
         <span class="fp-album-txt"><b>${escA(x.nome)}</b>${x.cientifico ? `<i>${escA(x.cientifico)}</i>` : ""}<small>📅 ${escA(x.data)}</small></span></button>`).join("")
         : `<div class="fp-album-vazio"><span style="font-size:40px">${escA(CFG.icone || "🌿")}</span><br><b>Seu álbum ainda está vazio.</b><br>Reconheça uma foto e toque em “💾 Salvar no álbum”!</div>`}</div>`;
