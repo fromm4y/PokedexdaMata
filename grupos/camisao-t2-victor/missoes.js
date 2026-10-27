@@ -9,6 +9,7 @@
 //    https://SEU-PROJETO.vercel.app/api/identificar?grupo=camisao-t2-victor
 //
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
+//   - Mensagens das missões: as frases do grupo ganharam acentos, pontuação, o "%" e um emoji, para fazer sentido para quem lê (as palavras são as do grupo).
 //   - Missões 1, 2 e 6: só ajustes de escrita ("em", vírgula e pontuação); as ideias são do grupo.
 //   - O álbum guardava a foto de cada ave e podia encher o espaço do navegador: agora guarda só os dados (o álbum desenha a ave, não usa a foto).
 //   - Corrigido um erro do front: faltava criar STATS_KEY e PROFILE_KEY (a tela de Perfil e as Conquistas de som não funcionavam).
@@ -36,19 +37,19 @@ const CERTEZA_MINIMA = 80;
 
 // Missão 4: o porteiro
 function conferirFoto(foto) {
-  if (!foto.type.startsWith("image/")) return "Voce Gerou a Imagem errada";
-  if (foto.size > 10000000) return "a Foto esta do tamanho de um gaviao";
+  if (!foto.type.startsWith("image/")) return "🦅 Você mandou a imagem errada: isso não é uma foto!";
+  if (foto.size > 10000000) return "🦅 A foto está do tamanho de um gavião! Escolha uma menor.";
   return "ok";
 }
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "tenho so " + r.confianca + "%. Tenta outra foto, mais de perto";
+  return "🤔 Tenho só " + r.confianca + "% de certeza. Tenta outra foto, mais de perto!";
 }
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "Boa, eu achei " + r.nome_popular + "! Que top!";
+  return "🎉 Boa, eu achei: " + r.nome_popular + "! Que top!";
 }
 
 // ----------------------------------------------------------------------------

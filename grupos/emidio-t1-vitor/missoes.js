@@ -9,6 +9,9 @@
 //    https://SEU-PROJETO.vercel.app/api/identificar?grupo=emidio-t1-vitor
 // ============================================================================
 
+// Ajustes feitos pela professora:
+//   - Mensagens das missões: as frases do grupo ganharam acentos, pontuação, o "%" e um emoji, para fazer sentido para quem lê (as palavras são as do grupo).
+
 // Quem é o grupo (aparece no painel)
 const GRUPO = {
   nome: "Os sem sementes",
@@ -30,19 +33,19 @@ const CERTEZA_MINIMA = 79;
 
 // Missão 4: o porteiro
 function conferirFoto(foto) {
-  if (!foto.type.startsWith("image/")) return "erro isso não é uma imagem.";
-  if (foto.size > 10000000) return "Foto muito grande";
+  if (!foto.type.startsWith("image/")) return "🍉 Erro: isso não é uma imagem!";
+  if (foto.size > 10000000) return "🍉 Foto muito grande! Escolha uma menor.";
   return "ok";
 }
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "Não entendi. " + r.confianca + " Me de mais detalhes.";
+  return "🤔 Não entendi direito: só tenho " + r.confianca + "% de certeza. Me dê mais detalhes: tire outra foto da fruta!";
 }
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "Essa é a fruta. " + r.nome_popular + " Muito bem.";
+  return "🍍 Essa é a fruta: " + r.nome_popular + "! Muito bem!";
 }
 
 // ----------------------------------------------------------------------------

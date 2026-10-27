@@ -9,6 +9,7 @@
 //    https://SEU-PROJETO.vercel.app/api/identificar?grupo=camisao-t1m-isabelly
 //
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
+//   - Mensagens das missões: as frases do grupo ganharam acentos, pontuação, o "%" e um emoji, para fazer sentido para quem lê (as palavras são as do grupo).
 //   - O grupo não entregou o front: a página foi montada pela professora a partir do README do grupo e das fotos de bem-te-vi coletadas pela Isabelly (as fotos 4 e 10, com marca d'água de fotógrafos, ficaram de fora).
 //   - Escritas pela professora (estavam em branco ou incompletas no documento): Missão 5, Missão 6.
 // ============================================================================
@@ -34,8 +35,8 @@ const CERTEZA_MINIMA = 60;
 
 // Missão 4: o porteiro
 function conferirFoto(foto) {
-  if (!foto.type.startsWith("image/")) return "opa arquivo não compativel";
-  if (foto.size > 10000000) return "arquivo muito pesado para nosso app";
+  if (!foto.type.startsWith("image/")) return "🕵️ Opa! Arquivo não compatível: isso não é uma foto.";
+  if (foto.size > 10000000) return "🕵️ Arquivo muito pesado para o nosso app! Escolha uma foto menor.";
   return "ok";
 }
 

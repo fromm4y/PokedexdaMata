@@ -9,6 +9,7 @@
 //    https://SEU-PROJETO.vercel.app/api/identificar?grupo=camisao-t2-bryan
 //
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
+//   - Mensagens das missões: as frases do grupo ganharam acentos, pontuação, o "%" e um emoji, para fazer sentido para quem lê (as palavras são as do grupo).
 //   - Missões 1, 2 e 4: só correções de digitação ("frulticultor especilista", "a a a imagem").
 //   - O álbum guardava a foto em tamanho original e enchia o espaço do navegador: agora guarda uma versão menor.
 //   - Corrigido um erro do front: a variável lastDiscovery nunca era criada, então o botão "🗺️ Ver no mapa" não funcionava.
@@ -36,7 +37,7 @@ const CERTEZA_MINIMA = 70;
 
 // Missão 4: o porteiro
 function conferirFoto(foto) {
-  if (!foto.type.startsWith("image/")) return "n foi possivel carregar a imagem";
+  if (!foto.type.startsWith("image/")) return "🕵️ Não foi possível carregar a imagem: isso não é uma foto!";
   if (foto.size > 10000000) return "🕵️ Essa foto é grande demais pra lupa do detetive! Escolha uma menor.";
   return "ok";
 }

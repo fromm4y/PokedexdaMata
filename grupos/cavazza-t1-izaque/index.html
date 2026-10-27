@@ -303,7 +303,7 @@ body:not(.entered) .page{display:none}
         <div class="plant"><span class="emoji">🌼</span><small>Flores</small></div>
         <div class="plant"><span class="emoji">🍃</span><small>Plantas</small></div>
       </div>
-      <div class="scientist">🧑‍🔬👍</div>
+      <div class="scientist">👨‍🔬👍</div>
     </section>
 
     <section class="glass camera">
@@ -396,7 +396,7 @@ body:not(.entered) .page{display:none}
         <p>Observe, fotografe e aprenda curiosidades sobre a natureza.</p>
         <button class="gold" type="button" onclick="document.getElementById('photoGallery').click()">🖼️ Abrir galeria</button>
       </div>
-      <div class="home-mini-scientist">🧑‍🔬🌿</div>
+      <div class="home-mini-scientist">👨‍🔬🌿</div>
     </div>
     <div class="app-cards">
       <div class="mini-card"><div class="big">📷</div><strong>Descobrir</strong><span>Fotografe uma planta para investigar.</span></div>
@@ -539,7 +539,7 @@ photoCamera.addEventListener('change',()=>handlePhoto(photoCamera.files[0]));
 photoGallery.addEventListener('change',()=>handlePhoto(photoGallery.files[0]));
 async function descobrir(){
   if(!base64)return;
-  identify.disabled=true; status.textContent='🧑‍🔬 O cientista está investigando...';
+  identify.disabled=true; status.textContent='👨‍🔬 O cientista está investigando...';
   result.classList.add('hidden'); message.classList.add('hidden');
   const payload={
     "modelo":"gemini-3.6-flash",

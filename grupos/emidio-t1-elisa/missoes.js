@@ -9,6 +9,7 @@
 //    https://SEU-PROJETO.vercel.app/api/identificar?grupo=emidio-t1-elisa
 //
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
+//   - Mensagens das missões: as frases do grupo ganharam acentos, pontuação, o "%" e um emoji, para fazer sentido para quem lê (as palavras são as do grupo).
 //   - Missões 4 e 5: faltaram aspas (") em volta das frases, o que quebraria o código; as frases do grupo foram mantidas.
 // ============================================================================
 
@@ -33,19 +34,19 @@ const CERTEZA_MINIMA = 70;
 
 // Missão 4: o porteiro
 function conferirFoto(foto) {
-  if (!foto.type.startsWith("image/")) return "isso nao E uma foto";
-  if (foto.size > 10000000) return "essa imagem e grande demais";
+  if (!foto.type.startsWith("image/")) return "🕵️ Isso não é uma foto!";
+  if (foto.size > 10000000) return "🕵️ Essa imagem é grande demais! Escolha uma menor.";
   return "ok";
 }
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "essa foi a arvore que eu achei mais nao tenho certeza da decisao " + r.confianca + " Me de mais informaçoes nivel de certeza 60%";
+  return "🌳 Essa foi a árvore que eu achei, mas não tenho certeza da decisão: só " + r.confianca + "%. Me dê mais informações: tire outra foto, mostrando folhas, tronco ou flores!";
 }
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "Encontrei essa " + r.nome_popular + " Muito bem!";
+  return "🕵️ Encontrei! Essa árvore é: " + r.nome_popular + ". Muito bem, detetive!";
 }
 
 // ----------------------------------------------------------------------------

@@ -9,6 +9,7 @@
 //    https://SEU-PROJETO.vercel.app/api/identificar?grupo=adherbal-t2-bryan
 //
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
+//   - Mensagens das missões: as frases do grupo ganharam acentos, pontuação, o "%" e um emoji, para fazer sentido para quem lê (as palavras são as do grupo).
 //   - Missão 1: o documento misturava um nome de pessoa e "ornitólogo" (especialista em aves) com frutas; ficou "um especialista em frutas brasileiras".
 //   - Missão 5: o grupo escreveu só a 1ª parte; foi completada com "(…% de certeza)".
 //   - Escritas pela professora (estavam em branco ou incompletas no documento): Missão 3 (por que escolheram 85), Missão 6, Missão 5 (2ª parte da mensagem).
@@ -35,14 +36,14 @@ const CERTEZA_MINIMA = 85;
 
 // Missão 4: o porteiro
 function conferirFoto(foto) {
-  if (!foto.type.startsWith("image/")) return "fruta não encontradas";
-  if (foto.size > 10000000) return "esta imagem de fruta esta muito grande";
+  if (!foto.type.startsWith("image/")) return "🍌 Fruta não encontrada: isso não é uma foto!";
+  if (foto.size > 10000000) return "🍉 Esta imagem de fruta está muito grande! Escolha uma menor.";
   return "ok";
 }
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "não consegui indentificar a imagem da fruta (" + r.confianca + "% de certeza)";
+  return "🤔 Não consegui identificar a imagem da fruta (" + r.confianca + "% de certeza). Tente outra foto!";
 }
 
 // Missão 6: quando a IA acerta

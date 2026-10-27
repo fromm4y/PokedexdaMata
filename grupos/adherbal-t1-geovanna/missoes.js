@@ -9,6 +9,7 @@
 //    https://SEU-PROJETO.vercel.app/api/identificar?grupo=adherbal-t1-geovanna
 //
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
+//   - Mensagens das missões: as frases do grupo ganharam acentos, pontuação, o "%" e um emoji, para fazer sentido para quem lê (as palavras são as do grupo).
 //   - Escritas pela professora (estavam em branco ou incompletas no documento): Missão 4 (mensagem de não é foto), Missão 4 (mensagem de foto grande), Missão 5.
 // ============================================================================
 
@@ -45,7 +46,7 @@ function mensagemDeDuvida(r) {
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "Boa! " + r.nome_popular + " Que bom";
+  return "🪶 Boa! É " + r.nome_popular + "! Que bom!";
 }
 
 // ----------------------------------------------------------------------------

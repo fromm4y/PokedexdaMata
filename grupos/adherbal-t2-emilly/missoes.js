@@ -9,6 +9,7 @@
 //    https://SEU-PROJETO.vercel.app/api/identificar?grupo=adherbal-t2-emilly
 //
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
+//   - Mensagens das missões: as frases do grupo ganharam acentos, pontuação, o "%" e um emoji, para fazer sentido para quem lê (as palavras são as do grupo).
 //   - Missão 3 estava em branco: usado 80, o mesmo número que o front do grupo já usava.
 //   - Missão 5: só foi colocado o "%" depois do número.
 //   - Missão 6: o grupo escreveu só "Para" no final (provavelmente "Parabéns") — conferir com o grupo.
@@ -36,19 +37,19 @@ const CERTEZA_MINIMA = 80;
 
 // Missão 4: o porteiro
 function conferirFoto(foto) {
-  if (!foto.type.startsWith("image/")) return "isso eu não consigo reconhecer essa imagem tente novamente";
-  if (foto.size > 10000000) return "essa imagem esta muinto grande você pode tertar uma imagem menor";
+  if (!foto.type.startsWith("image/")) return "🦜 Isso eu não consigo reconhecer: não é uma imagem! Tente novamente.";
+  if (foto.size > 10000000) return "🦜 Essa imagem está muito grande! Você pode tentar uma imagem menor?";
   return "ok";
 }
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "Só tenho apenas " + r.confianca + "% de certeza dessa imagem";
+  return "🤔 Só tenho " + r.confianca + "% de certeza dessa imagem. Tente outra foto da ave!";
 }
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "Pronto, consegui! É " + r.nome_popular + "! Parabéns!";
+  return "🎉 Pronto, consegui! É " + r.nome_popular + "! Parabéns!";
 }
 
 // ----------------------------------------------------------------------------

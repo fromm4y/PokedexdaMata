@@ -9,6 +9,7 @@
 //    https://SEU-PROJETO.vercel.app/api/identificar?grupo=camisao-t1-luan
 //
 //  Ajustes feitos pela professora (o resto é como o grupo escreveu):
+//   - Mensagens das missões: as frases do grupo ganharam acentos, pontuação, o "%" e um emoji, para fazer sentido para quem lê (as palavras são as do grupo).
 //   - Missão 1: no documento ficou "const ESPECIALIST" sem o "=", o que quebraria o código; o texto do grupo foi mantido.
 //   - Missão 5: o grupo escreveu "r.confianca (50)", que quebraria o código; ficou só r.confianca.
 // ============================================================================
@@ -34,19 +35,19 @@ const CERTEZA_MINIMA = 50;
 
 // Missão 4: o porteiro
 function conferirFoto(foto) {
-  if (!foto.type.startsWith("image/")) return "opa isso que voce mandou nao e uma foto por favor mande uma foto de verdade";
-  if (foto.size > 10000000) return "erro essa foto e grande demais mande novamente menor por favor";
+  if (!foto.type.startsWith("image/")) return "🐦 Opa! Isso que você mandou não é uma foto. Por favor, mande uma foto de verdade!";
+  if (foto.size > 10000000) return "🐦 Essa foto é grande demais! Mande de novo, menor, por favor.";
   return "ok";
 }
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "não tanta certeza sobre isso " + r.confianca + "% tente novamente";
+  return "🤔 Não tenho tanta certeza sobre isso: só " + r.confianca + "%. Tente novamente!";
 }
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "consegui acha o'que voce mandou " + r.nome_popular + " isso e muito legal";
+  return "🎉 Consegui achar o que você mandou: " + r.nome_popular + "! Isso é muito legal!";
 }
 
 // ----------------------------------------------------------------------------
