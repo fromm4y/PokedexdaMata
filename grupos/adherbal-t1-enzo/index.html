@@ -152,6 +152,8 @@ html{font-size:17.5px}
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  // botões por etapa: o de identificar só aparece depois de escolher a foto
+  etapas: { foto: ["#identifyButton"] },
   galeria: { depoisDe: "label.upload-zone", input: "#photoInput", classe: "btn btn-outline", texto: "🖼️ Escolher da galeria" },
   icone: "🐾", fauna: true,
   cor: "#e7b95f", cor2: "#7fc28e",

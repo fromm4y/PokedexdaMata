@@ -19,6 +19,7 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 - **câmera de verdade** no tablet, **webcam** no computador e **galeria** que abre a galeria (o botão "📁 Escolher arquivo" da webcam foi consertado);
 - revisado no **tablet deitado (1280×800) e em pé (800×1280)**: menus, botões do tamanho do dedo, letras legíveis e nada cortado;
 - testado: acerto, fora do tema, dúvida e arquivo que não é foto — **116 de 116 verificações passando, sem erros**;
+- **varredura de 27/10 em todas as escolas:** todos os álbuns guardam espécies novas (não só as do catálogo) e cabem no navegador (dois grupos guardavam a foto original inteira e o "salvar" falhava); o botão de identificar só aparece depois de escolher a foto; mensagens das missões com acento, "%" e sentido; emojis que o Windows desenhava quebrados foram trocados; menus inteiros no tablet em pé;
 - na dúvida, a porcentagem mostrada fica sempre abaixo da certeza mínima do grupo (antes podia aparecer "Estou em dúvida 95");
 - os fronts mais simples (Izaque, Davi T2, Eduardo, Elisa e Lucas) ganharam um **visual mais colorido e infantil**, cada um no seu tema, com letras arredondadas — as ideias e telas continuam sendo dos alunos;
 - só o primeiro nome dos alunos no site; os arquivos originais (com nomes completos) foram apagados do repositório e do histórico.

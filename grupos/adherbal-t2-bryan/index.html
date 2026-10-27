@@ -406,6 +406,8 @@ main{align-items:center!important;padding-top:20px!important}
   };
 })();
 PokedexAdaptador.iniciar({
+  // botões por etapa: o de identificar só aparece depois de escolher a foto
+  etapas: { foto: ["#analisar"] },
   galeria: { depoisDe: "label.fileBtn", input: "#foto", classe: "fileBtn", texto: "🖼️ Galeria" },
   icone: "🍌", fauna: false,
   cor: "#8fe33d", cor2: "#1f8f31",

@@ -217,6 +217,8 @@ renderAll();
   });
 })();
 PokedexAdaptador.iniciar({
+  // botões por etapa: o de identificar só aparece depois de escolher a foto
+  etapas: { foto: ["#identifyBtn"] },
   icone: "🐦", fauna: true,
   cor: "#25bd78", cor2: "#ffda48",
   escuro: () => true,

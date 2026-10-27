@@ -550,6 +550,8 @@ footer{text-align:center;color:#e9f4e7;font-size:12px;padding:0 16px 24px}
    do dispositivo" fica só para escolher arquivo. */
 document.getElementById("photo-input").removeAttribute("capture");
 PokedexAdaptador.iniciar({
+  // botões por etapa: o de identificar só aparece depois de escolher a foto
+  etapas: { inicio: ["#start-camera", "#choose-photo"], camera: ["#capture-photo", "#choose-photo"], foto: ["#identify-btn", "#retake-photo", "#choose-photo"], fotoTirada: ["#capture-photo"], trocar: ["#retake-photo"] },
   icone: "🦜", fauna: true,
   cor: "#174f36", cor2: "#f1ca69",
   escuro: () => false,

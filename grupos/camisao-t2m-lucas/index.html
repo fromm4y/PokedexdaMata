@@ -426,6 +426,8 @@ window.reduzirParaAlbum = src => new Promise(res => { const img = new Image(); i
   document.getElementById("choose").addEventListener("click", e => e.preventDefault());
 })();
 PokedexAdaptador.iniciar({
+  // botões por etapa: o de identificar só aparece depois de escolher a foto
+  etapas: { foto: ["#go"] },
   galeria: { depoisDe: "#choose", input: "#file", classe: "secondary", texto: "🖼️ Galeria" },
   icone: "🍃", fauna: true,
   cor: "#4f8f5b", cor2: "#f1dfb8",

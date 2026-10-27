@@ -233,6 +233,8 @@ button,.chip{min-height:44px}
 })();
 
 PokedexAdaptador.iniciar({
+  // botões por etapa: o de identificar só aparece depois de escolher a foto
+  etapas: { foto: ["#btnDescobrir"] },
   icone: "🐾", fauna: true,
   cor: "#ff7fb5", cor2: "#5bb8f0",
   escuro: () => false,

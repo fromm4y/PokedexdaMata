@@ -229,6 +229,8 @@ function desenharAlbum(){
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  // botões por etapa: o de identificar só aparece depois de escolher a foto
+  etapas: { foto: ["#btnInvestigar"] },
   icone: "🪶", fauna: true,
   cor: "#2f8fd8", cor2: "#f6c90e",
   escuro: () => false,

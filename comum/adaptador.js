@@ -17,6 +17,7 @@
    3) No computador, o botão de câmera abre a webcam.
    4) Opcional: um botão "🖼️ Galeria" ao lado do botão de foto do grupo.
    5) Opcional: um álbum pronto (album: { el, depois }) para quem não tem álbum.
+   6) Opcional: botões por etapa (etapas: { inicio, camera, foto, ... }).
 
    COMO USAR (no fim do index.html do grupo):
      <script src="/comum/ficha.js"></script>
@@ -94,6 +95,7 @@
      foto de novo não faz nada) e chama o "nova foto" do front, se houver. */
   function novaFoto() {
     document.querySelectorAll('input[type="file"]').forEach(i => { try { i.value = ""; } catch (e) {} });
+    temFoto = false; etapaAtual();
     if (CFG.novaFoto) CFG.novaFoto();
   }
 
@@ -140,6 +142,40 @@
       FichaPokedex.mostrar(x.info, { foto: x.foto, extras: CFG.extras ? (CFG.extras(x.info) || []) : [], alerta: CFG.alerta ? (CFG.alerta(x.info) || "") : "",
         acoes: [{ texto: "🗑️ Tirar do álbum", aoClicar: () => { const l = lerAlbum().filter(y => y.nome !== x.nome); localStorage.setItem(chaveAlbum(), JSON.stringify(l)); desenharAlbumComum(); } }, { texto: "Fechar", principal: true, aoClicar: () => {} }] });
     });
+  }
+
+  /* ---------- 6) Botões por etapa: só aparecem os botões que fazem sentido
+     agora. Uso (cada lista diz o que APARECE naquela etapa; o que estiver em
+     alguma lista e não estiver na etapa atual fica escondido):
+       etapas: { inicio: ["#camera", "#galeria"], camera: ["#tirar"],
+                 foto: ["#identificar", "#trocar"],
+                 fotoTirada: ["#tirar"],   // botões que tiram foto da webcam
+                 trocar: ["#trocar"] }     // botões que voltam ao começo ---------- */
+  let temFoto = false;
+  function etapaAtual() {
+    if (!CFG.etapas) return;
+    const camera = [...document.querySelectorAll("video")].some(v => v.srcObject && v.srcObject.active && v.offsetParent !== null);
+    document.documentElement.dataset.fpEtapa = temFoto ? "foto" : camera ? "camera" : "inicio";
+  }
+  function ligarEtapas() {
+    const e = CFG.etapas;
+    if (!e) return;
+    const todos = [...new Set([...(e.inicio || []), ...(e.camera || []), ...(e.foto || [])])];
+    const st = document.createElement("style");
+    st.textContent = ["inicio", "camera", "foto"].map(et => {
+      const esc = todos.filter(x => !(e[et] || []).includes(x));
+      return esc.length ? esc.map(x => `html[data-fp-etapa="${et}"] ${x}`).join(",") + "{display:none!important}" : "";
+    }).join("\n");
+    document.head.appendChild(st);
+    document.addEventListener("change", ev => { const t = ev.target; if (t && t.type === "file" && t.files && t.files[0] && ehImagem(t.files[0])) { temFoto = true; etapaAtual(); } }, true);
+    document.addEventListener("click", ev => {
+      const t = ev.target.closest && ev.target.closest("button,label,a");
+      if (!t) return;
+      if ((e.fotoTirada || []).some(x => t.matches(x))) setTimeout(() => { temFoto = true; etapaAtual(); }, 60);
+      if ((e.trocar || []).some(x => t.matches(x))) { temFoto = false; setTimeout(etapaAtual, 60); }
+    }, true);
+    setInterval(etapaAtual, 400);
+    etapaAtual();
   }
 
   function acoesFinais(info) {
@@ -277,7 +313,7 @@
       document.head.appendChild(s);
       document.documentElement.classList.add("fp-esconder");
     }
-    const pronto = () => { ligarWebcams(); botaoGaleria(); FichaPokedex.trocarFotos(); desenharAlbumComum(); };
+    const pronto = () => { ligarWebcams(); botaoGaleria(); FichaPokedex.trocarFotos(); desenharAlbumComum(); ligarEtapas(); };
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", pronto); else pronto();
   }
 
