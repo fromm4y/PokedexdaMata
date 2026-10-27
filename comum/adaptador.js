@@ -16,6 +16,7 @@
       porteiro do grupo na hora (o "grande teste" do documento das missões).
    3) No computador, o botão de câmera abre a webcam.
    4) Opcional: um botão "🖼️ Galeria" ao lado do botão de foto do grupo.
+   5) Opcional: um álbum pronto (album: { el, depois }) para quem não tem álbum.
 
    COMO USAR (no fim do index.html do grupo):
      <script src="/comum/ficha.js"></script>
@@ -96,11 +97,55 @@
     if (CFG.novaFoto) CFG.novaFoto();
   }
 
+  /* ---------- 5) Álbum comum (para grupos sem álbum, ou cujo álbum só
+     aceitava as espécies do catálogo). Uso:
+       album: { el: "#meuAlbum", depois: () => abrirAbaDoAlbum() }
+     Guarda nome, foto, data e a ficha inteira (tocar na figurinha reabre a ficha). ---------- */
+  const chaveAlbum = () => "pokedex-album-" + GRUPO;
+  const lerAlbum = () => { try { const l = JSON.parse(localStorage.getItem(chaveAlbum()) || "[]"); return Array.isArray(l) ? l : []; } catch (e) { return []; } };
+  const escA = t => String(t == null ? "" : t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  async function salvarNoAlbumComum(info) {
+    const lista = lerAlbum(), nome = String(info.nome_popular || info.nome || "Descoberta");
+    const foto = ultimoArquivo ? await (async () => { const u = URL.createObjectURL(ultimoArquivo); const r = await reduzir(u, 360, .74); URL.revokeObjectURL(u); return r || ""; })() : "";
+    const item = { nome, cientifico: info.nome_cientifico || "", foto, data: new Date().toLocaleDateString("pt-BR"), info };
+    const i = lista.findIndex(x => x.nome.toLowerCase() === nome.toLowerCase());
+    if (i >= 0) lista.splice(i, 1);
+    lista.unshift(item);
+    let n = 60;
+    while (n > 0) { try { localStorage.setItem(chaveAlbum(), JSON.stringify(lista.slice(0, n))); break; } catch (e) { n -= 10; } }
+    desenharAlbumComum();
+    FichaPokedex.fechar();
+    if (CFG.album.depois) CFG.album.depois();
+  }
+  function desenharAlbumComum() {
+    const caixa = CFG.album && document.querySelector(CFG.album.el);
+    if (!caixa) return;
+    const lista = lerAlbum(), escuro = CFG.escuro ? CFG.escuro() : true, t = (escuro ? CFG.noturno : CFG.claro) || {};
+    caixa.innerHTML = `<style>.fp-album{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;font-family:inherit}
+      .fp-album-item{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;border-radius:18px;overflow:hidden;background:${t.fundo || (escuro ? "#14202a" : "#fff")};color:${t.texto || (escuro ? "#fff" : "#222")};border:2px solid ${CFG.cor || "#5c9"}66;box-shadow:0 8px 22px #0003;transition:transform .2s}
+      .fp-album-item:hover,.fp-album-item:focus-visible{transform:translateY(-3px);border-color:${CFG.cor || "#5c9"}}
+      .fp-album-foto{aspect-ratio:4/3;background:linear-gradient(135deg,${CFG.cor || "#5c9"},${CFG.cor2 || "#9c5"});display:grid;place-items:center;font-size:46px;overflow:hidden}
+      .fp-album-foto img{width:100%;height:100%;object-fit:cover;display:block}
+      .fp-album-txt{padding:10px 12px 12px;display:flex;flex-direction:column;gap:2px}
+      .fp-album-txt b{font-size:16px;line-height:1.2}.fp-album-txt i,.fp-album-txt small{font-size:12.5px;color:${t.suave || (escuro ? "#bbb" : "#666")}}
+      .fp-album-vazio{grid-column:1/-1;text-align:center;padding:28px 16px;border:2px dashed ${CFG.cor || "#5c9"}88;border-radius:18px;color:${t.suave || "inherit"}}</style>
+      <div class="fp-album">${lista.length ? lista.map((x, i) => `<button type="button" class="fp-album-item" data-i="${i}" title="Ver a ficha">
+        <span class="fp-album-foto">${x.foto ? `<img src="${escA(x.foto)}" alt="">` : escA(CFG.icone || "🌿")}</span>
+        <span class="fp-album-txt"><b>${escA(x.nome)}</b>${x.cientifico ? `<i>${escA(x.cientifico)}</i>` : ""}<small>📅 ${escA(x.data)}</small></span></button>`).join("")
+        : `<div class="fp-album-vazio"><span style="font-size:40px">${escA(CFG.icone || "🌿")}</span><br><b>Seu álbum ainda está vazio.</b><br>Reconheça uma foto e toque em “💾 Salvar no álbum”!</div>`}</div>`;
+    caixa.querySelectorAll(".fp-album-item").forEach(b => b.onclick = () => {
+      const x = lista[+b.dataset.i];
+      FichaPokedex.mostrar(x.info, { foto: x.foto, extras: CFG.extras ? (CFG.extras(x.info) || []) : [], alerta: CFG.alerta ? (CFG.alerta(x.info) || "") : "",
+        acoes: [{ texto: "🗑️ Tirar do álbum", aoClicar: () => { const l = lerAlbum().filter(y => y.nome !== x.nome); localStorage.setItem(chaveAlbum(), JSON.stringify(l)); desenharAlbumComum(); } }, { texto: "Fechar", principal: true, aoClicar: () => {} }] });
+    });
+  }
+
   function acoesFinais(info) {
     const lista = [];
     if (CFG.salvar) lista.push({ texto: "💾 Salvar no álbum", principal: true, aoClicar: () => CFG.salvar(info) });
+    else if (CFG.album) lista.push({ texto: "💾 Salvar no álbum", principal: true, aoClicar: () => salvarNoAlbumComum(info) });
     if (CFG.acoesExtras) lista.push(...(CFG.acoesExtras(info) || []));
-    lista.push({ texto: "🔍 Reconhecer outra", principal: !CFG.salvar, aoClicar: novaFoto });
+    lista.push({ texto: "🔍 Reconhecer outra", principal: !CFG.salvar && !CFG.album, aoClicar: novaFoto });
     return lista;
   }
   const tentarOutra = () => [{ texto: "Tentar outra foto", principal: true, aoClicar: novaFoto }];
@@ -230,7 +275,7 @@
       document.head.appendChild(s);
       document.documentElement.classList.add("fp-esconder");
     }
-    const pronto = () => { ligarWebcams(); botaoGaleria(); FichaPokedex.trocarFotos(); };
+    const pronto = () => { ligarWebcams(); botaoGaleria(); FichaPokedex.trocarFotos(); desenharAlbumComum(); };
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", pronto); else pronto();
   }
 
@@ -271,5 +316,5 @@
   /* Ao começar uma nova identificação, o resultado antigo volta a ficar escondido. */
   document.addEventListener("change", e => { if (e.target && e.target.type === "file") document.documentElement.classList.toggle("fp-esconder", CFG.esconder.length > 0); }, true);
 
-  window.PokedexAdaptador = { iniciar, mostrarFront, grupo: GRUPO };
+  window.PokedexAdaptador = { iniciar, mostrarFront, grupo: GRUPO, lerAlbum, desenharAlbum: desenharAlbumComum };
 })();

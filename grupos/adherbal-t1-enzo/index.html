@@ -37,6 +37,8 @@
         <a class="brand" href="#" id="brandHome"><span class="brand-mark">✳</span><span>MUNDO DOS <b>MAMÍFEROS</b></span></a>
         <nav class="tabs" aria-label="Menu principal">
           <button class="tab active" data-view="habitat">Explorar</button>
+          <button class="tab" data-view="identify">📷 Identificar</button>
+          <button class="tab" data-view="album">📖 Álbum</button>
           <button class="tab" data-view="achievements">Conquistas <span class="tiny-count" id="achievementCount">0/4</span></button>
           <button class="tab" data-view="map">Mapa da aventura</button>
           <button class="tab" data-view="game">Fuga selvagem</button>
@@ -118,6 +120,13 @@
         </div>
       </section>
 
+      <section id="view-album" class="view hidden">
+        <div class="eyebrow">DIÁRIO DO EXPLORADOR</div><h2>Álbum de mamíferos</h2>
+        <p class="section-sub">Cada mamífero que você identificar e salvar aparece aqui. Toque na figurinha para ver a ficha de novo.</p>
+        <div id="albumComum"></div>
+        <button class="btn btn-gold" data-view="identify" style="margin-top:20px">📷 Identificar outro mamífero</button>
+      </section>
+
       <section id="animalModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="animalModalTitle">
         <div class="modal-card"><button class="modal-close" id="closeAnimalModal" aria-label="Fechar">×</button><div id="animalModalEmoji" class="modal-emoji">🐆</div><div class="eyebrow">FICHA DO EXPLORADOR</div><h2 id="animalModalTitle">Onça-pintada</h2><p id="animalModalText"></p><button class="btn btn-gold" id="animalChallenge">Concluir mini desafio</button></div>
       </section>
@@ -134,6 +143,8 @@
 html{font-size:17.5px}
 .tab{min-height:44px;font-size:.95rem}
 .eyebrow{font-size:.78rem}
+/* menu inteiro visível no tablet em pé (quebra a linha em vez de cortar) */
+@media(max-width:900px){.tabs{flex-wrap:wrap!important;overflow:visible!important}.tab{white-space:nowrap}}
 </style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
@@ -148,6 +159,7 @@ PokedexAdaptador.iniciar({
   noturno: { fundo: "#10251b", texto: "#f6f0e3", suave: "#9cae9f" },
   carregando: "🔎 O explorador está observando a foto...",
   esconder: ["#identifyResult", "#identifyMessage"],
+  album: { el: "#albumComum", depois: () => showView("album") },
   alerta: info => info.perigoso === true ? "Este animal pode ser perigoso. Observe de longe e chame um adulto." : ""
 });
 </script>
