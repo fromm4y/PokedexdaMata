@@ -905,7 +905,7 @@ button{min-height:46px}
 <script>
 /* O histórico guardava a foto em tamanho original e o navegador não tinha
    espaço (foto de celular tem vários MB): agora guarda uma versão menor. */
-window.reduzirParaAlbum = src => new Promise(res => { const img = new Image(); img.onload = () => { const k = Math.min(1, 700 / Math.max(img.width, img.height)); const c = document.createElement("canvas"); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); res(c.toDataURL("image/jpeg", .8)); }; img.onerror = () => res(src); img.src = src; });
+window.reduzirParaAlbum = src => new Promise(res => { const img = new Image(); img.onload = () => { const k = Math.min(1, 480 / Math.max(img.width, img.height)); const c = document.createElement("canvas"); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); res(c.toDataURL("image/jpeg", .75)); }; img.onerror = () => res(src); img.src = src; });
 PokedexAdaptador.iniciar({
   icone: "🌸", fauna: false,
   cor: "#f4a7d0", cor2: "#bddd9d",

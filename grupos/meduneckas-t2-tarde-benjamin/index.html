@@ -139,7 +139,7 @@ window.reduzirParaAlbum = src => new Promise(res => { const img = new Image(); i
     document.getElementById("savePhoto").click();
     try {
       const lista = JSON.parse(localStorage.getItem("reptisfera_records") || "[]");
-      if (lista[0] && ultimo && ultimo.identificado) { lista[0].speciesName = ultimo.nome_popular; lista[0].kind = "Identificado pela IA"; lista[0].tipoTexto = [ultimo.nome_cientifico, ultimo.habitat_descricao, (ultimo.curiosidades || []).join(" ")].join(" "); localStorage.setItem("reptisfera_records", JSON.stringify(lista)); }
+      if (lista[0] && ultimo && ultimo.identificado) { lista[0].speciesName = ultimo.nome_popular; lista[0].kind = "Identificado pela IA"; lista[0].tipoTexto = [ultimo.nome_cientifico, ultimo.habitat_descricao, [].concat(ultimo.curiosidades || []).join(" ")].join(" "); localStorage.setItem("reptisfera_records", JSON.stringify(lista)); }
     } catch (e) {}
     const aba = document.querySelector('[data-view="album"], [data-target="album"], [href="#album"]');
     if (aba) aba.click();

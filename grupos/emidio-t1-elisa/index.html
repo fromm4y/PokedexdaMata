@@ -425,6 +425,11 @@ PokedexAdaptador.iniciar({
   noturno: { fundo: "#242a20", texto: "#fff9ef", suave: "#d9cfbf" },
   carregando: "🕵️ Os detetives estão investigando a árvore...",
   esconder: ["#resultado", "#incerteza", "#naoValida", "#erro", "#carregando"],
+  // Regra do grupo: só árvores NATIVAS do Brasil entram na coleção. A ficha avisa.
+  extras: info => [["📖 Coleção dos detetives", info.ehArvore === true && ["nativa", "endemica"].includes(String(info.origem || "").toLowerCase())
+    ? "✅ Árvore brasileira! Ela entrou na sua coleção."
+    : info.ehArvore !== true ? "🔎 Não deu para confirmar que é uma árvore, então ela não entra na coleção."
+    : "🌎 Essa espécie não é nativa do Brasil, então não entra na coleção dos detetives (que é só de árvores brasileiras)."]],
   acoesExtras: () => [
     { texto: "🧠 Fazer o quiz", principal: true, aoClicar: () => document.getElementById("fazerQuiz").click() },
     { texto: "📖 Ver álbum", aoClicar: () => document.getElementById("resultadoAlbum").click() }

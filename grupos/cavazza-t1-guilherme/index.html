@@ -59,7 +59,10 @@ entries.forEach(([label,value])=>{let f=document.createElement('div');f.classNam
 let mc=document.createElement('div');mc.className='card';addText(mc,'h3','','🗺️ Região do animal');let map=document.createElement('div');map.className='map';map.textContent='AMAZÔNIA';let pin=document.createElement('span');pin.className='pin';pin.textContent='📍';map.appendChild(pin);mc.appendChild(map);right.appendChild(mc);
 if(d.perigoso===true){let w=document.createElement('div');w.className='warning';addText(w,'b','','⚠️ ATENÇÃO');addText(w,'p','',d.aviso||'Não se aproxime. Observe de longe e peça ajuda a um adulto.');right.appendChild(w)}
 wrap.append(left,right);$('resultBox').replaceChildren(wrap);
-if(!S.album.some(x=>x.nome.toLowerCase()===name.toLowerCase())){S.album.unshift({nome:name,conf,photo,grupo:d.grupo||'Não informado',dieta:d.dieta||'Não informado',porte:d.porte||'Não informado',habitat:d.habitat||'Não informado',caracteristicas:d.caracteristicas||''});S.album=S.album.slice(0,40);localStorage.setItem('ama_album',JSON.stringify(S.album))}S.score+=10;localStorage.setItem('ama_score',S.score);stats();toast('⭐ +10 pontos! Ficha salva no álbum.')}
+if(!S.album.some(x=>x.nome.toLowerCase()===name.toLowerCase())){miniAlbum(photo,name);S.album.unshift({nome:name,conf,photo:'',grupo:d.grupo||'Não informado',dieta:d.dieta||'Não informado',porte:d.porte||'Não informado',habitat:d.habitat||'Não informado',caracteristicas:d.caracteristicas||''});S.album=S.album.slice(0,40);localStorage.setItem('ama_album',JSON.stringify(S.album))}S.score+=10;localStorage.setItem('ama_score',S.score);stats();toast('⭐ +10 pontos! Ficha salva no álbum.')}
+/* O álbum guardava a foto inteira (400 KB cada) e enchia o navegador em ~12 animais:
+   agora guarda uma miniatura. */
+function miniAlbum(src,nome){const im=new Image();im.onload=()=>{const k=Math.min(1,360/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);const x=S.album.find(y=>y.nome===nome);if(x){x.photo=c.toDataURL('image/jpeg',.75);try{localStorage.setItem('ama_album',JSON.stringify(S.album))}catch(e){}}};im.src=src}
 function renderAlbum(){let g=$('albumGrid');g.innerHTML='';if(!S.album.length){g.innerHTML='<div class="empty" style="grid-column:1/-1">📖 Seu álbum está vazio.<br><br>Faça sua primeira descoberta!</div>';return}S.album.forEach(x=>{let a=document.createElement('article');a.className='animal';let im=document.createElement('img');im.src=x.photo;im.alt='Foto de '+x.nome;let d=document.createElement('div');addText(d,'b','',x.nome);addText(d,'small','',x.conf+'% de certeza');a.append(im,d);g.appendChild(a)})}
 
 function renderGroups(){
@@ -116,7 +119,8 @@ PokedexAdaptador.iniciar({
   carregando: "🤖 O robô está analisando o animal...",
   extras: info => [["🧬 Características", info.caracteristicas], ["🍖 Dieta", info.dieta], ["📏 Porte", info.porte]],
   alerta: info => info.perigoso === true ? (info.aviso || "Este animal pode ser perigoso. Observe de longe!") : "",
-  acoesExtras: () => [{ texto: "🗺️ Ver ficha do robô", principal: true, aoClicar: () => {} }],
+  salvar: () => go("album"),
+  acoesExtras: () => [{ texto: "🗺️ Ver ficha do robô", aoClicar: () => {} }],
   novaFoto: () => go("scanner")
 });
 </script>

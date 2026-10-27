@@ -694,12 +694,18 @@ input[type=file]{display:none}
     return result.imageData;
   }
 
+  // A foto do tablet tem vários MB e não cabia no álbum (o navegador guarda
+  // pouco): agora vai uma versão menor, de até 600 px.
   function imageToDataUrl(file) {
     return new Promise((resolve,reject)=>{
-      const r=new FileReader();
-      r.onload=()=>resolve(String(r.result));
-      r.onerror=reject;
-      r.readAsDataURL(file);
+      const img=new Image(), url=URL.createObjectURL(file);
+      img.onload=()=>{
+        const k=Math.min(1,600/Math.max(img.naturalWidth,img.naturalHeight)), c=document.createElement("canvas");
+        c.width=Math.round(img.naturalWidth*k); c.height=Math.round(img.naturalHeight*k);
+        c.getContext("2d").drawImage(img,0,0,c.width,c.height); URL.revokeObjectURL(url);
+        resolve(c.toDataURL("image/jpeg",.78));
+      };
+      img.onerror=reject; img.src=url;
     });
   }
 

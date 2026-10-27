@@ -114,7 +114,7 @@ nav button.on,#nav button.on{background:#2f6b3d;color:#fff;border-color:#2f6b3d}
       if (info.identificado) {
         marca(4); indice = A.findIndex(a => norm(a[0]) === norm(info.nome_popular) || norm(a[1]) === norm(info.nome_cientifico));
         if (indice < 0) {
-          const mini = await reduzir(f, 480, .72), cur = info.curiosidades || [], lista = x => (x || []).join(", ");
+          const mini = await reduzir(f, 480, .72), cur = [].concat(info.curiosidades || []), lista = x => (x || []).join(", ");
           novo = [info.nome_popular, info.nome_cientifico || "", mini, mini, lista(info.regioes) || "Brasil", "", "", "", "",
             info.habitat_descricao || "", cur[0] || "", lista(info.biomas) || "Natureza", "🐾"];
         }

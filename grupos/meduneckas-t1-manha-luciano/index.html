@@ -131,6 +131,7 @@ PokedexAdaptador.iniciar({
     { texto: "⭐ Favoritar", fechar: false, aoClicar: () => document.getElementById("favoriteCurrent").click() },
     { texto: "📖 Ver ficha completa do grupo", principal: true, aoClicar: () => {} }
   ],
+  salvar: () => showPage("album"),  // as descobertas já entram no álbum sozinhas
   novaFoto: () => document.getElementById("scanAnother").click()
 });
 </script>
