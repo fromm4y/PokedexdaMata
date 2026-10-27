@@ -212,7 +212,7 @@ img.lut-av{background:radial-gradient(circle,#3a2a7a,#151b3d);border-color:var(-
         </div>
       </div>
       <div class="hero-sukuna">
-        <img data-sukuna src="/grupos/meduneckas-t1-tarde-ana/sukuna.svg" alt="Sukuna, mascote do laboratório">
+        <img data-sukuna src="/grupos/meduneckas-t1-tarde-ana/sukuna.webp" alt="Sukuna, mascote do laboratório">
         <div class="balao" id="mascotLine" aria-live="polite">“Mostre sua descoberta. Vamos investigar!”</div>
       </div>
     </div>
@@ -294,9 +294,9 @@ img.lut-av{background:radial-gradient(circle,#3a2a7a,#151b3d);border-color:var(-
 </div>
 
 <!-- ===================== SUKUNA: CHAT ===================== -->
-<button class="chat-bolha" id="talkBtn" type="button" aria-label="Conversar com o Sukuna"><img data-sukuna src="/grupos/meduneckas-t1-tarde-ana/sukuna.svg" alt=""><span class="chat-ponto" id="chatPonto" hidden></span></button>
+<button class="chat-bolha" id="talkBtn" type="button" aria-label="Conversar com o Sukuna"><img data-sukuna src="/grupos/meduneckas-t1-tarde-ana/sukuna.webp" alt=""><span class="chat-ponto" id="chatPonto" hidden></span></button>
 <section class="chat" id="chat" hidden aria-label="Conversa com o Sukuna">
-  <div class="chat-topo"><img data-sukuna src="/grupos/meduneckas-t1-tarde-ana/sukuna.svg" alt=""><div><b>Sukuna</b><small>● mascote do laboratório</small></div><button class="chat-x" id="chatFechar" type="button" aria-label="Fechar conversa">✕</button></div>
+  <div class="chat-topo"><img data-sukuna src="/grupos/meduneckas-t1-tarde-ana/sukuna.webp" alt=""><div><b>Sukuna</b><small>● mascote do laboratório</small></div><button class="chat-x" id="chatFechar" type="button" aria-label="Fechar conversa">✕</button></div>
   <div class="chat-msgs" id="chatMsgs" aria-live="polite"></div>
   <div class="chat-chips" id="chatChips"></div>
   <form class="chat-form" id="chatForm"><input id="chatTexto" type="text" maxlength="120" placeholder="Pergunte algo ao Sukuna..." autocomplete="off" aria-label="Mensagem para o Sukuna"><button class="primary" type="submit" aria-label="Enviar">➤</button></form>
@@ -309,7 +309,7 @@ img.lut-av{background:radial-gradient(circle,#3a2a7a,#151b3d);border-color:var(-
     <div class="quiz-arena">
       <div class="lutador" id="ladoEu"><div class="lut-av" id="quizEu">🐛</div><b id="quizEuNome">Você</b><div class="vidas" id="quizVidas">❤️❤️❤️</div></div>
       <div class="vs">VS</div>
-      <div class="lutador" id="ladoSukuna"><img class="lut-av" data-sukuna src="/grupos/meduneckas-t1-tarde-ana/sukuna.svg" alt=""><b>Sukuna</b><div class="hp"><i id="quizHp"></i></div></div>
+      <div class="lutador" id="ladoSukuna"><img class="lut-av" data-sukuna src="/grupos/meduneckas-t1-tarde-ana/sukuna.webp" alt=""><b>Sukuna</b><div class="hp"><i id="quizHp"></i></div></div>
     </div>
     <div id="quizJogo">
       <div class="quiz-q"><small id="quizN">Pergunta 1</small><p id="quizPergunta"></p></div>
@@ -326,7 +326,7 @@ img.lut-av{background:radial-gradient(circle,#3a2a7a,#151b3d);border-color:var(-
 const $ = (id) => document.getElementById(id);
 /* IMAGEM DO SUKUNA: para usar outra (ex.: uma do Google), coloque o arquivo
    nesta pasta (grupos/meduneckas-t1-tarde-ana/) e troque só o nome abaixo. */
-const IMAGEM_SUKUNA = "/grupos/meduneckas-t1-tarde-ana/sukuna.svg";
+const IMAGEM_SUKUNA = "/grupos/meduneckas-t1-tarde-ana/sukuna.webp";
 document.querySelectorAll("[data-sukuna]").forEach(img => img.src = IMAGEM_SUKUNA);
 const photoInput = $("photoInput");
 const preview = $("preview");
