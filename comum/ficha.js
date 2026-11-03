@@ -153,6 +153,15 @@
         const m = L.marker(b.coord, { icon }).addTo(map);
         if (o.aoClicar) [c, m].forEach(x => x.on("click", () => o.aoClicar(nome)));
       });
+      // o.mundo: mapa-múndi com um alfinete onde o animal vive (em vez de só o Brasil)
+      if (o.mundo && pts.length) {
+        const pin = L.divIcon({ className: "", iconSize: [40, 40], iconAnchor: [20, 38], html: '<div class="fp-mapa-pin">📍</div>' });
+        L.marker(pts[0], { icon: pin }).addTo(map);
+        const enquadrarMundo = () => { map.invalidateSize(); map.setView([-8, -45], el.clientWidth < 500 ? 1.25 : 2); };
+        enquadrarMundo();
+        if (window.ResizeObserver) new ResizeObserver(enquadrarMundo).observe(el);
+        return map;
+      }
       const enquadrar = () => { map.invalidateSize(); if (pts.length) map.fitBounds(L.latLngBounds(pts).pad(.22)); };
       map.setView([-14.5, -52], 4);
       enquadrar();
@@ -590,6 +599,7 @@
 /* mapa solto (fora da ficha) */
 .fp-mapa-solto{position:relative;isolation:isolate;z-index:0;min-height:380px;border-radius:16px;overflow:hidden;background:#0e1512}
 .fp-mapa-solto.fp-mapa-escuro .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.85) contrast(.9) saturate(.6)}
+.fp-mapa-pin{font-size:34px;line-height:1;filter:drop-shadow(0 3px 4px rgba(0,0,0,.6));animation:fpPin 1.6s ease-in-out infinite}@keyframes fpPin{50%{transform:translateY(-6px)}}
 .fp-mapa-rotulo{display:inline-block;white-space:nowrap;padding:5px 10px;border-radius:999px;background:var(--mc);color:#0b130f;font:800 13px system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.35);cursor:pointer}
 /* pop-up */
 html.fp-travado,html.fp-travado body{overflow:hidden}
