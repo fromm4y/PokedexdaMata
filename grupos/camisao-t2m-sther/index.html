@@ -141,6 +141,21 @@ render();
 @media (min-width:700px){body>header,body>main{zoom:1.1}}
 button,.chip{min-height:44px}
 .category small{font-size:13.5px}
+/* abas do Codex */
+.codex-abas{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px;position:sticky;top:0;z-index:5;padding:10px 0;background:inherit}
+.codex-abas button{border:2px solid #222;border-radius:999px;padding:10px 18px;font-weight:800;font-size:15px;background:#fff;cursor:pointer;min-height:46px;box-shadow:3px 3px 0 #222}
+.codex-abas button.on{background:var(--pink,#ff8fc6);transform:translate(1px,1px);box-shadow:2px 2px 0 #222}
+.codex-aba{display:none}.codex-aba.on{display:block}
+.category-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))!important}
+.category small{display:none}
+/* catálogo da aba Pesquisar mais compacto */
+#abaPesquisar .results{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))!important;gap:12px}
+#abaPesquisar .animal-card img{height:120px!important}
+#abaPesquisar .animal-card .body{padding:10px 12px}
+#abaPesquisar .animal-card h3{font-size:1.05rem}
+#abaPesquisar .animal-card p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.85rem}
+#abaPesquisar .category{padding:10px 12px!important}
+#abaPesquisar > p.note{font-size:12px}
 </style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
@@ -232,6 +247,37 @@ button,.chip{min-height:44px}
   render();
 })();
 
+/* O Codex era uma página só, bem comprida (quase 4 telas no tablet): agora as
+   partes viram 3 abas, sem mudar o que cada uma faz. */
+(function () {
+  const main = document.querySelector("main"), q = s => document.querySelector(s);
+  const aba = (id) => { const d = document.createElement("div"); d.className = "codex-aba"; d.id = id; return d; };
+  const descobrir = aba("abaDescobrir"), meu = aba("abaCodex"), pesquisar = aba("abaPesquisar");
+  const h2s = [...main.querySelectorAll(":scope > h2")];
+  const hMeu = h2s.find(h => /Meu Codex/.test(h.textContent)), hCat = h2s.find(h => /Categorias/.test(h.textContent));
+  descobrir.append(q("#reconhecer"));
+  meu.append(hMeu, hMeu.nextElementSibling, q("#meuCodex"));
+  const busca = main.querySelector(".search-panel");
+  pesquisar.append(busca, hCat, q(".category-grid"), q(".result-heading"), q("#results"), q("#detail"));
+  [...main.querySelectorAll(":scope > p.note")].forEach(n => pesquisar.append(n));
+  const barra = document.createElement("nav"); barra.className = "codex-abas"; barra.setAttribute("aria-label", "Partes do Codex");
+  [["abaDescobrir", "📷 Descobrir pela foto"], ["abaCodex", "📒 Meu Codex"], ["abaPesquisar", "🔎 Pesquisar animais"]].forEach(([id, t], i) => {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.dataset.aba = id; if (!i) b.classList.add("on");
+    b.onclick = () => irAba(id); barra.append(b);
+  });
+  main.prepend(barra, descobrir, meu, pesquisar);
+  window.irAba = id => {
+    document.querySelectorAll(".codex-aba").forEach(x => x.classList.toggle("on", x.id === id));
+    barra.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.aba === id));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  irAba("abaDescobrir");
+  // o Codex salvo aparece na aba "Meu Codex"
+  const salvarOriginal = window.salvarNoCodex;
+  if (salvarOriginal) window.salvarNoCodex = (...a) => { const r = salvarOriginal(...a); irAba("abaCodex"); return r; };
+  // escolher uma categoria ou pesquisar sempre leva para a aba de pesquisa
+  document.querySelectorAll(".category, #searchBtn, #filters .chip").forEach(b => b.addEventListener("click", () => { if (!pesquisar.classList.contains("on")) irAba("abaPesquisar"); }));
+})();
 PokedexAdaptador.iniciar({
   albumFicha: { cartao: "#meuCodex .animal-card", nome: "h3" },  // "📖 Ver ficha" nas figurinhas do álbum
   // botões por etapa: o de identificar só aparece depois de escolher a foto
