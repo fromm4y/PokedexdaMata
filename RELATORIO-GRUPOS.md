@@ -19,6 +19,7 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 - **câmera de verdade** no tablet, **webcam** no computador e **galeria** que abre a galeria (o botão "📁 Escolher arquivo" da webcam foi consertado);
 - revisado no **tablet deitado (1280×800) e em pé (800×1280)**: menus, botões do tamanho do dedo, letras legíveis e nada cortado;
 - testado: acerto, fora do tema, dúvida e arquivo que não é foto — **116 de 116 verificações passando, sem erros**;
+- **varredura de 03/11 em todas as escolas:** o álbum de todos os grupos reabre a ficha completa (botão "📖 Ver ficha" ou tocando na figurinha) e guarda a foto enviada; mapas iguais ao da ficha; telas que exigiam descer muito foram reorganizadas (Codex em abas, catálogos mais compactos); botões sem função removidos ou consertados;
 - **varredura de 27/10 em todas as escolas:** todos os álbuns guardam espécies novas (não só as do catálogo) e cabem no navegador (dois grupos guardavam a foto original inteira e o "salvar" falhava); o botão de identificar só aparece depois de escolher a foto; mensagens das missões com acento, "%" e sentido; emojis que o Windows desenhava quebrados foram trocados; menus inteiros no tablet em pé;
 - na dúvida, a porcentagem mostrada fica sempre abaixo da certeza mínima do grupo (antes podia aparecer "Estou em dúvida 95");
 - os fronts mais simples (Izaque, Davi T2, Eduardo, Elisa e Lucas) ganharam um **visual mais colorido e infantil**, cada um no seu tema, com letras arredondadas — as ideias e telas continuam sendo dos alunos;
@@ -159,9 +160,9 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 
 | Turma | Grupo | Tema | Integrantes | Visual no tablet |
 |---|---|---|---|---|
-| Turma 1 | [FrutaThech](grupos/cavazza-t1-enzo/) | Frutas brasileiras | Luckhas, Enzo, João e Ana | Cards em grade 2×2 (sobrava uma coluna vazia); mapa de verdade; o álbum era só enfeite e agora guarda as frutas. |
-| Turma 1 | [Animais da Amazônia](grupos/cavazza-t1-guilherme/) | Animais da Amazônia | Guilherme | Com tablet em pé, o menu vira barra no topo; fundo sem "cortes". |
-| Turma 1 | [Os Caçadores](grupos/cavazza-t1-izaque/) | Plantas medicinais | Izaque, David, Nicy, Dav e Ana | Visual reorganizado (eram 3 temas misturados); conquistas e coleção funcionando de verdade. **Visual novo:** tema de plantas medicinais (creme e verde, folhas, botões verdes e mel). |
+| Turma 1 | [FrutaThech](grupos/cavazza-t1-enzo/) | Frutas brasileiras | Luckhas, Enzo, João e Ana | **Refeito (03/11):** menu lateral com abas (Início, Identificar, Álbum, Modo explorador, Mapa); modo explorador com as frutas típicas de cada bioma; foto-surpresa com pistas e alternativas; mapa das frutas descobertas; caju de verdade na tela inicial; cores mais calmas; logo em PNG sem fundo. |
+| Turma 1 | [Animais da Amazônia](grupos/cavazza-t1-guilherme/) | Animais da Amazônia | Guilherme | **Nova versão do grupo (03/11):** tela de início do jogo; 10 conquistas que contam de verdade; o álbum reabre a ficha (e a "Ficha do robô"); mapa-múndi com o alfinete onde o animal vive; miniatura no álbum. |
+| Turma 1 | [Os Caçadores](grupos/cavazza-t1-izaque/) | Plantas medicinais | Izaque, David, Nicy, Dav e Ana | **Refeito (03/11):** páginas separadas com menu fixo no topo; visual moderno e centralizado; coleção que reabre a ficha; mapa de biomas igual ao da ficha (os "ambientes" do grupo continuam abaixo); página 45× mais leve. |
 | Turma 2 | [As Frutas Brasileiras](grupos/cavazza-t2-eduardo/) | Frutas brasileiras | Eduardo | Botões maiores; álbum vazio centralizado. **Visual novo:** feira de frutas (a floresta continua no topo; o resto ficou claro e colorido, ficha clara). |
 | Turma 2 | [Dattflower](grupos/cavazza-t2-emilly/) | Flores | Emilly | Tela de entrada empilhada com tablet em pé. |
 | Turma 2 | [Cogumelo Explorer](grupos/cavazza-t2-victor/) | Cogumelos (venenoso ou não) | Victor, Kaun, Miguel e Bruno | Área da foto em largura total; galeria no tablet; a barra de baixo marca a aba atual. |

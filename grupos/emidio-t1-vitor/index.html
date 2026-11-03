@@ -203,7 +203,7 @@ input[type=file]{display:none}
       <div class="brand-banana">🍌</div>
       <div><div class="logo">Fruit<span>Dex</span></div><small>Frutas brasileiras • ciência • natureza</small></div>
     </div>
-    <button class="icon-btn" id="topSettings" aria-label="Configurações">⚙️</button>
+    
   </header>
 
   <main>
@@ -305,7 +305,7 @@ input[type=file]{display:none}
     </section>
 
     <section class="page" id="albumPage">
-      <div class="section-title"><h2>📖 Meu Álbum</h2><span class="muted" id="albumCount"></span></div>
+      <div class="section-title"><h2>📖 Meu Álbum</h2><span class="muted" id="albumCount"></span><button class="btn danger" id="clearAlbum">🗑️ Apagar álbum</button></div>
       <div class="card">
         <div class="album-tools">
           <input id="albumSearch" type="search" placeholder="🔎 Buscar por nome popular ou científico">
@@ -348,15 +348,6 @@ input[type=file]{display:none}
         <div class="info-card span-4"><h3>🌱 Pampa</h3><p>Campos naturais do sul do Brasil.</p></div>
       </div>
     </section>
-
-    <section class="page" id="settingsPage">
-      <div class="section-title"><h2>⚙️ Configurações</h2></div>
-      <div class="card">
-        <label><span>🔬 Modo demonstração</span><input class="toggle" id="demoToggle" type="checkbox"></label>
-        <p class="muted">Quando ligado, a identificação usa dados de exemplo para testar a interface sem servidor. A API real continua sendo usada quando desligado.</p>
-        <button class="btn danger" id="clearAlbum">🗑️ Apagar álbum</button>
-      </div>
-    </section>
   </main>
 </div>
 
@@ -365,7 +356,6 @@ input[type=file]{display:none}
   <button data-page="mapPage"><span>🗺️</span>Mapa</button>
   <button data-page="biomesPage"><span>🌳</span>Biomas</button>
   <button data-page="albumPage"><span>📖</span>Meu Álbum</button>
-  <button data-page="settingsPage"><span>⚙️</span>Configurações</button>
 </nav>
 
 <div class="modal hidden" id="cameraModal">
@@ -421,7 +411,6 @@ input[type=file]{display:none}
   }
 
   navButtons.forEach(btn => btn.addEventListener("click", () => showPage(btn.dataset.page)));
-  $("topSettings").addEventListener("click", () => showPage("settingsPage"));
 
   // =========================================================
   // CÂMERA REAL
@@ -919,8 +908,7 @@ input[type=file]{display:none}
   // =========================================================
   // CONFIGURAÇÕES
   // =========================================================
-  $("demoToggle").checked=DEMO_MODE;
-  $("demoToggle").addEventListener("change",e=>{DEMO_MODE=e.target.checked;toast(DEMO_MODE?"Modo demonstração ligado.":"Modo demonstração desligado.")});
+  // (o "modo demonstração" foi tirado: ele trocava a IA por resultados de exemplo)
   ["albumSearch","albumDateFilter","albumStatusFilter"].forEach(id=>{
     const el=$(id); if(el) el.addEventListener(id==="albumSearch"?"input":"change",renderAlbum);
   });
