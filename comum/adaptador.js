@@ -152,6 +152,16 @@
                  fotoTirada: ["#tirar"],   // botões que tiram foto da webcam
                  trocar: ["#trocar"] }     // botões que voltam ao começo ---------- */
   let temFoto = false;
+  /* ---------- 7) Reabrir a ficha pelo álbum: o grupo guarda
+     PokedexAdaptador.ultimaFicha() junto com a figurinha e, ao tocar nela,
+     chama PokedexAdaptador.abrirFicha(info, foto). ---------- */
+  let ultima = null;
+  const ultimaFicha = () => ultima ? JSON.parse(JSON.stringify(ultima)) : null;
+  function abrirFicha(info, foto, acoes) {
+    if (!info) return;
+    FichaPokedex.mostrar(info, { foto: foto || "", extras: CFG.extras ? (CFG.extras(info) || []) : [], alerta: CFG.alerta ? (CFG.alerta(info) || "") : "",
+      acoes: (acoes || []).concat([{ texto: "Fechar", principal: true, aoClicar: () => {} }]) });
+  }
   function etapaAtual() {
     if (!CFG.etapas) return;
     const camera = [...document.querySelectorAll("video")].some(v => v.srcObject && v.srcObject.active && v.offsetParent !== null);
@@ -239,6 +249,8 @@
     } else if (!info.identificado) {
       FichaPokedex.aviso({ tipo: "duvida", texto: info.mensagem_backend || "Não consegui ter certeza. Tente uma foto mais nítida.", acoes: tentarOutra() });
     } else {
+      // guarda a ficha (e uma miniatura da foto) para o álbum do grupo poder reabrir depois
+      ultima = { info, foto: ultimoArquivo ? await (async () => { const u = URL.createObjectURL(ultimoArquivo); const r = await reduzir(u, 420, .76); URL.revokeObjectURL(u); return r || ""; })() : "" };
       FichaPokedex.mostrar(info, {
         foto: await fotoAtual(),
         extras: CFG.extras ? (CFG.extras(info) || []) : [],
@@ -354,5 +366,5 @@
   /* Ao começar uma nova identificação, o resultado antigo volta a ficar escondido. */
   document.addEventListener("change", e => { if (e.target && e.target.type === "file") document.documentElement.classList.toggle("fp-esconder", CFG.esconder.length > 0); }, true);
 
-  window.PokedexAdaptador = { iniciar, mostrarFront, grupo: GRUPO, lerAlbum, desenharAlbum: desenharAlbumComum };
+  window.PokedexAdaptador = { iniciar, mostrarFront, grupo: GRUPO, lerAlbum, desenharAlbum: desenharAlbumComum, ultimaFicha, abrirFicha };
 })();

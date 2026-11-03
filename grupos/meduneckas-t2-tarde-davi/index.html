@@ -24,7 +24,7 @@ let saved=JSON.parse(localStorage.getItem('mamiferosAlbum')||'[]');
 function go(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.getElementById(id).classList.add('on');document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.id===id));if(id==='albumPage')album();if(id==='explorar')explore();if(id==='conquistas')achievements();scrollTo(0,0)}
 function mode(x,b){document.getElementById('gal').style.display=x==='gal'?'block':'none';document.getElementById('cam').style.display=x==='cam'?'block':'none';document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on')}
 function gallery(){let box=document.getElementById('cards');box.innerHTML='';A.forEach((a,i)=>{let c=document.createElement('article');c.className='card';c.innerHTML=`<img src="${a[2]}" alt="Fotografia real de ${a[0]}"><h3>${a[0]}</h3><p>${a[9]}</p>`;let b=document.createElement('button');b.className='btn';b.textContent='Descobrir';b.onclick=()=>detail(i);c.append(b);box.append(c)})}
-function detail(i){let a=A[i],d=document.getElementById('details');d.innerHTML=`<div class="paper detail"><div><img class="bigphoto" src="${a[2]}" alt="Fotografia real de ${a[0]}"><div class="hab"><img src="${a[3]}" alt="Fotografia real do habitat de ${a[0]}"><span>🌿 Habitat real: ${a[11]}</span></div></div><div><h2>📋 Ficha de pesquisador: ${a[0]}</h2><p><em>${a[1]}</em></p><div class="facts">${[['🌎 Onde mora',a[4]],['⚖️ Peso',a[5]],['📏 Altura',a[6]],['⏳ Tempo de vida',a[7]],['🍃 Alimentação',a[8]],['🐾 Dia a dia',a[9]],['💡 Curiosidade',a[10]]].filter(x=>x[1]).map(x=>`<div class="fact"><b>${x[0]}</b>${x[1]}</div>`).join('')}</div><button id="add" class="btn" style="margin-top:12px" onclick="add(${i})">${saved.includes(i)?'✓ Já está no álbum':'📖 Adicionar ao meu álbum'}</button></div></div>`;d.scrollIntoView({behavior:'smooth'})}
+function detail(i){let a=A[i],d=document.getElementById('details');d.innerHTML=`<div class="paper detail"><div><img class="bigphoto" src="${a[2]}" alt="Fotografia real de ${a[0]}"><div class="hab"><img src="${a[3]}" alt="Fotografia real do habitat de ${a[0]}"><span>🌿 Habitat real: ${a[11]}</span><b class="hab-bicho">${a[12]}</b></div></div><div><h2>📋 Ficha de pesquisador: ${a[0]}</h2><p><em>${a[1]}</em></p><div class="facts">${[['🌎 Onde mora',a[4]],['⚖️ Peso',a[5]],['📏 Altura',a[6]],['⏳ Tempo de vida',a[7]],['🍃 Alimentação',a[8]],['🐾 Dia a dia',a[9]],['💡 Curiosidade',a[10]]].filter(x=>x[1]).map(x=>`<div class="fact"><b>${x[0]}</b>${x[1]}</div>`).join('')}</div><button id="add" class="btn" style="margin-top:12px" onclick="add(${i})">${saved.includes(i)?'✓ Já está no álbum':'📖 Adicionar ao meu álbum'}</button></div></div>`;d.scrollIntoView({behavior:'smooth'})}
 function add(i){if(!saved.includes(i)){saved.push(i);localStorage.setItem('mamiferosAlbum',JSON.stringify(saved));toast('🏆 Nova descoberta! '+A[i][0]+' entrou no álbum.');check(i)}else toast('Esse mamífero já foi descoberto.');album();explore();achievements();document.getElementById('add').textContent='✓ Já está no álbum'}
 function album(){let box=document.getElementById('album');box.innerHTML='';document.getElementById('count').textContent='🐾 Mamíferos descobertos: '+saved.length;if(!saved.length){box.innerHTML='<p>Ainda não há descobertas. Vá para Reconhecer e comece sua aventura!</p>';return}saved.forEach(i=>{let a=A[i];if(!a)return;let c=document.createElement('article');c.className='card';c.innerHTML=`<img src="${a[2]}" alt="Foto real de ${a[0]}"><h3>${a[0]}</h3><p>✓ Descoberto! ${a[11]}</p>`;c.onclick=()=>{go('reconhecer');detail(i)};box.append(c)})}
 function explore(){let box=document.getElementById('world');box.innerHTML='';if(!saved.length){box.innerHTML='<p>Descubra mamíferos primeiro. Eles aparecerão aqui em seus habitats.</p>';return}saved.forEach(i=>{let a=A[i];if(!a)return;let s=document.createElement('div');s.className='scene';s.innerHTML=`<img src="${a[3]}" alt="Habitat real de ${a[0]}"><label>${a[12]} ${a[0]}</label><div class="walker">${a[12]}</div>`;s.onclick=()=>{go('reconhecer');detail(i)};box.append(s)})}
@@ -34,6 +34,8 @@ function check(i){let old=JSON.parse(localStorage.getItem('mamiferosConquistas')
 function toast(t){let x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),2800)}gallery();album();explore();achievements();
 </script>
 <style id="ajustes-tablet">
+.hab{position:relative}.hab-bicho{position:absolute;right:14px;bottom:44px;font-size:52px;filter:drop-shadow(0 4px 6px #0008);animation:bichoAnda 3s ease-in-out infinite}
+@keyframes bichoAnda{50%{transform:translateX(-14px) translateY(-4px)}}
 /* Ajustes de visual para tablet (deitado e em pé) e computador.
    O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap');
@@ -92,8 +94,31 @@ nav button.on,#nav button.on{background:#2f6b3d;color:#fff;border-color:#2f6b3d}
    do grupo, "Salvar no álbum" ganha a figurinha dele. Se não estiver, ele
    vira uma figurinha NOVA (com a foto tirada) e entra no álbum também. */
 (function () {
-  const EXTRAS = "mamiferosExtras";
-  JSON.parse(localStorage.getItem(EXTRAS) || "[]").forEach(a => A.push(a));
+  const EXTRAS = "mamiferosExtras", FOTOS = "mamiferosFotos", FICHAS = "mamiferosFichas";
+  /* Habitat de um mamífero novo: foto do bioma principal + o ícone do bicho
+     (antes repetia a foto tirada). */
+  const FOTO_BIOMA = { "Amazônia": "photo-1591081658714-f576fb7ea3ed", "Mata Atlântica": "photo-1448375240586-882707db888b", "Cerrado": "photo-1535940360221-641a69c43bac",
+    "Caatinga": "photo-1592521899562-172a1fda8059", "Pampa": "photo-1758614685215-b1d7dbaca5c6", "Pantanal": "photo-1566818421132-700d4b3ceeb7" };
+  const fotoBioma = lista => "https://images.unsplash.com/" + (FOTO_BIOMA[String(lista || "").split(",")[0].trim()] || FOTO_BIOMA["Amazônia"]) + "?auto=format&fit=crop&w=900&q=75";
+  const ICONES = [[/on[cç]a|jaguatirica|gato|felino|suçuarana|puma/, "🐆"], [/macaco|bugio|sagui|mico|muriqui|primata/, "🐒"], [/capivara/, "🦫"], [/pregui/, "🦥"],
+    [/lobo|cachorro/, "🐺"], [/raposa/, "🦊"], [/veado|cervo/, "🦌"], [/boto|golfinho/, "🐬"], [/baleia/, "🐋"], [/morcego/, "🦇"], [/porco|queixada|cateto|javali/, "🐗"],
+    [/rato|cutia|paca|pre[aá]|roedor/, "🐀"], [/coelho|tapeti|lebre/, "🐇"], [/urso/, "🐻"], [/le[aã]o/, "🦁"], [/tigre/, "🐅"], [/elefante/, "🐘"], [/girafa/, "🦒"],
+    [/zebra/, "🦓"], [/cavalo/, "🐎"], [/boi|vaca/, "🐄"], [/quati|guaxinim|m[aã]o-pelada/, "🦝"], [/ouri[cç]o|porco-espinho/, "🦔"], [/lontra|ariranha/, "🦦"], [/canguru/, "🦘"]];
+  const iconeDe = nome => (ICONES.find(([re]) => re.test(String(nome).toLowerCase())) || [0, "🐾"])[1];
+  const ler = (k, v) => { try { return JSON.parse(localStorage.getItem(k) || "null") || v; } catch (e) { return v; } };
+  const fotos = ler(FOTOS, {}), fichas = ler(FICHAS, {});
+  ler(EXTRAS, []).forEach(a => { if (String(a[3]).startsWith("data:")) { a[3] = fotoBioma(a[11]); a[12] = iconeDe(a[0]); } A.push(a); });
+  Object.keys(fotos).forEach(i => { if (A[i] && fotos[i]) A[i][2] = fotos[i]; });   // a foto que a criança tirou
+  /* Ficha completa (a mesma do pop-up, com mapa e habitat) dentro da página do bicho */
+  const detalheOriginal = window.detail;
+  window.detail = i => {
+    detalheOriginal(i);
+    if (fichas[i]) {
+      const b = document.createElement("button"); b.className = "btn"; b.style.margin = "12px 0 0 8px"; b.textContent = "🗺️ Ficha completa";
+      b.onclick = () => PokedexAdaptador.abrirFicha(fichas[i], fotos[i] || A[i][2]);
+      document.getElementById("add").after(b);
+    }
+  };
   gallery(); album(); explore(); achievements();
   const passos = ["s1", "s2", "s3", "s4"];
   const marca = n => passos.forEach((x, i) => document.getElementById(x).classList.toggle("ok", i < n));
@@ -115,8 +140,8 @@ nav button.on,#nav button.on{background:#2f6b3d;color:#fff;border-color:#2f6b3d}
         marca(4); indice = A.findIndex(a => norm(a[0]) === norm(info.nome_popular) || norm(a[1]) === norm(info.nome_cientifico));
         if (indice < 0) {
           const mini = await reduzir(f, 480, .72), cur = [].concat(info.curiosidades || []), lista = x => (x || []).join(", ");
-          novo = [info.nome_popular, info.nome_cientifico || "", mini, mini, lista(info.regioes) || "Brasil", "", "", "", "",
-            info.habitat_descricao || "", cur[0] || "", lista(info.biomas) || "Natureza", "🐾"];
+          novo = [info.nome_popular, info.nome_cientifico || "", mini, fotoBioma(lista(info.biomas)), lista(info.regioes) || "Brasil", "", "", "", "",
+            info.habitat_descricao || "", cur[0] || "", lista(info.biomas) || "Natureza", iconeDe(info.nome_popular)];
         }
       }
     } catch (err) { marca(0); }
@@ -126,6 +151,12 @@ nav button.on,#nav button.on{background:#2f6b3d;color:#fff;border-color:#2f6b3d}
       A.push(novo); indice = A.length - 1; novo = null;
       try { localStorage.setItem(EXTRAS, JSON.stringify(A.slice(10))); }
       catch (e) { A.pop(); indice = -1; return toast("O álbum está cheio neste aparelho! 📦"); }
+      gallery();
+    }
+    const fic = window.PokedexAdaptador && PokedexAdaptador.ultimaFicha();
+    if (indice >= 0 && fic) {
+      fichas[indice] = fic.info; if (fic.foto) { fotos[indice] = fic.foto; A[indice][2] = fic.foto; }
+      try { localStorage.setItem(FICHAS, JSON.stringify(fichas)); localStorage.setItem(FOTOS, JSON.stringify(fotos)); } catch (e) {}
       gallery();
     }
     if (indice >= 0) { go("reconhecer"); detail(indice); document.getElementById("add").click(); }

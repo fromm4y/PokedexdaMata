@@ -351,7 +351,6 @@ footer{text-align:center;color:#759895;padding:30px 0;font-size:13px}
     <p class="muted">Escolha uma foto de uma ave. O sistema só mostra um resultado quando tiver confiança suficiente.</p>
     <div style="display:flex;gap:9px;flex-wrap:wrap;margin:12px 0">
       <button class="primary" id="cameraBtn" type="button">📷 Abrir câmera</button>
-      <button class="secondary" id="pasteBtn" type="button">📋 Colar foto</button>
       <label class="secondary" for="photoInput" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 15px;border-radius:14px;cursor:pointer;font-weight:800">
         🖼️ Escolher foto
       </label>
@@ -429,7 +428,9 @@ function renderAlbum(){
     const isFound=discovered.has(b.id);
     const card=document.createElement("article");
     card.className="sticker"+(isFound?"":" locked");
-    const img=document.createElement("div"); img.className="sticker-img"; img.textContent=isFound?b.emoji:"?";
+    const img=document.createElement("div"); img.className="sticker-img";
+    if(isFound&&bbFotos[b.id]){const f=document.createElement("img");f.src=bbFotos[b.id];f.alt=b.name;img.appendChild(f);} else img.textContent=isFound?b.emoji:"?";
+    if(isFound){card.classList.add("nova");card.onclick=()=>bbFichas[b.id]?PokedexAdaptador.abrirFicha(bbFichas[b.id],bbFotos[b.id]):verAve(b);}
     const title=document.createElement("h3"); title.textContent=isFound?b.name:"Ave misteriosa";
     const habitat=document.createElement("p"); habitat.textContent=isFound?"🌳 "+b.habitat:"Descubra esta ave para desbloquear.";
     const fact=document.createElement("p"); fact.textContent=isFound?"💡 "+b.fact:"🔒 Ainda não descoberta";
@@ -439,7 +440,7 @@ function renderAlbum(){
     grid.appendChild(card);
   });
   extras.forEach(b=>{
-    const card=document.createElement("article"); card.className="sticker nova"; card.onclick=()=>verAve(b);
+    const card=document.createElement("article"); card.className="sticker nova"; card.onclick=()=>b.ficha?PokedexAdaptador.abrirFicha(b.ficha,b.img):verAve(b);
     const img=document.createElement("div"); img.className="sticker-img";
     if(b.img){const f=document.createElement("img");f.src=b.img;f.alt=b.name;img.appendChild(f);}else img.textContent="🐦";
     const title=document.createElement("h3"); title.textContent=b.name;
@@ -572,7 +573,7 @@ $("cameraBtn").addEventListener("click",()=>{
   $("cameraInput").click();
 });
 
-$("pasteBtn").addEventListener("click",async()=>{
+$("pasteBtn")?.addEventListener("click",async()=>{
   try{
     if(!navigator.clipboard || !navigator.clipboard.read){
       $("photoStatus").textContent="Seu navegador não permite colar a foto automaticamente. Use “Escolher foto”. 📷";
@@ -673,15 +674,17 @@ $("saveIdentifiedBtn")?.addEventListener("click",()=>{
   const result=window.lastIdentifiedBird;
   if(!result){toast("Identifique uma ave primeiro.");return;}
   const existing=birds.find(b=>b.name.toLowerCase()===result.name.toLowerCase());
+  const fic=window.PokedexAdaptador&&PokedexAdaptador.ultimaFicha();
   if(existing){
     discovered.add(existing.id);
+    if(fic){bbFotos[existing.id]=fic.foto||result.img||"";bbFichas[existing.id]=fic.info;try{localStorage.setItem("bb-fotos",JSON.stringify(bbFotos));localStorage.setItem("bb-fichas",JSON.stringify(bbFichas));}catch(e){}}
     try{localStorage.setItem("bb-discovered",JSON.stringify([...discovered]));}catch(e){}
     renderAlbum(); desenharBioma(true);
     toast("Ave salva no álbum! 📖");
   }else{
     const id="foto-"+norm(result.name).replace(/[^a-z0-9]+/g,"-");
     if(!extras.some(b=>b.id===id)){
-      extras.push(Object.assign({id},result));
+      extras.push(Object.assign({id},result,fic?{ficha:fic.info,img:fic.foto||result.img}:{}));
       try{localStorage.setItem("bb-extras",JSON.stringify(extras));}catch(e){extras.pop();toast("O álbum deste aparelho está cheio! 📦");return;}
     }
     renderAlbum(); desenharBioma(true);
@@ -707,6 +710,8 @@ const ORDEM_BIOMAS=Object.keys(FOTO_BIOMA);
 const norm=t=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 const escH=t=>String(t==null?"":t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let extras=[];
+let bbFotos={},bbFichas={};
+try{bbFotos=JSON.parse(localStorage.getItem("bb-fotos")||"{}")||{};bbFichas=JSON.parse(localStorage.getItem("bb-fichas")||"{}")||{};}catch(e){}
 try{const e=JSON.parse(localStorage.getItem("bb-extras")||"[]");if(Array.isArray(e))extras=e.filter(b=>b&&typeof b.name==="string");}catch(e){}
 
 function miniatura(src){
@@ -723,7 +728,7 @@ function verAve(a){
   $("birdModal").classList.add("show");
 }
 function abrirDescoberta(){ $("photoModal").classList.add("show"); }
-function avesConhecidas(){ return birds.filter(b=>discovered.has(b.id)).map(b=>Object.assign({},b,{biomas:BIOMAS_AVES[b.id]||[]})).concat(extras); }
+function avesConhecidas(){ return birds.filter(b=>discovered.has(b.id)).map(b=>Object.assign({},b,{biomas:BIOMAS_AVES[b.id]||[],img:bbFotos[b.id]||"",ficha:bbFichas[b.id]})).concat(extras); }
 function doBioma(bioma){ return avesConhecidas().filter(a=>(a.biomas||[]).some(x=>norm(x)===norm(bioma))); }
 function listaBiomas(){ const com=ORDEM_BIOMAS.filter(b=>doBioma(b).length); return com.length?com:ORDEM_BIOMAS; }
 let biomaAtual=0, timerBioma=null;
@@ -742,7 +747,7 @@ function desenharBioma(reiniciar){
     ${aves.map((a,i)=>`<button type="button" class="ave-voando" data-i="${i}" style="--x:${pos[i][0]}%;--y:${pos[i][1]}%;--d:${-(i*.7)}s"><span class="ave-foto">${a.img?`<img src="${escH(a.img)}" alt="">`:(a.emoji||"🐦")}</span><span class="ave-nome">${escH(a.name)}</span></button>`).join("")}
     ${aves.length?"":`<div class="bioma-vazio"><p>${discovered.size+extras.length?`Ainda não tem ave descoberta no(a) <b>${bioma}</b>.`:"Sua floresta ainda está vazia! Cada ave que você reconhecer aparece aqui, no bioma onde ela vive."}</p><button type="button" class="primary" data-descobrir>📸 Fazer descoberta</button></div>`}
     <div class="bioma-pontos">${lista.length>1?lista.map((b,i)=>`<button type="button" class="${i===biomaAtual?"on":""}" data-b="${i}" aria-label="${b}" title="${b}"></button>`).join(""):""}</div>`;
-  forest.querySelectorAll(".ave-voando").forEach(b=>b.onclick=()=>verAve(aves[+b.dataset.i]));
+  forest.querySelectorAll(".ave-voando").forEach(b=>b.onclick=()=>{const a=aves[+b.dataset.i];a.ficha?PokedexAdaptador.abrirFicha(a.ficha,a.img):verAve(a);});
   forest.querySelectorAll(".bioma-pontos button").forEach(b=>b.onclick=()=>{biomaAtual=+b.dataset.b;desenharBioma(true);});
   const vazio=forest.querySelector("[data-descobrir]"); if(vazio) vazio.onclick=abrirDescoberta;
   if(reiniciar||!timerBioma){

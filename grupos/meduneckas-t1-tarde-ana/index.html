@@ -131,6 +131,8 @@ button,.file-label{min-height:48px}
 .ins-emoji{font-size:44px;line-height:1}
 .ins-nome{font-family:'Bangers',sans-serif;font-size:1.5rem;letter-spacing:1px;color:#fff}
 .ins-info{color:var(--muted);font-size:.86rem}
+.ins-foto{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;border:2px solid #8875ff66}
+.ins-ficha{margin-top:6px;background:linear-gradient(100deg,#35c8f5,#8875ff);color:#10152d;padding:8px 12px;min-height:42px}
 .ins-batalha{margin-top:6px;background:#2a315e;color:#fff;border:1px solid #8875ff;padding:8px 12px;min-height:42px}
 /* chat do Sukuna */
 .chat-bolha{position:fixed;right:20px;bottom:20px;z-index:40;width:76px;height:76px;padding:0;border-radius:50%;background:radial-gradient(circle,#3a2a7a,#151b3d);border:3px solid var(--purple);box-shadow:0 10px 30px #000a,0 0 24px #f472b655;overflow:visible}
@@ -379,11 +381,14 @@ function renderAlbum(){
   if(!album.length){ const li=document.createElement("li"); li.className="empty"; li.innerHTML="<span class='ins-emoji'>🫙</span><b>Seu álbum ainda está vazio.</b><span class='ins-info'>Vá em 📸 Reconhecer e mostre um inseto pro Sukuna!</span>"; list.append(li); }
   album.forEach(item=>{
     const li=document.createElement("li");
-    const em=document.createElement("span"); em.className="ins-emoji"; em.textContent=emojiDe(item.nome);
+    let em;
+    if(item.foto){ em=document.createElement("img"); em.className="ins-foto"; em.src=item.foto; em.alt="Foto de "+item.nome; }
+    else { em=document.createElement("span"); em.className="ins-emoji"; em.textContent=emojiDe(item.nome); }
     const name=document.createElement("span"); name.className="ins-nome"; name.textContent=item.nome;
     const loc=document.createElement("span"); loc.className="ins-info"; loc.textContent=(item.local ? "📍 "+item.local : "📍 Local não informado")+(item.quando ? " • "+item.quando : "");
     li.append(em,name,loc);
     if(item.onde_vive){ const h=document.createElement("span"); h.className="ins-info"; h.textContent="🌿 "+item.onde_vive; li.append(h); }
+    if(item.ficha){ const v=document.createElement("button"); v.type="button"; v.className="ins-ficha"; v.textContent="📖 Ver ficha"; v.onclick=()=>PokedexAdaptador.abrirFicha(item.ficha,item.foto); li.append(v); }
     const b=document.createElement("button"); b.type="button"; b.className="ins-batalha"; b.textContent="⚔️ Batalhar com "+item.nome; b.onclick=()=>abrirQuiz(item.nome);
     li.append(b); list.append(li);
   });
@@ -491,7 +496,8 @@ $("albumBtn").addEventListener("click",()=>{
  const name=safeText(lastResult.nome,"Inseto descoberto");
  if(album.some(x=>x.nome.toLowerCase()===name.toLowerCase())){$("albumBtn").textContent="✅ Já está no álbum";return;}
  const local=$("locationInput").value.trim();
- const item={nome:name,local,quando:new Date().toLocaleDateString("pt-BR"),onde_vive:safeText(lastResult.onde_vive,"")};
+ const f=window.PokedexAdaptador&&PokedexAdaptador.ultimaFicha();
+ const item={nome:name,local,quando:new Date().toLocaleDateString("pt-BR"),onde_vive:safeText(lastResult.onde_vive,""),foto:f?f.foto:"",ficha:f?f.info:null};
  album.push(item);discoveries.push(item);store("ik_album",album);store("ik_discoveries",discoveries);
  isSaved=true;renderAlbum();renderMap();$("savedLocation").textContent=local||"Local não informado.";
  $("albumBtn").textContent="✅ Guardado no álbum";ganhar(5,5);
