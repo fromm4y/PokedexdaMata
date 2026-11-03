@@ -93,6 +93,7 @@ $('surpriseBtn').addEventListener('click',surprise);updateCounts();renderFacts()
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  albumFicha: { cartao: "#albumList .album-item", nome: "h3" },  // "📖 Ver ficha" nas figurinhas do álbum
   // botões por etapa: o de identificar só aparece depois de escolher a foto
   etapas: { foto: ["#identifyBtn", "#clearBtn"], trocar: ["#clearBtn"] },
   galeria: { depoisDe: "#identifyBtn", input: "#photoInput", classe: "btn btn-outline" },

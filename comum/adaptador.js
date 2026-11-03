@@ -18,6 +18,7 @@
    4) Opcional: um botão "🖼️ Galeria" ao lado do botão de foto do grupo.
    5) Opcional: um álbum pronto (album: { el, depois }) para quem não tem álbum.
    6) Opcional: botões por etapa (etapas: { inicio, camera, foto, ... }).
+   7) Opcional: "📖 Ver ficha" nas figurinhas do álbum do grupo (albumFicha: { cartao, nome }).
 
    COMO USAR (no fim do index.html do grupo):
      <script src="/comum/ficha.js"></script>
@@ -157,6 +158,59 @@
      chama PokedexAdaptador.abrirFicha(info, foto). ---------- */
   let ultima = null;
   const ultimaFicha = () => ultima ? JSON.parse(JSON.stringify(ultima)) : null;
+  /* ---------- 8) "📖 Ver ficha" nas figurinhas do álbum do PRÓPRIO grupo.
+     Cada ficha mostrada fica guardada pelo nome (com uma miniatura); toda
+     figurinha do álbum cujo nome tenha ficha guardada ganha o botão.
+     Uso: albumFicha: { cartao: "#albumGrid .card", nome: "h3" } ---------- */
+  const chaveFichas = () => "pokedex-fichas-" + GRUPO;
+  const normNome = t => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  const lerFichas = () => { try { return JSON.parse(localStorage.getItem(chaveFichas()) || "{}") || {}; } catch (e) { return {}; } };
+  async function guardarFicha(u) {
+    if (!u || !u.info) return;
+    const nome = normNome(u.info.nome_popular || u.info.nome);
+    if (!nome) return;
+    const foto = u.foto ? await reduzir(u.foto, 300, .7) : "";
+    const tudo = lerFichas();
+    tudo[nome] = { info: u.info, foto: foto || "", t: Date.now() };
+    let chaves = Object.keys(tudo).sort((a, b) => tudo[b].t - tudo[a].t);
+    for (let n = Math.min(chaves.length, 40); n > 0; n -= 5) {
+      const parte = {}; chaves.slice(0, n).forEach(k => parte[k] = tudo[k]);
+      try { localStorage.setItem(chaveFichas(), JSON.stringify(parte)); break; } catch (e) {}
+    }
+  }
+  function fichaPeloNome(texto) {
+    const n = normNome(texto), tudo = lerFichas();
+    if (!n) return null;
+    if (tudo[n]) return tudo[n];
+    const k = Object.keys(tudo).find(k => k.length >= 4 && (n.includes(k) || k.includes(n)));
+    return k ? tudo[k] : null;
+  }
+  function marcarAlbum() {
+    const o = CFG.albumFicha;
+    if (!o) return;
+    document.querySelectorAll(o.cartao).forEach(c => {
+      if (c.querySelector(".fp-ver-ficha")) return;
+      const alvo = o.nome ? c.querySelector(o.nome) : c;
+      const f = alvo && fichaPeloNome(alvo.textContent);
+      if (!f) return;
+      const b = document.createElement("span");
+      b.className = "fp-ver-ficha"; b.setAttribute("role", "button"); b.tabIndex = 0; b.textContent = "📖 Ver ficha";
+      const abrir = e => { e.preventDefault(); e.stopPropagation(); abrirFicha(f.info, f.foto); };
+      b.addEventListener("click", abrir); b.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") abrir(e); });
+      c.appendChild(b);
+    });
+  }
+  function ligarAlbumFicha() {
+    if (!CFG.albumFicha) return;
+    const st = document.createElement("style");
+    st.textContent = `.fp-ver-ficha{display:inline-flex!important;align-items:center;gap:4px;margin:8px 10px 10px;padding:7px 12px!important;border-radius:999px;font:700 13px/1.2 system-ui,sans-serif!important;letter-spacing:0!important;text-transform:none!important;white-space:nowrap;flex:0 0 auto;cursor:pointer;
+      background:${CFG.cor || "#2f7d43"};color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35);box-shadow:0 2px 8px rgba(0,0,0,.18);width:max-content;max-width:calc(100% - 20px)}
+      .fp-ver-ficha:hover{filter:brightness(1.08)}`;
+    document.head.appendChild(st);
+    let pend = false;
+    new MutationObserver(() => { if (pend) return; pend = true; requestAnimationFrame(() => { pend = false; marcarAlbum(); }); }).observe(document.body, { childList: true, subtree: true });
+    marcarAlbum();
+  }
   function abrirFicha(info, foto, acoes) {
     if (!info) return;
     FichaPokedex.mostrar(info, { foto: foto || "", extras: CFG.extras ? (CFG.extras(info) || []) : [], alerta: CFG.alerta ? (CFG.alerta(info) || "") : "",
@@ -251,6 +305,7 @@
     } else {
       // guarda a ficha (e uma miniatura da foto) para o álbum do grupo poder reabrir depois
       ultima = { info, foto: ultimoArquivo ? await (async () => { const u = URL.createObjectURL(ultimoArquivo); const r = await reduzir(u, 420, .76); URL.revokeObjectURL(u); return r || ""; })() : "" };
+      guardarFicha(ultima);
       FichaPokedex.mostrar(info, {
         foto: await fotoAtual(),
         extras: CFG.extras ? (CFG.extras(info) || []) : [],
@@ -325,7 +380,7 @@
       document.head.appendChild(s);
       document.documentElement.classList.add("fp-esconder");
     }
-    const pronto = () => { ligarWebcams(); botaoGaleria(); FichaPokedex.trocarFotos(); desenharAlbumComum(); ligarEtapas(); };
+    const pronto = () => { ligarWebcams(); botaoGaleria(); FichaPokedex.trocarFotos(); desenharAlbumComum(); ligarEtapas(); ligarAlbumFicha(); };
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", pronto); else pronto();
   }
 

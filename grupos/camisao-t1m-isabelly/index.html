@@ -229,6 +229,7 @@ function desenharAlbum(){
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  albumFicha: { cartao: "#listaAlbum .item", nome: "strong" },  // "📖 Ver ficha" nas figurinhas do álbum
   // botões por etapa: o de identificar só aparece depois de escolher a foto
   etapas: { foto: ["#btnInvestigar"] },
   icone: "🪶", fauna: true,
