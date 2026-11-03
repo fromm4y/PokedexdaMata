@@ -201,7 +201,14 @@ function showFruitMap(){
  if(region.includes('amaz'))$('mapAmazonia').classList.add('active');else if(region.includes('cerrado'))$('mapCerrado').classList.add('active');else if(region.includes('mata'))$('mapMata').classList.add('active');
  $('mapNote').textContent=(lastDiscovery.nome||'Esta fruta')+' é encontrada principalmente em: '+(known?.regiao||lastDiscovery.onde_vive||'Brasil')+'. Habitat: '+(known?.habitat||lastDiscovery.habitat||'não informado')+'.';screen('mapa')
 }
-$('mapButton').onclick=showFruitMap;$('backMap').onclick=()=>screen('resultado');$('backFromResult').onclick=()=>screen('camera');
+$('mapButton').onclick=()=>{showFruitMap();mapaReal()};
+/* Mapa de verdade dos biomas da fruta (o mesmo da ficha), no lugar do desenho de 3 regiões */
+function mapaReal(){const w=document.querySelector('#mapa .map-wrap');if(!w||!window.FichaPokedex)return;
+ let biomas=[].concat((lastDiscovery&&lastDiscovery.biomas)||[]).filter(Boolean);
+ if(!biomas.length){const r=String((lastDiscovery&&(lastDiscovery.regiao||lastDiscovery.onde_vive))||'').toLowerCase();biomas=['Amazônia','Cerrado','Mata Atlântica','Caatinga','Pantanal','Pampa'].filter(b=>r.includes(b.toLowerCase().slice(0,5)))}
+ w.innerHTML='';const m=document.createElement('div');m.style.cssText='width:100%;height:340px;border-radius:16px;overflow:hidden';w.appendChild(m);
+ FichaPokedex.mapaBiomas(m,biomas.length?biomas:null,{escuro:true});
+ if(biomas.length)$('mapNote').textContent=(lastDiscovery.nome||lastDiscovery.nome_popular||'Esta fruta')+' é encontrada em: '+biomas.join(', ')+'.';}$('backMap').onclick=()=>screen('resultado');$('backFromResult').onclick=()=>screen('camera');
 // Enriquece o resultado com dados conhecidos quando a IA retorna apenas o nome.
 const originalFill=(typeof fillResult==='function')?fillResult:null;
 function enrichResultIfPossible(){
