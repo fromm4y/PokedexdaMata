@@ -454,5 +454,9 @@ PokedexAdaptador.iniciar({
   novaFoto: () => { go("camera"); $("btnGaleria").click(); }
 });
 </script>
+<script>
+/* Fotos de rio de cada bioma: entram sozinhas quando os arquivos existirem em img/ */
+(function(){const fundos={};[["Amazônia","rio-amazonia"],["Cerrado","rio-cerrado"],["Mata Atlântica","rio-mata-atlantica"],["Caatinga","rio-caatinga"],["Pantanal","rio-pantanal"],["Pampa","rio-pampa"]].forEach(([b,f])=>{const im=new Image();im.onload=()=>{fundos[b]="img/"+f+".webp";FichaPokedex.configurar({fundosCena:Object.assign({},fundos)})};im.src="img/"+f+".webp"})})();
+</script>
 </body>
 </html>

@@ -55,6 +55,7 @@ header{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-
 .intro-text p{font-size:18px;margin:0 0 12px}
 .intro-text .primary{margin-top:14px;font-size:19px;padding:16px 28px}
 .elf{padding:14px!important;background:linear-gradient(160deg,var(--pink3),var(--green3))!important}
+.elf .jardim-foto{width:100%;border-radius:22px;display:block}
 .elf svg.jardim,.elf img{display:block;width:100%;height:auto;border-radius:22px}
 .elf-bubble{background:#fff;border-radius:20px;padding:14px 18px;margin-top:12px;border:1px solid var(--line)}
 .elf-bubble strong{color:var(--pink);font-size:18px}.elf-bubble p{margin:4px 0 0;font-size:15px}
@@ -165,7 +166,8 @@ button{min-height:44px}
       <button class="primary" onclick="go('photo')">🌷 Vamos começar!</button>
     </div>
     <div class="card elf">
-      <svg class="jardim" viewBox="0 0 600 440" role="img" aria-label="Jardim com flores dos seis biomas do Brasil" xmlns="http://www.w3.org/2000/svg">
+      <img class="jardim-foto" src="img/dattflower-inicio.webp" alt="A elfa guardiã num jardim com flores dos biomas do Brasil" style="display:none" onload="this.style.display='block';this.nextElementSibling.style.display='none'" onerror="this.remove()">
+<svg class="jardim" viewBox="0 0 600 440" role="img" aria-label="Jardim com flores dos seis biomas do Brasil" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="dfCeu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b1f3f"/><stop offset=".55" stop-color="#7a4a78"/><stop offset="1" stop-color="#f4a7d0"/></linearGradient>
     <linearGradient id="dfAgua" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fb8c9"/><stop offset="1" stop-color="#2a6f86"/></linearGradient>

@@ -291,7 +291,7 @@
     <h2>🦊 A raposa pegou as frutas!</h2>
     <p>A raposa marota fugiu com as frutas brasileiras no saco. <b>Cada fruta que você escanear</b> faz ela devolver uma. Recupere todas!</p>
     <div class="cena-raposa" id="cenaRaposa">
-      <div class="raposa-corre" id="raposaCorre" title="Tente pegar a raposa!"><span class="raposa">🦊</span><span class="saco"><b id="noSaco">12</b></span></div>
+      <div class="raposa-corre" id="raposaCorre" title="Tente pegar a raposa!"><img class="raposa-img" src="img/raposa.webp" alt="" onerror="this.outerHTML='<span class=&quot;raposa&quot;>🦊</span>'"><span class="saco"><b id="noSaco">12</b></span></div>
     </div>
     <div class="cesta-titulo"><b>🧺 Sua cesta</b><span id="placarRaposa">0 de 12 recuperadas</span></div>
     <div class="cesta" id="cesta"></div>
@@ -636,6 +636,7 @@ desenharRaposa();
 .cena-raposa::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34px;background:linear-gradient(180deg,#2f6b3a,#17402a)}
 .raposa-corre{position:absolute;bottom:18px;left:-20%;z-index:2;display:flex;align-items:flex-end;gap:2px;cursor:pointer;animation:raposaCorre 7s linear infinite}
 .raposa-corre .raposa{font-size:58px;transform:scaleX(-1);display:inline-block;animation:pulo .35s ease-in-out infinite alternate}
+.raposa-corre .raposa-img{height:84px;width:auto;animation:pulo .35s ease-in-out infinite alternate}
 .raposa-corre .saco{width:58px;height:54px;border-radius:45% 45% 40% 40%;background:radial-gradient(circle at 35% 30%,#c79a5b,#8a5a2b);border:2px solid #5e3b1a;display:grid;place-items:center;margin-left:-14px;animation:pulo .35s ease-in-out infinite alternate-reverse}
 .raposa-corre .saco b{color:#fff4d6;font-size:20px;text-shadow:0 2px 4px #000}
 .raposa-corre.vazia .saco{opacity:.35}
