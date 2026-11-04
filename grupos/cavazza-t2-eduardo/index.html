@@ -1,5 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+<!--
+  AS FRUTAS BRASILEIRAS — grupo do Eduardo (Cavazza, Turma 2)
+  Este é o front que o Eduardo mandou (com os níveis: a cada 4 frutas, sobe 1 nível).
+  A professora só acrescentou: a ligação com o back-end (ficha em pop-up) e o jogo
+  "A raposa pegou as frutas!", que era a ideia inicial dele: a raposa roubou as
+  frutas e você recupera uma a cada fruta que escanear.
+-->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -279,6 +286,16 @@
     <div id="status" class="status"></div>
   </section>
 
+
+  <section class="card raposa-jogo" id="raposaJogo">
+    <h2>🦊 A raposa pegou as frutas!</h2>
+    <p>A raposa marota fugiu com as frutas brasileiras no saco. <b>Cada fruta que você escanear</b> faz ela devolver uma. Recupere todas!</p>
+    <div class="cena-raposa" id="cenaRaposa">
+      <div class="raposa-corre" id="raposaCorre" title="Tente pegar a raposa!"><span class="raposa">🦊</span><span class="saco"><b id="noSaco">12</b></span></div>
+    </div>
+    <div class="cesta-titulo"><b>🧺 Sua cesta</b><span id="placarRaposa">0 de 12 recuperadas</span></div>
+    <div class="cesta" id="cesta"></div>
+  </section>
   <section id="result" class="card result">
     <h2 id="fruitName" class="fruit-title"></h2>
     <div id="danger" class="danger"></div>
@@ -297,17 +314,10 @@
     <button id="saveBtn">💾 Salvar no álbum</button>
   </section>
 
-  <section class="card nivel-card" id="painelNivel">
+  <section class="card">
     <h2>🏆 Minhas descobertas</h2>
-    <div class="nivel-topo">
-      <div class="nivel-selo"><span id="nivelEmoji">🌱</span><b>Nível <span id="totalLevel">1</span></b><small id="nivelNome">Semente</small></div>
-      <div class="nivel-trilha">
-        <p>A cada <b>4 frutas</b> descobertas, você sobe 1 nível! 🦊</p>
-        <div class="nivel-slots" id="nivelSlots"></div>
-        <p class="nivel-falta" id="nivelFalta"></p>
-      </div>
-    </div>
     <div class="stats">
+      <div class="stat"><strong id="totalLevel">1</strong>Nível atual</div>
       <div class="stat"><strong id="totalFruitProgress">0/4</strong>Progresso do nível</div>
       <div class="stat"><strong id="totalPoints">0</strong>Pontos</div>
       <div class="stat"><strong id="totalMedals">🏅 0</strong>Medalhas</div>
@@ -340,46 +350,15 @@ const saveBtn = document.getElementById("saveBtn");
 let selectedFile = null;
 let currentPhotoData = null;
 let currentFruit = null;
+let countedCurrentPhoto = false;
 
 let points = Number(localStorage.getItem("frutas_points") || 0);
 let medals = Number(localStorage.getItem("frutas_medals") || 0);
 let album = JSON.parse(localStorage.getItem("frutas_album") || "[]");
 
-// MINIGAME DO EDUARDO: a cada 4 frutas descobertas, o jogador avança exatamente 1 nível.
-let countedCurrentPhoto = false;
+// A cada 4 frutas descobertas, o jogador avança exatamente 1 nível.
 let discoveredFruits = Number(localStorage.getItem("frutas_discovered_count") || 0);
-const NIVEIS = [["🌱", "Semente"], ["🌿", "Brotinho"], ["🌳", "Árvore jovem"], ["🍊", "Pomar"], ["🧺", "Feirante da floresta"], ["🦊", "Guardião das frutas"]];
-const FRUTINHAS = ["🍓", "🍍", "🥭", "🍊"];
-function nivelAtual() { return Math.floor(discoveredFruits / 4) + 1; }
-function desenharNivel() {
-  const level = nivelAtual(), progress = discoveredFruits % 4, [emoji, nome] = NIVEIS[Math.min(level, NIVEIS.length) - 1];
-  document.getElementById("level").textContent = level;
-  document.getElementById("fruitProgress").textContent = progress + "/4";
-  document.getElementById("totalLevel").textContent = level;
-  document.getElementById("totalFruitProgress").textContent = progress + "/4";
-  document.getElementById("nivelEmoji").textContent = emoji;
-  document.getElementById("nivelNome").textContent = nome;
-  document.getElementById("nivelSlots").innerHTML = FRUTINHAS.map((f, i) => `<span class="${i < progress ? "cheio" : ""}">${i < progress ? f : "?"}</span>`).join("");
-  document.getElementById("nivelFalta").textContent = "Faltam " + (4 - progress) + " fruta(s) para o nível " + (level + 1) + "!";
-}
-// Cada foto conta uma única vez, depois de uma identificação certa.
-function contarFrutaNoNivel() {
-  if (countedCurrentPhoto) return;
-  const antes = nivelAtual();
-  discoveredFruits += 1; countedCurrentPhoto = true;
-  localStorage.setItem("frutas_discovered_count", discoveredFruits);
-  desenharNivel();
-  if (nivelAtual() > antes) comemorarNivel(nivelAtual());
-}
-function comemorarNivel(n) {
-  const [emoji, nome] = NIVEIS[Math.min(n, NIVEIS.length) - 1];
-  const el = document.createElement("div");
-  el.className = "nivel-festa";
-  el.innerHTML = `<div class="nivel-festa-caixa"><div class="nivel-festa-chuva">🍓🍍🥭🍊🍇🥥🍌🍉</div><span>${emoji}</span><h2>Parabéns! 🎉</h2><p>Você evoluiu para o <b>nível ${n}</b>: ${nome}!</p><button type="button">Continuar explorando 🦊</button></div>`;
-  el.querySelector("button").onclick = () => el.remove();
-  setTimeout(() => document.body.appendChild(el), 900);   // depois da ficha aparecer
-}
-photoInput.addEventListener("change", () => { countedCurrentPhoto = false; });
+let level = Math.floor(discoveredFruits / 4) + 1;
 
 function showStatus(message, isError = false) {
   statusBox.style.display = "block";
@@ -392,6 +371,12 @@ function hideStatus() {
 }
 
 function updateStats() {
+  level = Math.floor(discoveredFruits / 4) + 1;
+  const progress = discoveredFruits % 4;
+  document.getElementById("level").textContent = level;
+  document.getElementById("fruitProgress").textContent = progress + "/4";
+  document.getElementById("totalLevel").textContent = level;
+  document.getElementById("totalFruitProgress").textContent = progress + "/4";
   document.getElementById("totalPoints").textContent = points;
   document.getElementById("totalMedals").textContent = "🏅 " + medals;
 }
@@ -430,6 +415,7 @@ choosePhotoBtn.addEventListener("click", () => photoInput.click());
 
 photoInput.addEventListener("change", () => {
   selectedFile = photoInput.files[0];
+  countedCurrentPhoto = false;
   result.style.display = "none";
   hideStatus();
 
@@ -553,10 +539,24 @@ O campo perigo deve ser true somente quando houver um aviso importante e verdade
 
     points += 10;
     medals += 1;
+
+    // Cada foto selecionada conta uma única vez após identificação bem-sucedida.
+    if (!countedCurrentPhoto) {
+      const previousLevel = Math.floor(discoveredFruits / 4) + 1;
+      discoveredFruits += 1;
+      countedCurrentPhoto = true;
+      localStorage.setItem("frutas_discovered_count", discoveredFruits);
+      recuperarFruta(dados);
+
+      const newLevel = Math.floor(discoveredFruits / 4) + 1;
+      if (newLevel > previousLevel) {
+        showStatus("🎉 Parabéns! Você evoluiu para o nível " + newLevel + "!");
+      }
+    }
+
     localStorage.setItem("frutas_points", points);
     localStorage.setItem("frutas_medals", medals);
     updateStats();
-    contarFrutaNoNivel();
   } catch (error) {
     console.error("Erro ao identificar fruta:", error);
     const msg = error?.message || "Falha ao identificar a fruta.";
@@ -583,74 +583,77 @@ saveBtn.addEventListener("click", async () => {
 });
 
 updateStats();
-desenharNivel();
 renderAlbum();
-</script>
 
-<style id="ajustes-tablet">
-/* Ajustes de visual para tablet (deitado e em pé) e computador.
-   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap');
-/* Ajustes de visual para tablet (deitado e em pé) e computador.
-   O visual e as ideias são do grupo; aqui deixamos mais colorido para as crianças:
-   a floresta continua no topo e o resto vira uma feira de frutas. */
-.empty{grid-column:1/-1;font-size:16px}
-button{min-height:48px;font-size:16px}
-.card p{font-size:16px}
-body{font-family:'Nunito',system-ui,sans-serif;color:#2b3a22;background-color:#fff7e6;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cg opacity='.22'%3E%3Ccircle cx='30' cy='34' r='11' fill='%23f4a72c'/%3E%3Cpath d='M30 23c2-6 7-8 11-7-2 5-6 7-11 7z' fill='%234caa62'/%3E%3Cpath d='M104 40c14-14 30-10 30-10s-2 18-18 24c-6 2-10 0-12-2z' fill='%234caa62'/%3E%3Ccircle cx='54' cy='108' r='9' fill='%23e94f37'/%3E%3Ccircle cx='68' cy='112' r='9' fill='%23e94f37'/%3E%3Cpath d='M60 100l2-10' stroke='%232f7d43' stroke-width='3'/%3E%3Cellipse cx='118' cy='118' rx='9' ry='14' fill='%23f6c445' transform='rotate%28-30 118 118%29'/%3E%3C/g%3E%3C/svg%3E"),linear-gradient(180deg,#fff7e6,#f3f9e4)!important;background-attachment:scroll!important}
-h1,h2,h3{font-family:'Fredoka','Nunito',sans-serif}
-header{border-bottom:6px solid #f4a72c}
-header::after{content:"🍌 🍍 🥭 🍊 🍇 🥥 🍓 🍉";position:absolute;left:0;right:0;bottom:10px;font-size:22px;letter-spacing:6px;opacity:.95}
-header .fox{background:#fff7e6;border:4px solid #f4a72c}
-h1{color:#fff;text-shadow:0 3px 0 #b35e12,0 7px 24px rgba(0,0,0,.6)}
-header p{font-weight:700;margin-bottom:22px}
-.card{background:#fffdf6;border:3px solid #cfe6b5;backdrop-filter:none;box-shadow:0 8px 0 #e3efcf,0 16px 30px #6b8a4a22;border-radius:26px}
-.card::before{height:8px;opacity:1;background:repeating-linear-gradient(90deg,#f4a72c 0 22px,#4caa62 22px 44px,#e94f37 44px 66px)}
-.card h2,.card h3{color:#2f7d43;text-shadow:none}
-.camera{background:linear-gradient(180deg,#ecf8df,#fffdf6);border:3px dashed #7cc36a}
-button{font-family:'Fredoka','Nunito',sans-serif;border:0;border-radius:18px;background:linear-gradient(180deg,#5cbf6d,#2f8a45);box-shadow:0 5px 0 #1f6531;letter-spacing:.3px}
-button.secondary{background:linear-gradient(180deg,#ffbe4d,#f08c1b);color:#4a2600;box-shadow:0 5px 0 #b35e12}
-button:disabled{filter:saturate(.3)}
-.preview{background:#fff;border:6px solid #fff;box-shadow:0 10px 24px #6b8a4a40}
-.status{background:#fff3d6;border:2px solid #f4c46b;color:#5a3a06}
-.stat{background:linear-gradient(180deg,#fff,#f2f9e8);border:2px solid #cfe6b5;color:#4f6b3a;font-weight:700}
-.stat:nth-child(2){background:linear-gradient(180deg,#fff,#fff1d8);border-color:#f6d39a}
-.stat strong{color:#e07a10;text-shadow:none}
-.album-item{background:#fff;border:3px solid #cfe6b5;box-shadow:0 6px 0 #e3efcf}
-.album-item p{color:#2f7d43}
-.empty{color:#6b7f58;opacity:1;background:#f6faef;border:2px dashed #cfe6b5;border-radius:18px}
-footer{background:#2f7d43;color:#fff8e6;border-top:6px solid #f4a72c;font-weight:700}
-.fruit-title{color:#2f7d43}
-body{background-size:150px 150px,auto!important;background-repeat:repeat!important}
-header{background-color:#1f5a33}
-/* ===== Tablet sempre: duas colunas (foto à esquerda, níveis e álbum à direita) ===== */
-main{max-width:1180px!important;margin-left:auto!important;margin-right:auto!important}
-@media(min-width:820px){
-  main{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
-  main>.camera,main>#result{grid-column:1}
-  main>#painelNivel,main>section:last-child{grid-column:2}
-  main>.camera{grid-row:1 / span 2}main>#painelNivel{grid-row:1}
+/* ===== JOGO: a raposa pegou as frutas! (ideia do Eduardo) ===== */
+const FRUTAS_RAPOSA = [["Açaí","Euterpe oleracea","🫐"],["Jabuticaba","Plinia cauliflora","🫐"],["Caju","Anacardium occidentale","🍎"],["Cupuaçu","Theobroma grandiflorum","🥥"],["Pequi","Caryocar brasiliense","🍋"],["Mangaba","Hancornia speciosa","🍐"],["Pitanga","Eugenia uniflora","🍒"],["Buriti","Mauritia flexuosa","🌰"],["Goiaba","Psidium guajava","🍏"],["Maracujá","Passiflora edulis","🟡"],["Graviola","Annona muricata","🍈"],["Acerola","Malpighia emarginata","🍒"]];
+const normR = t => String(t || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+function lerRecuperadas(){ try { return JSON.parse(localStorage.getItem("frutas_raposa") || "{}"); } catch (e) { return {}; } }
+function desenharRaposa(){
+  const rec = lerRecuperadas(), n = Object.keys(rec).length;
+  document.getElementById("noSaco").textContent = FRUTAS_RAPOSA.length - n;
+  document.getElementById("placarRaposa").textContent = n + " de " + FRUTAS_RAPOSA.length + " recuperadas";
+  const cesta = document.getElementById("cesta"); cesta.innerHTML = "";
+  FRUTAS_RAPOSA.forEach(([nome, cient, emo]) => {
+    const r = rec[nome], d = document.createElement("div");
+    d.className = "slot" + (r ? " ok" : "");
+    d.innerHTML = `<div class="slot-foto">${r && r.foto ? `<img src="${r.foto}" alt="">` : `<span>${r ? emo : "❔"}</span>`}</div><small>${r ? nome : "Com a raposa"}</small>`;
+    if (!r) d.title = "A raposa ainda está com esta fruta!";
+    cesta.appendChild(d);
+  });
+  document.getElementById("raposaCorre").classList.toggle("vazia", n >= FRUTAS_RAPOSA.length);
 }
-/* ===== Minigame dos níveis ===== */
-.nivel-topo{display:flex;gap:16px;align-items:center;margin-bottom:14px}
-.nivel-selo{flex:0 0 auto;width:130px;height:130px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 35% 30%,#fff,#ffe1a6);border:5px solid #f4a72c;box-shadow:0 6px 0 #b35e12}
-.nivel-selo span{font-size:40px;line-height:1}.nivel-selo b{font-family:'Fredoka',sans-serif;font-size:22px;color:#2f7d43}.nivel-selo small{font-weight:800;color:#8a5a12;font-size:12px;text-align:center;padding:0 8px}
-.nivel-trilha p{margin:0 0 8px}
-.nivel-slots{display:flex;gap:8px}
-.nivel-slots span{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-size:28px;font-weight:800;color:#b9c9a8;background:#f6faef;border:3px dashed #cfe6b5}
-.nivel-slots span.cheio{background:#fff;border:3px solid #7cc36a;animation:pula .5s ease}
-@keyframes pula{50%{transform:scale(1.18)}}
-#painelNivel .stats{grid-template-columns:repeat(3,minmax(0,1fr))!important}
-.nivel-falta{font-weight:800;color:#e07a10;margin-top:8px!important}
-.nivel-festa{position:fixed;inset:0;z-index:100000;background:#1f5a33cc;display:grid;place-items:center;padding:20px;animation:aparece .3s ease}
-@keyframes aparece{from{opacity:0}}
-.nivel-festa-caixa{background:#fffdf6;border:5px solid #f4a72c;border-radius:30px;padding:26px 30px;text-align:center;max-width:420px;box-shadow:0 10px 0 #b35e12;position:relative;overflow:hidden}
-.nivel-festa-caixa>span{font-size:76px;display:block;animation:pula 1s ease infinite}
-.nivel-festa-caixa h2{margin:6px 0;color:#2f7d43}
-.nivel-festa-chuva{font-size:26px;letter-spacing:6px;animation:chuva 1.4s ease-in-out infinite alternate}
-@keyframes chuva{to{transform:translateY(6px) rotate(2deg)}}
-@media(max-width:560px){.nivel-topo{flex-direction:column;text-align:center}.nivel-slots{justify-content:center}}
+function recuperarFruta(dados){
+  const rec = lerRecuperadas();
+  const nome = normR(dados && (dados.nome || dados.nome_popular)), cient = normR(dados && dados.nome_cientifico);
+  // primeiro tenta a mesma fruta; se a raposa não tinha essa, ela devolve a próxima do saco
+  let alvo = FRUTAS_RAPOSA.find(f => !rec[f[0]] && (normR(f[0]) === nome || nome.includes(normR(f[0])) || normR(f[1]) === cient));
+  const mesma = !!alvo;
+  if (!alvo) alvo = FRUTAS_RAPOSA.find(f => !rec[f[0]]);
+  if (!alvo) return;
+  rec[alvo[0]] = { foto: mesma ? "" : "", quando: Date.now() };
+  try { localStorage.setItem("frutas_raposa", JSON.stringify(rec)); } catch (e) {}
+  // a foto real da fruta (da internet), se tiver
+  if (window.FichaPokedex) FichaPokedex.urlDaEspecie(alvo[1]).then(u => { if (!u) return; const r2 = lerRecuperadas(); if (r2[alvo[0]]) { r2[alvo[0]].foto = u; try { localStorage.setItem("frutas_raposa", JSON.stringify(r2)); } catch (e) {} desenharRaposa(); } });
+  desenharRaposa();
+  const fx = document.createElement("div"); fx.className = "voa-fruta"; fx.textContent = alvo[2];
+  document.getElementById("cenaRaposa").appendChild(fx); setTimeout(() => fx.remove(), 1400);
+  const total = Object.keys(rec).length;
+  setTimeout(() => showStatus(total >= FRUTAS_RAPOSA.length
+    ? "🏆 Você recuperou TODAS as frutas! A raposa ficou de boca aberta! 🦊💨"
+    : (mesma ? "🦊 Você recuperou o(a) " + alvo[0] + " da raposa!" : "🦊 A raposa não tinha essa fruta, mas devolveu o(a) " + alvo[0] + "!") + " Faltam " + (FRUTAS_RAPOSA.length - total) + "."), 1200);
+}
+document.getElementById("raposaCorre").onclick = () => {
+  const r = document.getElementById("raposaCorre"); r.classList.remove("escapa"); void r.offsetWidth; r.classList.add("escapa");
+  showStatus("🦊 Hehe, não me pega! Escaneie uma fruta para eu devolver uma do saco.");
+};
+desenharRaposa();
+</script>
+<style id="ajustes-tablet">
+/* jogo da raposa (no mesmo visual de floresta do Eduardo) */
+.cena-raposa{position:relative;height:150px;border-radius:18px;overflow:hidden;margin:14px 0;border:1px solid rgba(180,212,144,.25);
+  background:linear-gradient(180deg,rgba(13,73,44,.35),rgba(6,18,13,.85)),url("https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1200&q=80") center/cover}
+.cena-raposa::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34px;background:linear-gradient(180deg,#2f6b3a,#17402a)}
+.raposa-corre{position:absolute;bottom:18px;left:-20%;z-index:2;display:flex;align-items:flex-end;gap:2px;cursor:pointer;animation:raposaCorre 7s linear infinite}
+.raposa-corre .raposa{font-size:58px;transform:scaleX(-1);display:inline-block;animation:pulo .35s ease-in-out infinite alternate}
+.raposa-corre .saco{width:58px;height:54px;border-radius:45% 45% 40% 40%;background:radial-gradient(circle at 35% 30%,#c79a5b,#8a5a2b);border:2px solid #5e3b1a;display:grid;place-items:center;margin-left:-14px;animation:pulo .35s ease-in-out infinite alternate-reverse}
+.raposa-corre .saco b{color:#fff4d6;font-size:20px;text-shadow:0 2px 4px #000}
+.raposa-corre.vazia .saco{opacity:.35}
+.raposa-corre.escapa{animation:raposaCorre 2.4s linear infinite}
+@keyframes raposaCorre{from{left:-20%}to{left:110%}}
+@keyframes pulo{to{transform:translateY(-8px) scaleX(-1)}}
+.raposa-corre .saco{transform:none}
+.voa-fruta{position:absolute;z-index:3;left:50%;bottom:40px;font-size:42px;animation:voa 1.3s ease-in forwards}
+@keyframes voa{0%{transform:translate(0,0) scale(1)}60%{transform:translate(-30px,-80px) scale(1.4)}100%{transform:translate(-10px,140px) scale(.6);opacity:0}}
+.cesta-titulo{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:6px 0 10px}
+.cesta-titulo span{color:var(--gold);font-weight:700}
+.cesta{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
+.slot{background:linear-gradient(145deg,rgba(24,69,48,.6),rgba(7,32,23,.8));border:1px dashed rgba(151,196,126,.35);border-radius:14px;padding:8px;text-align:center}
+.slot.ok{border-style:solid;border-color:var(--gold);box-shadow:0 0 14px rgba(242,198,109,.25)}
+.slot-foto{height:62px;border-radius:10px;overflow:hidden;display:grid;place-items:center;background:#061410;font-size:30px}
+.slot-foto img{width:100%;height:100%;object-fit:cover}
+.slot small{display:block;margin-top:6px;font-size:12px;color:#d6e4d2}
+.slot:not(.ok) .slot-foto{filter:grayscale(1);opacity:.6}
 </style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
@@ -669,7 +672,7 @@ PokedexAdaptador.iniciar({
   escuro: () => false,
   claro: { fundo: "#fffdf6", texto: "#24361d", suave: "#55684a" },
   carregando: "🦊 A raposa está olhando a foto...",
-  esconder: ["#result", "#status"],
+  esconder: ["#result"],   // as mensagens do Eduardo (nível, raposa) continuam aparecendo
   extras: info => [["🗺️ Onde ela vive?", info.regioes]],
   alerta: info => info.perigo ? (info.aviso || "Esta fruta precisa de cuidado. Não coma sem orientação de um adulto.") : "",
   salvar: () => { document.getElementById("saveBtn").click(); setTimeout(() => document.getElementById("album").scrollIntoView({ behavior: "smooth" }), 300); },
