@@ -100,6 +100,11 @@ button{font:inherit;cursor:pointer}
   .mapa-frutadex{height:360px}
 }
 @media (max-width:600px){.atalhos{grid-template-columns:1fr}.side nav button b{display:none}}
+
+.dois-botoes{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.dois-botoes .primary{width:100%;display:flex;align-items:center;justify-content:center;text-align:center}
+.dois-botoes .galeria{filter:hue-rotate(-30deg)}
+.fr.minha{outline:3px solid #ffd23f;outline-offset:-3px}
 </style>
 </head>
 <body>
@@ -143,7 +148,11 @@ button{font:inherit;cursor:pointer}
       <section class="card identify-card">
         <div class="zona" id="zona"><div class="ico">📸</div><b>Mostre uma fruta para a câmera</b><p class="small">Deixe a fruta bem visível, com boa luz.</p></div>
         <img id="preview" class="preview" alt="Foto escolhida">
-        <label for="photo" class="primary" style="width:100%">📷 Tirar ou escolher foto</label>
+        <div class="dois-botoes">
+          <button type="button" class="primary" id="btnTirarFoto">📷 Tirar foto</button>
+          <label for="photo" class="primary galeria">🖼️ Escolher da galeria</label>
+        </div>
+        <input id="photoCam" type="file" accept="image/*" capture="environment">
         <input id="photo" type="file" accept="image/jpeg,image/jpg,image/png,image/webp">
         <div id="status" class="status"></div>
         <section id="result" class="result">
@@ -344,6 +353,9 @@ window.salvarFrutaDex=info=>{
   irPara("album");
 };
 
+/* dois botões: a câmera entrega a foto para o mesmo campo da galeria */
+document.getElementById("btnTirarFoto").onclick=()=>document.getElementById("photoCam").click();
+document.getElementById("photoCam").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const dt=new DataTransfer();dt.items.add(f);const p=document.getElementById("photo");p.files=dt.files;p.dispatchEvent(new Event("change",{bubbles:true}))});
 /* ===== modo explorador: frutas típicas de cada região ===== */
 const REGIOES=[
  {nome:"Amazônia",ico:"🌳",frutas:[["Açaí","Euterpe oleracea"],["Cupuaçu","Theobroma grandiflorum"],["Bacuri","Platonia insignis"],["Guaraná","Paullinia cupana"],["Castanha-do-pará","Bertholletia excelsa"],["Camu-camu","Myrciaria dubia"]]},
@@ -365,7 +377,16 @@ function desenharRegiao(){
     const d=document.createElement("div");const b=document.createElement("b");b.textContent=nome;const s=document.createElement("small");s.textContent=cient;d.append(b,s);
     const achou=ja.some(x=>x.includes(norm(nome))||x.includes(norm(cient)));
     const ok=document.createElement("span");ok.className="ok";ok.textContent=achou?"✓ Você já descobriu!":"🔎 Ainda não descoberta";if(!achou)ok.style.color="var(--suave)";d.appendChild(ok);
+    const minha=lerAlbum().find(f=>norm(f.nome).includes(norm(nome))||norm(f.ficha&&f.ficha.nome_cientifico)===norm(cient));
+    if(minha&&minha.foto){im.src=minha.foto;c.classList.add("minha");}
     c.append(im,d);grid.appendChild(c);
+  });
+  const nomesLista=REGIOES[regiaoAtual].frutas.map(f=>norm(f[0])+" "+norm(f[1]));
+  lerAlbum().filter(f=>[].concat((f.ficha&&f.ficha.biomas)||[]).includes(REGIOES[regiaoAtual].nome)&&!nomesLista.some(n=>n.includes(norm(f.nome))||(f.ficha&&f.ficha.nome_cientifico&&n.includes(norm(f.ficha.nome_cientifico))))).forEach(f=>{
+    const c=document.createElement("article");c.className="fr minha";const im=document.createElement("img");im.alt=f.nome;if(f.foto)im.src=f.foto;
+    const d=document.createElement("div");const b=document.createElement("b");b.textContent=f.nome;const s=document.createElement("small");s.textContent=(f.ficha&&f.ficha.nome_cientifico)||"";
+    const ok=document.createElement("span");ok.className="ok";ok.textContent="⭐ Sua descoberta!";d.append(b,s,ok);c.append(im,d);
+    c.style.cursor="pointer";c.onclick=()=>PokedexAdaptador.abrirFicha(f.ficha,f.foto);grid.prepend(c);
   });
 }
 
