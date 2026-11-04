@@ -1,5 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+<!--
+  CODEX — Mundo dos Mamíferos
+  Grupo: Anna Laynara, Evelyn e Sther (Camisão, Turma 2 - M)
+  O visual (cores azul, rosa e amarelo, cartões com sombra preta, o logo "codex")
+  é o do front das meninas. A professora trocou o tema para mamíferos, deixou o
+  topo mais baixo e encaixou a câmera e o "Meu Codex" no mesmo estilo.
+-->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,100 +14,100 @@
 <style>
 :root{--blue:#9edcff;--pink:#ffb7d5;--yellow:#ffe56d;--ink:#20202a;--paper:#fffdf8;--muted:#666575;--line:#24232b}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
-header{background:linear-gradient(115deg,var(--blue),var(--pink) 58%,var(--yellow));padding:22px 5vw 28px;border-bottom:3px solid var(--line);position:relative;overflow:hidden}
-header:after{content:"★  ★  ★";position:absolute;right:4%;top:16px;font-size:24px;letter-spacing:12px;color:#111}
-.brand{font-weight:1000;font-size:clamp(2.6rem,7vw,4.5rem);letter-spacing:-4px;margin:4px 0}.brand span{display:inline-block;transform:rotate(-4deg);background:white;border:3px solid var(--line);border-radius:18px;padding:2px 18px;box-shadow:5px 5px 0 var(--line)}
-header p{font-size:1.05rem;max-width:620px;line-height:1.5;margin:14px 0 0}
-main{width:min(1100px,92%);margin:28px auto 60px}
+header{background:linear-gradient(115deg,var(--blue),var(--pink) 58%,var(--yellow));padding:12px 4vw 14px;border-bottom:3px solid var(--line);position:relative;overflow:hidden;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+header:after{content:"★  ★  ★";position:absolute;right:3%;top:10px;font-size:20px;letter-spacing:10px;color:#111}
+.brand{font-weight:1000;font-size:clamp(2.1rem,4.6vw,3.1rem);letter-spacing:-3px;margin:2px 0}.brand span{display:inline-block;transform:rotate(-4deg);background:white;border:3px solid var(--line);border-radius:16px;padding:0 14px;box-shadow:4px 4px 0 var(--line)}
+header p{font-size:1rem;max-width:560px;line-height:1.4;margin:0}
+.abas{width:min(1100px,92%);margin:18px auto 0;display:flex;gap:10px;flex-wrap:wrap}
+.abas button{flex:1;min-width:180px;font-size:1.05rem;padding:14px 16px;background:#fff}
+.abas button.on{background:var(--pink)}
+main{width:min(1100px,92%);margin:18px auto 40px}
+.tela{display:none}.tela.on{display:block}
 .search-panel{background:white;border:2px solid var(--line);border-radius:22px;padding:20px;box-shadow:5px 5px 0 var(--line)}
 .search-row{display:flex;gap:10px;flex-wrap:wrap}.search-row input{flex:1;min-width:220px;padding:14px 16px;border:2px solid var(--line);border-radius:12px;font-size:1rem}
-button,.chip{border:2px solid var(--line);border-radius:12px;background:var(--yellow);font-weight:800;padding:12px 16px;cursor:pointer;color:var(--ink);transition:transform .12s}
-button:hover,.chip:hover{transform:translateY(-2px)}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.chip{background:#fff;padding:9px 12px}.chip.active{background:var(--pink)}
-h2{font-size:1.6rem;margin:30px 0 14px}.category-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+button,.chip{border:2px solid var(--line);border-radius:12px;background:var(--yellow);font-weight:800;padding:12px 16px;cursor:pointer;color:var(--ink);transition:transform .12s;font-family:inherit;font-size:.98rem;min-height:46px}
+button:hover,.chip:hover{transform:translateY(-2px)}button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.chip{background:#fff;padding:9px 12px}.chip.active{background:var(--pink)}
+h2{font-size:1.6rem;margin:26px 0 14px}.category-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
 .category{border:2px solid var(--line);border-radius:17px;padding:16px;background:white;box-shadow:3px 3px 0 var(--line);cursor:pointer;text-align:left}
-.category:nth-child(3n+1){background:#e3f5ff}.category:nth-child(3n+2){background:#ffe2ef}.category:nth-child(3n){background:#fff4b8}.category b{display:block;font-size:1.05rem;margin:8px 0}.category small{color:#4f4c5b;line-height:1.4}
+.category:nth-child(3n+1){background:#e3f5ff}.category:nth-child(3n+2){background:#ffe2ef}.category:nth-child(3n){background:#fff4b8}.category b{display:block;font-size:1.05rem;margin:8px 0}.category small{color:#4f4c5b;line-height:1.4;font-weight:400}
 .result-heading{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}.result-heading p{color:var(--muted);margin:0}
-.results{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:16px;margin-top:16px}
-.animal-card{border:2px solid var(--line);border-radius:18px;overflow:hidden;background:white;box-shadow:4px 4px 0 var(--line);cursor:pointer}
-.animal-card img{width:100%;height:190px;object-fit:cover;display:block;background:#eee}.animal-card .body{padding:14px}.animal-card h3{margin:0 0 6px;font-size:1.25rem}.animal-card p{margin:0;color:var(--muted);line-height:1.45;font-size:.94rem}.tag{display:inline-block;background:var(--yellow);border:1px solid var(--line);border-radius:30px;padding:4px 8px;font-size:.78rem;font-weight:800;margin:0 5px 8px 0}
-.detail{display:none;margin-top:24px;border:2px solid var(--line);border-radius:22px;overflow:hidden;background:white;box-shadow:5px 5px 0 var(--line)}.detail.show{display:grid;grid-template-columns:minmax(250px, .9fr) 1.1fr}
+.results{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin-top:16px}
+.animal-card{border:2px solid var(--line);border-radius:18px;overflow:hidden;background:white;box-shadow:4px 4px 0 var(--line);cursor:pointer;position:relative}
+.animal-card img{width:100%;height:180px;object-fit:cover;display:block;background:#eee}.animal-card .body{padding:14px}.animal-card h3{margin:0 0 6px;font-size:1.25rem}.animal-card p{margin:0;color:var(--muted);line-height:1.45;font-size:.94rem}.tag{display:inline-block;background:var(--yellow);border:1px solid var(--line);border-radius:30px;padding:4px 8px;font-size:.78rem;font-weight:800;margin:0 5px 8px 0}
+.animal-card.meu{outline:4px solid var(--pink)}.tag.meu{background:var(--pink)}.tag.trava{background:#fff}
+.detail{display:none;margin-top:24px;border:2px solid var(--line);border-radius:22px;overflow:hidden;background:white;box-shadow:5px 5px 0 var(--line)}.detail.show{display:grid;grid-template-columns:minmax(250px,.9fr) 1.1fr}
 .detail img{width:100%;height:100%;min-height:300px;object-fit:cover;background:#eee}.detail-copy{padding:22px}.detail-copy h2{margin:0 0 8px}.detail-copy p{line-height:1.55}.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px;margin:16px 0}.fact{background:#f5f7fb;border:1px solid #d4d6df;border-radius:10px;padding:10px;font-size:.9rem}.fact strong{display:block;margin-bottom:4px}.note{font-size:.83rem;color:var(--muted)}
-.empty{padding:25px;background:#fff4b8;border:2px dashed var(--line);border-radius:16px;line-height:1.5}
-footer{padding:22px;text-align:center;background:var(--blue);border-top:2px solid var(--line);line-height:1.5}
-@media(max-width:650px){.detail.show{grid-template-columns:1fr}.detail img{height:240px;min-height:0}header:after{font-size:16px;letter-spacing:5px;right:2%}.brand{letter-spacing:-2px}}
+.trancado{background:#fff4b8;border:2px dashed var(--line);border-radius:14px;padding:12px 14px;margin:14px 0;line-height:1.5}
+.detail-btns{display:flex;gap:10px;flex-wrap:wrap}
+.empty{padding:25px;background:#fff4b8;border:2px dashed var(--line);border-radius:16px;line-height:1.5;grid-column:1/-1}
+/* Descobrir pela foto, no estilo do grupo */
+.scan{display:grid;grid-template-columns:minmax(260px,1fr) 1fr;gap:20px;align-items:center}
+.scan-preview{aspect-ratio:4/3;border:2px dashed var(--line);border-radius:18px;background:#e3f5ff;display:grid;place-items:center;text-align:center;overflow:hidden;font-size:2.6rem}
+.scan-preview img{width:100%;height:100%;object-fit:cover}.scan-preview small{display:block;font-size:1rem;color:var(--muted);margin-top:6px}
+.scan-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.scan-btns .cheio{grid-column:1/-1;background:var(--pink)}
+input[type=file]{display:none}
+#statusCodex{font-weight:800;min-height:22px;margin:12px 0 0}
+footer{padding:18px;text-align:center;background:var(--blue);border-top:2px solid var(--line);line-height:1.5}
+@media(max-width:760px){.scan{grid-template-columns:1fr}.detail.show{grid-template-columns:1fr}.detail img{height:240px;min-height:0}header:after{display:none}.abas button{min-width:0}}
 </style>
 </head>
 <body>
 <header>
   <div class="brand"><span>codex</span></div>
-  <p><strong>Um mundo de mamíferos para descobrir!</strong><br>Pesquise espécies, conheça filhotes e adultos e aprenda sobre habitats, alimentação e conservação dos mamíferos. 💙💗💛</p>
+  <p><strong>Um mundo de mamíferos para descobrir!</strong><br>Pesquise espécies, conheça filhotes e adultos e aprenda sobre habitats, alimentação e conservação. 💙💗💛</p>
 </header>
+<nav class="abas" aria-label="Abas do Codex">
+  <button data-tela="descobrir" class="on">📷 Descobrir pela foto</button>
+  <button data-tela="meu">📒 Meu Codex</button>
+  <button data-tela="pesquisar">🔎 Pesquisar mamíferos</button>
+</nav>
 <main>
-  <section class="search-panel" aria-label="Pesquisa de mamíferos">
-    <h2 style="margin:0 0 12px">🔎 O que você quer descobrir?</h2>
-    <div class="search-row">
-      <input id="search" type="search" placeholder="Ex.: onça-pintada, capivara, boto-cor-de-rosa..." aria-label="Pesquisar mamíferos">
-      <button id="searchBtn">Pesquisar</button>
-    </div>
-    <div class="tabs" id="filters">
-      <button class="chip active" data-filter="Todos">Todos</button>
-      <button class="chip" data-filter="Carnívoros">🐆 Carnívoros</button>
-      <button class="chip" data-filter="Herbívoros">🦌 Herbívoros</button>
-      <button class="chip" data-filter="Roedores">🐹 Roedores</button>
-      <button class="chip" data-filter="Primatas">🐒 Primatas</button>
-      <button class="chip" data-filter="Aquáticos">🐬 Aquáticos</button>
-      <button class="chip" data-filter="Domésticos">🐕 Domésticos</button>
-    </div>
-  </section>
-
-<style>
-.scan-row{display:grid;grid-template-columns:minmax(200px,280px) 1fr;gap:16px;align-items:center;margin-top:12px}
-.scan-preview{aspect-ratio:4/3;border:2px dashed var(--line);border-radius:16px;background:#e3f5ff;display:grid;place-items:center;text-align:center;overflow:hidden;font-size:2.4rem}
-.scan-preview small{display:block;font-size:.85rem;color:var(--muted)}
-.scan-preview img{width:100%;height:100%;object-fit:cover}
-.scan-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.scan-actions .note{flex-basis:100%;font-size:.95rem}
-button:disabled{opacity:.5;cursor:not-allowed;transform:none}
-@media(max-width:650px){.scan-row{grid-template-columns:1fr}}
-</style>
-  <section class="search-panel" id="reconhecer" style="margin-top:22px;background:linear-gradient(115deg,#e3f5ff,#ffe2ef 60%,#fff4b8)">
-    <h2 style="margin:0 0 6px">📷 Descobrir pela foto</h2>
-    <p style="margin:0;line-height:1.5">Tire uma foto de um mamífero (ou escolha uma da galeria) e o Codex tenta descobrir qual é! 💙💗💛</p>
-    <div class="scan-row">
-      <div class="scan-preview" id="previaCodex"><div>🐾<small>A foto aparece aqui</small></div></div>
-      <div class="scan-actions">
-        <button id="btnCamCodex">📷 Tirar foto</button>
-        <button id="btnGalCodex" class="chip">🖼️ Escolher da galeria</button>
-        <button id="btnDescobrir" style="background:var(--pink)" disabled>🔎 Descobrir mamífero</button>
-        <div id="statusCodex" class="note"></div>
+  <!-- DESCOBRIR -->
+  <section class="tela on" id="tela-descobrir">
+    <div class="search-panel" style="background:linear-gradient(115deg,#e3f5ff,#ffe2ef 60%,#fff4b8)">
+      <div class="scan">
+        <div class="scan-preview" id="previaCodex"><div>🐾<small>Sua foto aparece aqui</small></div></div>
+        <div>
+          <h2 style="margin:0 0 8px">📷 Qual é esse mamífero?</h2>
+          <p style="margin:0;line-height:1.5">Tire uma foto de um mamífero (ou escolha uma da galeria) e o Codex tenta descobrir qual é! 💙💗💛</p>
+          <input id="camCodex" type="file" accept="image/*" capture="environment">
+          <input id="galCodex" type="file" accept="image/*">
+          <div class="scan-btns">
+            <button id="btnCamCodex" type="button">📸 Tirar foto</button>
+            <button id="btnGalCodex" type="button" style="background:#fff">🖼️ Galeria</button>
+            <button id="btnDescobrir" class="cheio" type="button" disabled>🔎 Descobrir mamífero</button>
+          </div>
+          <p id="statusCodex"></p>
+        </div>
       </div>
     </div>
-    <input id="camCodex" type="file" accept="image/*" capture="environment" hidden>
-    <input id="galCodex" type="file" accept="image/*" hidden>
   </section>
 
-  <h2>📒 Meu Codex</h2>
-  <p class="note" style="margin-top:-6px">Os mamíferos que você descobriu pela foto ficam guardados aqui (neste aparelho).</p>
-  <section id="meuCodex" class="results" style="margin-top:0"></section>
-
-  <h2>⭐ Categorias do Codex</h2>
-  <section class="category-grid">
-    <button class="category" data-category="Carnívoros"><span style="font-size:1.8rem">🐆</span><b>Carnívoros</b><small>Comem carne: onça, lobo-guará, ariranha. Têm dentes caninos fortes.</small></button>
-    <button class="category" data-category="Herbívoros"><span style="font-size:1.8rem">🦌</span><b>Herbívoros</b><small>Comem plantas: anta, veado, tamanduá (que come formigas!). Vivem em florestas e campos.</small></button>
-    <button class="category" data-category="Roedores"><span style="font-size:1.8rem">🐹</span><b>Roedores</b><small>Têm dentes da frente que não param de crescer: capivara, cutia, paca.</small></button>
-    <button class="category" data-category="Primatas"><span style="font-size:1.8rem">🐒</span><b>Primatas</b><small>Mãos que seguram as coisas e cérebro grande: mico-leão, bugio, macaco-prego.</small></button>
-    <button class="category" data-category="Aquáticos"><span style="font-size:1.8rem">🐬</span><b>Aquáticos</b><small>Mamíferos que vivem na água e respiram ar: boto, peixe-boi, baleia.</small></button>
-    <button class="category" data-category="Domésticos"><span style="font-size:1.8rem">🐕</span><b>Domésticos</b><small>Vivem com a gente: cão e gato. Raça não é o mesmo que espécie!</small></button>
-    <button class="category" data-category="Habitats"><span style="font-size:1.8rem">🌎</span><b>Habitats e países</b><small>Descubra onde cada mamífero vive naturalmente.</small></button>
+  <!-- MEU CODEX -->
+  <section class="tela" id="tela-meu">
+    <div class="result-heading"><div><h2 style="margin-top:0">📒 Meu Codex</h2><p>Os mamíferos que você descobriu pela foto ficam guardados aqui (neste aparelho).</p></div></div>
+    <section id="meuCodex" class="results"></section>
   </section>
 
-  <div class="result-heading">
-    <div><h2>🐣 Conheça os mamíferos</h2><p>Selecione um cartão para ver mais informações.</p></div>
-    <span class="note">As fotos são carregadas de fontes externas.</span>
-  </div>
-  <section id="results" class="results" aria-live="polite"></section>
-  <section id="detail" class="detail" aria-live="polite"></section>
-  <p class="note" style="margin-top:22px">Nota: as informações são educativas e resumidas. As imagens dependem de conexão com a internet; confirme dados específicos com fontes científicas ou instituições de conservação.</p>
+  <!-- PESQUISAR -->
+  <section class="tela" id="tela-pesquisar">
+    <section class="search-panel" aria-label="Pesquisa de mamíferos">
+      <h2 style="margin:0 0 12px">🔎 O que você quer descobrir?</h2>
+      <div class="search-row">
+        <input id="search" type="search" placeholder="Ex.: onça-pintada, capivara, boto-cor-de-rosa..." aria-label="Pesquisar mamíferos">
+        <button id="searchBtn">Pesquisar</button>
+      </div>
+      <div class="tabs" id="filters"></div>
+    </section>
+    <h2>⭐ Categorias do Codex</h2>
+    <section class="category-grid" id="categorias"></section>
+    <div class="result-heading">
+      <div><h2>🐣 Conheça os mamíferos</h2><p>Os que você já escaneou aparecem com a sua foto e a ficha completa. Os outros aparecem resumidos.</p></div>
+    </div>
+    <section id="detail" class="detail" aria-live="polite"></section>
+    <section id="results" class="results" aria-live="polite"></section>
+  </section>
 </main>
 <footer>⭐ <strong>Codex</strong> — descubra, respeite e proteja os mamíferos. ⭐<br>Projeto educativo sobre mamíferos filhotes e adultos.</footer>
 <script>
@@ -123,183 +130,129 @@ const animals = [
  {"name": "Cachorro doméstico", "group": "Domésticos", "scientific": "Canis lupus familiaris", "young": "Filhote", "adult": "Adulto", "habitat": "Casas e cidades", "countries": "Presente em todo o mundo", "food": "Ração para cães; as necessidades mudam com idade e saúde", "description": "Mamífero domesticado com muitas raças, tamanhos e pelagens. Todas as raças são a mesma espécie.", "fact": "O focinho de cada cão é único, como uma impressão digital.", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Cachorro+doméstico"},
  {"name": "Gato doméstico", "group": "Domésticos", "scientific": "Felis catus", "young": "Filhote", "adult": "Adulto", "habitat": "Casas e cidades", "countries": "Presente em todo o mundo", "food": "Carnívoro; precisa de alimento próprio para gatos", "description": "Pequeno felino domesticado, com sentidos apurados e instinto de caça.", "fact": "Os gatos ronronam também para se acalmar.", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Gato+doméstico"}
 ];
-let activeGroup="Todos";
-const results=document.getElementById("results"), search=document.getElementById("search"), detail=document.getElementById("detail");
+const GRUPOS = [["Carnívoros","🐆","Comem carne: onça, lobo-guará, ariranha. Têm dentes caninos fortes."],["Herbívoros","🦌","Comem plantas: anta, veado, tamanduá (que come formigas!)."],["Roedores","🐹","Dentes da frente que não param de crescer: capivara, cutia, paca."],["Primatas","🐒","Mãos que seguram as coisas: mico-leão, bugio, macaco-prego."],["Aquáticos","🐬","Vivem na água e respiram ar: boto, peixe-boi, baleia."],["Domésticos","🐕","Vivem com a gente: cão e gato. Raça não é o mesmo que espécie!"]];
+const $ = id => document.getElementById(id);
+const esc = t => String(t == null ? "" : t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const norm = t => String(t || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+const VAZIA = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E";
+
+/* Abas */
+function irPara(t){
+  document.querySelectorAll(".tela").forEach(x => x.classList.toggle("on", x.id === "tela-" + t));
+  document.querySelectorAll(".abas button").forEach(b => b.classList.toggle("on", b.dataset.tela === t));
+  if (t === "meu") desenharMeu();
+  if (t === "pesquisar") render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+document.querySelectorAll(".abas button").forEach(b => b.onclick = () => irPara(b.dataset.tela));
+
+/* Meu Codex (álbum) */
+const CHAVE = "codexMeusAnimais";
+const lerMeu = () => { try { return JSON.parse(localStorage.getItem(CHAVE) || "[]"); } catch (e) { return []; } };
+const meuDe = a => lerMeu().find(m => norm(m.nome) === norm(a.name) || (m.cientifico && norm(m.cientifico) === norm(a.scientific)));
+function desenharMeu(){
+  const caixa = $("meuCodex"), lista = lerMeu();
+  caixa.innerHTML = "";
+  if (!lista.length) { caixa.innerHTML = '<div class="empty">🐣 Seu Codex ainda está vazio. Descubra um mamífero pela foto!</div>'; return; }
+  lista.forEach(a => {
+    const card = document.createElement("article"); card.className = "animal-card meu";
+    card.innerHTML = `<img src="${a.foto || VAZIA}" alt="Foto de ${esc(a.nome)}"><div class="body"><span class="tag meu">Descoberto em ${esc(a.data)}</span><h3>${esc(a.nome)}</h3><p>${esc(a.cientifico || "")}</p></div>`;
+    card.onclick = () => abrirFichaMinha(a.nome, a.foto);
+    caixa.appendChild(card);
+  });
+}
+function abrirFichaMinha(nome, foto){
+  const f = PokedexAdaptador.fichaSalva && PokedexAdaptador.fichaSalva(nome);
+  if (f) PokedexAdaptador.abrirFicha(f.info, f.foto || foto);
+}
+
+/* Pesquisar: catálogo das meninas, agora com mamíferos */
+let activeGroup = "Todos";
+$("filters").innerHTML = ['<button class="chip active" data-filter="Todos">Todos</button>'].concat(GRUPOS.map(g => `<button class="chip" data-filter="${g[0]}">${g[1]} ${g[0]}</button>`)).join("");
+$("categorias").innerHTML = GRUPOS.map(g => `<button class="category" data-category="${g[0]}"><span style="font-size:1.8rem">${g[1]}</span><b>${g[0]}</b><small>${g[2]}</small></button>`).join("");
 function render(){
- const q=search.value.trim().toLocaleLowerCase("pt-BR");
- const list=animals.filter(a=>(activeGroup==="Todos"||a.group===activeGroup||activeGroup==="Habitats")&&(!q||[a.name,a.group,a.scientific,a.habitat,a.countries,a.food].join(" ").toLocaleLowerCase("pt-BR").includes(q)));
- results.innerHTML="";
- if(!list.length){results.innerHTML='<div class="empty">Não encontrei esse termo no catálogo de demonstração. Tente “onça”, “capivara”, “boto”, “Cerrado” ou “cachorro”.</div>';return}
- list.forEach(a=>{const card=document.createElement("article");card.className="animal-card";card.tabIndex=0;card.innerHTML=`<img src="${a.image}" data-especie="${a.scientific.replace(/ \(.*\)/,"")}" alt="Foto de ${a.name}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x500/e3f5ff/20202a?text=Foto+indisponivel'"><div class="body"><span class="tag">${a.group}</span><span class="tag">Filhote e adulto</span><h3>${a.name}</h3><p>${a.description}</p></div>`;card.addEventListener("click",()=>showDetail(a));card.addEventListener("keydown",e=>{if(e.key==="Enter")showDetail(a)});results.appendChild(card)});
+  const q = norm($("search").value);
+  const list = animals.filter(a => (activeGroup === "Todos" || a.group === activeGroup) && (!q || norm([a.name, a.group, a.scientific, a.habitat, a.countries, a.food].join(" ")).includes(q)));
+  // os que você já escaneou aparecem primeiro
+  list.sort((a, b) => (meuDe(b) ? 1 : 0) - (meuDe(a) ? 1 : 0));
+  $("results").innerHTML = "";
+  if (!list.length) { $("results").innerHTML = '<div class="empty">Não encontrei esse termo. Tente “onça”, “capivara”, “boto” ou “cachorro”.</div>'; return; }
+  list.forEach(a => {
+    const m = meuDe(a), card = document.createElement("article");
+    card.className = "animal-card" + (m ? " meu" : ""); card.tabIndex = 0;
+    card.innerHTML = `<img ${m && m.foto ? `src="${m.foto}"` : `src="${VAZIA}" data-especie="${esc(a.scientific)}"`} alt="Foto de ${esc(a.name)}"><div class="body"><span class="tag">${esc(a.group)}</span>${m ? '<span class="tag meu">✅ Escaneado por você</span>' : '<span class="tag trava">🔒 Resumido</span>'}<h3>${esc(a.name)}</h3><p>${esc(a.description)}</p></div>`;
+    card.addEventListener("click", () => showDetail(a));
+    card.addEventListener("keydown", e => { if (e.key === "Enter") showDetail(a); });
+    $("results").appendChild(card);
+  });
+  FichaPokedex.trocarFotos($("results"));
 }
 function showDetail(a){
- detail.className="detail show";
- detail.innerHTML=`<img src="${a.image}" data-especie="${a.scientific.replace(/ \(.*\)/,"")}" alt="Foto de ${a.name}" onerror="this.onerror=null;this.src='https://placehold.co/800x600/ffe2ef/20202a?text=Foto+indisponivel'"><div class="detail-copy"><span class="tag">${a.group}</span><h2>${a.name}</h2><p><em>${a.scientific}</em></p><p>${a.description}</p><div class="facts"><div class="fact"><strong>🐣 Filhote</strong>${a.young}</div><div class="fact"><strong>🐾 Adulto</strong>${a.adult}</div><div class="fact"><strong>🌿 Habitat</strong>${a.habitat}</div><div class="fact"><strong>🌎 Países / região</strong>${a.countries}</div><div class="fact"><strong>🍃 Alimentação</strong>${a.food}</div><div class="fact"><strong>⭐ Curiosidade</strong>${a.fact}</div></div><button id="closeDetail">Fechar informações</button><p class="note">As fotos são fornecidas por links externos e podem variar em disponibilidade. Para uso público, confira a licença e o crédito de cada imagem.</p></div>`;
- document.getElementById("closeDetail").addEventListener("click",()=>{detail.className="detail";detail.innerHTML=""});
- detail.scrollIntoView({behavior:"smooth",block:"start"});
+  const m = meuDe(a), f = m && PokedexAdaptador.fichaSalva && PokedexAdaptador.fichaSalva(m.nome);
+  const info = f ? f.info : null;
+  const cur = info ? [].concat(info.curiosidades || []).filter(Boolean) : [];
+  const detail = $("detail");
+  detail.className = "detail show";
+  detail.innerHTML = `<img ${m && m.foto ? `src="${m.foto}"` : `src="${VAZIA}" data-especie="${esc(a.scientific)}"`} alt="Foto de ${esc(a.name)}"><div class="detail-copy"><span class="tag">${esc(a.group)}</span>${m ? '<span class="tag meu">✅ Escaneado por você</span>' : ""}<h2>${esc(a.name)}</h2><p><em>${esc(a.scientific)}</em></p><p>${esc(a.description)}</p>
+    ${m ? `<div class="facts"><div class="fact"><strong>🐣 Filhote</strong>${esc(a.young)}</div><div class="fact"><strong>🐾 Adulto</strong>${esc(a.adult)}</div><div class="fact"><strong>🌿 Habitat</strong>${esc(info && info.habitat_descricao || a.habitat)}</div><div class="fact"><strong>🌎 Países / região</strong>${esc(a.countries)}</div><div class="fact"><strong>🍃 Alimentação</strong>${esc(a.food)}</div><div class="fact"><strong>⭐ Curiosidade</strong>${esc(cur[0] || a.fact)}</div></div>`
+         : `<div class="facts"><div class="fact"><strong>🌿 Habitat</strong>${esc(a.habitat)}</div></div><div class="trancado">🔒 <b>Ficha resumida.</b> Escaneie um(a) <b>${esc(a.name)}</b> de verdade para desbloquear filhote e adulto, alimentação, países e curiosidades!</div>`}
+    <div class="detail-btns">${f ? '<button id="fichaCompleta">📋 Ver a ficha completa</button>' : ""}<button id="closeDetail" style="background:#fff">Fechar informações</button></div></div>`;
+  $("closeDetail").onclick = () => { detail.className = "detail"; detail.innerHTML = ""; };
+  if (f) $("fichaCompleta").onclick = () => PokedexAdaptador.abrirFicha(f.info, f.foto || m.foto);
+  FichaPokedex.trocarFotos(detail);
+  detail.scrollIntoView({ behavior: "smooth", block: "start" });
 }
-document.getElementById("searchBtn").addEventListener("click",render);
-search.addEventListener("input",render);
-search.addEventListener("keydown",e=>{if(e.key==="Enter")render()});
-document.querySelectorAll("#filters .chip").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll("#filters .chip").forEach(b=>b.classList.remove("active"));btn.classList.add("active");activeGroup=btn.dataset.filter;render()}));
-document.querySelectorAll("[data-category]").forEach(btn=>btn.addEventListener("click",()=>{const c=btn.dataset.category;activeGroup=c==="Habitats"?"Habitats":c;document.querySelectorAll("#filters .chip").forEach(b=>b.classList.toggle("active",b.dataset.filter===activeGroup));search.value="";render();document.getElementById("results").scrollIntoView({behavior:"smooth"})}));
-render();
-</script>
+$("searchBtn").addEventListener("click", render);
+$("search").addEventListener("input", render);
+document.querySelectorAll("#filters .chip").forEach(btn => btn.addEventListener("click", () => { document.querySelectorAll("#filters .chip").forEach(b => b.classList.remove("active")); btn.classList.add("active"); activeGroup = btn.dataset.filter; render(); }));
+document.querySelectorAll("[data-category]").forEach(btn => btn.addEventListener("click", () => { activeGroup = btn.dataset.category; document.querySelectorAll("#filters .chip").forEach(b => b.classList.toggle("active", b.dataset.filter === activeGroup)); $("search").value = ""; render(); $("results").scrollIntoView({ behavior: "smooth" }); }));
 
-<style id="ajustes-tablet">
-/* Ajustes de visual para tablet (deitado e em pé) e computador.
-   O visual e as ideias são do grupo; aqui só arrumamos tamanho, espaço e alinhamento. */
-@media (min-width:700px){body>header,body>main{zoom:1.1}}
-button,.chip{min-height:44px}
-.category small{font-size:13.5px}
-/* abas do Codex */
-.codex-abas{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px;position:sticky;top:0;z-index:5;padding:10px 0;background:inherit}
-.codex-abas button{border:2px solid #222;border-radius:999px;padding:10px 18px;font-weight:800;font-size:15px;background:#fff;cursor:pointer;min-height:46px;box-shadow:3px 3px 0 #222}
-.codex-abas button.on{background:var(--pink,#ff8fc6);transform:translate(1px,1px);box-shadow:2px 2px 0 #222}
-.codex-aba{display:none}.codex-aba.on{display:block}
-.category-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))!important}
-.category small{display:none}
-/* catálogo da aba Pesquisar mais compacto */
-#abaPesquisar .results{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))!important;gap:12px}
-#abaPesquisar .animal-card img{height:120px!important}
-#abaPesquisar .animal-card .body{padding:10px 12px}
-#abaPesquisar .animal-card h3{font-size:1.05rem}
-#abaPesquisar .animal-card p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.85rem}
-#abaPesquisar .category{padding:10px 12px!important}
-#abaPesquisar > p.note{font-size:12px}
-</style>
+/* Descobrir pela foto */
+let foto = null, miniatura = "", ultimo = null;
+function reduzir(arquivo, lado){
+  return new Promise(res => { const img = new Image();
+    img.onload = () => { const k = Math.min(1, lado / Math.max(img.width, img.height)); const c = document.createElement("canvas"); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); res(c.toDataURL("image/jpeg", .85)); };
+    img.onerror = () => res(""); img.src = URL.createObjectURL(arquivo); });
+}
+function escolher(f){ if (!f) return; foto = f; $("previaCodex").innerHTML = `<img src="${URL.createObjectURL(f)}" alt="Foto escolhida">`; $("btnDescobrir").disabled = false; $("statusCodex").textContent = "Foto pronta! Agora toque em “Descobrir mamífero”. 🐾"; }
+$("btnCamCodex").onclick = () => $("camCodex").click();
+$("btnGalCodex").onclick = () => $("galCodex").click();
+["camCodex", "galCodex"].forEach(id => $(id).addEventListener("change", e => escolher(e.target.files[0])));
+$("btnDescobrir").onclick = async () => {
+  if (!foto) return;
+  $("btnDescobrir").disabled = true;
+  try {
+    const grande = await reduzir(foto, 1280); miniatura = await reduzir(foto, 400);
+    const r = await fetch("/api/identificar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mime: "image/jpeg", imagem: grande.split(",")[1] }) });
+    const dados = await r.json().catch(() => ({}));
+    const texto = dados && dados.candidates && dados.candidates[0].content.parts[0].text;
+    ultimo = texto ? JSON.parse(texto) : null;
+    $("statusCodex").textContent = ultimo && ultimo.identificado ? "🎉 Mamífero descoberto!" : "Vamos tentar outra foto? 📷";
+  } catch (e) { $("statusCodex").textContent = "Ops! Não consegui falar com o servidor."; }
+  finally { $("btnDescobrir").disabled = false; }
+};
+window.salvarNoCodex = () => {
+  if (!ultimo || !ultimo.identificado) return;
+  const lista = lerMeu().filter(a => norm(a.nome) !== norm(ultimo.nome_popular));
+  lista.unshift({ nome: ultimo.nome_popular, cientifico: ultimo.nome_cientifico || "", foto: miniatura, data: new Date().toLocaleDateString("pt-BR") });
+  try { localStorage.setItem(CHAVE, JSON.stringify(lista.slice(0, 40))); } catch (e) {}
+  irPara("meu");
+};
+</script>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
 <script src="/comum/adaptador.js"></script>
 <script>
-/* ===== Parte nova: descobrir o animal pela foto + "Meu Codex" =====
-   (o catálogo e o visual são do grupo; a ficha aparece no pop-up) */
-(function () {
-  const $ = id => document.getElementById(id);
-  const CHAVE = "codexMeusAnimais";
-  let foto = null, miniatura = "", ultimo = null;
-
-  function reduzir(arquivo, lado) {
-    return new Promise(res => {
-      const img = new Image();
-      img.onload = () => {
-        const k = Math.min(1, lado / Math.max(img.width, img.height));
-        const c = document.createElement("canvas");
-        c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
-        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
-        res(c.toDataURL("image/jpeg", .85));
-      };
-      img.onerror = () => res("");
-      img.src = URL.createObjectURL(arquivo);
-    });
-  }
-  function escolher(f) {
-    if (!f) return;
-    foto = f;
-    $("previaCodex").innerHTML = `<img src="${URL.createObjectURL(f)}" alt="Foto escolhida">`;
-    $("btnDescobrir").disabled = false;
-    $("statusCodex").textContent = "Foto pronta! Agora toque em “Descobrir mamífero”. 🐾";
-  }
-  $("btnCamCodex").onclick = () => $("camCodex").click();
-  $("btnGalCodex").onclick = () => $("galCodex").click();
-  ["camCodex", "galCodex"].forEach(id => $(id).addEventListener("change", e => escolher(e.target.files[0])));
-
-  $("btnDescobrir").onclick = async () => {
-    if (!foto) return;
-    $("btnDescobrir").disabled = true;
-    try {
-      const grande = await reduzir(foto, 1600);
-      miniatura = await reduzir(foto, 400);
-      const r = await fetch("/api/identificar", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ modelo: "gemini-3.6-flash", mime: "image/jpeg", imagem: grande.split(",")[1] })
-      });
-      const dados = await r.json().catch(() => ({}));
-      const texto = dados && dados.candidates && dados.candidates[0].content.parts[0].text;
-      ultimo = texto ? JSON.parse(texto) : null;
-      $("statusCodex").textContent = ultimo && ultimo.identificado ? "🎉 Mamífero descoberto!" : "Vamos tentar outra foto? 📷";
-    } catch (e) {
-      $("statusCodex").textContent = "Ops! Não consegui falar com o servidor.";
-    } finally {
-      $("btnDescobrir").disabled = false;
-    }
-  };
-
-  const ler = () => { try { return JSON.parse(localStorage.getItem(CHAVE) || "[]"); } catch (e) { return []; } };
-  function desenhar() {
-    const caixa = $("meuCodex"), lista = ler();
-    caixa.innerHTML = "";
-    if (!lista.length) { caixa.innerHTML = '<div class="empty">🐣 Seu Codex ainda está vazio. Descubra um mamífero pela foto!</div>'; return; }
-    lista.forEach(a => {
-      const card = document.createElement("article"); card.className = "animal-card";
-      const img = document.createElement("img"); img.src = a.foto; img.alt = "Foto de " + a.nome;
-      const body = document.createElement("div"); body.className = "body";
-      const tag = document.createElement("span"); tag.className = "tag"; tag.textContent = "Descoberto em " + a.data;
-      const h = document.createElement("h3"); h.textContent = a.nome;
-      const p = document.createElement("p"); p.textContent = a.cientifico || "";
-      body.append(tag, h, p); card.append(img, body); caixa.appendChild(card);
-    });
-  }
-  window.salvarNoCodex = () => {
-    if (!ultimo || !ultimo.identificado) return;
-    const lista = ler().filter(a => a.nome.toLowerCase() !== String(ultimo.nome_popular).toLowerCase());
-    lista.unshift({ nome: ultimo.nome_popular, cientifico: ultimo.nome_cientifico || "", foto: miniatura, data: new Date().toLocaleDateString("pt-BR") });
-    try { localStorage.setItem(CHAVE, JSON.stringify(lista.slice(0, 40))); } catch (e) {}
-    desenhar();
-    $("meuCodex").scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-  desenhar();
-
-  /* Fotos certas no catálogo: cada animal busca a foto pela espécie */
-  const desenharCatalogo = render, abrirDetalhe = showDetail;
-  render = function () { desenharCatalogo(); FichaPokedex.trocarFotos($("results")); };
-  showDetail = function (a) { abrirDetalhe(a); FichaPokedex.trocarFotos($("detail")); };
-  render();
-})();
-
-/* O Codex era uma página só, bem comprida (quase 4 telas no tablet): agora as
-   partes viram 3 abas, sem mudar o que cada uma faz. */
-(function () {
-  const main = document.querySelector("main"), q = s => document.querySelector(s);
-  const aba = (id) => { const d = document.createElement("div"); d.className = "codex-aba"; d.id = id; return d; };
-  const descobrir = aba("abaDescobrir"), meu = aba("abaCodex"), pesquisar = aba("abaPesquisar");
-  const h2s = [...main.querySelectorAll(":scope > h2")];
-  const hMeu = h2s.find(h => /Meu Codex/.test(h.textContent)), hCat = h2s.find(h => /Categorias/.test(h.textContent));
-  descobrir.append(q("#reconhecer"));
-  meu.append(hMeu, hMeu.nextElementSibling, q("#meuCodex"));
-  const busca = main.querySelector(".search-panel");
-  pesquisar.append(busca, hCat, q(".category-grid"), q(".result-heading"), q("#results"), q("#detail"));
-  [...main.querySelectorAll(":scope > p.note")].forEach(n => pesquisar.append(n));
-  const barra = document.createElement("nav"); barra.className = "codex-abas"; barra.setAttribute("aria-label", "Partes do Codex");
-  [["abaDescobrir", "📷 Descobrir pela foto"], ["abaCodex", "📒 Meu Codex"], ["abaPesquisar", "🔎 Pesquisar mamíferos"]].forEach(([id, t], i) => {
-    const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.dataset.aba = id; if (!i) b.classList.add("on");
-    b.onclick = () => irAba(id); barra.append(b);
-  });
-  main.prepend(barra, descobrir, meu, pesquisar);
-  window.irAba = id => {
-    document.querySelectorAll(".codex-aba").forEach(x => x.classList.toggle("on", x.id === id));
-    barra.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.aba === id));
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-  irAba("abaDescobrir");
-  // o Codex salvo aparece na aba "Meu Codex"
-  const salvarOriginal = window.salvarNoCodex;
-  if (salvarOriginal) window.salvarNoCodex = (...a) => { const r = salvarOriginal(...a); irAba("abaCodex"); return r; };
-  // escolher uma categoria ou pesquisar sempre leva para a aba de pesquisa
-  document.querySelectorAll(".category, #searchBtn, #filters .chip").forEach(b => b.addEventListener("click", () => { if (!pesquisar.classList.contains("on")) irAba("abaPesquisar"); }));
-})();
 PokedexAdaptador.iniciar({
-  albumFicha: { cartao: "#meuCodex .animal-card", nome: "h3" },  // "📖 Ver ficha" nas figurinhas do álbum
-  // botões por etapa: o de identificar só aparece depois de escolher a foto
-  etapas: { foto: ["#btnDescobrir"] },
+  etapas: { foto: ["#btnDescobrir"] },   // o botão de descobrir só aparece depois de escolher a foto
   icone: "🐾", fauna: true,
   cor: "#ff7fb5", cor2: "#5bb8f0",
   escuro: () => false,
   claro: { fundo: "#fffdf8", texto: "#20202a", suave: "#666575" },
   carregando: "🔎 O Codex está olhando a foto...",
   salvar: () => salvarNoCodex(),
-  novaFoto: () => document.getElementById("btnGalCodex").click()
+  novaFoto: () => { irPara("descobrir"); document.getElementById("btnGalCodex").click(); }
 });
 </script>
 </body>
