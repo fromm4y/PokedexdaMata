@@ -337,7 +337,7 @@ renderAll();
     if (!b || !host) return;
     const ouvir = [...host.querySelectorAll("button")].find(x => /Ouvir canto/.test(x.textContent));
     if (ouvir) ouvir.onclick = () => {
-      FichaPokedex.tocarSom(b.scientific, b.name);
+      FichaPokedex.tocarSom(b.scientific, b.name, ouvir);
       if (!state.songs.includes(b.id)) { state.songs.push(b.id); pointsFor("song", b.id); }
       completeMission("listenSong"); checkAchievements(); saveState();
     };

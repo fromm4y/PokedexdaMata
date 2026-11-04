@@ -34,6 +34,18 @@
 @media(max-width:620px){.top{height:72px;padding:0 12px;column-gap:10px}.brand{gap:8px}.brand .mark{width:40px;height:40px}.brand b{font-size:21px;letter-spacing:3px}.brand small{font-size:7px;letter-spacing:1px}.menu,.gear{width:42px;height:42px}.leaf{min-height:116px;padding:18px 12px}.leaf b{font-size:13px}.leaf span{font-size:10px}}
 @media(max-width:430px){.leaves,.cards,.album,.achievements,.stats,.info{grid-template-columns:1fr}.hero h1{font-size:41px}}
 @media (prefers-reduced-motion:reduce){.fly,.leaf,.main{animation:none!important;transition:none!important}.fly{display:none}}
+
+/* pedidos do Victor */
+.bird.comFoto{padding:0;overflow:hidden}.bird.comFoto img{width:100%;height:100%;object-fit:cover;display:block}
+.mark{cursor:pointer;position:relative;overflow:hidden}.mark.comFoto{border-radius:50%;padding:0}.mark.comFoto svg{display:none}.mark .markFoto{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.perfilGrande{position:fixed;inset:0;z-index:99999;background:#020617d9;display:grid;place-items:center;padding:20px;backdrop-filter:blur(6px)}
+.perfilGrandeBox{background:#081330;border:1px solid var(--line);border-radius:26px;padding:24px;text-align:center;display:grid;gap:14px;justify-items:center}
+.perfilGrandeBox img{width:min(70vw,320px);height:min(70vw,320px);border-radius:50%;object-fit:cover;border:5px solid #26bfff;box-shadow:0 0 50px #3a75ff77}
+.perfilGrandeBtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.volBox{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:16px 18px;margin-bottom:16px;border:1px solid var(--line);border-radius:19px;background:#0b1d4acc}
+.volBox input{flex:1;min-width:180px;accent-color:#26bfff;height:28px}.volBox output{font-weight:900;color:#88dfff;min-width:48px}
+.play .icStop{display:none}.player:has(.fp-tocando) .play .icPlay{display:none}.player:has(.fp-tocando) .play .icStop{display:block}
+.fp-tocando{background:linear-gradient(90deg,#ff5c7a,#ff8a3d)!important;color:#fff!important}
 </style>
 </head>
 <body>
@@ -50,7 +62,7 @@
 <header class="top">
 <div class="brand">
 <button class="menu" aria-label="Abrir menu" onclick="toggleMenu()"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-<div class="mark"><svg viewBox="0 0 48 48" fill="white"><path d="M24 3C17 13 12 18 12 27c0 8 5 14 12 18 7-4 12-10 12-18 0-9-5-14-12-24Z"/><path d="M24 12v26" fill="none" stroke="#08102b" stroke-width="2"/></svg></div>
+<div class="mark" id="markPerfil" role="button" tabindex="0" aria-label="Ver foto de perfil" onclick="verFotoPerfil()"><svg viewBox="0 0 48 48" fill="white"><path d="M24 3C17 13 12 18 12 27c0 8 5 14 12 18 7-4 12-10 12-18 0-9-5-14-12-24Z"/><path d="M24 12v26" fill="none" stroke="#08102b" stroke-width="2"/></svg></div>
 <div><b>VELO</b><small>AVENTUREIRO DA NATUREZA</small></div>
 </div>
 <button class="gear" aria-label="Configurações" onclick="mostrar('configuracoes')"><svg viewBox="0 0 24 24"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm8.2 4a7.9 7.9 0 0 0-.1-1l2-1.5-2-3.4-2.4 1a8.5 8.5 0 0 0-1.8-1L15.6 3h-4l-.3 3.1a8.5 8.5 0 0 0-1.8 1l-2.4-1-2 3.4 2 1.5a7.9 7.9 0 0 0-.1 1c0 .3 0 .7.1 1l-2 1.5 2 3.4 2.4-1a8.5 8.5 0 0 0 1.8 1l.3 3.1h4l.3-3.1a8.5 8.5 0 0 0 1.8-1l2.4 1 2-3.4-2-1.5c.1-.3.1-.7.1-1Z"/></svg></button>
@@ -122,7 +134,7 @@ function save(a){try{localStorage.setItem(KEY,JSON.stringify(a.slice(0,80).map(x
 function mostrar(id){
  document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");
  document.querySelectorAll(".nav[data-page]").forEach(x=>x.classList.toggle("active",x.dataset.page===id));
- if(id==="album")renderAlbum();if(id==="sons")renderSounds();if(id==="conquistas")renderAchievements();if(id==="perfil")renderProfile();if(id==="configuracoes")renderSettings();
+ if(id==="inicio")home();if(id==="album")renderAlbum();if(id==="sons")renderSounds();if(id==="conquistas")renderAchievements();if(id==="perfil")renderProfile();if(id==="configuracoes")renderSettings();
  document.getElementById("side").classList.remove("open");scrollTo({top:0,behavior:"smooth"});
 }
 function toggleMenu(){document.getElementById("side").classList.toggle("open")}
@@ -131,6 +143,7 @@ function home(){
  let a=album(),area=document.getElementById("recent");area.textContent="";
  if(!a.length){let empty=document.createElement("div");empty.className="empty-state";empty.innerHTML="<div class=\"empty-icon\"><svg viewBox=\"0 0 24 24\"><path d=\"M12 20C7 16 4 13 4 9a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 4-3 7-6 11Z\"/></svg></div><div><b>Nenhuma ave descoberta ainda.</b><p>Reconheça sua primeira ave para começar sua coleção!</p></div><button class=\"secondary\" onclick=\"mostrar(\'reconhecer\')\">Reconhecer uma ave</button>";area.append(empty)}else a.slice(0,4).forEach(b=>{let c=document.createElement("article");c.className="card";let art=document.createElement("div");art.className="bird";art.innerHTML=birdSVG(b.type,b.cor);let i=document.createElement("div");i.className="cardinfo";let n=document.createElement("b");n.textContent=b.nome;let s=document.createElement("small");s.textContent=b.cientifico||"Ave brasileira";i.append(n,s);c.append(art,i);area.append(c)})
 }
+const homeOriginal=home;home=function(){homeOriginal();const a=album();[...document.querySelectorAll("#recent .card")].forEach((c,i)=>colocarFoto(c,a[i]))};
 home();
 
 async function prepararImagem(file){
@@ -165,14 +178,17 @@ function fail(title,msg){
 }
 function result(d){
  last={nome:typeof d.nome==="string"&&d.nome?d.nome:"Ave brasileira",cientifico:typeof d.nomeCientifico==="string"?d.nomeCientifico:"",info:typeof d.curiosidades==="string"?d.curiosidades:"Uma nova descoberta para o seu álbum!",local:typeof d.localizacao==="string"?d.localizacao:"Localização não informada.",hab:typeof d.habitat==="string"?d.habitat:"Habitat não informado.",som:typeof d.somUrl==="string"?d.somUrl:"",conf:Number(d.confianca)||0,imagem:dataURL};
- rphoto.src=last.imagem;rname.textContent=last.nome;rsci.textContent=last.cientifico;conf.textContent="Confiança: "+last.conf+"%";tinfo.textContent=last.info;tlocal.textContent=last.local;thabitat.textContent=last.hab;rsound.textContent="Ouvir canto";
- let a=album();if(!a.some(x=>x.nome.toLowerCase()===last.nome.toLowerCase())){a.unshift(last);save(a)}mostrar("resultado")
+ rphoto.src=last.imagem;rname.textContent=last.nome;rsci.textContent=last.cientifico;conf.textContent="Confiança: "+last.conf+"%";tinfo.textContent=last.info;tlocal.textContent=last.local;thabitat.textContent=last.hab;rsound.textContent="Ouvir canto";delete rsound.dataset.fpTextoSom;
+ fotoPequena(dataURL).then(f=>{last.foto=f;let a=album().filter(x=>x.nome.toLowerCase()!==last.nome.toLowerCase());a.unshift(last);save(a);home()});mostrar("resultado")
 }
+/* foto pequena da ave (cabe muitas no álbum do aparelho) */
+function fotoPequena(src){return new Promise(res=>{if(!src)return res("");const im=new Image();im.onload=()=>{const k=Math.min(1,320/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.75))};im.onerror=()=>res("");im.src=src})}
+function colocarFoto(card,b){if(!b||!b.foto)return;const art=card.querySelector(".bird");if(!art)return;art.classList.add("comFoto");art.innerHTML="";const im=document.createElement("img");im.src=b.foto;im.alt="Foto de "+b.nome;art.appendChild(im)}
 function tab(which,b){document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");["info","local","habitat"].forEach(x=>document.getElementById("t"+x).classList.add("hidden"));document.getElementById("t"+which).classList.remove("hidden")}
-function lastSound(){playBirdSound(last)}
+function lastSound(){playBirdSound(last,rsound)}
 function renderSounds(){
- sounds.textContent="";let a=album();if(!a.length){sounds.innerHTML='<p style="color:#9da9cd;text-align:center;padding:40px">Descubra uma ave para colocar os primeiros cantos aqui.</p>';return}
- a.forEach(b=>{let r=document.createElement("div");r.className="player";let p=document.createElement("button");p.className="play";p.innerHTML='<svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg>';p.onclick=()=>playBirdSound(b);let mid=document.createElement("div"),n=document.createElement("b");n.textContent=b.nome;let s=document.createElement("small");s.textContent=b.cientifico||"Ave brasileira";s.style.cssText="display:block;color:#8e9bc2;margin-top:3px";let range=document.createElement("input");range.type="range";range.className="range";range.disabled=true;mid.append(n,s,range);let q=document.createElement("button");q.className="secondary";q.textContent="Ouvir";q.onclick=p.onclick;r.append(p,mid,q);sounds.append(r)})
+ sounds.textContent="";const vol=Number(localStorage.getItem("velo_volume")||80),vb=document.createElement("div");vb.className="volBox";vb.innerHTML='<b>🔊 Volume dos cantos</b><input class="volSons" type="range" min="0" max="100" value="'+vol+'" aria-label="Volume dos cantos"><output class="volSonsTxt">'+vol+'%</output>';vb.querySelector("input").oninput=e=>setVolume(e.target.value);sounds.append(vb);let a=album();if(!a.length){sounds.insertAdjacentHTML("beforeend",'<p style="color:#9da9cd;text-align:center;padding:40px">Descubra uma ave para colocar os primeiros cantos aqui.</p>');return}
+ a.forEach(b=>{let r=document.createElement("div");r.className="player";let p=document.createElement("button");p.className="play";p.innerHTML='<svg class="icPlay" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg><svg class="icStop" viewBox="0 0 24 24"><path d="M7 7h10v10H7z"/></svg>';let mid=document.createElement("div"),n=document.createElement("b");n.textContent=b.nome;let s=document.createElement("small");s.textContent=b.cientifico||"Ave brasileira";s.style.cssText="display:block;color:#8e9bc2;margin-top:3px";let range=document.createElement("input");range.type="range";range.className="range";range.hidden=true;mid.append(n,s,range);let q=document.createElement("button");q.className="secondary";q.textContent="Ouvir";q.onclick=()=>playBirdSound(b,q);p.onclick=q.onclick;r.append(p,mid,q);sounds.append(r)})
 }
 function getStats(){try{return JSON.parse(localStorage.getItem(STATS_KEY)||"{}")}catch{return{}}}
 function saveStats(o){localStorage.setItem(STATS_KEY,JSON.stringify(o))}
@@ -202,7 +218,7 @@ function renderAchievements(){
 function renderAlbum(){
  albumGrid.textContent="";let a=album();if(!a.length){let empty=document.createElement("div");empty.className="empty-state album-empty";empty.innerHTML="<div class=\"empty-icon\"><svg viewBox=\"0 0 24 24\"><path d=\"M6 3h12v18H6z\"/><path d=\"M9 7h6M9 11h6M9 15h4\"/></svg></div><div><b>Seu álbum ainda está vazio.</b><p>Reconheça uma ave para começar sua coleção!</p></div><button class=\"primary\" onclick=\"mostrar(\'reconhecer\')\">RECONHECER UMA AVE</button>";albumGrid.append(empty);return} a.forEach(b=>albumGrid.appendChild(makeCard(b,true)))
 }
-function makeCard(b,found){let c=document.createElement("article");c.className="card";let art=document.createElement("div");art.className="bird"+(found?"":" locked");art.innerHTML=birdSVG(b.type,b.cor);let i=document.createElement("div");i.className="cardinfo";let n=document.createElement("b");n.textContent=b.nome;let s=document.createElement("small");s.textContent=b.cientifico||"";i.append(n,s);c.append(art,i);return c}
+function makeCard(b,found){let c=document.createElement("article");c.className="card";let art=document.createElement("div");art.className="bird"+(found?"":" locked");art.innerHTML=birdSVG(b.type,b.cor);let i=document.createElement("div");i.className="cardinfo";let n=document.createElement("b");n.textContent=b.nome;let s=document.createElement("small");s.textContent=b.cientifico||"";i.append(n,s);c.append(art,i);colocarFoto(c,b);return c}
 function renderProfile(){
  let n=album().length,l=1+Math.floor(n/5),q=n%5,unlocked=[n>=1,n>=5,n>=10,uniqueValues("hab")>=3,n>=15,Number(getStats().soundsPlayed||0)>=1,uniqueValues("local")>=3,n>=25,n>=50,n>=20,n>=30,uniqueValues("local")>=5,n>=40,n>=60].filter(Boolean).length;
  pl.textContent=l;pb.textContent=n;pa.textContent=unlocked;pg.style.width=(n%5===0&&n>0?100:(q/5*100))+"%";pt.textContent=n>=5?"Continue descobrindo para subir de nível.":q+" de 5 descobertas para o próximo nível";
@@ -212,15 +228,18 @@ function renderSettings(){
  const n=album().length,pct=Math.min(100,n/50*100),v=Number(localStorage.getItem("velo_volume")||80);
  volumeControl.value=v;volumeValue.value=v+"%";settingsDiscoveryText.textContent=n+" / 50";settingsDiscoveryBar.style.width=pct+"%";
 }
-function loadProfilePhoto(){const saved=localStorage.getItem(PROFILE_KEY),box=document.getElementById("profileAvatar"),remove=document.getElementById("removeProfilePhoto");if(!box)return;box.textContent="";if(saved){box.classList.add("hasPhoto");let im=document.createElement("img");im.src=saved;im.alt="Foto de perfil";box.appendChild(im);remove?.classList.remove("hidden")}else{box.classList.remove("hasPhoto");let s=document.createElement("span");s.textContent="FOTO DE PERFIL";box.appendChild(s);remove?.classList.add("hidden")}}
+function loadProfilePhoto(){const saved=localStorage.getItem(PROFILE_KEY),box=document.getElementById("profileAvatar"),remove=document.getElementById("removeProfilePhoto");if(!box)return;box.textContent="";if(saved){box.classList.add("hasPhoto");let im=document.createElement("img");im.src=saved;im.alt="Foto de perfil";box.appendChild(im);remove?.classList.remove("hidden")}else{box.classList.remove("hasPhoto");let s=document.createElement("span");s.textContent="FOTO DE PERFIL";box.appendChild(s);remove?.classList.add("hidden")}iconePerfil()}
+function iconePerfil(){const m=document.getElementById("markPerfil");if(!m)return;const saved=localStorage.getItem(PROFILE_KEY);let im=m.querySelector("img.markFoto");if(saved){if(!im){im=document.createElement("img");im.className="markFoto";im.alt="Foto de perfil";m.appendChild(im)}im.src=saved;m.classList.add("comFoto")}else{if(im)im.remove();m.classList.remove("comFoto")}}
+function verFotoPerfil(){const saved=localStorage.getItem(PROFILE_KEY);if(!saved){toast("Escolha uma foto de perfil primeiro! 📷");return mostrar("perfil")}let o=document.getElementById("perfilGrande");if(!o){o=document.createElement("div");o.id="perfilGrande";o.className="perfilGrande";o.onclick=e=>{if(e.target===o)o.remove()};document.body.appendChild(o)}o.innerHTML='<div class="perfilGrandeBox"><img alt="Foto de perfil"><b>Aventureiro VELO</b><div class="perfilGrandeBtns"><button class="primary" type="button">Ver meu perfil</button><button class="secondary" type="button">Fechar</button></div></div>';o.querySelector("img").src=saved;const [ir,fe]=o.querySelectorAll("button");ir.onclick=()=>{o.remove();mostrar("perfil")};fe.onclick=()=>o.remove()}
 function removerFotoPerfil(){localStorage.removeItem(PROFILE_KEY);loadProfilePhoto();toast("Foto de perfil removida.")}
-function setVolume(v){localStorage.setItem("velo_volume",String(v));volumeValue.value=v+"%";if(window.currentAudio)window.currentAudio.volume=v/100}
+function setVolume(v){localStorage.setItem("velo_volume",String(v));volumeValue.value=v+"%";window.FichaPokedex&&FichaPokedex.definirVolume(v/100);document.querySelectorAll(".volSons").forEach(r=>{r.value=v});document.querySelectorAll(".volSonsTxt").forEach(o=>{o.textContent=v+"%"})}
 /* Canto de verdade: a IA não tem link de áudio confiável, então buscamos uma
    gravação real da ave (Wikimedia Commons) pelo nome científico. */
-function playBirdSound(ave){if(!ave)return toast("Descubra uma ave primeiro!");let st=getStats();st.soundsPlayed=Number(st.soundsPlayed||0)+1;saveStats(st);FichaPokedex.tocarSom(ave.cientifico,ave.nome)}
+function playBirdSound(ave,botao){if(!ave)return toast("Descubra uma ave primeiro!");let st=getStats();st.soundsPlayed=Number(st.soundsPlayed||0)+1;saveStats(st);FichaPokedex.tocarSom(ave.cientifico,ave.nome,botao)}
 
 document.getElementById("profilePhotoInput")?.addEventListener("change",e=>{const f=e.target.files?.[0];if(!f||!f.type.startsWith("image/"))return toast("Escolha uma imagem para o perfil.");const r=new FileReader();r.onload=async()=>{try{localStorage.setItem(PROFILE_KEY,await reduzirParaAlbum(r.result))}catch(e){};loadProfilePhoto();toast("Foto de perfil atualizada!")};r.readAsDataURL(f)});
 document.getElementById("volumeControl")?.addEventListener("input",e=>setVolume(e.target.value));
+addEventListener("load",()=>window.FichaPokedex&&FichaPokedex.definirVolume(Number(localStorage.getItem("velo_volume")||80)/100));
 loadProfilePhoto();
 window.addEventListener("beforeunload",()=>{if(cameraStream)cameraStream.getTracks().forEach(t=>t.stop());if(window.currentAudio)window.currentAudio.pause()});
 document.addEventListener("click",e=>{let s=document.getElementById("side");if(s.classList.contains("open")&&!s.contains(e.target)&&!e.target.closest(".menu"))s.classList.remove("open")});

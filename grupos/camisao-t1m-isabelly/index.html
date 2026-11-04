@@ -325,7 +325,7 @@ function mostrarResultado(r){
       <button class="botao verde" id="btnSalvar">📖 Salvar no álbum</button>
       <button class="botao claro" id="btnFicha">📋 Ver a ficha</button>
     </div>`;
-  $("btnSom").onclick = () => FichaPokedex.tocarSom(r.nome_cientifico, r.nome_popular);
+  $("btnSom").onclick = () => FichaPokedex.tocarSom(r.nome_cientifico, r.nome_popular, $("btnSom"));
   $("btnSalvar").onclick = salvarNoAlbum;
   $("btnFicha").onclick = () => PokedexAdaptador.abrirFicha(r, miniatura);
 }

@@ -320,6 +320,7 @@
   function fechar() {
     if (!popAtual) return;
     const pop = popAtual; popAtual = null;
+    if (botaoAtual && pop.contains(botaoAtual)) pararSom();   // fechou a ficha: o canto para junto
     if (pop._aoFechar) pop._aoFechar();
     if (observador) { observador.disconnect(); observador = null; }
     pop.remove();
@@ -357,7 +358,7 @@
       el.type = "button";
       el.className = "fp-btn" + (b.principal ? " principal" : "");
       el.textContent = b.texto;
-      el.onclick = () => { if (b.fechar !== false) fechar(); if (b.aoClicar) b.aoClicar(); };
+      el.onclick = () => { if (b.fechar !== false) fechar(); if (b.aoClicar) b.aoClicar(el); };
       caixa.appendChild(el);
     });
     if (!caixa.children.length) caixa.remove();
@@ -504,18 +505,67 @@
     b.textContent = msg; b.classList.add("on");
     clearTimeout(balao.t); balao.t = setTimeout(() => b.classList.remove("on"), 3200);
   }
-  function tocarSom(cientifico, popular) {
+  /* Volume dos sons (0 a 1), guardado no aparelho. No iPad o volume do <audio>
+     não pode ser mudado pelo site, então usamos o "Web Audio" (GainNode). */
+  let volume = 1;
+  try { const v = parseFloat(localStorage.getItem("fpVolume")); if (v >= 0 && v <= 1) volume = v; } catch (e) {}
+  let ctxAudio = null, ganho = null;
+  function aplicarVolume(a) {
+    a.volume = volume;
+    if (ganho) ganho.gain.value = volume;
+  }
+  function ligarGanho(a) {
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!ctxAudio) { ctxAudio = new AC(); ganho = ctxAudio.createGain(); ganho.connect(ctxAudio.destination); }
+      if (ctxAudio.state === "suspended") ctxAudio.resume();
+      ctxAudio.createMediaElementSource(a).connect(ganho);
+      ganho.gain.value = volume;
+    } catch (e) {}
+  }
+  function definirVolume(v) {
+    volume = Math.max(0, Math.min(1, Number(v)));
+    try { localStorage.setItem("fpVolume", String(volume)); } catch (e) {}
+    if (audioAtual) aplicarVolume(audioAtual);
+  }
+  /* tocarSom(científico, popular, botão?): toca a gravação real. Se vier o
+     botão, ele vira "⏹️ Parar" enquanto toca e um novo toque para o som. */
+  let botaoAtual = null;
+  function voltarBotao() {
+    if (botaoAtual && botaoAtual.dataset.fpTextoSom) { botaoAtual.textContent = botaoAtual.dataset.fpTextoSom; botaoAtual.classList.remove("fp-tocando"); }
+    botaoAtual = null;
+  }
+  function pararSom() {
     if (audioAtual) { audioAtual.pause(); audioAtual = null; }
+    voltarBotao();
+  }
+  function tocarSom(cientifico, popular, botao) {
+    if (botao && botao === botaoAtual && audioAtual) { pararSom(); balao("⏹️ Som parado."); return Promise.resolve(false); }
+    pararSom();
     // o tablet só deixa tocar som criado no toque do dedo: o áudio nasce aqui
     const a = new Audio(); audioAtual = a;
+    const ios = /iP(ad|hone|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    if (ios) { a.crossOrigin = "anonymous"; ligarGanho(a); }
+    aplicarVolume(a);
     a.play().catch(() => {});
+    if (botao) {
+      botaoAtual = botao;
+      if (!botao.dataset.fpTextoSom) botao.dataset.fpTextoSom = botao.textContent;
+      botao.textContent = /canto/i.test(botao.dataset.fpTextoSom) ? "⏹️ Parar o canto" : /rugido/i.test(botao.dataset.fpTextoSom) ? "⏹️ Parar o rugido" : "⏹️ Parar o som"; botao.classList.add("fp-tocando");
+    }
+    a.addEventListener("ended", () => { if (audioAtual === a) { audioAtual = null; voltarBotao(); } });
     balao("🔎 Procurando o som de " + (popular || cientifico) + "...");
     return somDaEspecie(cientifico, popular).then(u => {
       if (audioAtual !== a) return false;
-      if (!u) { balao("🙈 Não encontrei uma gravação de " + (popular || cientifico) + "."); return false; }
+      if (!u) { balao("🙈 Não encontrei uma gravação de " + (popular || cientifico) + "."); audioAtual = null; voltarBotao(); return false; }
       a.src = u;
       return a.play().then(() => { balao("🔊 Ouvindo: " + (popular || cientifico)); return true; })
-        .catch(() => { balao("Não consegui tocar o som agora. Tente de novo!"); return false; });
+        .catch(() => {
+          // se o "Web Audio" não conseguir, toca do jeito simples
+          if (ios && audioAtual === a) { const b = new Audio(u); audioAtual = b; aplicarVolume(b); b.addEventListener("ended", () => { if (audioAtual === b) { audioAtual = null; voltarBotao(); } }); return b.play().then(() => true).catch(() => { voltarBotao(); return false; }); }
+          balao("Não consegui tocar o som agora. Tente de novo!"); audioAtual = null; voltarBotao(); return false;
+        });
     });
   }
   /* trocarFotos(): toda <img data-especie="..."> ganha a foto nítida; todo
@@ -678,5 +728,5 @@ html.fp-travado,html.fp-travado body{overflow:hidden}
 @media (max-width:420px){.fp-corpo{padding:0 14px 14px}.fp-pop{padding:8px}.fp{padding:16px}.fp-name{font-size:22px}.fp-foto{width:52px;height:52px}.fp-tab{font-size:11.5px;gap:4px}}
 `;
 
-  window.FichaPokedex = { configurar, mostrar, aviso, carregando, fechar, ligarCamera, escolherArquivo, trocarFotos, urlDaEspecie, mapaBiomas, BIOMAS, somDaEspecie, tocarSom, balao };
+  window.FichaPokedex = { configurar, mostrar, aviso, carregando, fechar, ligarCamera, escolherArquivo, trocarFotos, urlDaEspecie, mapaBiomas, BIOMAS, somDaEspecie, tocarSom, pararSom, definirVolume, lerVolume: () => volume, balao };
 })();

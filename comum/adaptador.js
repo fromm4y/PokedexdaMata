@@ -225,7 +225,7 @@
     marcarAlbum();
   }
   /* som: true -> botão "🔊 Ouvir som" na ficha, com uma gravação real da espécie */
-  const acaoSom = info => ({ texto: CFG.textoSom || "🔊 Ouvir som", fechar: false, aoClicar: () => FichaPokedex.tocarSom(info.nome_cientifico, info.nome_popular || info.nome) });
+  const acaoSom = info => ({ texto: CFG.textoSom || "🔊 Ouvir som", fechar: false, aoClicar: botao => FichaPokedex.tocarSom(info.nome_cientifico, info.nome_popular || info.nome, botao) });
   function abrirFicha(info, foto, acoes) {
     if (!info) return;
     if (CFG.som) acoes = [acaoSom(info)].concat(acoes || []);

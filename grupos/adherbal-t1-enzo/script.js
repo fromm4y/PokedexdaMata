@@ -81,7 +81,7 @@ $$(".map-point").forEach(btn=>btn.addEventListener("click",()=>{
 }));
 
 const audio=$("#jaguarAudio"), roarBtn=$("#roarButton");
-roarBtn.addEventListener("click",()=>FichaPokedex.tocarSom("Panthera onca","Onça-pintada")); // rugido real (Wikimedia Commons)
+roarBtn.addEventListener("click",()=>FichaPokedex.tocarSom("Panthera onca","Onça-pintada",roarBtn)); // rugido real (Wikimedia Commons)
 
 // Identificação de mamíferos — mantém a rota e o formato do backend existentes.
 const photoInput=$("#photoInput"), photoPreview=$("#photoPreview");

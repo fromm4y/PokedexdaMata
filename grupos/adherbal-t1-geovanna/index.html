@@ -631,7 +631,7 @@
 
     // canto de verdade (gravação do Wikimedia Commons), pelo nome científico
     soundBtn.style.display = "inline-block";
-    soundBtn.onclick = () => FichaPokedex.tocarSom(dados.nome_cientifico, dados.nome);
+    soundBtn.onclick = () => FichaPokedex.tocarSom(dados.nome_cientifico, dados.nome, soundBtn);
 
     if (dados.raro === true) {
       points += 150;
