@@ -361,12 +361,12 @@ input[type=file]{display:none}
 <div class="modal hidden" id="cameraModal">
   <div class="modal-card">
     <div class="back-row"><h2 style="margin:0">📷 Câmera</h2><button class="btn" id="closeCamera">Fechar</button></div>
-    <video id="cameraVideo" class="camera-video" autoplay playsinline></video>
+    <video id="cameraVideo" class="camera-video" autoplay muted playsinline></video>
     <canvas id="cameraCanvas" class="hidden"></canvas>
     <p class="muted" id="cameraMessage">Permita o acesso à câmera para tirar a foto.</p>
     <div class="modal-actions">
       <button class="btn" id="cameraGallery">🖼️ Escolher da galeria</button>
-      <button class="btn primary" id="captureBtn">📸 Tirar foto</button>
+      <button class="btn primary" id="captureBtn">📸 Capturar agora</button>
     </div>
   </div>
 </div>
