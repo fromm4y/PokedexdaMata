@@ -17,9 +17,20 @@ html.claro{--card1:#ffffffee;--card2:#e8f6ffee;--text:#0b2a55;--suave:#3d5f8a;
 html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--text)}
 body{background:var(--fundo);background-attachment:fixed;background-color:#031432}
 html.claro body{background-color:#e4f4ff}
-body:before{content:"🐟   🐠      🐟        🐡      🐠       🐟";position:fixed;top:100px;left:-100px;width:130%;font-size:32px;letter-spacing:22px;opacity:.11;pointer-events:none;animation:swim 22s linear infinite;z-index:0}
-html.sem-peixinhos body:before{display:none}
-@keyframes swim{from{transform:translateX(-50px)}to{transform:translateX(150px)}}
+/* fundo vivo: cardume nadando pela tela toda + bolhas subindo */
+#oceano{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+html.sem-peixinhos #oceano{display:none}
+.peixe{position:absolute;left:-10%;font-size:var(--t);opacity:var(--o);animation:nadar var(--d) linear infinite;animation-delay:var(--a)}
+.peixe.volta{animation-name:voltar}.peixe.volta span{display:inline-block;transform:scaleX(-1)}
+.peixe span{display:inline-block;animation:balanca 2.4s ease-in-out infinite}
+@keyframes nadar{from{left:-10%}to{left:110%}}
+@keyframes voltar{from{left:110%}to{left:-10%}}
+@keyframes balanca{50%{transform:translateY(-10px)}}
+.peixe.volta span{animation:balancaVolta 2.4s ease-in-out infinite}
+@keyframes balancaVolta{0%,100%{transform:scaleX(-1)}50%{transform:scaleX(-1) translateY(-10px)}}
+.bolha{position:absolute;bottom:-30px;width:var(--t);height:var(--t);border-radius:50%;border:2px solid #ffffff66;background:radial-gradient(circle at 30% 30%,#ffffff55,transparent 60%);animation:subir var(--d) linear infinite;animation-delay:var(--a)}
+@keyframes subir{from{transform:translate(0,0)}50%{transform:translate(14px,-55vh)}to{transform:translate(-6px,-112vh);opacity:.2}}
+html.claro .bolha{border-color:#2b8fbf66}
 #app{position:relative;z-index:1;width:min(100%,1180px);margin:auto;min-height:100vh;padding-bottom:100px}
 .page{display:none;padding:22px}
 .page.active{display:block;animation:entra .25s ease}
@@ -77,7 +88,7 @@ input[type=file]{display:none}
 .alert strong{color:#ff7692}
 .duas{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
 /* Mapa */
-.map{height:380px;border-radius:20px;border:1px solid #4ab9ff99;overflow:hidden;background:#06275c}
+.map{min-height:380px;border-radius:20px;overflow:hidden}
 .map-vazio{height:100%;display:grid;place-items:center;text-align:center;color:#cde1ff;font-size:18px;padding:20px}
 .map-vazio span{font-size:80px;display:block}
 /* Álbum */
@@ -112,6 +123,7 @@ input[type=file]{display:none}
 </style>
 </head>
 <body>
+<div id="oceano" aria-hidden="true"></div>
 <div id="app">
 
 <!-- 1. INÍCIO -->
@@ -198,8 +210,8 @@ input[type=file]{display:none}
 <section class="page" id="mapa">
  <div class="header"><button class="btn claro" data-ir="resultado">← Resultado</button><h2>🗺️ Mapa</h2><span></span></div>
  <div class="card">
-  <h2 style="margin-top:0">Mapa de habitat</h2>
-  <div class="map" id="mapaPeixe"><div class="map-vazio"><div><span>🗺️</span>Identifique um peixe para ver no mapa os biomas onde ele vive.</div></div></div>
+  <h2 style="margin-top:0">Rios onde os peixes vivem</h2>
+  <div class="map" id="mapaPeixe"><div class="map-vazio"><div><span>🐠</span>Identifique um peixe para ver ele nadando nos rios do bioma onde vive.</div></div></div>
   <div class="card" style="margin-top:15px">
    <h3 style="margin-top:0">🌊 Onde vive?</h3><p id="mapInfo" style="margin:0">Selecione um peixe identificado para ver informações sobre seu habitat.</p>
   </div>
@@ -401,18 +413,25 @@ function carregarAlbum(){
 }
 carregarAlbum();
 
-/* Mapa de verdade: os biomas do último peixe (o mesmo mapa da ficha) */
-let mapaDe = null;
+/* Habitat: os peixes que você descobriu nadando nos rios do bioma (em vez do mapa) */
 function desenharMapa(){
-  if (!ultimoPeixe || !window.FichaPokedex || mapaDe === ultimoPeixe) return;
-  mapaDe = ultimoPeixe;
-  const biomas = lista(ultimoPeixe.biomas);
-  const caixa = $("mapaPeixe"); caixa.innerHTML = "";
-  const m = document.createElement("div"); m.style.cssText = "width:100%;height:100%"; caixa.appendChild(m);
-  FichaPokedex.mapaBiomas(m, biomas.length ? biomas : null, { escuro: opcoes.escuro });
-  $("mapInfo").textContent = (ultimoPeixe.nome_popular || "Este peixe") + (biomas.length ? " vive em: " + biomas.join(", ") + "." : " ainda não tem bioma conhecido.") +
-    (ultimoPeixe.habitat_descricao ? " " + ultimoPeixe.habitat_descricao : "");
+  const album = lerAlbum();
+  const itens = album.map(p => ({ nome: p.nome, img: p.foto, icone: "🐟", fauna: true, biomas: p.biomas && p.biomas.length ? p.biomas : ["Amazônia"], atual: !!ultimoPeixe && p.nome === ultimoPeixe.nome_popular }));
+  if (ultimoPeixe && !itens.some(i => i.atual)) itens.unshift({ nome: ultimoPeixe.nome_popular, img: miniatura, icone: "🐟", fauna: true, biomas: lista(ultimoPeixe.biomas).length ? lista(ultimoPeixe.biomas) : ["Amazônia"], atual: true });
+  if (!itens.length || !window.FichaPokedex) return;
+  const mostrarInfo = bio => { const aqui = itens.filter(i => i.biomas.includes(bio)).map(i => i.nome);
+    $("mapInfo").textContent = aqui.length ? "Nos rios da " + bio + " nadam: " + aqui.join(", ") + "." : "Você ainda não descobriu peixes dos rios da " + bio + ". Que tal procurar? 🎣"; };
+  const est = FichaPokedex.cena($("mapaPeixe"), { itens, aquatico: true, aoTrocar: mostrarInfo });
+  if (est) mostrarInfo(est.bioma);
 }
+/* cardume do fundo e bolhas */
+(function () {
+  const o = $("oceano"), P = ["🐟", "🐠", "🐡", "🐟", "🐠", "🦈", "🐟", "🐠", "🐡", "🐟", "🐠", "🐟", "🦐", "🐠"];
+  let h = "";
+  P.forEach((p, i) => h += `<div class="peixe${i % 2 ? " volta" : ""}" style="top:${5 + (i * 67) % 88}%;--t:${22 + (i * 13) % 26}px;--o:${(.28 + ((i * 7) % 10) / 40).toFixed(2)};--d:${18 + (i * 7) % 20}s;--a:${-(i * 3.1).toFixed(1)}s"><span>${p}</span></div>`);
+  for (let i = 0; i < 18; i++) h += `<div class="bolha" style="left:${(i * 53) % 100}%;--t:${6 + (i * 5) % 14}px;--d:${9 + (i * 3) % 10}s;--a:${-(i * 1.7).toFixed(1)}s"></div>`;
+  o.innerHTML = h;
+})();
 </script>
 
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
@@ -425,6 +444,7 @@ PokedexAdaptador.iniciar({
   etapas: { foto: ["#analisar"] },   // o botão de identificar só aparece depois de escolher a foto
   icone: "🐟", fauna: true,
   cor: "#168cff", cor2: "#7d3cff",
+  aquatico: true,   // na ficha, o peixe nada no rio (e não anda na floresta)
   escuro: () => opcoes.escuro,
   noturno: { fundo: "#071d52", texto: "#ffffff", suave: "#cde1ff" },
   claro: { fundo: "#f5fbff", texto: "#0b2a55", suave: "#3d5f8a" },

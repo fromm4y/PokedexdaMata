@@ -389,7 +389,8 @@
     Object.assign(CFG, o || {});
     FichaPokedex.configurar({
       icone: CFG.icone, cor: CFG.cor, cor2: CFG.cor2, fauna: !!CFG.fauna,
-      escuro: CFG.escuro, claro: CFG.claro || {}, noturno: CFG.noturno || {}
+      escuro: CFG.escuro, claro: CFG.claro || {}, noturno: CFG.noturno || {},
+      aquatico: !!CFG.aquatico, fundosCena: CFG.fundosCena || {}
     });
     if (CFG.esconder.length) {
       const s = document.createElement("style");

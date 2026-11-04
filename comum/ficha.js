@@ -57,6 +57,9 @@
     "Amazônia": "floresta_amazonica", "Cerrado": "cerrado", "Mata Atlântica": "mata_atlantica",
     "Caatinga": "caatinga", "Pampa": "pampa", "Pantanal": "pantanal"
   };
+  /* Fundo "debaixo d'água" de um rio (para peixes e outros bichos aquáticos).
+     Pode ser trocado por fotos: configurar({ fundosCena: { "Amazônia": "rio-amazonia.webp" } }). */
+  const FUNDO_AQUA = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fd3d6"/><stop offset=".35" stop-color="#2f8f9a"/><stop offset="1" stop-color="#0b3b47"/></linearGradient><linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect width="600" height="400" fill="url(#a)"/><path d="M0 18 Q75 8 150 18 T300 18 T450 18 T600 18 V0 H0Z" fill="#c9f1ee" opacity=".6"/><g fill="url(#r)"><path d="M70 0h40L60 300H30Z"/><path d="M230 0h30L200 280h-26Z"/><path d="M400 0h44L380 320h-34Z"/><path d="M520 0h26L500 260h-20Z"/></g><path d="M0 330 Q90 300 180 325 T360 318 T600 322 V400 H0Z" fill="#c8a66b"/><path d="M0 352 Q120 336 240 352 T480 348 T600 350 V400 H0Z" fill="#a8844f"/><g fill="#2e7d4f"><path d="M40 340 C30 280 60 250 45 200 C70 250 60 290 58 340Z"/><path d="M70 342 C80 300 60 270 78 230 C92 275 86 305 84 342Z"/><path d="M520 336 C505 270 540 240 525 180 C555 240 545 285 540 336Z"/><path d="M552 338 C560 300 545 280 560 250 C572 285 568 310 566 338Z"/><path d="M300 330 C292 300 310 285 302 260 C320 288 315 310 312 330Z"/></g><g fill="#6b5a46" opacity=".8"><ellipse cx="200" cy="345" rx="34" ry="12"/><ellipse cx="430" cy="342" rx="26" ry="10"/></g></svg>');
   const PERIODOS = { dia: "Dia", amanhecer: "Amanhecer", crepusculo: "Crepúsculo", noite: "Noite" };
 
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -180,8 +183,12 @@
     }
     return out;
   }
-  function htmlCena(bioma, periodo, itens) {
+  function htmlCena(bioma, periodo, itens, extra) {
+    extra = extra || {};
     const cenario = BIOMA_CENARIO[bioma] || "floresta_amazonica";
+    const fundos = Object.assign({}, CFG.fundosCena || {}, extra.fundos || {});
+    const aqua = !!(extra.aquatico || CFG.aquatico);
+    const fundoUrl = fundos[bioma] || (aqua ? FUNDO_AQUA : fotoCenario(cenario));
     const doBioma = itens.filter(it => lista(it.biomas).includes(bioma));
     const fauna = doBioma.filter(it => it.fauna), flora = doBioma.filter(it => !it.fauna);
     const roam = fauna.map((it, i) => `
@@ -195,22 +202,22 @@
     const vazio = doBioma.length ? "" : `<div class="fp-empty"><p>Esta espécie não aparece no(a) <strong>${esc(bioma)}</strong>. Escolha outro bioma acima.</p></div>`;
     const botoes = Object.entries(PERIODOS).map(([k, n]) => `<button data-per="${k}" class="${k === periodo ? "on" : ""}">${n}</button>`).join("");
     const seed = (bioma.charCodeAt(0) || 65) + bioma.length;
-    return `<div class="fp-scene per-${periodo}">
-      <div class="fp-photo" style="background-image:url('${fotoCenario(cenario)}')"></div>
+    return `<div class="fp-scene per-${periodo}${aqua ? " fp-aqua" : ""}">
+      <div class="fp-photo" style="background-image:url(&quot;${fundoUrl}&quot;)"></div>
       <div class="fp-grade"></div><div class="fp-rays"></div><div class="fp-stars"></div>
       <div class="fp-particles">${motes(seed)}</div><div class="fp-vignette"></div>
       ${roam}${garden}${vazio}
       <div class="fp-controls">${botoes}</div>
-      <div class="fp-overlay"><div class="fp-bioma" data-base="${esc(CENARIOS[cenario].nome)}">${esc(CENARIOS[cenario].nome)} · ${PERIODOS[periodo]}</div>
-        <div class="fp-scene-title">${fauna.length ? "Toque no bichinho para ver o nome" : "Toque na plantinha para ver o nome"}</div></div>
+      <div class="fp-overlay"><div class="fp-bioma" data-base="${esc(aqua ? "Rios da " + bioma : CENARIOS[cenario].nome)}">${esc(aqua ? "Rios da " + bioma : CENARIOS[cenario].nome)} · ${PERIODOS[periodo]}</div>
+        <div class="fp-scene-title">${fauna.length ? (aqua ? "Toque no peixinho para ver o nome" : "Toque no bichinho para ver o nome") : "Toque na plantinha para ver o nome"}</div></div>
     </div>`;
   }
   function desenharCena(caixa, estado) {
     const box = caixa.querySelector(".fp-safari");
     box.innerHTML = `<div class="fp-biomes">${Object.entries(BIOMAS).map(([nome, b]) =>
       `<button class="fp-biome ${nome === estado.bioma ? "active" : ""}" data-bioma="${esc(nome)}" style="--bc:${b.cor}"><span class="fp-dot"></span>${esc(nome)}</button>`).join("")}</div>` +
-      htmlCena(estado.bioma, estado.periodo, estado.itens);
-    box.querySelectorAll(".fp-biome").forEach(b => b.onclick = () => { estado.bioma = b.dataset.bioma; desenharCena(caixa, estado); });
+      htmlCena(estado.bioma, estado.periodo, estado.itens, estado);
+    box.querySelectorAll(".fp-biome").forEach(b => b.onclick = () => { estado.bioma = b.dataset.bioma; desenharCena(caixa, estado); if (estado.aoTrocar) estado.aoTrocar(estado.bioma); });
     box.querySelectorAll(".fp-roam,.fp-plant").forEach(b => b.onclick = () => b.classList.toggle("show"));
     const cena = box.querySelector(".fp-scene");
     cena.querySelectorAll(".fp-controls button").forEach(b => b.onclick = () => {
@@ -220,6 +227,22 @@
       const lbl = cena.querySelector(".fp-bioma");
       lbl.textContent = lbl.dataset.base + " · " + PERIODOS[estado.periodo];
     });
+  }
+  /* cena(el, { bioma, itens: [{ nome, img, icone, fauna, biomas, atual }], aquatico, fundos, aoTrocar }):
+     a cena do bioma com os bichinhos andando (ou nadando), fora da ficha. */
+  function cena(el, o) {
+    o = o || {};
+    if (!el) return null;
+    carregarRecursos();
+    el.innerHTML = '<div class="fp fp-cena-solta"><div class="fp-safari"></div></div>';
+    const caixa = el.firstChild; pintar(caixa);
+    const itens = (o.itens || []).map(it => ({ nome: it.nome || "", img: it.img || "", icone: it.icone || CFG.icone || "🐾", cor: it.cor || CFG.cor,
+      fauna: it.fauna !== undefined ? !!it.fauna : CFG.fauna !== false, biomas: lista(it.biomas), atual: !!it.atual }));
+    const primeiro = (itens.find(i => i.atual) || itens[0] || {}).biomas;
+    const estado = { bioma: o.bioma || (primeiro && primeiro[0]) || "Amazônia", periodo: o.periodo || "dia", itens,
+      aquatico: !!o.aquatico, fundos: o.fundos || {}, aoTrocar: o.aoTrocar };
+    desenharCena(caixa, estado);
+    return estado;
   }
   function htmlHabitat(d) {
     const comp = lista(d.companheiros_habitat).slice(0, 5);
@@ -304,7 +327,8 @@
     const estado = {
       bioma: biomas[0] || "Amazônia",
       periodo: PERIODOS[d.cenario_periodo] ? d.cenario_periodo : "dia",
-      itens: [{ nome: d.nome_popular || d.nome || "Espécie", img: o.foto || "", icone, cor, fauna: !!CFG.fauna, biomas, atual: true }]
+      itens: [{ nome: d.nome_popular || d.nome || "Espécie", img: o.foto || "", icone, cor, fauna: !!CFG.fauna, biomas, atual: true }],
+      aquatico: !!CFG.aquatico
     };
     const tabs = el.querySelectorAll(".fp-tab"), panels = el.querySelectorAll(".fp-panel");
     tabs.forEach(t => t.onclick = () => {
@@ -670,6 +694,13 @@
 .fp .fp-roam:hover,.fp .fp-roam.show{animation-play-state:paused;z-index:8}
 .fp-walk{display:block;animation:fpBob .62s ease-in-out infinite}
 @keyframes fpBob{25%{transform:translateY(-3px) rotate(-3deg)}75%{transform:translateY(-3px) rotate(3deg)}}
+.fp .fp-aqua .fp-roam{bottom:auto;top:calc(100% - var(--lane) - 6%)}
+.fp .fp-aqua .fp-walk{animation:fpNada 2.6s ease-in-out infinite}
+@keyframes fpNada{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-12px) rotate(4deg)}}
+.fp .fp-aqua .fp-mote{border-radius:50%!important;background:transparent!important;border:1.5px solid #ffffffb0;box-shadow:none!important;width:9px!important;height:9px!important;animation:fpBolha 6s linear infinite!important}
+@keyframes fpBolha{from{transform:translateY(40px);opacity:0}15%{opacity:.9}to{transform:translateY(-260px);opacity:0}}
+.fp-cena-solta{background:none!important;padding:0!important}
+.fp-cena-solta .fp-scene{max-height:62vh}
 .fp-thumb,.fp-pthumb{position:relative;display:block;width:48px;height:48px;border-radius:50%;overflow:visible;border:2px solid var(--c);background:#04140d;box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 25%,transparent),0 0 18px var(--c)}
 .fp-pthumb{border-radius:50% 50% 50% 8px}
 .fp-thumb img,.fp-pthumb img{width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
@@ -728,5 +759,5 @@ html.fp-travado,html.fp-travado body{overflow:hidden}
 @media (max-width:420px){.fp-corpo{padding:0 14px 14px}.fp-pop{padding:8px}.fp{padding:16px}.fp-name{font-size:22px}.fp-foto{width:52px;height:52px}.fp-tab{font-size:11.5px;gap:4px}}
 `;
 
-  window.FichaPokedex = { configurar, mostrar, aviso, carregando, fechar, ligarCamera, escolherArquivo, trocarFotos, urlDaEspecie, mapaBiomas, BIOMAS, somDaEspecie, tocarSom, pararSom, definirVolume, lerVolume: () => volume, balao };
+  window.FichaPokedex = { configurar, mostrar, aviso, carregando, fechar, ligarCamera, escolherArquivo, trocarFotos, urlDaEspecie, mapaBiomas, BIOMAS, cena, somDaEspecie, tocarSom, pararSom, definirVolume, lerVolume: () => volume, balao };
 })();
