@@ -285,6 +285,8 @@
     <p id="curiosities"></p>
 
     <div class="stats">
+      <div class="stat"><strong id="level">1</strong>Nível do explorador</div>
+      <div class="stat"><strong id="fruitProgress">0/4</strong>Frutas para o próximo nível</div>
       <div class="stat"><strong id="points">0</strong>Pontos</div>
       <div class="stat"><strong id="medals">🏅 0</strong>Medalhas</div>
     </div>
@@ -295,9 +297,18 @@
     <button id="saveBtn">💾 Salvar no álbum</button>
   </section>
 
-  <section class="card">
+  <section class="card nivel-card" id="painelNivel">
     <h2>🏆 Minhas descobertas</h2>
+    <div class="nivel-topo">
+      <div class="nivel-selo"><span id="nivelEmoji">🌱</span><b>Nível <span id="totalLevel">1</span></b><small id="nivelNome">Semente</small></div>
+      <div class="nivel-trilha">
+        <p>A cada <b>4 frutas</b> descobertas, você sobe 1 nível! 🦊</p>
+        <div class="nivel-slots" id="nivelSlots"></div>
+        <p class="nivel-falta" id="nivelFalta"></p>
+      </div>
+    </div>
     <div class="stats">
+      <div class="stat"><strong id="totalFruitProgress">0/4</strong>Progresso do nível</div>
       <div class="stat"><strong id="totalPoints">0</strong>Pontos</div>
       <div class="stat"><strong id="totalMedals">🏅 0</strong>Medalhas</div>
     </div>
@@ -333,6 +344,42 @@ let currentFruit = null;
 let points = Number(localStorage.getItem("frutas_points") || 0);
 let medals = Number(localStorage.getItem("frutas_medals") || 0);
 let album = JSON.parse(localStorage.getItem("frutas_album") || "[]");
+
+// MINIGAME DO EDUARDO: a cada 4 frutas descobertas, o jogador avança exatamente 1 nível.
+let countedCurrentPhoto = false;
+let discoveredFruits = Number(localStorage.getItem("frutas_discovered_count") || 0);
+const NIVEIS = [["🌱", "Semente"], ["🌿", "Brotinho"], ["🌳", "Árvore jovem"], ["🍊", "Pomar"], ["🧺", "Feirante da floresta"], ["🦊", "Guardião das frutas"]];
+const FRUTINHAS = ["🍓", "🍍", "🥭", "🍊"];
+function nivelAtual() { return Math.floor(discoveredFruits / 4) + 1; }
+function desenharNivel() {
+  const level = nivelAtual(), progress = discoveredFruits % 4, [emoji, nome] = NIVEIS[Math.min(level, NIVEIS.length) - 1];
+  document.getElementById("level").textContent = level;
+  document.getElementById("fruitProgress").textContent = progress + "/4";
+  document.getElementById("totalLevel").textContent = level;
+  document.getElementById("totalFruitProgress").textContent = progress + "/4";
+  document.getElementById("nivelEmoji").textContent = emoji;
+  document.getElementById("nivelNome").textContent = nome;
+  document.getElementById("nivelSlots").innerHTML = FRUTINHAS.map((f, i) => `<span class="${i < progress ? "cheio" : ""}">${i < progress ? f : "?"}</span>`).join("");
+  document.getElementById("nivelFalta").textContent = "Faltam " + (4 - progress) + " fruta(s) para o nível " + (level + 1) + "!";
+}
+// Cada foto conta uma única vez, depois de uma identificação certa.
+function contarFrutaNoNivel() {
+  if (countedCurrentPhoto) return;
+  const antes = nivelAtual();
+  discoveredFruits += 1; countedCurrentPhoto = true;
+  localStorage.setItem("frutas_discovered_count", discoveredFruits);
+  desenharNivel();
+  if (nivelAtual() > antes) comemorarNivel(nivelAtual());
+}
+function comemorarNivel(n) {
+  const [emoji, nome] = NIVEIS[Math.min(n, NIVEIS.length) - 1];
+  const el = document.createElement("div");
+  el.className = "nivel-festa";
+  el.innerHTML = `<div class="nivel-festa-caixa"><div class="nivel-festa-chuva">🍓🍍🥭🍊🍇🥥🍌🍉</div><span>${emoji}</span><h2>Parabéns! 🎉</h2><p>Você evoluiu para o <b>nível ${n}</b>: ${nome}!</p><button type="button">Continuar explorando 🦊</button></div>`;
+  el.querySelector("button").onclick = () => el.remove();
+  setTimeout(() => document.body.appendChild(el), 900);   // depois da ficha aparecer
+}
+photoInput.addEventListener("change", () => { countedCurrentPhoto = false; });
 
 function showStatus(message, isError = false) {
   statusBox.style.display = "block";
@@ -509,6 +556,7 @@ O campo perigo deve ser true somente quando houver um aviso importante e verdade
     localStorage.setItem("frutas_points", points);
     localStorage.setItem("frutas_medals", medals);
     updateStats();
+    contarFrutaNoNivel();
   } catch (error) {
     console.error("Erro ao identificar fruta:", error);
     const msg = error?.message || "Falha ao identificar a fruta.";
@@ -535,6 +583,7 @@ saveBtn.addEventListener("click", async () => {
 });
 
 updateStats();
+desenharNivel();
 renderAlbum();
 </script>
 
@@ -575,6 +624,33 @@ footer{background:#2f7d43;color:#fff8e6;border-top:6px solid #f4a72c;font-weight
 .fruit-title{color:#2f7d43}
 body{background-size:150px 150px,auto!important;background-repeat:repeat!important}
 header{background-color:#1f5a33}
+/* ===== Tablet sempre: duas colunas (foto à esquerda, níveis e álbum à direita) ===== */
+main{max-width:1180px!important;margin-left:auto!important;margin-right:auto!important}
+@media(min-width:820px){
+  main{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+  main>.camera,main>#result{grid-column:1}
+  main>#painelNivel,main>section:last-child{grid-column:2}
+  main>.camera{grid-row:1 / span 2}main>#painelNivel{grid-row:1}
+}
+/* ===== Minigame dos níveis ===== */
+.nivel-topo{display:flex;gap:16px;align-items:center;margin-bottom:14px}
+.nivel-selo{flex:0 0 auto;width:130px;height:130px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 35% 30%,#fff,#ffe1a6);border:5px solid #f4a72c;box-shadow:0 6px 0 #b35e12}
+.nivel-selo span{font-size:40px;line-height:1}.nivel-selo b{font-family:'Fredoka',sans-serif;font-size:22px;color:#2f7d43}.nivel-selo small{font-weight:800;color:#8a5a12;font-size:12px;text-align:center;padding:0 8px}
+.nivel-trilha p{margin:0 0 8px}
+.nivel-slots{display:flex;gap:8px}
+.nivel-slots span{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-size:28px;font-weight:800;color:#b9c9a8;background:#f6faef;border:3px dashed #cfe6b5}
+.nivel-slots span.cheio{background:#fff;border:3px solid #7cc36a;animation:pula .5s ease}
+@keyframes pula{50%{transform:scale(1.18)}}
+#painelNivel .stats{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.nivel-falta{font-weight:800;color:#e07a10;margin-top:8px!important}
+.nivel-festa{position:fixed;inset:0;z-index:100000;background:#1f5a33cc;display:grid;place-items:center;padding:20px;animation:aparece .3s ease}
+@keyframes aparece{from{opacity:0}}
+.nivel-festa-caixa{background:#fffdf6;border:5px solid #f4a72c;border-radius:30px;padding:26px 30px;text-align:center;max-width:420px;box-shadow:0 10px 0 #b35e12;position:relative;overflow:hidden}
+.nivel-festa-caixa>span{font-size:76px;display:block;animation:pula 1s ease infinite}
+.nivel-festa-caixa h2{margin:6px 0;color:#2f7d43}
+.nivel-festa-chuva{font-size:26px;letter-spacing:6px;animation:chuva 1.4s ease-in-out infinite alternate}
+@keyframes chuva{to{transform:translateY(6px) rotate(2deg)}}
+@media(max-width:560px){.nivel-topo{flex-direction:column;text-align:center}.nivel-slots{justify-content:center}}
 </style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
