@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<script>
+/* Pedido da professora: cada vez que abre ou recarrega a página, tudo começa do zero. */
+["pokedexMataGame","luanAvesExtras","pdm_missions_done","pokedex-fichas-camisao-t1-luan","pokedex-album-camisao-t1-luan"].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#08251f">
@@ -38,7 +42,7 @@ h1,h2,h3,p{margin-top:0}.title{font-size:clamp(32px,5vw,48px);margin-bottom:8px}
 <p>Prepare seus olhos de explorador! Conheça aves brasileiras, descubra onde vivem, o que comem e como são seus cantos. Fotografe uma ave para tentar identificá-la e monte sua própria coleção.</p>
 <div class="actions"><button class="btn primary" data-page="camera">🌿 Começar a explorar</button><button class="btn blue" data-page="pokedex">🦜 Abrir coleção de aves</button></div>
 <div class="panel"><div class="stats"><div class="stat"><strong id="homeDiscovered">0</strong><span>Espécies descobertas</span></div><div class="stat"><strong id="homeAvailable">12</strong><span>Espécies no guia</span></div><div class="stat"><strong id="homePoints">0</strong><span>Pontos de exploração</span></div></div><p id="levelSummary" style="margin:14px 0 0;color:var(--mint);font-weight:800">Nível: Aprendiz da Mata</p><div class="progress"><span id="homeProgress"></span></div><small id="progressText" class="subtitle">Continue explorando para subir de nível!</small></div>
-</div><div class="forest-art" role="img" aria-label="Ilustração decorativa de floresta, rio, árvores e aves brasileiras"><div class="hill"></div><div class="hill two"></div><div class="tree t1"></div><div class="tree t2"></div><div class="tree t3"></div><div class="art-bird b1">🦜</div><div class="art-bird b2">🦅</div><div class="art-bird b3">🐦</div></div></div>
+</div><div class="forest-art kevin-hero" role="img" aria-label="Kevin, a ave colorida guardiã da Pokédex da Mata"><img src="kevin.webp" alt=""><span class="kevin-legenda">🪶 Kevin, o guardião da Pokédex</span></div></div>
 <div class="sectionhead"><h2>⭐ Ave em destaque</h2><button class="btn ghost smallbtn" data-page="pokedex">Ver todas →</button></div><div id="featuredBird"></div>
 <div class="sectionhead"><h2>🌟 Aves populares</h2></div><div id="popularBirds" class="birdgrid"></div>
 <div class="sectionhead"><h2>🧭 Sua próxima missão</h2></div><div id="homeMissions" class="grid g3"></div>
@@ -274,6 +278,20 @@ renderAll();
 /* a ficha tinha dois "Voltar à Pokédex"; fica só o de cima */
 #birdDetail .panel > .btn.ghost.smallbtn:first-child{display:none}
 #birdDetail .detail-layout .btn{margin:6px 8px 6px 0}
+/* Kevin na frente da página inicial */
+.forest-art.kevin-hero{padding:0;overflow:hidden;position:relative;background:#103b30}
+.forest-art.kevin-hero img{width:100%;height:100%;object-fit:cover;display:block;animation:kevinRespira 5s ease-in-out infinite}
+@keyframes kevinRespira{50%{transform:scale(1.03)}}
+.kevin-legenda{position:absolute;left:16px;bottom:16px;background:rgba(5,30,22,.8);color:#ffe36e;font-weight:800;padding:8px 14px;border-radius:999px}
+/* Pokédex: escaneada x resumida */
+.selo-ave{display:inline-block;margin-top:8px;font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.08)}
+.birdcard.escaneada{border-color:#66dca1!important;box-shadow:0 0 0 2px #66dca155}
+.birdcard.escaneada .selo-ave{background:#25bd78;color:#06231a}
+.birdcard.nao-escaneada .birdpic{filter:saturate(.35) brightness(.8)}
+.detailfacts .fact.trancado{display:none}
+.aviso-trancado{margin:16px 0;padding:14px 16px;border-radius:16px;background:rgba(255,218,72,.12);border:1px dashed #ffda48;line-height:1.5}
+.cena-ave{border-radius:18px;overflow:hidden}
+@media(min-width:900px){#birdDetail .ficha-mapa{display:inline-block;width:calc(50% - 10px);vertical-align:top}#birdDetail .ficha-mapa+.ficha-mapa{margin-left:16px}#birdDetail .ficha-mapa .mapa-ave{height:360px}#birdDetail .cena-ave .fp-scene{aspect-ratio:auto;height:360px}}
 /* Kevin no topo do álbum */
 .kevin-album{display:flex;gap:20px;align-items:center;margin-bottom:18px;padding:16px;border-radius:24px;background:linear-gradient(135deg,rgba(255,218,72,.16),rgba(37,189,120,.14));border:1px solid rgba(255,255,255,.14)}
 .kevin-album img{width:150px;height:150px;border-radius:22px;object-fit:cover;flex:0 0 auto;box-shadow:0 10px 26px rgba(0,0,0,.35);animation:kevinBalanca 3.5s ease-in-out infinite}
@@ -350,6 +368,7 @@ renderAll();
     FichaPokedex.mapaBiomas(caixa.querySelector(".mapa-ave"), b.biomes, { escuro: true });
   };
   // 2) Ave reconhecida pela IA que não está no guia vira uma ficha nova
+  window.garantirNoGuiaLuan = info => garantirNoGuia(info);
   function garantirNoGuia(info) {
     const nome = (lastIdentified && lastIdentified.name) || info.nome_popular || info.nome || "Ave identificada";
     const cient = (lastIdentified && lastIdentified.scientific) || info.nome_cientifico || "";
@@ -423,6 +442,56 @@ renderAll();
     saveState();
   };
   renderAll();
+})();
+/* ===== Pedidos da professora (rodada 3) ===== */
+(function () {
+  const achada = id => state.discoveries.find(d => d.birdId === id);
+  // a) Pokédex: ave ainda não escaneada aparece resumida; escaneada aparece completa e com a SUA foto
+  const cartaoAntes = renderBirdCard;
+  renderBirdCard = function (b) {
+    const c = cartaoAntes(b), d = achada(b.id), pic = c.querySelector(".birdpic"), info = c.querySelector(".birdinfo");
+    const selo = document.createElement("span"); selo.className = "selo-ave";
+    if (d) {
+      c.classList.add("escaneada"); selo.textContent = "✅ Escaneada";
+      if (d.photo) { pic.dataset.fpFoto = "1"; pic.style.backgroundImage = `linear-gradient(180deg,transparent 55%,rgba(0,0,0,.45)), url("${d.photo}")`; pic.classList.add("com-foto"); }
+    } else { c.classList.add("nao-escaneada"); selo.textContent = "🔒 Ficha resumida"; }
+    info.appendChild(selo);
+    return c;
+  };
+  const abrirAntes = openBird;
+  openBird = function (id, fromDiscovery) {
+    abrirAntes(id, fromDiscovery);
+    const b = getBird(id), host = $("birdDetail"); if (!b || !host) return;
+    const d = achada(b.id), painel = host.querySelector(".panel") || host;
+    if (!d) {
+      // ficha resumida: só nome, descrição, biomas e habitat
+      host.querySelectorAll(".detailfacts .fact").forEach(f => { if (!/Biomas|Habitat|Regiões/.test(f.textContent)) f.classList.add("trancado"); });
+      const ouvir = [...host.querySelectorAll("button")].find(x => /Ouvir canto/.test(x.textContent)); if (ouvir) ouvir.style.display = "none"; host.querySelectorAll("p.small").forEach(x => { if (/Ouvir canto/.test(x.textContent)) x.style.display = "none"; });
+      const aviso = document.createElement("div"); aviso.className = "aviso-trancado";
+      aviso.innerHTML = "🔒 <b>Ficha resumida.</b> Fotografe um(a) <b>" + b.name + "</b> de verdade e escaneie para desbloquear o tamanho, a alimentação, o comportamento, as curiosidades e o canto!";
+      const fatos = host.querySelector(".detailfacts"); if (fatos) fatos.before(aviso); else painel.appendChild(aviso);
+    }
+    // b) o bichinho andando no bioma onde vive (como na ficha), junto do mapa
+    const caixa = document.createElement("div"); caixa.className = "ficha-mapa";
+    caixa.innerHTML = "<h2>🌳 " + b.name + " no seu bioma</h2><div class='cena-ave'></div>";
+    painel.appendChild(caixa);
+    const desenhar = img => FichaPokedex.cena(caixa.querySelector(".cena-ave"), { itens: [{ nome: b.name, img, icone: b.icon, fauna: true, biomas: b.biomes, atual: true }] });
+    if (d && d.photo) desenhar(d.photo); else { desenhar(""); FichaPokedex.urlDaEspecie(b.scientific).then(u => { if (u && $("birdDetail").contains(caixa)) desenhar(u); }); }
+  };
+  // c) salva sozinho assim que reconhece (não perde a ave se tocar em outro botão)
+  let salvoDe = null;
+  new MutationObserver(() => {
+    if ($("result").classList.contains("hidden") || !lastIdentified || salvoDe === lastIdentified) return;
+    salvoDe = lastIdentified;
+    const info = (PokedexAdaptador.ultimaFicha && PokedexAdaptador.ultimaFicha()) || {};
+    garantirAveSilencioso(info);
+  }).observe($("result"), { attributes: true, attributeFilter: ["class"] });
+  function garantirAveSilencioso(info) {
+    if (window.garantirNoGuiaLuan) window.garantirNoGuiaLuan(info);
+    const antes = state.discoveries.length;
+    const notificar = window.notify; window.notify = () => {};
+    try { $("saveDiscovery").click(); } finally { setTimeout(() => { window.notify = notificar; if (state.discoveries.length > antes) notify("📖 Ave guardada no álbum automaticamente!"); renderAll(); }, 800); }
+  }
 })();
 PokedexAdaptador.iniciar({
   som: true, textoSom: "🔊 Ouvir o canto",  // canto de verdade (Wikimedia Commons)
