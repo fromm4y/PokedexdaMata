@@ -165,25 +165,37 @@
   const chaveFichas = () => "pokedex-fichas-" + GRUPO;
   const normNome = t => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
   const lerFichas = () => { try { return JSON.parse(localStorage.getItem(chaveFichas()) || "{}") || {}; } catch (e) { return {}; } };
-  async function guardarFicha(u) {
-    if (!u || !u.info) return;
-    const nome = normNome(u.info.nome_popular || u.info.nome);
-    if (!nome) return;
-    const foto = u.foto ? await reduzir(u.foto, 300, .7) : "";
-    const tudo = lerFichas();
-    tudo[nome] = { info: u.info, foto: foto || "", t: Date.now() };
-    let chaves = Object.keys(tudo).sort((a, b) => tudo[b].t - tudo[a].t);
+  /* Guarda a ficha JÁ (sem esperar a foto diminuir) e depois atualiza a foto:
+     antes, com foto grande, a figurinha aparecia antes da ficha estar guardada
+     e ficava sem o botão. Guarda todos os nomes (popular, comum, científico). */
+  function gravarFichas(tudo) {
+    const chaves = Object.keys(tudo).sort((a, b) => tudo[b].t - tudo[a].t);
     for (let n = Math.min(chaves.length, 40); n > 0; n -= 5) {
       const parte = {}; chaves.slice(0, n).forEach(k => parte[k] = tudo[k]);
-      try { localStorage.setItem(chaveFichas(), JSON.stringify(parte)); break; } catch (e) {}
+      try { localStorage.setItem(chaveFichas(), JSON.stringify(parte)); return; } catch (e) {}
     }
+  }
+  async function guardarFicha(u) {
+    if (!u || !u.info) return;
+    const i = u.info, nome = normNome(i.nome_popular || i.nome || i.nome_comum);
+    if (!nome) return;
+    const nomes = [...new Set([i.nome_popular, i.nome, i.nome_comum, i.name, i.nome_cientifico].map(normNome).filter(x => x.length >= 3))];
+    let tudo = lerFichas();
+    tudo[nome] = { info: i, foto: (tudo[nome] && tudo[nome].foto) || "", nomes, t: Date.now() };
+    gravarFichas(tudo); marcarAlbum();
+    const foto = u.foto ? await reduzir(u.foto, 300, .7) : "";
+    tudo = lerFichas();
+    if (tudo[nome] && foto) { tudo[nome].foto = foto; gravarFichas(tudo); }
+    setTimeout(marcarAlbum, 300);
   }
   function fichaPeloNome(texto) {
     const n = normNome(texto), tudo = lerFichas();
     if (!n) return null;
     if (tudo[n]) return tudo[n];
-    const k = Object.keys(tudo).find(k => k.length >= 4 && (n.includes(k) || k.includes(n)));
-    return k ? tudo[k] : null;
+    const bate = k => k.length >= 4 && (n.includes(k) || k.includes(n));
+    const v = Object.keys(tudo).map(k => tudo[k]).sort((a, b) => b.t - a.t)
+      .find(f => [normNome(f.info.nome_popular || f.info.nome)].concat(f.nomes || []).some(bate));
+    return v || null;
   }
   function marcarAlbum() {
     const o = CFG.albumFicha;
@@ -195,7 +207,7 @@
       if (!f) return;
       const b = document.createElement("span");
       b.className = "fp-ver-ficha"; b.setAttribute("role", "button"); b.tabIndex = 0; b.textContent = "📖 Ver ficha";
-      const abrir = e => { e.preventDefault(); e.stopPropagation(); abrirFicha(f.info, f.foto); };
+      const abrir = e => { e.preventDefault(); e.stopPropagation(); const g = fichaPeloNome(alvo.textContent) || f; abrirFicha(g.info, g.foto); };
       b.addEventListener("click", abrir); b.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") abrir(e); });
       c.appendChild(b);
     });
