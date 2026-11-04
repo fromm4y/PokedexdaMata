@@ -133,10 +133,11 @@
       .fp-album-txt b{font-size:16px;line-height:1.2}.fp-album-txt i,.fp-album-txt small{font-size:12.5px;color:${t.suave || (escuro ? "#bbb" : "#666")}}
       .fp-album.compacto{grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:9px}.fp-album.compacto .fp-album-foto{aspect-ratio:1;font-size:34px}
       .fp-album.compacto .fp-album-txt{padding:6px 8px 8px}.fp-album.compacto .fp-album-txt b{font-size:13px}.fp-album.compacto .fp-album-txt i{display:none}.fp-album.compacto .fp-album-txt small{font-size:11px}
+      .fp-album-ver{all:unset;margin-top:6px;align-self:flex-start;padding:5px 10px;border-radius:999px;background:${CFG.cor || "#2f7d43"};color:#fff;font:700 12px/1.2 system-ui,sans-serif;text-shadow:0 1px 2px #0005}
       .fp-album-vazio{grid-column:1/-1;text-align:center;padding:28px 16px;border:2px dashed ${CFG.cor || "#5c9"}88;border-radius:18px;color:${t.suave || "inherit"}}</style>
       <div class="fp-album${CFG.album.compacto ? " compacto" : ""}">${lista.length ? lista.map((x, i) => `<button type="button" class="fp-album-item" data-i="${i}" title="Ver a ficha">
         <span class="fp-album-foto">${x.foto ? `<img src="${escA(x.foto)}" alt="">` : escA(CFG.icone || "🌿")}</span>
-        <span class="fp-album-txt"><b>${escA(x.nome)}</b>${x.cientifico ? `<i>${escA(x.cientifico)}</i>` : ""}<small>📅 ${escA(x.data)}</small></span></button>`).join("")
+        <span class="fp-album-txt"><b>${escA(x.nome)}</b>${x.cientifico ? `<i>${escA(x.cientifico)}</i>` : ""}<small>📅 ${escA(x.data)}</small><em class="fp-album-ver">📖 Ver ficha</em></span></button>`).join("")
         : `<div class="fp-album-vazio"><span style="font-size:40px">${escA(CFG.icone || "🌿")}</span><br><b>Seu álbum ainda está vazio.</b><br>Reconheça uma foto e toque em “💾 Salvar no álbum”!</div>`}</div>`;
     caixa.querySelectorAll(".fp-album-item").forEach(b => b.onclick = () => {
       const x = lista[+b.dataset.i];

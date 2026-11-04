@@ -403,6 +403,7 @@ const AMBIENTES=[["🌳 Mata fechada","Floresta com sombra, árvores altas e sol
 (function(){const box=document.getElementById("ambientes");AMBIENTES.forEach(([t,d],i)=>{const b=document.createElement("button");b.type="button";b.className="ambiente"+(i===0?" on":"");b.innerHTML="<b></b><p></p>";b.querySelector("b").textContent=t;b.querySelector("p").textContent=d;b.onclick=()=>box.querySelectorAll(".ambiente").forEach(x=>x.classList.toggle("on",x===b));box.appendChild(b)})})();
 
 PokedexAdaptador.iniciar({
+  albumFicha: { cartao: "#colecaoGrid .item", nome: "b" },  // "📖 Ver ficha" em cada figurinha salva
   icone: "🌿", fauna: false,
   cor: "#1f5e3b", cor2: "#c39b3c",
   escuro: () => false,

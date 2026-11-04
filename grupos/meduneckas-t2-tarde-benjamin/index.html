@@ -146,6 +146,7 @@ window.reduzirParaAlbum = src => new Promise(res => { const img = new Image(); i
   };
 })();
 PokedexAdaptador.iniciar({
+  albumFicha: { cartao: "#albumGrid .card", nome: "h3" },  // "📖 Ver ficha" em cada figurinha salva
   icone: "🦎", fauna: true,
   cor: "#c5ff38", cor2: "#29b765",
   escuro: () => true,

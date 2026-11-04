@@ -120,6 +120,7 @@ nav button{white-space:nowrap;padding:10px 10px;min-height:44px}
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  albumFicha: { cartao: "#discoveryGrid .creature, #historyList .history-item", nome: "h3, strong" },  // "📖 Ver ficha" em cada figurinha salva
   icone: "🐸", fauna: true,
   cor: "#39dc78", cor2: "#ffdf4f",
   escuro: () => true,

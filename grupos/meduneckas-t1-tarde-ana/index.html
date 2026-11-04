@@ -647,6 +647,7 @@ window.abrirQuiz=abrirQuiz; window.irPara=irPara;
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  albumFicha: { cartao: "#albumList li", nome: ".ins-nome" },  // "📖 Ver ficha" em cada figurinha salva
   som: true, textoSom: "🔊 Ouvir o som do inseto",  // gravação real da espécie (Wikimedia Commons)
   galeria: { depoisDe: "label.file-label", input: "#photoInput" },
   icone: "🐛", fauna: true,
