@@ -476,6 +476,11 @@ nav button{font-size:15px;min-height:48px}
 nav button.active{color:#fff;background:#3a1418;border-radius:12px}
 .btn{min-height:46px}
 </style>
+<style id="centralizar">
+/* Conteúdo principal no centro da tela (professora) */
+#inicio:not(.hidden){min-height:calc(100vh - 64px - 110px);display:flex;flex-direction:column;justify-content:center}
+</style>
+
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>

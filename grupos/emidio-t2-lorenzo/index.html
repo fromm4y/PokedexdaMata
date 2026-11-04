@@ -98,6 +98,11 @@ function renderStats(){$('animalCount').textContent=data.animals.length;$('explo
 .map-placeholder{min-height:0!important;padding:20px!important}
 .primary,.secondary{min-height:46px}
 </style>
+<style id="centralizar">
+/* Conteúdo principal no centro da tela (professora) */
+@media(min-width:900px){main{display:flex;justify-content:center}main>.screen{width:min(1180px,100%)}main>.screen.active#inicio{min-height:calc(100vh - 56px);display:flex;flex-direction:column;justify-content:center}}
+</style>
+
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
