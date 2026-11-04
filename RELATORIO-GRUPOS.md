@@ -227,7 +227,7 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 
 | Turma | Grupo | Tema | Integrantes | Visual no tablet |
 |---|---|---|---|---|
-| Turma 1 | [Conjuntos da Floresta](grupos/camisao-t1-luan/) | Aves do Brasil | Luan, Nicolas e Maria | Fotos reais das aves na Pokédex (eram emojis parecidos); mapa de biomas de verdade; textos amigáveis. |
+| Turma 1 | [Conjuntos da Floresta](grupos/camisao-t1-luan/) | Aves do Brasil | Luan, Nicolas e Maria | Fotos reais das aves; mapa de biomas real; 72 aves de todos os biomas; ao salvar abre a ficha fixa com sobre, mapa, localização e canto real; Kevin no álbum; 14 missões do dia; foto enviada mais leve (mais rápido). |
 | Turma 1 | [AquaDex](grupos/camisao-t1-maria/) | Peixes do Brasil | Maria, Mateus e Raul | Grupo novo: telas do grupo ligadas ao back-end, imagem do menino no barco no início, mapa de biomas real, álbum com foto e medalhas, configurações que funcionam. |
 | Turma 1 - M | [Detetives de Penas](grupos/camisao-t1m-isabelly/) | Aves do Brasil | Hyan, Thales, Sophia e Isabelly | Front novo do grupo (veio em .docx): boas-vindas com a arara azul, abas Descobrir/Álbum/Mapa/Medalhas, canto real da ave, fotos de bem-te-vi para testar. |
 | Turma 2 | [As Frutas](grupos/camisao-t2-bryan/) | Frutas do Brasil | Ana e Bryan | Imagem do detetive numa moldura só; a barra de baixo não cobre mais os botões. |

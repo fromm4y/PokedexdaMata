@@ -61,7 +61,7 @@ h1,h2,h3,p{margin-top:0}.title{font-size:clamp(32px,5vw,48px);margin-bottom:8px}
 
 <section id="detalhe" class="page"><button class="btn ghost smallbtn" data-page="pokedex">← Voltar à Pokédex</button><div id="birdDetail" style="margin-top:18px"></div></section>
 
-<section id="album" class="page"><h1 class="title">📚 Meu álbum</h1><p class="subtitle">Suas espécies descobertas e favoritas ficam guardadas neste navegador.</p><div class="panel" style="margin-bottom:18px"><div class="stats"><div class="stat"><strong id="albumCount">0</strong><span>Espécies únicas</span></div><div class="stat"><strong id="favoriteCount">0</strong><span>Favoritas</span></div><div class="stat"><strong id="albumPoints">0</strong><span>Pontos</span></div></div></div><div id="albumGrid" class="birdgrid"></div></section>
+<section id="album" class="page"><div class="kevin-album"><img src="kevin.webp" alt="Kevin, a ave colorida guardiã do álbum"><div><h1 class="title" style="margin:0">📚 Meu álbum</h1><p class="subtitle" style="margin:6px 0 0">O Kevin está de olho nas suas descobertas! 🪶 Suas espécies descobertas e favoritas ficam guardadas neste navegador.</p><p class="kevin-dica">💡 Toque em <b>Ver ficha</b> para ver de novo o sobre, o mapa e o canto de cada ave.</p></div></div><div class="panel" style="margin-bottom:18px"><div class="stats"><div class="stat"><strong id="albumCount">0</strong><span>Espécies únicas</span></div><div class="stat"><strong id="favoriteCount">0</strong><span>Favoritas</span></div><div class="stat"><strong id="albumPoints">0</strong><span>Pontos</span></div></div></div><div id="albumGrid" class="birdgrid"></div></section>
 
 <section id="mapa" class="page"><h1 class="title">🗺️ Mapa da biodiversidade</h1><p class="subtitle">Escolha um bioma para ver algumas aves associadas a ele. Toque num bioma no mapa para ver as aves de lá.</p><div id="mapaAves" class="mapa-aves" role="img" aria-label="Mapa dos biomas do Brasil"></div><div id="biomeButtons" class="grid g3" style="margin:16px 0"></div><div id="biomeResults"></div><div class="sectionhead"><h2>📍 Habitats das suas descobertas</h2></div><div id="mapDiscoveries" class="grid g3"></div></section>
 
@@ -86,6 +86,95 @@ const BIRDS = [
 {id:11,name:"Jacu",scientific:"Penelope obscura",icon:"🐦",size:"cerca de 65–75 cm",biomes:["Mata Atlântica","Cerrado"],regions:["Nordeste","Sudeste","Sul"],diet:["Frutas","Folhas"],habitat:"Florestas, capoeiras e matas com árvores frutíferas.",food:"Frutos, folhas e sementes.",behavior:"Vive principalmente nas árvores e pode espalhar sementes ao comer frutos.",curiosity:"Ajuda na regeneração da floresta ao dispersar sementes.",description:"Ave grande, de plumagem escura, encontrada em áreas arborizadas.",resident:"Residente.",song:"Áudio real ainda não adicionado."},
 {id:12,name:"Carcará",scientific:"Caracara plancus",icon:"🦅",size:"cerca de 55–60 cm",biomes:["Cerrado","Caatinga","Pantanal","Pampa"],regions:["Norte","Nordeste","Centro-Oeste","Sudeste","Sul"],diet:["Carne","Onívora"],habitat:"Campos, pastagens, áreas abertas e paisagens modificadas.",food:"Pequenos animais, carcaças e outros alimentos disponíveis.",behavior:"Anda pelo chão e também voa planando.",curiosity:"É uma ave de rapina muito adaptável.",description:"Ave de rapina com face alaranjada e plumagem marrom, branca e preta.",resident:"Residente.",song:"Áudio real ainda não adicionado."}
 ];
+/* MAIS AVES DO BRASIL — de todos os biomas (pedido do grupo: "em cada bioma tem muito pouca ave").
+   Formato: [nome, científico, ícone, tamanho, biomas, regiões, alimentação, habitat, comida, comportamento, curiosidade, descrição, presença]
+   Biomas "*" = todos. Regiões: N, NE, CO, SE, S ("*" = todas). */
+(function () {
+  const TODOS_BIOMAS = ["Amazônia", "Mata Atlântica", "Cerrado", "Caatinga", "Pantanal", "Pampa"];
+  const REG = { N: "Norte", NE: "Nordeste", CO: "Centro-Oeste", SE: "Sudeste", S: "Sul" };
+  const A = [
+  // ---------- AMAZÔNIA ----------
+  ["Arara-vermelha","Ara chloropterus","🦜","cerca de 90 cm",["Amazônia","Cerrado","Pantanal"],"N NE CO",["Frutas","Sementes"],"Florestas altas e matas perto de rios.","Frutos, sementes e castanhas.","Voa em casais ou pequenos grupos, fazendo muito barulho.","Come argila de barrancos para ajudar a digerir sementes que têm substâncias amargas.","Grande arara vermelha com asas verdes e azuis."],
+  ["Harpia","Harpia harpyja","🦅","cerca de 1 m (asas com 2 m)",["Amazônia","Mata Atlântica"],"N CO SE",["Carne"],"Florestas altas e bem preservadas.","Preguiças, macacos e outros animais das copas.","Caça voando rápido entre os galhos das árvores.","Suas garras são do tamanho das de um urso: é uma das águias mais fortes do mundo!","Grande águia cinza e branca com um penacho na cabeça."],
+  ["Cigana","Opisthocomus hoazin","🐦","cerca de 65 cm",["Amazônia"],"N",["Folhas"],"Matas alagadas na beira de rios e lagos.","Folhas e brotos.","Vive em grupos barulhentos perto da água.","Os filhotes têm garrinhas nas asas para subir nos galhos.","Ave de crista arrepiada e cara azul que digere folhas como uma vaca."],
+  ["Galo-da-serra","Rupicola rupicola","🐦","cerca de 32 cm",["Amazônia"],"N",["Frutas"],"Florestas perto de serras e rochas.","Frutos.","Os machos fazem danças em arenas no chão para as fêmeas.","O macho é laranja-vivo e tem uma crista em forma de leque que cobre o bico.","Ave laranja brilhante, uma das mais bonitas da Amazônia."],
+  ["Ararajuba","Guaruba guarouba","🦜","cerca de 35 cm",["Amazônia"],"N NE",["Frutas","Sementes"],"Florestas de terra firme do Pará e do Maranhão.","Frutos e sementes.","Vive em grupos que cuidam dos filhotes juntos.","Amarela com pontas verdes nas asas: tem as cores da bandeira do Brasil!","Papagaio amarelo-ouro que só existe no Brasil."],
+  ["Mutum-cavalo","Pauxi tuberosa","🐦","cerca de 85 cm",["Amazônia"],"N",["Frutas","Sementes"],"Chão de florestas úmidas.","Frutos caídos e sementes.","Anda pelo chão da floresta em silêncio.","Tem um bico vermelho com uma bola em cima.","Grande ave preta parecida com uma galinha gigante."],
+  ["Japiim","Cacicus cela","🐦","cerca de 28 cm",["Amazônia","Mata Atlântica","Cerrado"],"N NE CO",["Insetos","Frutas"],"Beiras de rios e bordas de floresta.","Insetos, frutos e néctar.","Faz ninhos pendurados em colônias, como bolsinhas.","É ótimo imitador: copia o canto de outras aves e até sons de máquinas!","Ave preta e amarela de olho azul-claro."],
+  ["Pavãozinho-do-pará","Eurypyga helias","🐦","cerca de 45 cm",["Amazônia","Pantanal"],"N CO",["Insetos","Peixes"],"Margens de riachos dentro da floresta.","Insetos, peixinhos e sapinhos.","Anda devagar na beira da água procurando comida.","Quando se assusta, abre as asas e mostra desenhos que parecem dois olhos enormes.","Ave de plumagem cheia de desenhos marrons, pretos e dourados."],
+  ["Socó-boi","Tigrisoma lineatum","🐦","cerca de 75 cm",["Amazônia","Pantanal","Mata Atlântica","Cerrado"],"*",["Peixes"],"Beiras de rios, lagoas e brejos.","Peixes, sapos e crustáceos.","Fica parado como uma estátua esperando o peixe passar.","Quando se sente ameaçado, estica o pescoço para cima para parecer um galho.","Garça grande de pescoço ruivo e listrado."],
+  ["Gavião-belo","Busarellus nigricollis","🦅","cerca de 48 cm",["Pantanal","Amazônia"],"N CO",["Peixes"],"Rios, lagoas e áreas alagadas.","Peixes.","Pega peixes na superfície da água com as garras.","A sola dos pés é áspera, como uma lixa, para segurar peixes escorregadios.","Gavião ruivo de cabeça clara e colar preto."],
+  // ---------- MATA ATLÂNTICA ----------
+  ["Tiê-sangue","Ramphocelus bresilia","🐦","cerca de 19 cm",["Mata Atlântica"],"NE SE S",["Frutas","Insetos"],"Restingas, bordas de mata e jardins perto do litoral.","Frutos e insetos.","Anda em casais ou pequenos grupos nas moitas.","Só existe no Brasil! O macho é vermelho como sangue.","Ave vermelho-viva com asas e cauda pretas."],
+  ["Saíra-sete-cores","Tangara seledon","🐦","cerca de 13 cm",["Mata Atlântica"],"NE SE S",["Frutas","Insetos"],"Copas de florestas úmidas.","Frutinhas e insetos.","Anda em bandos misturados com outras espécies.","Tem tantas cores que parece pintada com lápis de cor: verde, azul, amarelo, laranja, preto…","Pequena ave colorida das copas da Mata Atlântica."],
+  ["Tucano-de-bico-verde","Ramphastos dicolorus","🦜","cerca de 48 cm",["Mata Atlântica"],"SE S",["Frutas"],"Florestas e matas com árvores frutíferas.","Frutos, ovos e insetos.","Vive em pequenos grupos e pula de galho em galho.","Espalha sementes de palmito-juçara e ajuda a floresta a crescer.","Tucano preto de bico verde-claro e peito amarelo e vermelho."],
+  ["Papagaio-de-cara-roxa","Amazona brasiliensis","🦜","cerca de 37 cm",["Mata Atlântica"],"SE S",["Frutas","Sementes"],"Litoral, manguezais e ilhas do Paraná e São Paulo.","Frutos e sementes.","Dorme em ilhas e voa ao continente para comer.","Quase desapareceu, mas a população voltou a crescer com a ajuda de pesquisadores.","Papagaio verde com a testa vermelha e a cara arroxeada."],
+  ["Araponga","Procnias nudicollis","🐦","cerca de 27 cm",["Mata Atlântica"],"NE SE S",["Frutas"],"Florestas úmidas e altas.","Frutos.","O macho canta do alto das árvores.","Seu canto parece uma martelada no ferro e é um dos sons mais altos de todas as aves!","Ave branca com a garganta verde e sem penas."],
+  ["Jacutinga","Aburria jacutinga","🐦","cerca de 70 cm",["Mata Atlântica"],"SE S",["Frutas"],"Florestas bem preservadas.","Frutos, principalmente do palmito-juçara.","Vive nas árvores e desce pouco ao chão.","Está ameaçada de extinção por causa da caça e do corte de palmito.","Ave preta brilhante com a cabeça branca e papo vermelho."],
+  ["Sanhaço-cinzento","Thraupis sayaca","🐦","cerca de 17 cm",["Mata Atlântica","Cerrado","Caatinga"],"NE CO SE S",["Frutas"],"Cidades, parques, jardins e bordas de mata.","Frutos como mamão e banana.","É comum em comedouros e quintais.","Adora frutas maduras e aparece em quase todo pomar de cidade.","Ave azul-acinzentada, muito comum no Brasil."],
+  ["Gaturamo-verdadeiro","Euphonia violacea","🐦","cerca de 11 cm",["Mata Atlântica","Amazônia"],"N NE SE S",["Frutas"],"Bordas de mata e pomares.","Frutinhas, especialmente de erva-de-passarinho.","Anda em casais pelas copas.","É ótimo imitador: copia o canto de várias outras aves.","Passarinho azul-escuro com barriga amarela."],
+  ["Beija-flor-preto","Florisuga fusca","🐦","cerca de 12 cm",["Mata Atlântica"],"NE SE S",["Néctar"],"Florestas, jardins e parques.","Néctar de flores e pequenos insetos.","Defende suas flores de outros beija-flores.","Bate as asas tão rápido que elas fazem um zumbido.","Beija-flor preto com as laterais e a cauda brancas."],
+  ["Atobá-pardo","Sula leucogaster","🐦","cerca de 70 cm",["Mata Atlântica"],"NE SE S",["Peixes"],"Mar e ilhas do litoral.","Peixes e lulas.","Mergulha de cabeça de grande altura para pegar peixes.","Faz ninhos no chão de ilhas, longe dos predadores.","Ave marinha marrom com barriga branca."],
+  ["Fragata","Fregata magnificens","🐦","cerca de 1 m (asas com 2,3 m)",["Mata Atlântica"],"N NE SE S",["Peixes"],"Litoral e ilhas.","Peixes, muitas vezes roubados de outras aves.","Plana por horas quase sem bater as asas.","O macho enche um papo vermelho enorme, como um balão, para chamar a fêmea.","Ave marinha preta de asas longas e cauda em tesoura."],
+  // ---------- CERRADO ----------
+  ["Ema","Rhea americana","🐦","cerca de 1,5 m",["Cerrado","Pantanal","Pampa","Caatinga"],"NE CO SE S",["Onívora"],"Campos abertos e cerrados.","Plantas, sementes, insetos e pequenos animais.","Corre muito rápido, mas não voa.","É a maior ave do Brasil, e quem choca os ovos é o pai!","Grande ave cinzenta de pernas compridas."],
+  ["Gralha-do-cerrado","Cyanocorax cristatellus","🐦","cerca de 35 cm",["Cerrado"],"NE CO SE",["Onívora"],"Cerrados e campos com árvores.","Frutos, insetos, ovos e pequenos animais.","Vive em bandos barulhentos.","Tem um topete duro na testa, como uma escova.","Gralha azul-escura com nuca e barriga brancas."],
+  ["Pato-mergulhão","Mergus octosetaceus","🦆","cerca de 55 cm",["Cerrado"],"CO SE",["Peixes"],"Rios de água limpa com corredeiras.","Peixes.","Mergulha nas corredeiras para pescar.","É um dos patos mais ameaçados do mundo: só sobram poucas centenas.","Pato escuro de crista comprida e bico fino."],
+  ["Arara-canindé","Ara ararauna","🦜","cerca de 85 cm",["Cerrado","Amazônia","Pantanal"],"N NE CO SE",["Frutas","Sementes"],"Buritizais, matas e cerrados.","Frutos e sementes de palmeiras.","Voa em casais que ficam juntos a vida toda.","Faz ninhos em troncos ocos de buriti.","Arara azul com o peito amarelo."],
+  ["Papagaio-verdadeiro","Amazona aestiva","🦜","cerca de 37 cm",["Cerrado","Caatinga","Pantanal"],"NE CO SE S",["Frutas","Sementes"],"Cerrados, matas secas e palmeirais.","Frutos e sementes.","Vive em bandos e dorme em grupos.","Consegue imitar a voz humana. Nunca compre um: o tráfico tira milhares da natureza!","Papagaio verde com testa azul e rosto amarelo."],
+  ["Periquito-rei","Eupsittula aurea","🦜","cerca de 27 cm",["Cerrado","Caatinga","Pantanal","Amazônia"],"*",["Sementes","Frutas"],"Cerrados e campos com árvores.","Sementes, frutos e flores.","Anda em bandos barulhentos.","Faz ninho dentro de cupinzeiros!","Periquito verde com a testa laranja."],
+  ["Tico-tico","Zonotrichia capensis","🐦","cerca de 15 cm",["Cerrado","Mata Atlântica","Pampa","Caatinga"],"*",["Sementes","Insetos"],"Campos, jardins e cidades.","Sementes e insetos.","Pula no chão procurando comida.","Ganhou até música: “O tico-tico no fubá”.","Passarinho de topete com colar ruivo no pescoço."],
+  ["Canário-da-terra","Sicalis flaveola","🐦","cerca de 14 cm",["Cerrado","Caatinga","Pampa","Pantanal","Mata Atlântica"],"NE CO SE S",["Sementes"],"Campos, pastos e cidades.","Sementes de capim.","Gosta de usar ninhos velhos de joão-de-barro.","O macho fica amarelo-ouro brilhante.","Passarinho amarelo de canto bonito."],
+  ["Gavião-carijó","Rupornis magnirostris","🦅","cerca de 36 cm",["*"],"*",["Carne"],"Bordas de mata, campos e cidades.","Lagartos, insetos, ratos e pequenas aves.","Fica pousado em postes esperando a presa.","É o gavião mais comum do Brasil.","Gavião cinzento com barriga listrada de ruivo."],
+  ["Curicaca","Theristicus caudatus","🐦","cerca de 70 cm",["Cerrado","Pantanal","Pampa"],"NE CO SE S",["Insetos"],"Campos abertos e pastos.","Insetos, larvas e pequenos animais.","Anda em casais cutucando o chão com o bico.","Seu grito alto parece dizer o próprio nome: “cu-ri-ca-ca”!","Ave de bico longo e curvo, pescoço cor de creme."],
+  ["Quero-quero","Vanellus chilensis","🐦","cerca de 37 cm",["*"],"*",["Insetos"],"Campos, gramados e até campos de futebol.","Insetos e minhocas.","Defende o ninho com gritos e voos rasantes.","Tem esporões nas asas e é a ave-símbolo do Rio Grande do Sul.","Ave cinza e branca com topete e peito preto."],
+  ["Sabiá-do-campo","Mimus saturninus","🐦","cerca de 26 cm",["Cerrado","Caatinga","Pampa","Pantanal"],"NE CO SE S",["Onívora"],"Campos, cerrados e cidades.","Insetos, frutos e pequenos animais.","Canta alto em poleiros e cercas.","É imitador: mistura o canto de várias aves no seu.","Ave cinzenta de cauda longa com uma faixa escura no olho."],
+  ["Tesourinha","Tyrannus savana","🐦","cerca de 38 cm (com a cauda)",["Cerrado","Pampa","Pantanal","Mata Atlântica","Amazônia"],"*",["Insetos"],"Campos e áreas abertas com árvores.","Insetos pegos em voo.","Faz acrobacias no ar para caçar.","Migra: passa o verão no sul do Brasil e o inverno na Amazônia.","Ave cinza e branca de cabeça preta e cauda em tesoura bem comprida."],
+  // ---------- CAATINGA ----------
+  ["Ararinha-azul","Cyanopsitta spixii","🦜","cerca de 57 cm",["Caatinga"],"NE",["Sementes"],"Matas de caraibeira na beira de riachos da Bahia.","Sementes e frutos da Caatinga.","Vive em casais e pequenos grupos.","Desapareceu da natureza e voltou a voar livre na Bahia em 2022, graças à reintrodução.","Pequena arara toda azul, a estrela do filme “Rio”."],
+  ["Arara-azul-de-lear","Anodorhynchus leari","🦜","cerca de 75 cm",["Caatinga"],"NE",["Sementes"],"Paredões de arenito do Raso da Catarina, na Bahia.","Cocos da palmeira licuri.","Dorme e faz ninhos em buracos nos paredões.","Come até 350 cocos de licuri por dia!","Arara azul-escura com pele amarela no bico."],
+  ["Asa-branca","Patagioenas picazuro","🕊️","cerca de 34 cm",["Caatinga","Cerrado","Pampa","Mata Atlântica","Pantanal"],"NE CO SE S",["Sementes"],"Campos, cerrados e caatingas.","Sementes e frutos.","Voa longe procurando lugares com água e comida.","Ficou famosa na música “Asa Branca”, de Luiz Gonzaga.","Pomba grande cinza-arroxeada com faixa branca nas asas."],
+  ["Cardeal-do-nordeste","Paroaria dominicana","🐦","cerca de 18 cm",["Caatinga"],"NE",["Sementes","Insetos"],"Caatingas e áreas abertas com arbustos.","Sementes e insetos.","Anda em casais pelo chão e arbustos.","Também é chamado de galo-de-campina e só existe no Brasil.","Ave cinza e branca de cabeça vermelha."],
+  ["Soldadinho-do-araripe","Antilophia bokermanni","🐦","cerca de 15 cm",["Caatinga"],"NE",["Frutas"],"Matas úmidas com nascentes na Chapada do Araripe (Ceará).","Frutinhas.","Vive perto de riachos e nascentes.","Só foi descoberto em 1996 e vive em um lugar pequeninho do Ceará.","O macho é branco com asas pretas e um capacete vermelho."],
+  ["Rolinha-picuí","Columbina picui","🕊️","cerca de 17 cm",["Caatinga","Cerrado","Pampa","Pantanal"],"NE CO SE S",["Sementes"],"Campos, quintais e áreas abertas.","Sementes no chão.","Anda no chão em casais.","Seu canto parece dizer “pi-cu-í”.","Rolinha cinza-clara com manchas pretas nas asas."],
+  ["Corrupião","Icterus jamacaii","🐦","cerca de 23 cm",["Caatinga"],"NE",["Insetos","Frutas"],"Caatingas e matas secas.","Insetos, frutos e néctar.","Canta muito bonito, por isso é muito caçado.","Também é chamado de sofrê.","Ave laranja-viva com cabeça e asas pretas."],
+  ["Jacucaca","Penelope jacucaca","🐦","cerca de 70 cm",["Caatinga"],"NE",["Frutas","Folhas"],"Caatingas e matas secas.","Frutos, folhas e flores.","Passa a maior parte do tempo nas árvores.","Só existe no Brasil e está ameaçada pela caça.","Ave escura parecida com um jacu, com sobrancelha branca."],
+  ["Golinho","Sporophila albogularis","🐦","cerca de 11 cm",["Caatinga"],"NE",["Sementes"],"Caatingas e campos com capim.","Sementes de capim.","Anda em bandos pequenos.","Seu nome vem da garganta branquinha, como uma gola.","Passarinho cinza e branco com colar preto."],
+  // ---------- PANTANAL ----------
+  ["Colhereiro","Platalea ajaja","🦩","cerca de 80 cm",["Pantanal","Pampa","Mata Atlântica","Amazônia"],"*",["Peixes","Insetos"],"Brejos, lagoas e manguezais.","Peixinhos, camarões e insetos aquáticos.","Balança o bico de um lado para o outro dentro da água.","É cor-de-rosa por causa dos camarõezinhos que come, como o flamingo.","Ave rosa com bico achatado em forma de colher."],
+  ["Biguá","Nannopterum brasilianum","🐦","cerca de 70 cm",["*"],"*",["Peixes"],"Rios, lagos, represas e litoral.","Peixes.","Mergulha fundo para pescar.","Depois de nadar, abre as asas ao sol para secar as penas.","Ave preta de pescoço comprido e bico em gancho."],
+  ["Garça-branca-grande","Ardea alba","🐦","cerca de 1 m",["*"],"*",["Peixes"],"Brejos, lagoas, rios e manguezais.","Peixes, sapos e insetos.","Fica parada na água e ataca rápido com o bico.","Na época de namoro ganha penas longas e finas nas costas.","Garça toda branca de bico amarelo."],
+  ["Martim-pescador-grande","Megaceryle torquata","🐦","cerca de 40 cm",["*"],"*",["Peixes"],"Rios, lagos e represas.","Peixes.","Pousa em galhos sobre a água e mergulha de cabeça.","Faz o ninho em túneis cavados em barrancos.","Ave azul-acinzentada de peito ruivo e bico enorme."],
+  ["Cabeça-seca","Mycteria americana","🐦","cerca de 1 m",["Pantanal","Amazônia","Mata Atlântica"],"*",["Peixes"],"Brejos e lagoas rasas.","Peixes.","Tateia com o bico aberto dentro da água e fecha bem rápido.","Tem a cabeça sem penas, por isso o nome!","Cegonha branca de cabeça cinza e pelada."],
+  ["Jaçanã","Jacana jacana","🐦","cerca de 25 cm",["*"],"*",["Insetos"],"Lagoas com plantas aquáticas.","Insetos e pequenos animais.","Anda por cima das plantas que boiam na água.","Tem dedos tão compridos que parece andar sobre a água. Quem cuida dos ovos é o pai!","Ave marrom-avermelhada com bico amarelo e escudo vermelho."],
+  ["Tachã","Chauna torquata","🐦","cerca de 85 cm",["Pantanal","Pampa"],"CO S",["Folhas"],"Banhados e beiras de lagoas.","Plantas aquáticas.","Vive em casais que se chamam com gritos altos.","Tem dois esporões afiados em cada asa.","Ave grande e cinzenta com colar preto e branco."],
+  ["Gavião-caramujeiro","Rostrhamus sociabilis","🦅","cerca de 42 cm",["Pantanal","Pampa","Amazônia","Mata Atlântica"],"*",["Carne"],"Brejos e lagoas.","Caramujos aquáticos.","Voa baixo sobre a água procurando caramujos.","Tem o bico bem curvo, perfeito para tirar o caramujo da concha.","Gavião cinza-escuro com olhos e pernas vermelhas."],
+  // ---------- PAMPA ----------
+  ["Pica-pau-do-campo","Colaptes campestris","🐦","cerca de 32 cm",["Pampa","Cerrado","Caatinga","Pantanal"],"NE CO SE S",["Insetos"],"Campos abertos e cupinzeiros.","Formigas e cupins.","Procura comida no chão, diferente de outros pica-paus.","Usa cupinzeiros como casa para o ninho.","Pica-pau de cabeça e peito amarelos."],
+  ["Cardeal","Paroaria coronata","🐦","cerca de 18 cm",["Pampa","Pantanal"],"CO S",["Sementes"],"Campos com arbustos e matas abertas.","Sementes e insetos.","Anda em casais e canta bonito.","Tem um topete vermelho em pé, como uma coroa.","Ave cinza e branca com topete vermelho."],
+  ["Veste-amarela","Xanthopsar flavus","🐦","cerca de 21 cm",["Pampa"],"S",["Insetos"],"Banhados e campos úmidos.","Insetos.","Vive em bandos, às vezes junto com outras aves.","Está ameaçado porque os banhados estão sumindo.","Ave preta com cabeça e ombros amarelos."],
+  ["Cisne-de-pescoço-preto","Cygnus melancoryphus","🦢","cerca de 1,1 m",["Pampa"],"S",["Folhas"],"Lagoas e banhados do Rio Grande do Sul.","Plantas aquáticas.","Nada em casais ou bandos.","Os filhotes passeiam nas costas da mãe!","Cisne branco de pescoço preto e bico com bolinha vermelha."],
+  ["Pinguim-de-magalhães","Spheniscus magellanicus","🐧","cerca de 70 cm",["Pampa","Mata Atlântica"],"S SE",["Peixes"],"Mar; aparece no litoral sul no inverno.","Peixes e lulas.","Nada muito rápido debaixo da água.","Vem da Patagônia nadando atrás de peixes. Se achar um na praia, chame os bombeiros ou o órgão ambiental!","Pinguim preto e branco com faixas no peito."],
+  ["Caturrita","Myiopsitta monachus","🦜","cerca de 29 cm",["Pampa","Pantanal"],"CO S",["Sementes","Frutas"],"Campos com árvores e cidades.","Sementes e frutos.","Vive em colônias barulhentas.","É o único papagaio que constrói ninhos de gravetos, como um prédio com vários apartamentos!","Periquito verde com rosto e peito cinzentos."],
+  // ---------- EM TODO O BRASIL ----------
+  ["Urubu-de-cabeça-preta","Coragyps atratus","🦅","cerca de 60 cm",["*"],"*",["Carne"],"Céus de quase todo o Brasil, inclusive cidades.","Animais mortos (carniça).","Plana alto em círculos usando o ar quente.","É o “lixeiro” da natureza: limpa o ambiente e evita doenças.","Ave preta de cabeça pelada e cinzenta."],
+  ["Coruja-das-torres","Tyto furcata","🦉","cerca de 35 cm",["*"],"*",["Carne"],"Campos, celeiros, torres de igreja e prédios.","Ratos e outros pequenos animais.","Caça à noite, guiada pela audição.","O rosto em forma de coração funciona como uma antena para o som.","Coruja clara de rosto branco em formato de coração."],
+  ["Corujinha-do-mato","Megascops choliba","🦉","cerca de 22 cm",["*"],"*",["Insetos"],"Matas, parques e quintais com árvores.","Insetos grandes e pequenos animais.","Fica escondida de dia nos galhos.","Tem “orelhinhas” de penas que ela levanta quando está atenta.","Corujinha cinza-amarronzada de olhos amarelos."]
+  ];
+  let id = 100;
+  A.forEach(a => {
+    const [name, scientific, icon, size, biomes, regs, diet, habitat, food, behavior, curiosity, description] = a;
+    if (BIRDS.some(b => b.scientific === scientific)) return;
+    BIRDS.push({ id: id++, name, scientific, icon, size,
+      biomes: biomes[0] === "*" ? TODOS_BIOMAS.slice() : biomes,
+      regions: regs === "*" ? Object.values(REG) : regs.split(" ").map(r => REG[r]),
+      diet, habitat, food, behavior, curiosity, description,
+      resident: /Migra|inverno/.test(curiosity + habitat) ? "Migratória (aparece em parte do ano)." : "Residente.", song: "" });
+  });
+  /* Aves que a IA reconheceu e não estavam no guia viram fichas novas (ficam neste aparelho). */
+  try { (JSON.parse(localStorage.getItem("luanAvesExtras") || "[]")).forEach(b => { if (!BIRDS.some(x => x.id === b.id)) BIRDS.push(b); }); } catch (e) {}
+})();
+
 
 const LEVELS=[{name:"Aprendiz da Mata",min:0},{name:"Observador de Asas",min:50},{name:"Explorador Brasileiro",min:150},{name:"Especialista em Aves",min:350},{name:"Guardião da Biodiversidade",min:700}];
 const ACHIEVEMENTS=[
@@ -152,7 +241,7 @@ function handleSelectedFile(file){if(!file)return;if(!file.type.startsWith("imag
 $("cameraInput").addEventListener("change",e=>handleSelectedFile(e.target.files[0]));$("galleryInput").addEventListener("change",e=>handleSelectedFile(e.target.files[0]));$("identifyBtn").addEventListener("click",()=>{if(selectedFile)identifyImage(selectedFile)});
 async function identifyImage(file){$("loading").style.display="block";$("status").style.display="none";$("identifyBtn").disabled=true;try{
 /* O backend espera image/jpeg. Convertemos a imagem escolhida para JPEG sem alterar o endpoint nem o envelope da requisição. */
-const base64=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>{const canvas=document.createElement("canvas");const max=1400;const scale=Math.min(1,max/Math.max(img.width,img.height));canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);const ctx=canvas.getContext("2d");ctx.drawImage(img,0,0,canvas.width,canvas.height);const data=canvas.toDataURL("image/jpeg",.88).split(",")[1];resolve(data)};img.onerror=()=>base64DaImagem(file).then(resolve,reject);img.src=URL.createObjectURL(file)});
+const base64=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>{const canvas=document.createElement("canvas");const max=1024;const scale=Math.min(1,max/Math.max(img.width,img.height));canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);const ctx=canvas.getContext("2d");ctx.drawImage(img,0,0,canvas.width,canvas.height);const data=canvas.toDataURL("image/jpeg",.8).split(",")[1];resolve(data)};img.onerror=()=>base64DaImagem(file).then(resolve,reject);img.src=URL.createObjectURL(file)});
 const pedido={modelo:"gemini-3.6-flash",body:{contents:[{parts:[{text:"Analise esta foto para o aplicativo educativo Pokédex da Mata, com foco principal em aves brasileiras. Tente identificar a ave visível somente se houver certeza suficiente. Não chute nem invente informações. Se não conseguir identificar com segurança, use identificado=false e confianca abaixo de 80. Se for uma ave e puder identificar, forneça nome popular, nome científico se conhecido, curiosidades educativas e uma descrição geral do habitat. Se a imagem não mostrar uma ave identificável, não apresente uma identificação como certa."},{inline_data:{mime_type:"image/jpeg",data:base64}}]}],generationConfig:{temperature:.2,responseMimeType:"application/json",responseSchema:{type:"object",properties:{identificado:{type:"boolean"},confianca:{type:"integer"},nome:{type:"string"},nome_cientifico:{type:"string"},curiosidades:{type:"string"},onde_vive:{type:"string"},tipo:{type:"string"}},required:["identificado","confianca"]}}}};
 const response=await fetch("/api/identificar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(pedido)});if(!response.ok)throw new Error("servidor");const resposta=await response.json();const texto=resposta?.candidates?.[0]?.content?.parts?.[0]?.text;if(!texto)throw new Error("resposta");const dados=JSON.parse(texto);if(dados.identificado!==true||Number(dados.confianca)<80){showStatus("Hmm, não consegui ter certeza. 🪶 Tente outra foto em que a ave apareça melhor.");return}
 lastIdentified={name:typeof dados.nome==="string"&&dados.nome.trim()?dados.nome.trim():"Ave identificada",scientific:typeof dados.nome_cientifico==="string"?dados.nome_cientifico:"",facts:typeof dados.curiosidades==="string"?dados.curiosidades:"Curiosidades ainda não disponíveis.",habitat:typeof dados.onde_vive==="string"?dados.onde_vive:"Habitat não informado.",type:typeof dados.tipo==="string"?dados.tipo:"Ave"};
@@ -180,6 +269,22 @@ renderAll();
 /* foto real da ave: o emoji vira um selinho no canto */
 .birdpic.com-foto{background-size:cover!important;background-position:center!important}
 .birdpic.com-foto span:not(.number){position:absolute;right:8px;bottom:6px;font-size:28px;filter:drop-shadow(0 2px 4px #000)}
+/* foto do álbum presa dentro do quadro (antes cobria o nome da ave) */
+.birdpic{overflow:hidden}.birdpic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* a ficha tinha dois "Voltar à Pokédex"; fica só o de cima */
+#birdDetail .panel > .btn.ghost.smallbtn:first-child{display:none}
+#birdDetail .detail-layout .btn{margin:6px 8px 6px 0}
+/* Kevin no topo do álbum */
+.kevin-album{display:flex;gap:20px;align-items:center;margin-bottom:18px;padding:16px;border-radius:24px;background:linear-gradient(135deg,rgba(255,218,72,.16),rgba(37,189,120,.14));border:1px solid rgba(255,255,255,.14)}
+.kevin-album img{width:150px;height:150px;border-radius:22px;object-fit:cover;flex:0 0 auto;box-shadow:0 10px 26px rgba(0,0,0,.35);animation:kevinBalanca 3.5s ease-in-out infinite}
+@keyframes kevinBalanca{50%{transform:rotate(-3deg) translateY(-4px)}}
+.kevin-dica{margin:10px 0 0;font-size:14px;opacity:.9}
+@media(max-width:620px){.kevin-album{flex-direction:column;text-align:center}.kevin-album img{width:120px;height:120px}}
+/* mapa e canto dentro da ficha da ave */
+.ficha-mapa{margin-top:18px}.ficha-mapa h2{margin:0 0 10px}
+.ficha-mapa .mapa-ave{height:340px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.12)}
+.ficha-mapa .locais{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.ficha-mapa .locais span{padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.1);font-weight:700;font-size:14px}
 .navbtn{min-height:44px;font-size:15px}
 .btn{min-height:46px}
 /* Conquistas mais compactas no tablet */
@@ -219,8 +324,109 @@ renderAll();
     }
   });
 })();
+/* ===== Pedidos do grupo (professora): ficha com mapa e canto, ficha abre fixa ao salvar,
+   aves novas viram ficha, mais missões ===== */
+(function () {
+  const norm = t => String(t || "").toLocaleLowerCase("pt-BR").trim();
+  const REGIOES = ["Norte", "Nordeste", "Centro-Oeste", "Sudeste", "Sul"];
+  // 1) Ficha da ave: canto de verdade + mapa dos biomas + localização
+  const abrirAntes = openBird;
+  openBird = function (id, fromDiscovery) {
+    abrirAntes(id, fromDiscovery);
+    const b = getBird(id), host = $("birdDetail");
+    if (!b || !host) return;
+    const ouvir = [...host.querySelectorAll("button")].find(x => /Ouvir canto/.test(x.textContent));
+    if (ouvir) ouvir.onclick = () => {
+      FichaPokedex.tocarSom(b.scientific, b.name);
+      if (!state.songs.includes(b.id)) { state.songs.push(b.id); pointsFor("song", b.id); }
+      completeMission("listenSong"); checkAchievements(); saveState();
+    };
+    [...host.querySelectorAll("p.small")].filter(p => /^🔈/.test(p.textContent)).forEach(p => p.textContent = "🔈 Toque em “Ouvir canto” para escutar uma gravação de verdade desta ave (Wikimedia Commons).");
+    const painel = host.querySelector(".panel") || host;
+    const caixa = document.createElement("div"); caixa.className = "ficha-mapa";
+    caixa.innerHTML = '<h2>🗺️ Onde ela vive</h2><div class="mapa-ave"></div><div class="locais"></div>';
+    caixa.querySelector(".locais").innerHTML = b.biomes.map(x => "<span>🌳 " + x + "</span>").join("") + b.regions.map(x => "<span>📍 " + x + "</span>").join("");
+    painel.appendChild(caixa);
+    FichaPokedex.mapaBiomas(caixa.querySelector(".mapa-ave"), b.biomes, { escuro: true });
+  };
+  // 2) Ave reconhecida pela IA que não está no guia vira uma ficha nova
+  function garantirNoGuia(info) {
+    const nome = (lastIdentified && lastIdentified.name) || info.nome_popular || info.nome || "Ave identificada";
+    const cient = (lastIdentified && lastIdentified.scientific) || info.nome_cientifico || "";
+    let b = BIRDS.find(x => norm(x.name) === norm(nome) || (cient && norm(x.scientific) === norm(cient)));
+    if (b) return b;
+    const cur = [].concat(info.curiosidades || []).filter(Boolean);
+    const biomas = [].concat(info.biomas || []).filter(x => ["Amazônia", "Mata Atlântica", "Cerrado", "Caatinga", "Pantanal", "Pampa"].includes(x));
+    const regs = [].concat(info.regioes || []).join(" ");
+    let extras = []; try { extras = JSON.parse(localStorage.getItem("luanAvesExtras") || "[]"); } catch (e) {}
+    b = { id: 1000 + extras.length, name: nome, scientific: cient, icon: "🐦", size: "—",
+      biomes: biomas.length ? biomas : ["Mata Atlântica"], regions: REGIOES.filter(r => regs.includes(r)),
+      diet: [], habitat: info.habitat_descricao || info.onde_vive || "—", food: "—", behavior: "—",
+      curiosity: cur[0] || "—", description: info.o_que_e || cur[1] || "Ave descoberta pela foto!", resident: "—", song: "", nova: true };
+    if (!b.regions.length) b.regions = ["Brasil"];
+    BIRDS.push(b); extras.push(b);
+    try { localStorage.setItem("luanAvesExtras", JSON.stringify(extras)); } catch (e) {}
+    return b;
+  }
+  // 3) Salvar no álbum: guarda e já abre a ficha fixa da ave (sobre, mapa, localização e canto)
+  window.salvarEAbrir = function (info) {
+    const b = garantirNoGuia(info || {});
+    $("saveDiscovery").click();
+    completeMission("saveAlbum");
+    setTimeout(() => {
+      const d = state.discoveries.find(x => x.birdId === b.id || norm(x.name) === norm(b.name));
+      if (d && d.birdId == null) { d.birdId = b.id; saveState(); }
+      openBird(b.id, d);
+      notify("📖 " + b.name + " está no álbum! Aqui está a ficha dela.");
+    }, 700);
+  };
+  // 4) Mais missões do dia
+  MISSION_DEFS.push(
+    { id: "listenSong", icon: "🔊", name: "Ouvidos atentos", desc: "Ouça o canto de uma ave na ficha.", goal: 1 },
+    { id: "saveAlbum", icon: "📖", name: "Colecionador", desc: "Guarde uma ave no álbum.", goal: 1 },
+    { id: "favorite", icon: "💚", name: "Ave do coração", desc: "Favorite uma ave.", goal: 1 },
+    { id: "search", icon: "🔎", name: "Detetive de penas", desc: "Pesquise uma ave na Pokédex.", goal: 1 },
+    { id: "readFive", icon: "📚", name: "Leitor da mata", desc: "Leia 5 fichas de aves diferentes.", goal: 5 },
+    { id: "threeBiomes", icon: "🧭", name: "Volta ao Brasil", desc: "Explore 3 biomas diferentes no mapa hoje.", goal: 3 },
+    { id: "water", icon: "💧", name: "Aves da água", desc: "Abra a ficha de uma ave que come peixes.", goal: 1 },
+    { id: "night", icon: "🦉", name: "Turno da noite", desc: "Abra a ficha de uma coruja.", goal: 1 },
+    { id: "raptor", icon: "🦅", name: "Olhar de gavião", desc: "Abra a ficha de uma ave de rapina.", goal: 1 },
+    { id: "parrot", icon: "🦜", name: "Papo de papagaio", desc: "Abra a ficha de uma arara, papagaio ou periquito.", goal: 1 }
+  );
+  ACHIEVEMENTS.push(
+    { id: "first3", icon: "🐣", name: "Ninho cheio", desc: "Descubra 3 espécies diferentes.", goal: 3, kind: "discoveries" },
+    { id: "five", icon: "🪺", name: "Observador iniciante", desc: "Descubra 5 espécies diferentes.", goal: 5, kind: "discoveries" },
+    { id: "read25", icon: "📖", name: "Enciclopédia voadora", desc: "Leia 25 fichas de aves.", goal: 25, kind: "reads" },
+    { id: "song10", icon: "🎶", name: "Maestro da mata", desc: "Escute 10 cantos diferentes.", goal: 10, kind: "songs" },
+    { id: "biomes6", icon: "🇧🇷", name: "Brasil inteiro", desc: "Explore os 6 biomas.", goal: 6, kind: "biomes" },
+    { id: "missions10", icon: "🎯", name: "Missão impossível", desc: "Complete 10 missões diárias.", goal: 10, kind: "missions" }
+  );
+  const abrirComMissoes = openBird;
+  openBird = function (id, fromDiscovery) {
+    abrirComMissoes(id, fromDiscovery);
+    const b = getBird(id); if (!b) return;
+    if (state.reads.length >= 5) completeMission("readFive");
+    if (b.diet.includes("Peixes")) completeMission("water");
+    if (b.icon === "🦉") completeMission("night");
+    if (b.icon === "🦅") completeMission("raptor");
+    if (/arara|papagaio|periquito|ararinha|ararajuba|caturrita/i.test(b.name)) completeMission("parrot");
+  };
+  const favAntes = toggleFavorite;
+  toggleFavorite = function (id) { const tinha = state.favorites.includes(id); favAntes(id); if (!tinha) completeMission("favorite"); };
+  $("searchBird").addEventListener("input", e => { if (e.target.value.trim().length >= 3) completeMission("search"); });
+  const biomaAntes = selectBiome;
+  selectBiome = function (bio) {
+    biomaAntes(bio);
+    state.missions.biomasHoje = state.missions.biomasHoje || [];
+    if (!state.missions.biomasHoje.includes(bio)) state.missions.biomasHoje.push(bio);
+    if (state.missions.biomasHoje.length >= 3) completeMission("threeBiomes");
+    saveState();
+  };
+  renderAll();
+})();
 PokedexAdaptador.iniciar({
-  albumFicha: { cartao: "#albumGrid .birdcard", nome: "h3" },  // "📖 Ver ficha" nas figurinhas do álbum
+  som: true, textoSom: "🔊 Ouvir o canto",  // canto de verdade (Wikimedia Commons)
+  // o álbum já tem o botão "Ver ficha" do grupo, que abre a ficha completa (sobre, mapa, canto)
   // botões por etapa: o de identificar só aparece depois de escolher a foto
   etapas: { foto: ["#identifyBtn"] },
   icone: "🐦", fauna: true,
@@ -230,7 +436,7 @@ PokedexAdaptador.iniciar({
   carregando: "🔎 Procurando a ave na foto...",
   esconder: ["#result"],
   extras: info => [["🌳 Onde vive", info.onde_vive], ["🏷️ Tipo", info.tipo]],
-  salvar: () => { document.getElementById("saveDiscovery").click(); document.querySelector('[data-page="album"]').click(); },
+  salvar: info => salvarEAbrir(info),   // guarda no álbum e já abre a ficha fixa da ave
   acoesExtras: () => [{ texto: "📖 Ver na Pokédex", aoClicar: () => document.getElementById("openIdentified").click() }]
 });
 </script>
