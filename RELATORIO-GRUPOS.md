@@ -234,6 +234,7 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 | Turma 2 | [PassaroDex](grupos/camisao-t2-victor/) | Aves do Brasil | Victor, Henzo e Lara | "Escolher da galeria" abria a câmera (corrigido). O visual já estava ótimo. |
 | Turma 2 - M | [Jardim do Leafeon](grupos/camisao-t2m-lucas/) | Animais terrestres | Lucas, Kauã e Ruan | Atalhos para "Animais descobertos" e "Conquistas" (só existiam no menu de entrada); galeria no tablet; app maior. **Visual novo:** tema Leafeon (verde-folha e creme, raios do Rotom). |
 | Turma 2 - M | [Blinkis (Codex)](grupos/camisao-t2m-sther/) | Animais | Anna Laynara, Evelyn e Sther | App um pouco maior no tablet; nome da Sther corrigido. |
+| Turma 2 - M | [Mata Grande](grupos/camisao-t2m-ruan/) | Aves do mundo todo | Miguel e Ruan | Grupo novo (front veio em .docx, remontado pela professora): Descobrir com o BIÓLOGO, catálogo "Aves da Mata" com filtros Brasil/Américas/Mundo/Raras, ficha com Vive/Nascimento/Vida/Som e canto real, álbum "Seu Safari". |
 
 <details><summary><b>Conjuntos da Floresta</b> (Turma 1) — ajustes nas missões e no front</summary>
 

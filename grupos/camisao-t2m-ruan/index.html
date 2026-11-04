@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<!--
+  MATA GRANDE — aves do mundo todo
+  Grupo: Miguel e Ruan (Camisão, Turma 2 - M)
+
+  O front do grupo chegou como .docx (o código se perdeu). A professora
+  remontou a página a partir dos textos, das cores e da foto do documento:
+  Descobrir (com o BIÓLOGO), catálogo "Aves da Mata" com os filtros do grupo,
+  "Seu Safari" (álbum) e a "Ficha da ave" com Vive, Nascimento, Vida e Som.
+  As missões do back-end são as do grupo (missoes.js).
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mata Grande 🌿</title>
+<style>
+:root{--escuro:#0f241b;--escuro2:#183126;--verde:#397b6c;--menta:#9dc5aa;--lima:#bde2a8;--claro:#f5fff9;--creme:#f7f5ec;--palha:#eaf3ed;--texto:#183126;--suave:#5c7468;--ouro:#f2c14e}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--claro);background:radial-gradient(circle at 15% 0%,#2b5a45 0,transparent 40%),radial-gradient(circle at 90% 20%,#1f4a3c 0,transparent 35%),var(--escuro);min-height:100vh}
+button{font-family:inherit}
+.app{max-width:1180px;margin:auto;padding:16px 20px 40px}
+/* topo */
+header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;position:sticky;top:0;z-index:30;padding:12px 0;background:linear-gradient(var(--escuro) 70%,transparent)}
+.marca{font-weight:900;font-size:26px;letter-spacing:3px;color:var(--claro);cursor:pointer}
+.marca span{color:var(--lima)}
+nav{display:flex;gap:6px;background:#ffffff10;border:1px solid #ffffff1f;border-radius:999px;padding:5px}
+nav button{border:0;border-radius:999px;padding:11px 20px;font-weight:800;font-size:16px;background:transparent;color:var(--menta);cursor:pointer;min-height:46px}
+nav button.ativo{background:var(--lima);color:var(--escuro)}
+.ver-aves{border:2px solid var(--lima);background:transparent;color:var(--lima);border-radius:999px;padding:10px 18px;font-weight:800;font-size:16px;cursor:pointer;min-height:46px}
+.aba{display:none;animation:entra .3s ease}.aba.ativa{display:block}
+@keyframes entra{from{opacity:0;transform:translateY(8px)}}
+/* hero */
+.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:24px;align-items:center;margin:14px 0 22px}
+.selo{display:inline-block;color:var(--menta);font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.hero h1{font-size:clamp(36px,5vw,60px);line-height:1.02;margin:0 0 14px;color:var(--claro)}
+.hero h1 em{font-style:normal;color:var(--lima)}
+.hero p{font-size:19px;line-height:1.5;color:#c2d2c7;margin:0}
+.hero-foto{position:relative;border-radius:28px;overflow:hidden;aspect-ratio:3/4;max-height:420px;box-shadow:0 24px 50px #0008;border:3px solid #ffffff22;justify-self:center;width:100%;max-width:320px}
+.hero-foto img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-foto span{position:absolute;left:12px;bottom:12px;background:#0f241bcc;color:var(--lima);padding:7px 12px;border-radius:999px;font-weight:800;font-size:13px}
+/* cartões claros */
+.cartao{background:var(--creme);color:var(--texto);border-radius:26px;padding:24px;box-shadow:0 16px 40px #0006}
+.cartao h2{margin:0 0 8px;font-size:28px}
+.cartao>p{margin:0 0 16px;font-size:17px;line-height:1.5;color:var(--suave)}
+.descobrir{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.previa{aspect-ratio:4/3;border-radius:20px;border:3px dashed var(--menta);background:var(--palha);display:grid;place-items:center;text-align:center;color:var(--suave);overflow:hidden}
+.previa img{width:100%;height:100%;object-fit:cover}
+.previa .ic{font-size:58px}
+.botoes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.botao{border:0;border-radius:16px;padding:14px;font-size:17px;font-weight:800;cursor:pointer;min-height:52px;background:var(--verde);color:#fff}
+.botao.claro{background:var(--palha);color:var(--texto);border:2px solid var(--menta)}
+.botao.ouro{background:var(--ouro);color:#3a2a00}
+.botao.cheio{grid-column:1/-1}
+.botao:disabled{opacity:.45;cursor:not-allowed}
+input[type=file]{display:none}
+#status{text-align:center;font-weight:800;color:var(--verde);min-height:22px;margin:10px 0 0}
+.resultado h3{font-size:30px;margin:0}
+.resultado .cient{font-style:italic;color:var(--suave);margin:2px 0 12px}
+.dados{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dado{background:#fff;border:2px solid var(--palha);border-radius:16px;padding:12px}
+.dado b{display:block;color:var(--verde);font-size:14px;margin-bottom:4px}
+.dado span{font-size:15px;line-height:1.4}
+.acoes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.vazio{text-align:center;padding:28px;border:3px dashed var(--menta);border-radius:20px;color:var(--suave);font-weight:700;grid-column:1/-1}
+.vazio .ic{font-size:48px;display:block}
+/* catálogo */
+.titulo-secao{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin:6px 0 14px}
+.titulo-secao small{color:var(--menta);font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.titulo-secao h2{margin:2px 0 0;font-size:34px}
+.filtros{display:flex;gap:8px;flex-wrap:wrap}
+.filtros button{border:1px solid #ffffff2a;background:#ffffff12;color:var(--claro);border-radius:999px;padding:10px 16px;font-weight:800;font-size:15px;cursor:pointer;min-height:44px}
+.filtros button.ativo{background:var(--lima);color:var(--escuro);border-color:var(--lima)}
+.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.ave{background:var(--creme);color:var(--texto);border-radius:20px;overflow:hidden;cursor:pointer;border:0;padding:0;text-align:left;box-shadow:0 10px 24px #0005;transition:transform .2s}
+.ave:hover{transform:translateY(-4px)}
+.ave .foto{position:relative;aspect-ratio:4/3;background:linear-gradient(160deg,#2b5a45,#183126);display:grid;place-items:center;font-size:52px;overflow:hidden}
+.ave .foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ave .rara{position:absolute;top:8px;right:8px;background:var(--ouro);color:#3a2a00;font-weight:900;font-size:12px;padding:4px 9px;border-radius:999px}
+.ave .txt{padding:10px 12px 12px}
+.ave b{display:block;font-size:17px}
+.ave i{color:var(--suave);font-size:13px}
+.ave .regiao{display:inline-block;margin-top:6px;background:var(--palha);color:var(--verde);font-weight:800;font-size:12px;padding:4px 10px;border-radius:999px}
+/* álbum */
+.album{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.figurinha{background:var(--creme);color:var(--texto);border-radius:20px;overflow:hidden;box-shadow:0 10px 24px #0005;display:flex;flex-direction:column}
+.figurinha img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.figurinha .txt{padding:10px 12px 4px}
+.figurinha strong{font-size:17px}
+.figurinha small{color:var(--suave)}
+.figurinha .fp-ver-ficha{align-self:flex-start}
+.contador{color:var(--lima);font-weight:800;font-size:18px}
+/* ficha da ave (catálogo) */
+.ficha-fundo{position:fixed;inset:0;z-index:200;background:#0f241bd9;display:grid;place-items:center;padding:18px;backdrop-filter:blur(6px)}
+.ficha{position:relative;background:var(--creme);color:var(--texto);border-radius:26px;max-width:620px;width:100%;max-height:92vh;overflow:auto;box-shadow:0 30px 60px #000a}
+.ficha .topo-foto{aspect-ratio:16/9;background:linear-gradient(160deg,#2b5a45,#183126);display:grid;place-items:center;font-size:70px;position:relative;overflow:hidden}
+.ficha .topo-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ficha .corpo{padding:18px 22px 22px}
+.ficha small.rotulo{color:var(--verde);font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.ficha h3{margin:4px 0 0;font-size:30px}
+.ficha .cient{font-style:italic;color:var(--suave);margin:2px 0 14px}
+.fechar{position:absolute;top:10px;right:10px;z-index:2;width:44px;height:44px;border-radius:50%;border:0;background:#0f241bcc;color:#fff;font-size:20px;cursor:pointer}
+footer{margin-top:30px;color:#9dc5aa;font-size:14px;line-height:1.5;text-align:center}
+@media(max-width:860px){.hero,.descobrir{grid-template-columns:1fr}.hero-foto{max-width:260px}}
+@media(max-width:560px){.dados,.acoes,.botoes{grid-template-columns:1fr}nav button{padding:10px 12px;font-size:14px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="marca" data-ir="descobrir">🌿 MATA <span>GRANDE</span></div>
+  <nav aria-label="Abas">
+    <button data-aba="descobrir" class="ativo">📷 Descobrir</button>
+    <button data-aba="aves">🐦 Aves</button>
+    <button data-aba="album">📖 Meu álbum</button>
+  </nav>
+  <button class="ver-aves" data-ir="aves">🐦 Ver aves</button>
+</header>
+
+<!-- ===== DESCOBRIR ===== -->
+<section class="aba ativa" id="aba-descobrir">
+  <div class="hero">
+    <div>
+      <span class="selo">Floresta + tecnologia · IA de visão</span>
+      <h1>Descubra o que vive, <em>cresce e voa.</em></h1>
+      <p>Uma experiência inspirada na Pokédex da Mata: tire uma foto, descubra a espécie e guarde suas descobertas.</p>
+    </div>
+    <div class="hero-foto"><img src="mata.webp" alt="Rio e floresta ao pôr do sol"><span>🌅 Mata Grande</span></div>
+  </div>
+
+  <div class="descobrir">
+    <div class="cartao">
+      <h2>Pronto para descobrir?</h2>
+      <p>Envie uma foto de uma ave. O <b>BIÓLOGO</b> vai analisar a imagem e só mostrará um resultado quando tiver confiança suficiente.</p>
+      <div class="previa" id="previa"><div><span class="ic">🐦</span><br><b>Sua foto aparece aqui</b></div></div>
+      <input type="file" id="arquivoCamera" accept="image/*" capture="environment">
+      <input type="file" id="arquivoGaleria" accept="image/*">
+      <div class="botoes">
+        <button class="botao" id="btnCamera">📷 Tirar foto</button>
+        <button class="botao claro" id="btnGaleria">🖼️ Galeria</button>
+        <button class="botao ouro cheio" id="btnAnalisar" disabled>🔎 Analisar</button>
+      </div>
+      <p id="status"></p>
+    </div>
+    <div class="cartao resultado" id="resultado">
+      <div class="vazio"><span class="ic">🔭</span>Ainda nenhuma ave. Tire uma foto para o BIÓLOGO analisar!</div>
+    </div>
+  </div>
+  <footer>MATA GRANDE · Visual inspirado na experiência de catálogo e descoberta da Pokédex da Mata. A foto principal mostra uma ave da natureza enviada por você.</footer>
+</section>
+
+<!-- ===== AVES (catálogo de campo) ===== -->
+<section class="aba" id="aba-aves">
+  <div class="titulo-secao">
+    <div><small>Catálogo de campo</small><h2>Aves da Mata</h2></div>
+    <div class="filtros" id="filtros">
+      <button data-f="todas" class="ativo">Todas</button>
+      <button data-f="Brasil">🇧🇷 Brasil</button>
+      <button data-f="Américas">🌎 Américas</button>
+      <button data-f="Mundo">🌍 Mundo</button>
+      <button data-f="raras">⭐ Raras</button>
+    </div>
+  </div>
+  <div class="grade" id="catalogo"></div>
+</section>
+
+<!-- ===== MEU ÁLBUM (Seu Safari) ===== -->
+<section class="aba" id="aba-album">
+  <div class="titulo-secao">
+    <div><small>Seu Safari</small><h2>Álbum de descobertas</h2></div>
+    <span class="contador" id="contador">0 espécies descobertas</span>
+  </div>
+  <div class="album" id="album"></div>
+</section>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = t => String(t == null ? "" : t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+/* Abas */
+function irPara(aba){
+  document.querySelectorAll(".aba").forEach(a => a.classList.toggle("ativa", a.id === "aba-" + aba));
+  document.querySelectorAll("nav button").forEach(b => b.classList.toggle("ativo", b.dataset.aba === aba));
+  if (aba === "aves") desenharCatalogo();
+  if (aba === "album") desenharAlbum();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+document.querySelectorAll("[data-aba]").forEach(b => b.onclick = () => irPara(b.dataset.aba));
+document.querySelectorAll("[data-ir]").forEach(b => b.onclick = () => irPara(b.dataset.ir));
+
+/* Catálogo de campo: aves do Brasil, das Américas e do mundo
+   [nome, científico, emoji, região, rara, vive, nascimento, vida, som] */
+const AVES = [
+  ["Arara-azul-grande", "Anodorhynchus hyacinthinus", "🦜", "Brasil", true, "Pantanal e Cerrado, em palmeirais e matas.", "Em ocos de árvores grandes, como o manduvi. Põe 2 ovos.", "Até uns 50 anos.", "Gritos altos e roucos, que se ouvem de longe."],
+  ["Tucano-toco", "Ramphastos toco", "🦜", "Brasil", false, "Cerrado, Pantanal e bordas de mata.", "Em ocos de árvores e cupinzeiros.", "Cerca de 20 anos.", "Um ronco grave, parecido com um sapo: “rrrok”."],
+  ["Sabiá-laranjeira", "Turdus rufiventris", "🐦", "Brasil", false, "Quase todo o Brasil, até nas cidades.", "Em ninho em forma de tigela, feito de barro e raízes.", "Cerca de 10 anos.", "Canto bonito e cheio de notas, como uma flauta."],
+  ["Bem-te-vi", "Pitangus sulphuratus", "🐦", "Brasil", false, "Todo o Brasil: cidades, campos e beiras de rio.", "Em ninho de palha em forma de bola, com entrada do lado.", "Cerca de 7 anos.", "Grita o próprio nome: “bem-te-vi!”."],
+  ["Harpia", "Harpia harpyja", "🦅", "Brasil", true, "Florestas altas da Amazônia e da Mata Atlântica.", "Em ninho enorme de galhos no alto de árvores gigantes. Põe 1 ou 2 ovos.", "De 25 a 35 anos.", "Um assobio agudo e triste."],
+  ["Ararinha-azul", "Cyanopsitta spixii", "🦜", "Brasil", true, "Caatinga da Bahia, perto de riachos.", "Em ocos de caraibeiras.", "De 20 a 30 anos.", "Gritos curtos e agudos."],
+  ["Condor-dos-andes", "Vultur gryphus", "🦅", "Américas", true, "Montanhas dos Andes e costa do Pacífico.", "Em cavernas e paredões de rocha. Põe só 1 ovo a cada 2 anos.", "Pode passar de 50 anos.", "Quase não faz som: só chiados e grunhidos."],
+  ["Águia-careca", "Haliaeetus leucocephalus", "🦅", "Américas", false, "América do Norte, perto de rios e lagos.", "Em ninhos gigantes no alto das árvores, usados por muitos anos.", "De 20 a 30 anos.", "Pios agudos, bem mais fininhos do que parece."],
+  ["Flamingo-do-caribe", "Phoenicopterus ruber", "🦩", "Américas", false, "Lagoas salgadas do Caribe e da América Central.", "Em um montinho de lama, com 1 ovo em cima.", "Mais de 40 anos.", "Grasnados parecidos com os de um ganso."],
+  ["Colibri-abelha", "Mellisuga helenae", "🐦", "Américas", true, "Florestas de Cuba.", "Em ninho do tamanho de uma tampinha de garrafa.", "Cerca de 7 anos.", "Chiados bem agudos e fininhos."],
+  ["Pinguim-de-magalhães", "Spheniscus magellanicus", "🐧", "Américas", false, "Mares e costas da Patagônia; visita o sul do Brasil no inverno.", "Em tocas cavadas no chão, perto do mar.", "Cerca de 25 anos.", "Um zurro alto, parecido com o de um burro."],
+  ["Pinguim-imperador", "Aptenodytes forsteri", "🐧", "Mundo", false, "Gelo da Antártida.", "Sem ninho: o pai segura o ovo em cima dos pés por 2 meses!", "Cerca de 20 anos.", "Chamados que parecem uma trombeta."],
+  ["Avestruz", "Struthio camelus", "🐦", "Mundo", false, "Savanas e desertos da África.", "Em um buraco no chão; várias fêmeas põem os ovos no mesmo ninho.", "De 30 a 40 anos.", "Um rugido grave, parecido com o de um leão."],
+  ["Pavão-indiano", "Pavo cristatus", "🦚", "Mundo", false, "Florestas e campos da Índia e do Sri Lanka.", "Em ninho simples no chão, escondido no mato.", "Cerca de 20 anos.", "Um grito alto que parece um “miau”."],
+  ["Kiwi", "Apteryx mantelli", "🐦", "Mundo", true, "Florestas da Nova Zelândia.", "Em tocas no chão. O ovo é enorme para o tamanho da ave!", "De 25 a 50 anos.", "Assobios agudos, à noite."],
+  ["Papagaio-cinzento", "Psittacus erithacus", "🦜", "Mundo", true, "Florestas da África Central.", "Em ocos de árvores.", "De 40 a 60 anos.", "Assobios, gritos e é um dos melhores imitadores de voz humana."],
+  ["Albatroz-errante", "Diomedea exulans", "🐦", "Mundo", true, "Oceanos do sul; só pousa em ilhas para ter filhotes.", "Em ninho de lama e capim em ilhas isoladas.", "Mais de 50 anos.", "Estalos de bico e assobios na dança do namoro."],
+  ["Coruja-das-neves", "Bubo scandiacus", "🦉", "Mundo", false, "Tundra gelada do Ártico.", "Em um buraquinho raso no chão da tundra.", "Cerca de 10 anos na natureza.", "Pios graves: “hu-hu”."]
+];
+let filtro = "todas";
+document.querySelectorAll("#filtros button").forEach(b => b.onclick = () => {
+  filtro = b.dataset.f;
+  document.querySelectorAll("#filtros button").forEach(x => x.classList.toggle("ativo", x === b));
+  desenharCatalogo();
+});
+function desenharCatalogo(){
+  const lista = AVES.filter(a => filtro === "todas" || (filtro === "raras" ? a[4] : a[3] === filtro));
+  $("catalogo").innerHTML = lista.map(a => `<button class="ave" type="button" data-nome="${esc(a[0])}">
+    <div class="foto">${a[2]}<img data-especie="${esc(a[1])}" alt="Foto de ${esc(a[0])}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" onload="this.style.opacity=this.naturalWidth>1?1:0" style="opacity:0">${a[4] ? '<span class="rara">⭐ Rara</span>' : ""}</div>
+    <div class="txt"><b>${esc(a[0])}</b><i>${esc(a[1])}</i><br><span class="regiao">${a[3] === "Brasil" ? "🇧🇷" : a[3] === "Américas" ? "🌎" : "🌍"} ${esc(a[3])}</span></div></button>`).join("");
+  document.querySelectorAll("#catalogo .ave").forEach(b => b.onclick = () => abrirFichaCatalogo(AVES.find(a => a[0] === b.dataset.nome)));
+  FichaPokedex.trocarFotos($("catalogo"));
+}
+/* Ficha da ave (do catálogo): Vive, Nascimento, Vida e Som + ouvir o canto */
+function abrirFichaCatalogo(a){
+  const fundo = document.createElement("div"); fundo.className = "ficha-fundo";
+  fundo.innerHTML = `<div class="ficha" role="dialog" aria-label="Ficha da ave"><button class="fechar" aria-label="Fechar">✕</button>
+    <div class="topo-foto">${a[2]}<img data-especie="${esc(a[1])}" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" onload="this.style.opacity=this.naturalWidth>1?1:0" style="opacity:0"></div>
+    <div class="corpo"><small class="rotulo">Ficha da ave ${a[4] ? "· ⭐ Rara" : ""}</small><h3>${esc(a[0])}</h3><div class="cient">${esc(a[1])}</div>
+      <div class="dados"><div class="dado"><b>📍 Vive</b><span>${esc(a[5])}</span></div><div class="dado"><b>🥚 Nascimento</b><span>${esc(a[6])}</span></div>
+      <div class="dado"><b>⏳ Vida</b><span>${esc(a[7])}</span></div><div class="dado"><b>🔊 Som</b><span>${esc(a[8])}</span></div></div>
+      <div class="acoes"><button class="botao ouro" type="button" data-som>🔊 Ouvir o canto</button><button class="botao claro" type="button" data-fechar>Fechar</button></div></div></div>`;
+  const fechar = () => { FichaPokedex.pararSom(); fundo.remove(); };
+  fundo.onclick = e => { if (e.target === fundo) fechar(); };
+  fundo.querySelector(".fechar").onclick = fechar; fundo.querySelector("[data-fechar]").onclick = fechar;
+  const som = fundo.querySelector("[data-som]"); som.onclick = () => FichaPokedex.tocarSom(a[1], a[0], som);
+  document.body.appendChild(fundo);
+  FichaPokedex.trocarFotos(fundo);
+}
+
+/* Descobrir: foto -> back-end do grupo (/api/identificar) */
+let fotoEscolhida = null, miniatura = "", ultimaAve = null;
+$("btnCamera").onclick = () => $("arquivoCamera").click();
+$("btnGaleria").onclick = () => $("arquivoGaleria").click();
+[$("arquivoCamera"), $("arquivoGaleria")].forEach(inp => inp.addEventListener("change", () => {
+  const f = inp.files && inp.files[0]; if (!f) return;
+  fotoEscolhida = f;
+  $("previa").innerHTML = `<img src="${URL.createObjectURL(f)}" alt="Foto escolhida">`;
+  $("btnAnalisar").disabled = false;
+  $("status").textContent = "Foto pronta! Toque em “Analisar”. 🔎";
+}));
+function reduzir(arquivo, lado){
+  return new Promise(res => {
+    const img = new Image();
+    img.onload = () => { const k = Math.min(1, lado / Math.max(img.width, img.height)); const c = document.createElement("canvas");
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); res(c.toDataURL("image/jpeg", .82)); };
+    img.onerror = () => res(""); img.src = URL.createObjectURL(arquivo);
+  });
+}
+$("btnAnalisar").onclick = async () => {
+  if (!fotoEscolhida) return;
+  $("btnAnalisar").disabled = true; $("status").textContent = "🔭 O BIÓLOGO está analisando...";
+  try {
+    const foto = await reduzir(fotoEscolhida, 1024);
+    miniatura = await reduzir(fotoEscolhida, 320);
+    const pedido = { body: { contents: [{ parts: [
+      { text: "Identifique a ave da foto (pode ser uma ave de qualquer lugar do mundo). Preencha também: onde_vive (onde ela vive no mundo), lugar_nascimento (onde e como ela nasce: tipo de ninho, quantos ovos), tempo_vida (quanto tempo ela vive) e som_descricao (como é o canto ou o som dela). Use frases curtas, para crianças." },
+      { inline_data: { mime_type: "image/jpeg", data: foto.split(",")[1] } } ] }],
+      generationConfig: { temperature: 0.2, responseMimeType: "application/json", responseSchema: { type: "object", properties: {
+        onde_vive: { type: "string" }, lugar_nascimento: { type: "string" }, tempo_vida: { type: "string" }, som_descricao: { type: "string" } } } } } };
+    const resposta = await fetch("/api/identificar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(pedido) });
+    const dados = await resposta.json().catch(() => ({}));
+    const texto = dados && dados.candidates && dados.candidates[0].content.parts[0].text;
+    const r = texto ? JSON.parse(texto) : null;
+    if (r && r.identificado) { ultimaAve = r; mostrarResultado(r); $("status").textContent = "🎉 Ave descoberta!"; }
+    else $("status").textContent = "🤔 O BIÓLOGO não teve certeza. Tente outra foto!";
+  } catch (e) {
+    $("status").textContent = "Ops! Não consegui falar com o servidor.";
+  } finally { $("btnAnalisar").disabled = false; }
+};
+function mostrarResultado(r){
+  $("resultado").innerHTML = `<small style="color:var(--verde);font-weight:800;letter-spacing:1px">AVE</small><h3>${esc(r.nome_popular)}</h3><div class="cient">${esc(r.nome_cientifico || "")}</div>
+    <div class="dados"><div class="dado"><b>📍 Onde vive</b><span>${esc(r.onde_vive || r.habitat_descricao || "—")}</span></div>
+    <div class="dado"><b>🥚 Lugar de nascimento</b><span>${esc(r.lugar_nascimento || "—")}</span></div>
+    <div class="dado"><b>⏳ Tempo de vida</b><span>${esc(r.tempo_vida || "—")}</span></div>
+    <div class="dado"><b>🔊 Som</b><span>${esc(r.som_descricao || "—")}</span></div></div>
+    <div class="acoes"><button class="botao ouro" id="btnCanto">🔊 Ouvir o canto</button><button class="botao claro" id="btnDescricao">🗣️ Ouvir descrição do som</button>
+    <button class="botao" id="btnSalvar">💾 Salvar no álbum</button><button class="botao claro" id="btnFicha">📋 Ver a ficha</button></div>`;
+  $("btnCanto").onclick = () => FichaPokedex.tocarSom(r.nome_cientifico, r.nome_popular, $("btnCanto"));
+  $("btnDescricao").onclick = () => { if (!("speechSynthesis" in window)) return; speechSynthesis.cancel(); const f = new SpeechSynthesisUtterance(r.nome_popular + ". " + (r.som_descricao || "")); f.lang = "pt-BR"; speechSynthesis.speak(f); };
+  $("btnSalvar").onclick = salvarNoAlbum;
+  $("btnFicha").onclick = () => PokedexAdaptador.abrirFicha(r, miniatura);
+}
+
+/* Seu Safari: álbum guardado neste aparelho */
+function lerAlbum(){ try { return JSON.parse(localStorage.getItem("mataGrandeAlbum") || "[]"); } catch (e) { return []; } }
+function salvarNoAlbum(){
+  if (!ultimaAve) return;
+  const album = lerAlbum().filter(a => a.nome !== ultimaAve.nome_popular);
+  album.unshift({ nome: ultimaAve.nome_popular, cientifico: ultimaAve.nome_cientifico || "", foto: miniatura, data: new Date().toLocaleDateString("pt-BR") });
+  try { localStorage.setItem("mataGrandeAlbum", JSON.stringify(album.slice(0, 60))); } catch (e) {}
+  irPara("album");
+}
+function desenharAlbum(){
+  const album = lerAlbum();
+  $("contador").textContent = album.length + (album.length === 1 ? " espécie descoberta" : " espécies descobertas");
+  if (!album.length) { $("album").innerHTML = '<div class="vazio" style="color:#c2d2c7;border-color:#9dc5aa66"><span class="ic">🪺</span>Suas aves identificadas aparecerão aqui.</div>'; return; }
+  $("album").innerHTML = "";
+  album.forEach(a => {
+    const el = document.createElement("div"); el.className = "figurinha";
+    if (a.foto) { const im = document.createElement("img"); im.src = a.foto; im.alt = ""; el.appendChild(im); }
+    const t = document.createElement("div"); t.className = "txt";
+    const b = document.createElement("strong"); b.textContent = a.nome;
+    const s = document.createElement("small"); s.textContent = (a.cientifico ? a.cientifico + " • " : "") + a.data;
+    t.append(b, document.createElement("br"), s); el.appendChild(t); $("album").appendChild(el);
+  });
+}
+</script>
+
+<!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
+     (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
+<script src="/comum/ficha.js"></script>
+<script src="/comum/adaptador.js"></script>
+<script>
+PokedexAdaptador.iniciar({
+  albumFicha: { cartao: "#album .figurinha", nome: "strong" },  // "📖 Ver ficha" nas figurinhas do álbum
+  etapas: { foto: ["#btnAnalisar"] },   // o botão de analisar só aparece depois de escolher a foto
+  som: true, textoSom: "🔊 Ouvir o canto",
+  icone: "🐦", fauna: true,
+  cor: "#397b6c", cor2: "#bde2a8",
+  escuro: () => false,
+  claro: { fundo: "#f7f5ec", texto: "#183126", suave: "#5c7468" },
+  carregando: "🔭 O BIÓLOGO está analisando...",
+  extras: info => [["📍 Onde vive", info.onde_vive], ["🥚 Lugar de nascimento", info.lugar_nascimento], ["⏳ Tempo de vida", info.tempo_vida], ["🔊 Som", info.som_descricao]],
+  salvar: () => salvarNoAlbum(),
+  novaFoto: () => { irPara("descobrir"); document.getElementById("btnGaleria").click(); }
+});
+</script>
+</body>
+</html>
