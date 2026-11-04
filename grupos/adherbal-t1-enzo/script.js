@@ -81,17 +81,7 @@ $$(".map-point").forEach(btn=>btn.addEventListener("click",()=>{
 }));
 
 const audio=$("#jaguarAudio"), roarBtn=$("#roarButton");
-roarBtn.addEventListener("click",async()=>{
- if(!audio.paused){audio.pause();audio.currentTime=0;roarBtn.classList.remove("is-playing");roarBtn.textContent="🔊 Ouvir rugido da onça";return;}
- try{
-   audio.currentTime=0; await audio.play(); roarBtn.classList.add("is-playing");roarBtn.textContent="🔊 Parar áudio";
- }catch{
-   const message=document.createElement("p");message.className="message";message.textContent="Não consegui carregar o áudio agora. Confira a conexão e tente novamente.";
-   const old=$(".audio-message");if(old)old.remove();message.classList.add("audio-message");roarBtn.insertAdjacentElement("afterend",message);
- }
-});
-audio.addEventListener("ended",()=>{roarBtn.classList.remove("is-playing");roarBtn.textContent="🔊 Ouvir rugido da onça"});
-audio.addEventListener("error",()=>{roarBtn.classList.remove("is-playing");roarBtn.textContent="🔊 Ouvir rugido da onça"});
+roarBtn.addEventListener("click",()=>FichaPokedex.tocarSom("Panthera onca","Onça-pintada")); // rugido real (Wikimedia Commons)
 
 // Identificação de mamíferos — mantém a rota e o formato do backend existentes.
 const photoInput=$("#photoInput"), photoPreview=$("#photoPreview");

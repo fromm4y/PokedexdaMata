@@ -165,14 +165,14 @@ function fail(title,msg){
 }
 function result(d){
  last={nome:typeof d.nome==="string"&&d.nome?d.nome:"Ave brasileira",cientifico:typeof d.nomeCientifico==="string"?d.nomeCientifico:"",info:typeof d.curiosidades==="string"?d.curiosidades:"Uma nova descoberta para o seu álbum!",local:typeof d.localizacao==="string"?d.localizacao:"Localização não informada.",hab:typeof d.habitat==="string"?d.habitat:"Habitat não informado.",som:typeof d.somUrl==="string"?d.somUrl:"",conf:Number(d.confianca)||0,imagem:dataURL};
- rphoto.src=last.imagem;rname.textContent=last.nome;rsci.textContent=last.cientifico;conf.textContent="Confiança: "+last.conf+"%";tinfo.textContent=last.info;tlocal.textContent=last.local;thabitat.textContent=last.hab;rsound.textContent=last.som?"Ouvir canto":"Som indisponível";
+ rphoto.src=last.imagem;rname.textContent=last.nome;rsci.textContent=last.cientifico;conf.textContent="Confiança: "+last.conf+"%";tinfo.textContent=last.info;tlocal.textContent=last.local;thabitat.textContent=last.hab;rsound.textContent="Ouvir canto";
  let a=album();if(!a.some(x=>x.nome.toLowerCase()===last.nome.toLowerCase())){a.unshift(last);save(a)}mostrar("resultado")
 }
 function tab(which,b){document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");["info","local","habitat"].forEach(x=>document.getElementById("t"+x).classList.add("hidden"));document.getElementById("t"+which).classList.remove("hidden")}
-function lastSound(){playBirdSound(last?.som)}
+function lastSound(){playBirdSound(last)}
 function renderSounds(){
  sounds.textContent="";let a=album();if(!a.length){sounds.innerHTML='<p style="color:#9da9cd;text-align:center;padding:40px">Descubra uma ave para colocar os primeiros cantos aqui.</p>';return}
- a.forEach(b=>{let r=document.createElement("div");r.className="player";let p=document.createElement("button");p.className="play";p.innerHTML='<svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg>';p.onclick=()=>playBirdSound(b.som);let mid=document.createElement("div"),n=document.createElement("b");n.textContent=b.nome;let s=document.createElement("small");s.textContent=b.cientifico||"Ave brasileira";s.style.cssText="display:block;color:#8e9bc2;margin-top:3px";let range=document.createElement("input");range.type="range";range.className="range";range.disabled=true;mid.append(n,s,range);let q=document.createElement("button");q.className="secondary";q.textContent=b.som?"Ouvir":"Indisponível";q.onclick=p.onclick;r.append(p,mid,q);sounds.append(r)})
+ a.forEach(b=>{let r=document.createElement("div");r.className="player";let p=document.createElement("button");p.className="play";p.innerHTML='<svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg>';p.onclick=()=>playBirdSound(b);let mid=document.createElement("div"),n=document.createElement("b");n.textContent=b.nome;let s=document.createElement("small");s.textContent=b.cientifico||"Ave brasileira";s.style.cssText="display:block;color:#8e9bc2;margin-top:3px";let range=document.createElement("input");range.type="range";range.className="range";range.disabled=true;mid.append(n,s,range);let q=document.createElement("button");q.className="secondary";q.textContent="Ouvir";q.onclick=p.onclick;r.append(p,mid,q);sounds.append(r)})
 }
 function getStats(){try{return JSON.parse(localStorage.getItem(STATS_KEY)||"{}")}catch{return{}}}
 function saveStats(o){localStorage.setItem(STATS_KEY,JSON.stringify(o))}
@@ -215,7 +215,9 @@ function renderSettings(){
 function loadProfilePhoto(){const saved=localStorage.getItem(PROFILE_KEY),box=document.getElementById("profileAvatar"),remove=document.getElementById("removeProfilePhoto");if(!box)return;box.textContent="";if(saved){box.classList.add("hasPhoto");let im=document.createElement("img");im.src=saved;im.alt="Foto de perfil";box.appendChild(im);remove?.classList.remove("hidden")}else{box.classList.remove("hasPhoto");let s=document.createElement("span");s.textContent="FOTO DE PERFIL";box.appendChild(s);remove?.classList.add("hidden")}}
 function removerFotoPerfil(){localStorage.removeItem(PROFILE_KEY);loadProfilePhoto();toast("Foto de perfil removida.")}
 function setVolume(v){localStorage.setItem("velo_volume",String(v));volumeValue.value=v+"%";if(window.currentAudio)window.currentAudio.volume=v/100}
-function playBirdSound(url){if(!url)return toast("O canto desta ave não veio com a descoberta.");try{if(window.currentAudio){window.currentAudio.pause();window.currentAudio=null}let a=new Audio(url);a.volume=Number(localStorage.getItem("velo_volume")||80)/100;window.currentAudio=a;a.play().catch(()=>toast("Não consegui tocar este canto."));let st=getStats();st.soundsPlayed=Number(st.soundsPlayed||0)+1;saveStats(st)}catch{toast("Não consegui tocar este canto.")}}
+/* Canto de verdade: a IA não tem link de áudio confiável, então buscamos uma
+   gravação real da ave (Wikimedia Commons) pelo nome científico. */
+function playBirdSound(ave){if(!ave)return toast("Descubra uma ave primeiro!");let st=getStats();st.soundsPlayed=Number(st.soundsPlayed||0)+1;saveStats(st);FichaPokedex.tocarSom(ave.cientifico,ave.nome)}
 
 document.getElementById("profilePhotoInput")?.addEventListener("change",e=>{const f=e.target.files?.[0];if(!f||!f.type.startsWith("image/"))return toast("Escolha uma imagem para o perfil.");const r=new FileReader();r.onload=async()=>{try{localStorage.setItem(PROFILE_KEY,await reduzirParaAlbum(r.result))}catch(e){};loadProfilePhoto();toast("Foto de perfil atualizada!")};r.readAsDataURL(f)});
 document.getElementById("volumeControl")?.addEventListener("input",e=>setVolume(e.target.value));
@@ -233,6 +235,7 @@ document.addEventListener("click",e=>{let s=document.getElementById("side");if(s
    do navegador: agora guarda uma versão menor. */
 window.reduzirParaAlbum = src => new Promise(res => { const img = new Image(); img.onload = () => { const k = Math.min(1, 700 / Math.max(img.width, img.height)); const c = document.createElement("canvas"); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); res(c.toDataURL("image/jpeg", .8)); }; img.onerror = () => res(src); img.src = src; });
 PokedexAdaptador.iniciar({
+  som: true, textoSom: "🔊 Ouvir o canto",  // gravação real da espécie (Wikimedia Commons)
   albumFicha: { cartao: "#albumGrid .card", nome: "b" },  // "📖 Ver ficha" nas figurinhas do álbum
   icone: "🐦", fauna: true,
   cor: "#12b8ff", cor2: "#8c35ff",

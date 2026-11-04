@@ -475,6 +475,49 @@
   function urlDaEspecie(termo) {
     return fotoDaEspecie(termo).then(r => r ? primeiraQueCarrega([r.grande, r.original, r.pequena]) : null);
   }
+  /* ---------- som de verdade da espécie (gravações do Wikimedia Commons) ----------
+     somDaEspecie("Turdus rufiventris", "Sabiá-laranjeira") -> Promise<url|null>
+     tocarSom(cientifico, popular): toca e avisa num balãozinho. */
+  function somDaEspecie(cientifico, popular) {
+    const termos = [cientifico, popular].filter(t => t && String(t).trim().length > 2);
+    const chave = "fpSom:" + termos.join("|");
+    try { const c = localStorage.getItem(chave); if (c) return Promise.resolve(c); } catch (e) {}
+    const buscar = t => fetch("https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=10&gsrsearch="
+        + encodeURIComponent('filetype:audio "' + t + '"') + "&prop=videoinfo&viprop=url|mime|derivatives")
+      .then(r => r.ok ? r.json() : null)
+      .then(j => {
+        const ps = j && j.query && j.query.pages ? Object.values(j.query.pages).sort((a, b) => (a.index || 0) - (b.index || 0)) : [];
+        const info = p => (p.videoinfo && p.videoinfo[0]) || {};
+        // MP3 primeiro (toca em qualquer tablet, inclusive iPad); depois o arquivo original
+        for (const p of ps) { const d = info(p); const mp3 = (d.derivatives || []).find(x => /mpeg|mp3/.test((x.type || "") + (x.transcodekey || ""))); if (mp3) return mp3.src; if (/mpeg|mp3|wav/.test(d.mime || "")) return d.url; }
+        for (const p of ps) { const d = info(p); if (d.url) return d.url; }
+        return null;
+      }).catch(() => null);
+    return termos.reduce((p, t) => p.then(u => u || buscar(t)), Promise.resolve(null))
+      .then(u => { if (u) { try { localStorage.setItem(chave, u); } catch (e) {} } return u; });
+  }
+  let audioAtual = null;
+  function balao(msg) {
+    carregarRecursos();
+    let b = document.querySelector(".fp-balao");
+    if (!b) { b = document.createElement("div"); b.className = "fp-balao"; document.body.appendChild(b); }
+    b.textContent = msg; b.classList.add("on");
+    clearTimeout(balao.t); balao.t = setTimeout(() => b.classList.remove("on"), 3200);
+  }
+  function tocarSom(cientifico, popular) {
+    if (audioAtual) { audioAtual.pause(); audioAtual = null; }
+    // o tablet só deixa tocar som criado no toque do dedo: o áudio nasce aqui
+    const a = new Audio(); audioAtual = a;
+    a.play().catch(() => {});
+    balao("🔎 Procurando o som de " + (popular || cientifico) + "...");
+    return somDaEspecie(cientifico, popular).then(u => {
+      if (audioAtual !== a) return false;
+      if (!u) { balao("🙈 Não encontrei uma gravação de " + (popular || cientifico) + "."); return false; }
+      a.src = u;
+      return a.play().then(() => { balao("🔊 Ouvindo: " + (popular || cientifico)); return true; })
+        .catch(() => { balao("Não consegui tocar o som agora. Tente de novo!"); return false; });
+    });
+  }
   /* trocarFotos(): toda <img data-especie="..."> ganha a foto nítida; todo
      elemento com data-especie-fundo="..." ganha a foto como fundo. */
   function trocarFotos(raiz) {
@@ -599,6 +642,7 @@
 /* mapa solto (fora da ficha) */
 .fp-mapa-solto{position:relative;isolation:isolate;z-index:0;min-height:380px;border-radius:16px;overflow:hidden;background:#0e1512}
 .fp-mapa-solto.fp-mapa-escuro .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.85) contrast(.9) saturate(.6)}
+.fp-balao{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);z-index:2147483646;background:#14202a;color:#fff;padding:12px 18px;border-radius:999px;font:700 15px system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:.25s}.fp-balao.on{opacity:1;transform:translate(-50%,0)}
 .fp-mapa-pin{font-size:34px;line-height:1;filter:drop-shadow(0 3px 4px rgba(0,0,0,.6));animation:fpPin 1.6s ease-in-out infinite}@keyframes fpPin{50%{transform:translateY(-6px)}}
 .fp-mapa-rotulo{display:inline-block;white-space:nowrap;padding:5px 10px;border-radius:999px;background:var(--mc);color:#0b130f;font:800 13px system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.35);cursor:pointer}
 /* pop-up */
@@ -634,5 +678,5 @@ html.fp-travado,html.fp-travado body{overflow:hidden}
 @media (max-width:420px){.fp-corpo{padding:0 14px 14px}.fp-pop{padding:8px}.fp{padding:16px}.fp-name{font-size:22px}.fp-foto{width:52px;height:52px}.fp-tab{font-size:11.5px;gap:4px}}
 `;
 
-  window.FichaPokedex = { configurar, mostrar, aviso, carregando, fechar, ligarCamera, escolherArquivo, trocarFotos, urlDaEspecie, mapaBiomas, BIOMAS };
+  window.FichaPokedex = { configurar, mostrar, aviso, carregando, fechar, ligarCamera, escolherArquivo, trocarFotos, urlDaEspecie, mapaBiomas, BIOMAS, somDaEspecie, tocarSom, balao };
 })();

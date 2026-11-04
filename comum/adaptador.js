@@ -141,7 +141,7 @@
     caixa.querySelectorAll(".fp-album-item").forEach(b => b.onclick = () => {
       const x = lista[+b.dataset.i];
       FichaPokedex.mostrar(x.info, { foto: x.foto, extras: CFG.extras ? (CFG.extras(x.info) || []) : [], alerta: CFG.alerta ? (CFG.alerta(x.info) || "") : "",
-        acoes: [{ texto: "🗑️ Tirar do álbum", aoClicar: () => { const l = lerAlbum().filter(y => y.nome !== x.nome); localStorage.setItem(chaveAlbum(), JSON.stringify(l)); desenharAlbumComum(); } }, { texto: "Fechar", principal: true, aoClicar: () => {} }] });
+        acoes: (CFG.som ? [acaoSom(x.info)] : []).concat([{ texto: "🗑️ Tirar do álbum", aoClicar: () => { const l = lerAlbum().filter(y => y.nome !== x.nome); localStorage.setItem(chaveAlbum(), JSON.stringify(l)); desenharAlbumComum(); } }, { texto: "Fechar", principal: true, aoClicar: () => {} }]) });
     });
   }
 
@@ -223,8 +223,11 @@
     new MutationObserver(() => { if (pend) return; pend = true; requestAnimationFrame(() => { pend = false; marcarAlbum(); }); }).observe(document.body, { childList: true, subtree: true });
     marcarAlbum();
   }
+  /* som: true -> botão "🔊 Ouvir som" na ficha, com uma gravação real da espécie */
+  const acaoSom = info => ({ texto: CFG.textoSom || "🔊 Ouvir som", fechar: false, aoClicar: () => FichaPokedex.tocarSom(info.nome_cientifico, info.nome_popular || info.nome) });
   function abrirFicha(info, foto, acoes) {
     if (!info) return;
+    if (CFG.som) acoes = [acaoSom(info)].concat(acoes || []);
     FichaPokedex.mostrar(info, { foto: foto || "", extras: CFG.extras ? (CFG.extras(info) || []) : [], alerta: CFG.alerta ? (CFG.alerta(info) || "") : "",
       acoes: (acoes || []).concat([{ texto: "Fechar", principal: true, aoClicar: () => {} }]) });
   }
@@ -258,6 +261,7 @@
     const lista = [];
     if (CFG.salvar) lista.push({ texto: "💾 Salvar no álbum", principal: true, aoClicar: () => CFG.salvar(info) });
     else if (CFG.album) lista.push({ texto: "💾 Salvar no álbum", principal: true, aoClicar: () => salvarNoAlbumComum(info) });
+    if (CFG.som) lista.push(acaoSom(info));
     if (CFG.acoesExtras) lista.push(...(CFG.acoesExtras(info) || []));
     lista.push({ texto: "🔍 Reconhecer outra", principal: !CFG.salvar && !CFG.album, aoClicar: novaFoto });
     return lista;

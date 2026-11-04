@@ -475,7 +475,7 @@
 
           <div class="card">
             <h3 class="blue">🔊 Som da ave</h3>
-            <p>Quando houver um som disponível, ele aparecerá aqui.</p>
+            <p>Depois de descobrir uma ave, toque em <strong>🔊 Ouvir o canto</strong> na ficha para escutar uma gravação de verdade.</p>
             <div style="font-size:45px;text-align:center">🎵🐦🎵</div>
           </div>
 
@@ -629,17 +629,9 @@
     points += 50;
     pointsEl.textContent = points;
 
-    if (dados.somUrl) {
-      soundBtn.style.display = "inline-block";
-      soundBtn.onclick = () => {
-        const audio = new Audio(dados.somUrl);
-        audio.play().catch(() => {
-          mostrarMensagem("Não consegui tocar o som desta ave agora. 🎵");
-        });
-      };
-    } else {
-      soundBtn.style.display = "none";
-    }
+    // canto de verdade (gravação do Wikimedia Commons), pelo nome científico
+    soundBtn.style.display = "inline-block";
+    soundBtn.onclick = () => FichaPokedex.tocarSom(dados.nome_cientifico, dados.nome);
 
     if (dados.raro === true) {
       points += 150;
@@ -710,6 +702,7 @@
   }));
 })();
 PokedexAdaptador.iniciar({
+  som: true, textoSom: "🔊 Ouvir o canto",  // gravação real da espécie (Wikimedia Commons)
   icone: "🐦", fauna: true,
   cor: "#ef4fa4", cor2: "#7c63f6",
   escuro: () => true,
@@ -717,7 +710,6 @@ PokedexAdaptador.iniciar({
   carregando: "🧚‍♀️ A fadinha está procurando a ave na foto...",
   esconder: ["#result", "#error", "#loading"],
   extras: info => [["🌳 Habitat", info.habitat], ["✨ Ave rara?", info.raro === true ? "Sim! Essa é uma ave rara de ver." : ""]],
-  acoesExtras: info => info.somUrl ? [{ texto: "🔊 Ouvir o som", fechar: false, aoClicar: () => document.getElementById("soundBtn").click() }] : [],
   album: { el: "#albumComum", compacto: true, depois: () => document.getElementById("albumComum").closest(".card").scrollIntoView({ behavior: "smooth", block: "start" }) },
   novaFoto: () => document.getElementById("photoBtn").click()
 });
