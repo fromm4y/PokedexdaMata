@@ -104,14 +104,24 @@ input[type=file]{display:none}
 footer{margin-top:30px;color:#9dc5aa;font-size:14px;line-height:1.5;text-align:center}
 @media(max-width:860px){.hero,.descobrir{grid-template-columns:1fr}.hero-foto{max-width:260px}}
 @media(max-width:560px){.dados,.acoes,.botoes{grid-template-columns:1fr}nav button{padding:10px 12px;font-size:14px}}
+
+/* Início ocupando a tela, com o principal no centro */
+#aba-inicio.ativa{min-height:calc(100vh - 110px);display:flex;align-items:center}
+#aba-inicio .hero{width:100%;margin:0}
+.hero-acoes{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.hero-acoes .botao{padding:14px 22px}
+#aba-descobrir.ativa,#aba-aves.ativa,#aba-album.ativa{min-height:calc(100vh - 110px)}
+.descobrir{align-items:stretch}
+#resultado:has(.vazio){display:grid;place-items:center}#resultado .vazio{width:100%}
 </style>
 </head>
 <body>
 <div class="app">
 <header>
-  <div class="marca" data-ir="descobrir">🌿 MATA <span>GRANDE</span></div>
+  <div class="marca" data-ir="inicio">🌿 MATA <span>GRANDE</span></div>
   <nav aria-label="Abas">
-    <button data-aba="descobrir" class="ativo">📷 Descobrir</button>
+    <button data-aba="inicio" class="ativo">🏠 Início</button>
+    <button data-aba="descobrir">📷 Descobrir</button>
     <button data-aba="aves">🐦 Aves</button>
     <button data-aba="album">📖 Meu álbum</button>
   </nav>
@@ -119,16 +129,21 @@ footer{margin-top:30px;color:#9dc5aa;font-size:14px;line-height:1.5;text-align:c
 </header>
 
 <!-- ===== DESCOBRIR ===== -->
-<section class="aba ativa" id="aba-descobrir">
+<section class="aba ativa" id="aba-inicio">
   <div class="hero">
     <div>
       <span class="selo">Floresta + tecnologia · IA de visão</span>
       <h1>Descubra o que vive, <em>cresce e voa.</em></h1>
       <p>Uma experiência inspirada na Pokédex da Mata: tire uma foto, descubra a espécie e guarde suas descobertas.</p>
+      <div class="hero-acoes"><button class="botao ouro" data-ir="descobrir">📷 Começar a descobrir</button><button class="botao claro" data-ir="aves">🐦 Ver aves</button><button class="botao claro" data-ir="album">📖 Meu álbum</button></div>
     </div>
     <div class="hero-foto"><img src="mata.webp" alt="Rio e floresta ao pôr do sol"><span>🌅 Mata Grande</span></div>
   </div>
 
+</section>
+
+<section class="aba" id="aba-descobrir">
+  <div class="titulo-secao"><div><small>Descobrir</small><h2>Fotografe uma ave</h2></div></div>
   <div class="descobrir">
     <div class="cartao">
       <h2>Pronto para descobrir?</h2>
