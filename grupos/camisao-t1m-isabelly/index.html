@@ -106,7 +106,10 @@ input[type=file]{display:none}
 .item .fp-ver-ficha{align-self:flex-start}
 .mapa-caixa{height:380px;border-radius:20px;overflow:hidden;border:2px solid var(--linha);background:#e3f0e6}
 .legenda{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
-.legenda div{background:#f7faf3;border:2px solid var(--linha);border-radius:14px;padding:10px;text-align:center;font-weight:800}
+.legenda button{background:#f7faf3;border:2px solid var(--linha);border-radius:14px;padding:10px;text-align:center;font-weight:800;font-size:16px;color:var(--texto);cursor:pointer;min-height:56px}
+.legenda button.ativo{background:var(--verde);border-color:var(--verde);color:#fff}.legenda button.ativo small{color:#e6ffe9}
+.mapa-topo{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.mapa-topo h2{margin:0}
+#voltarMapa{display:none}
 .legenda small{display:block;color:var(--suave);font-weight:700}
 .medalhas{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .medalha{text-align:center;padding:18px 10px;border-radius:20px;border:2px solid var(--linha);background:#fafaf5;opacity:.45;filter:grayscale(1)}
@@ -201,13 +204,13 @@ footer{text-align:center;color:var(--suave);font-weight:700;margin-top:24px}
   <!-- MAPA -->
   <div class="aba" id="aba-mapa" hidden>
     <div class="cartao">
-      <h2>🗺️ Onde as aves vivem</h2>
+      <div class="mapa-topo"><h2>🗺️ Onde as aves vivem</h2><button class="botao claro" id="voltarMapa" type="button">🗺️ Voltar para o mapa</button></div>
       <div class="mapa-caixa" id="mapaAves"></div>
       <div class="legenda">
-        <div>🌳 Amazônia<small id="leg-Amazônia">0 aves</small></div>
-        <div>🌿 Cerrado<small id="leg-Cerrado">0 aves</small></div>
-        <div>🌊 Pantanal<small id="leg-Pantanal">0 aves</small></div>
-        <div>🌲 Mata Atlântica<small id="leg-Mata Atlântica">0 aves</small></div>
+        <button type="button" data-bioma="Amazônia">🌳 Amazônia<small id="leg-Amazônia">0 aves</small></button>
+        <button type="button" data-bioma="Cerrado">🌿 Cerrado<small id="leg-Cerrado">0 aves</small></button>
+        <button type="button" data-bioma="Pantanal">🌊 Pantanal<small id="leg-Pantanal">0 aves</small></button>
+        <button type="button" data-bioma="Mata Atlântica">🌲 Mata Atlântica<small id="leg-Mata Atlântica">0 aves</small></button>
       </div>
       <p style="color:var(--suave);font-weight:700;margin:12px 0 0" id="mapaNota">O mapa mostra regiões do Brasil onde muitas aves podem ser encontradas. O lugar exato depende de cada espécie.</p>
     </div>
@@ -363,11 +366,29 @@ function desenharMedalhas(){
   $("proxima").textContent = prox ? `Faltam ${prox[0] - n} ave(s) para a medalha ${prox[1]} ${prox[2]}!` : "🏆 Você ganhou todas as medalhas! Mestre das aves!";
 }
 let mapaFeito = "";
+/* Tocar num bioma da legenda: no lugar do mapa aparece o bioma com as aves do álbum andando */
+function mostrarBioma(bio){
+  const album = lerAlbum();
+  const itens = album.map(a => ({ nome: a.nome, img: a.foto, icone: "🐦", fauna: true, biomas: a.biomas || [] }));
+  document.querySelectorAll(".legenda button").forEach(b => b.classList.toggle("ativo", b.dataset.bioma === bio));
+  mapaFeito = "cena";
+  FichaPokedex.cena($("mapaAves"), { bioma: bio, itens, aoTrocar: b => { document.querySelectorAll(".legenda button").forEach(x => x.classList.toggle("ativo", x.dataset.bioma === b)); notaBioma(b); } });
+  $("mapaAves").style.height = "auto";
+  $("voltarMapa").style.display = "inline-flex";
+  notaBioma(bio);
+}
+function notaBioma(bio){
+  const aqui = lerAlbum().filter(a => (a.biomas || []).includes(bio)).map(a => a.nome);
+  $("mapaNota").textContent = aqui.length ? "Aves do seu álbum na " + bio + ": " + aqui.join(", ") + ". Toque nelas para ver o nome!" : "Nenhuma ave do seu álbum vive na " + bio + " ainda. Descubra uma! 📸";
+}
+document.querySelectorAll(".legenda button").forEach(b => b.onclick = () => mostrarBioma(b.dataset.bioma));
+$("voltarMapa").onclick = () => { mapaFeito = ""; $("mapaAves").style.height = ""; $("voltarMapa").style.display = "none"; document.querySelectorAll(".legenda button").forEach(b => b.classList.remove("ativo")); desenharMapa(); };
 function desenharMapa(){
   const album = lerAlbum(), biomas = [...new Set(album.flatMap(a => a.biomas || []))];
   ["Amazônia", "Cerrado", "Pantanal", "Mata Atlântica"].forEach(b => { const n = album.filter(a => (a.biomas || []).includes(b)).length; $("leg-" + b).textContent = n + (n === 1 ? " ave" : " aves"); });
   const chave = biomas.join("|");
   if (chave === mapaFeito && $("mapaAves").childElementCount) return;
+  $("mapaAves").style.height = ""; $("voltarMapa").style.display = "none"; document.querySelectorAll(".legenda button").forEach(b => b.classList.remove("ativo"));
   mapaFeito = chave;
   const caixa = $("mapaAves"); caixa.innerHTML = "";
   const m = document.createElement("div"); m.style.cssText = "width:100%;height:100%"; caixa.appendChild(m);
