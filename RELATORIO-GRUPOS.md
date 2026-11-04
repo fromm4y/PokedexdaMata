@@ -229,7 +229,7 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 |---|---|---|---|---|
 | Turma 1 | [Conjuntos da Floresta](grupos/camisao-t1-luan/) | Aves do Brasil | Luan, Nicolas e Maria | Fotos reais das aves na Pokédex (eram emojis parecidos); mapa de biomas de verdade; textos amigáveis. |
 | Turma 1 | [AquaDex](grupos/camisao-t1-maria/) | Peixes do Brasil | Maria, Mateus e Raul | Grupo novo: telas do grupo ligadas ao back-end, imagem do menino no barco no início, mapa de biomas real, álbum com foto e medalhas, configurações que funcionam. |
-| Turma 1 - M | [Detetives de Penas](grupos/camisao-t1m-isabelly/) | Aves do Brasil | Hyan, Thales, Sophia e Isabelly | App um pouco maior no tablet. |
+| Turma 1 - M | [Detetives de Penas](grupos/camisao-t1m-isabelly/) | Aves do Brasil | Hyan, Thales, Sophia e Isabelly | Front novo do grupo (veio em .docx): boas-vindas com a arara azul, abas Descobrir/Álbum/Mapa/Medalhas, canto real da ave, fotos de bem-te-vi para testar. |
 | Turma 2 | [As Frutas](grupos/camisao-t2-bryan/) | Frutas do Brasil | Ana e Bryan | Imagem do detetive numa moldura só; a barra de baixo não cobre mais os botões. |
 | Turma 2 | [PassaroDex](grupos/camisao-t2-victor/) | Aves do Brasil | Victor, Henzo e Lara | "Escolher da galeria" abria a câmera (corrigido). O visual já estava ótimo. |
 | Turma 2 - M | [Jardim do Leafeon](grupos/camisao-t2m-lucas/) | Animais terrestres | Lucas, Kauã e Ruan | Atalhos para "Animais descobertos" e "Conquistas" (só existiam no menu de entrada); galeria no tablet; app maior. **Visual novo:** tema Leafeon (verde-folha e creme, raios do Rotom). |
