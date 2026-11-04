@@ -46,6 +46,11 @@
 .volBox input{flex:1;min-width:180px;accent-color:#26bfff;height:28px}.volBox output{font-weight:900;color:#88dfff;min-width:48px}
 .play .icStop{display:none}.player:has(.fp-tocando) .play .icPlay{display:none}.player:has(.fp-tocando) .play .icStop{display:block}
 .fp-tocando{background:linear-gradient(90deg,#ff5c7a,#ff8a3d)!important;color:#fff!important}
+
+.avesFiltros{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}.avesFiltros button{min-height:42px}.avesFiltros button.on{background:linear-gradient(90deg,#12b8ff,#8c35ff);color:#fff;border-color:transparent}
+.aveGuia{cursor:pointer}.aveGuia:not(.minhaAve) .bird img{filter:saturate(.35) brightness(.75)}.aveGuia .bird{background:#0b1d4a}
+.seloAve{display:table;margin-top:6px;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;background:#ffffff14;color:#aeb9db}
+.minhaAve{border-color:#12b8ff!important;box-shadow:0 0 0 2px #12b8ff55}.minhaAve .seloAve{background:#12b8ff;color:#04112b}
 </style>
 </head>
 <body>
@@ -74,6 +79,7 @@
 <button class="nav active" data-page="inicio" onclick="mostrar('inicio')"><i class="ni"><svg viewBox="0 0 24 24"><path d="m3 11 9-8 9 8v9h-6v-6h-6v6H3z"/></svg></i>Início</button>
 <button class="nav rec" data-page="reconhecer" onclick="mostrar('reconhecer')"><i class="ni"><svg viewBox="0 0 24 24"><path d="M4 8h4l2-2h4l2 2h4v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></i>Reconhecer</button>
 <button class="nav" data-page="album" onclick="mostrar('album')"><i class="ni"><svg viewBox="0 0 24 24"><path d="M6 3h12v18H6z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></i>Álbum</button>
+<button class="nav" data-page="aves" onclick="mostrar('aves')"><i class="ni"><svg viewBox="0 0 24 24"><path d="M4 16c4-1 6-4 8-9 2 5 4 8 8 9-3 3-13 3-16 0Z"/></svg></i>Aves do Brasil</button>
 <button class="nav" data-page="sons" onclick="mostrar('sons')"><i class="ni"><svg viewBox="0 0 24 24"><path d="M5 10v4M9 7v10M13 4v16M17 8v8M21 10v4"/></svg></i>Sons das Aves</button>
 <button class="nav" data-page="conquistas" onclick="mostrar('conquistas')"><i class="ni"><svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0zM9 19h6M12 14v5"/></svg></i>Conquistas</button>
 <button class="nav" data-page="perfil" onclick="mostrar('perfil')"><i class="ni"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 21a7 7 0 0 1 14 0"/></svg></i>Perfil</button>
@@ -93,7 +99,7 @@
 </div>
 <div class="leaves">
 <button class="leaf" onclick="mostrar('album')"><svg viewBox="0 0 24 24"><path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h4"/></svg><b>ÁLBUM</b><span>Minhas aves</span></button>
-<button class="leaf" onclick="mostrar('album')"><svg viewBox="0 0 24 24"><path d="M4 16c4-1 6-4 8-9 2 5 4 8 8 9-3 3-13 3-16 0Z"/></svg><b>AVES</b><span>Explore espécies</span></button>
+<button class="leaf" onclick="mostrar('aves')"><svg viewBox="0 0 24 24"><path d="M4 16c4-1 6-4 8-9 2 5 4 8 8 9-3 3-13 3-16 0Z"/></svg><b>AVES</b><span>Explore espécies</span></button>
 <button class="leaf" onclick="mostrar('sons')"><svg viewBox="0 0 24 24"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10v4"/></svg><b>SOM DAS AVES</b><span>Ouça os cantos</span></button>
 <button class="leaf" onclick="mostrar('conquistas')"><svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0zM9 19h6M12 14v5"/></svg><b>CONQUISTAS</b><span>Desafios e metas</span></button>
 </div>
@@ -115,6 +121,7 @@
 
 <section id="conquistas" class="screen"><div class="panel"><div class="panel-head"><div><h1>Conquistas</h1><p>Continue explorando para liberar novas medalhas.</p></div><button class="back" onclick="mostrar('inicio')">← Início</button></div><div class="stats"><div class="stat"><b id="sb">0</b><span>aves descobertas</span></div><div class="stat"><b id="ss">0</b><span>espécies no álbum</span></div><div class="stat"><b id="sl">1</b><span>nível do aventureiro</span></div></div><div id="achs" class="achievements"></div></div></section>
 
+<section id="aves" class="screen"><div class="panel"><div class="panel-head"><div><h1>Aves do Brasil</h1><p>Um guia com aves de todos os biomas. As que você já reconheceu ficam completas, com a sua foto!</p></div><button class="back" onclick="mostrar('inicio')">← Início</button></div><div class="avesFiltros" id="avesFiltros"></div><div id="avesGrid" class="album"></div></div></section>
 <section id="album" class="screen"><div class="panel"><div class="panel-head"><div><h1>Álbum de Aves</h1><p>Suas descobertas ficam guardadas aqui.</p></div><button class="back" onclick="mostrar('inicio')">← Início</button></div><div id="albumGrid" class="album"></div></div></section>
 
 <section id="perfil" class="screen"><div class="panel"><div class="panel-head"><div><h1>Perfil do Aventureiro</h1><p>Seu progresso na exploração das aves brasileiras.</p></div><button class="back" onclick="mostrar('inicio')">← Início</button></div><div class="profile"><div class="profilePhotoBox"><div id="profileAvatar" class="avatar profileAvatar"><span>FOTO DE PERFIL</span></div><input id="profilePhotoInput" type="file" accept="image/*" hidden><button class="primary" onclick="document.getElementById('profilePhotoInput').click()">ESCOLHER FOTO</button><button id="removeProfilePhoto" class="secondary profileRemove hidden" onclick="removerFotoPerfil()">Remover foto</button></div><div class="profileCard"><h2 style="margin:0">Aventureiro VELO</h2><b style="color:#88dfff">Nível <span id="pl">1</span></b><p style="color:#9eabcf">Descubra aves, complete missões e monte sua coleção.</p><div class="progress"><i id="pg"></i></div><small id="pt" style="color:#8e9bc2"></small><div class="discoveryProgress"><div class="progressHead"><b>DESCOBERTAS DE AVES</b><span id="profileDiscoveryText">0 / 50 aves</span></div><div class="progress"><i id="profileDiscoveryBar"></i></div></div><div class="info"><div class="ibox"><b id="pb">0</b><br><small style="color:#8e9bc2">aves encontradas</small></div><div class="ibox"><b id="pa">0</b><br><small style="color:#8e9bc2">conquistas liberadas</small></div></div></div></div></div></section>
@@ -134,7 +141,7 @@ function save(a){try{localStorage.setItem(KEY,JSON.stringify(a.slice(0,80).map(x
 function mostrar(id){
  document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");
  document.querySelectorAll(".nav[data-page]").forEach(x=>x.classList.toggle("active",x.dataset.page===id));
- if(id==="inicio")home();if(id==="album")renderAlbum();if(id==="sons")renderSounds();if(id==="conquistas")renderAchievements();if(id==="perfil")renderProfile();if(id==="configuracoes")renderSettings();
+ if(id==="inicio")home();if(id==="aves")renderAves();if(id==="album")renderAlbum();if(id==="sons")renderSounds();if(id==="conquistas")renderAchievements();if(id==="perfil")renderProfile();if(id==="configuracoes")renderSettings();
  document.getElementById("side").classList.remove("open");scrollTo({top:0,behavior:"smooth"});
 }
 function toggleMenu(){document.getElementById("side").classList.toggle("open")}
@@ -189,6 +196,27 @@ function lastSound(){playBirdSound(last,rsound)}
 function renderSounds(){
  sounds.textContent="";const vol=Number(localStorage.getItem("velo_volume")||80),vb=document.createElement("div");vb.className="volBox";vb.innerHTML='<b>🔊 Volume dos cantos</b><input class="volSons" type="range" min="0" max="100" value="'+vol+'" aria-label="Volume dos cantos"><output class="volSonsTxt">'+vol+'%</output>';vb.querySelector("input").oninput=e=>setVolume(e.target.value);sounds.append(vb);let a=album();if(!a.length){sounds.insertAdjacentHTML("beforeend",'<p style="color:#9da9cd;text-align:center;padding:40px">Descubra uma ave para colocar os primeiros cantos aqui.</p>');return}
  a.forEach(b=>{let r=document.createElement("div");r.className="player";let p=document.createElement("button");p.className="play";p.innerHTML='<svg class="icPlay" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg><svg class="icStop" viewBox="0 0 24 24"><path d="M7 7h10v10H7z"/></svg>';let mid=document.createElement("div"),n=document.createElement("b");n.textContent=b.nome;let s=document.createElement("small");s.textContent=b.cientifico||"Ave brasileira";s.style.cssText="display:block;color:#8e9bc2;margin-top:3px";let range=document.createElement("input");range.type="range";range.className="range";range.hidden=true;mid.append(n,s,range);let q=document.createElement("button");q.className="secondary";q.textContent="Ouvir";q.onclick=()=>playBirdSound(b,q);p.onclick=q.onclick;r.append(p,mid,q);sounds.append(r)})
+}
+/* Aves do Brasil: guia com fichas resumidas; as que você reconheceu ficam completas, com a sua foto */
+let avesBioma="Todos";
+function renderAves(){
+ const lista=window.AVES_BRASIL||[],meu=album(),norm=t=>String(t||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+ const minha=a=>meu.find(x=>norm(x.nome)===norm(a.nome)||(x.cientifico&&norm(x.cientifico)===norm(a.cientifico)));
+ avesFiltros.innerHTML=["Todos","Amazônia","Mata Atlântica","Cerrado","Caatinga","Pantanal","Pampa"].map(b=>`<button class="secondary${b===avesBioma?" on":""}" data-b="${b}">${b}</button>`).join("");
+ avesFiltros.querySelectorAll("button").forEach(x=>x.onclick=()=>{avesBioma=x.dataset.b;renderAves()});
+ avesGrid.textContent="";
+ lista.filter(a=>avesBioma==="Todos"||a.biomas.includes(avesBioma)).sort((a,b)=>(minha(b)?1:0)-(minha(a)?1:0)).forEach(a=>{
+  const m=minha(a),c=document.createElement("article");c.className="card aveGuia"+(m?" minhaAve":"");
+  c.innerHTML=`<div class="bird comFoto">${m&&m.foto?`<img src="${m.foto}" alt="">`:`<img data-especie="${a.cientifico}" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E">`}</div><div class="cardinfo"><b></b><small></small><span class="seloAve">${m?"✅ Reconhecida por você":"🔒 Ficha resumida"}</span></div>`;
+  c.querySelector("b").textContent=a.nome;c.querySelector("small").textContent=a.cientifico;
+  c.onclick=()=>abrirAveGuia(a,m);avesGrid.append(c)});
+ FichaPokedex.trocarFotos(avesGrid);
+}
+function abrirAveGuia(a,m){
+ const salva=m&&PokedexAdaptador.fichaSalva&&PokedexAdaptador.fichaSalva(m.nome);
+ if(salva)return PokedexAdaptador.abrirFicha(salva.info,salva.foto||m.foto);
+ const resumo={nome_popular:a.nome,nome_cientifico:a.cientifico,biomas:a.biomas,regioes:a.regioes,habitat_descricao:a.habitat,curiosidades:[a.descricao]};
+ FichaPokedex.mostrar(resumo,{acoes:[{texto:"🔊 Ouvir o canto",fechar:false,aoClicar:b=>FichaPokedex.tocarSom(a.cientifico,a.nome,b)},{texto:"📷 Reconhecer uma de verdade",aoClicar:()=>mostrar("reconhecer")},{texto:"Fechar",principal:true}],alerta:"Ficha resumida: reconheça um(a) "+a.nome+" pela foto para desbloquear a ficha completa!"});
 }
 function getStats(){try{return JSON.parse(localStorage.getItem(STATS_KEY)||"{}")}catch{return{}}}
 function saveStats(o){localStorage.setItem(STATS_KEY,JSON.stringify(o))}
@@ -247,6 +275,7 @@ document.addEventListener("click",e=>{let s=document.getElementById("side");if(s
 
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
+<script src="/comum/aves-brasil.js"></script>
 <script src="/comum/ficha.js"></script>
 <script src="/comum/adaptador.js"></script>
 <script>
@@ -262,7 +291,6 @@ PokedexAdaptador.iniciar({
   noturno: { fundo: "#081330", texto: "#f7f8ff", suave: "#aeb9db" },
   carregando: "🐦 O VELO está olhando a foto com bastante cuidado...",
   extras: info => [["📍 Localização", info.localizacao]],
-  acoesExtras: info => info.somUrl ? [{ texto: "🔊 Ouvir canto", fechar: false, aoClicar: () => lastSound() }] : [],
   salvar: () => mostrar("album"),
   novaFoto: () => { resetPhoto(); mostrar("reconhecer"); photo.click(); }
 });
