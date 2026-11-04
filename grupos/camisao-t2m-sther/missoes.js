@@ -21,14 +21,14 @@ const GRUPO = {
   integrantes: "Anna Laynara, Evelyn e Sther",
   escola: "Camisão",
   turma: "Turma 2 - M",
-  tema: "Animais"
+  tema: "Mamíferos"
 };
 
 // Missão 1: quem a IA vai fingir ser
-const ESPECIALISTA = "um zoólogo especialista em animais";
+const ESPECIALISTA = "um zoólogo especialista em mamíferos";
 
 // Missão 2: o que procurar na foto
-const O_QUE_PROCURAR = "animais";
+const O_QUE_PROCURAR = "mamíferos";
 
 // Missão 3: quanta certeza a IA precisa ter (número de 0 a 100, sem aspas)
 // Por que o grupo escolheu: "porque achamos interessante (o número ficou em branco; 80 definido pela professora)"
@@ -36,19 +36,19 @@ const CERTEZA_MINIMA = 80;
 
 // Missão 4: o porteiro
 function conferirFoto(foto) {
-  if (!foto.type.startsWith("image/")) return "💙 Ops! Isso não é uma foto! Mostre um animal pro Codex.";
+  if (!foto.type.startsWith("image/")) return "💙 Ops! Isso não é uma foto! Mostre um mamífero pro Codex.";
   if (foto.size > 10000000) return "💗 Essa foto é grande demais pro Codex! Escolha uma menor.";
   return "ok";
 }
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "💛 O Codex tem só " + r.confianca + "% de certeza… tente outra foto do animal mais pertinho!";
+  return "💛 O Codex tem só " + r.confianca + "% de certeza… tente outra foto do mamífero mais pertinho!";
 }
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "⭐ Novo animal no Codex: é " + r.nome_popular + "! Que fofura!";
+  return "⭐ Novo mamífero no Codex: é " + r.nome_popular + "! Que fofura!";
 }
 
 // ----------------------------------------------------------------------------

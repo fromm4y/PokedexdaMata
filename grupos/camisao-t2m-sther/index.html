@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Codex — Mundo Animal</title>
+<title>Codex — Mundo dos Mamíferos</title>
 <style>
 :root{--blue:#9edcff;--pink:#ffb7d5;--yellow:#ffe56d;--ink:#20202a;--paper:#fffdf8;--muted:#666575;--line:#24232b}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
@@ -33,21 +33,23 @@ footer{padding:22px;text-align:center;background:var(--blue);border-top:2px soli
 <body>
 <header>
   <div class="brand"><span>codex</span></div>
-  <p><strong>Um mundo de animais para descobrir!</strong><br>Pesquise espécies, conheça filhotes e adultos e aprenda sobre habitats, alimentação e conservação. 💙💗💛</p>
+  <p><strong>Um mundo de mamíferos para descobrir!</strong><br>Pesquise espécies, conheça filhotes e adultos e aprenda sobre habitats, alimentação e conservação dos mamíferos. 💙💗💛</p>
 </header>
 <main>
-  <section class="search-panel" aria-label="Pesquisa de animais">
+  <section class="search-panel" aria-label="Pesquisa de mamíferos">
     <h2 style="margin:0 0 12px">🔎 O que você quer descobrir?</h2>
     <div class="search-row">
-      <input id="search" type="search" placeholder="Ex.: ararinha-azul, onça-pintada, cachorro..." aria-label="Pesquisar animais">
+      <input id="search" type="search" placeholder="Ex.: onça-pintada, capivara, boto-cor-de-rosa..." aria-label="Pesquisar mamíferos">
       <button id="searchBtn">Pesquisar</button>
     </div>
     <div class="tabs" id="filters">
       <button class="chip active" data-filter="Todos">Todos</button>
-      <button class="chip" data-filter="Mamíferos">Mamíferos</button>
-      <button class="chip" data-filter="Aves">Aves</button>
-      <button class="chip" data-filter="Répteis">Répteis</button>
-      <button class="chip" data-filter="Peixes">Peixes</button>
+      <button class="chip" data-filter="Carnívoros">🐆 Carnívoros</button>
+      <button class="chip" data-filter="Herbívoros">🦌 Herbívoros</button>
+      <button class="chip" data-filter="Roedores">🐹 Roedores</button>
+      <button class="chip" data-filter="Primatas">🐒 Primatas</button>
+      <button class="chip" data-filter="Aquáticos">🐬 Aquáticos</button>
+      <button class="chip" data-filter="Domésticos">🐕 Domésticos</button>
     </div>
   </section>
 
@@ -63,13 +65,13 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
 </style>
   <section class="search-panel" id="reconhecer" style="margin-top:22px;background:linear-gradient(115deg,#e3f5ff,#ffe2ef 60%,#fff4b8)">
     <h2 style="margin:0 0 6px">📷 Descobrir pela foto</h2>
-    <p style="margin:0;line-height:1.5">Tire uma foto de um animal (ou escolha uma da galeria) e o Codex tenta descobrir qual é! 💙💗💛</p>
+    <p style="margin:0;line-height:1.5">Tire uma foto de um mamífero (ou escolha uma da galeria) e o Codex tenta descobrir qual é! 💙💗💛</p>
     <div class="scan-row">
       <div class="scan-preview" id="previaCodex"><div>🐾<small>A foto aparece aqui</small></div></div>
       <div class="scan-actions">
         <button id="btnCamCodex">📷 Tirar foto</button>
         <button id="btnGalCodex" class="chip">🖼️ Escolher da galeria</button>
-        <button id="btnDescobrir" style="background:var(--pink)" disabled>🔎 Descobrir animal</button>
+        <button id="btnDescobrir" style="background:var(--pink)" disabled>🔎 Descobrir mamífero</button>
         <div id="statusCodex" class="note"></div>
       </div>
     </div>
@@ -78,47 +80,56 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
   </section>
 
   <h2>📒 Meu Codex</h2>
-  <p class="note" style="margin-top:-6px">Os animais que você descobriu pela foto ficam guardados aqui (neste aparelho).</p>
+  <p class="note" style="margin-top:-6px">Os mamíferos que você descobriu pela foto ficam guardados aqui (neste aparelho).</p>
   <section id="meuCodex" class="results" style="margin-top:0"></section>
 
   <h2>⭐ Categorias do Codex</h2>
   <section class="category-grid">
-    <button class="category" data-category="Mamíferos"><span style="font-size:1.8rem">🐾</span><b>Mamíferos</b><small>Animais como onças, cães, gatos e capivaras. Em geral, têm pelos e alimentam os filhotes com leite.</small></button>
-    <button class="category" data-category="Aves"><span style="font-size:1.8rem">🦜</span><b>Aves</b><small>Animais com penas e bico. Conheça araras, ararinhas-azuis, tucanos e outras espécies.</small></button>
-    <button class="category" data-category="Répteis"><span style="font-size:1.8rem">🐢</span><b>Répteis</b><small>Grupo que inclui tartarugas, jacarés, serpentes e lagartos.</small></button>
-    <button class="category" data-category="Peixes"><span style="font-size:1.8rem">🐟</span><b>Peixes</b><small>Animais aquáticos que, em sua maioria, respiram por brânquias.</small></button>
-    <button class="category" data-category="Raças"><span style="font-size:1.8rem">🐕</span><b>Raças</b><small>Explore raças de animais domésticos. Raça não é o mesmo que espécie.</small></button>
-    <button class="category" data-category="Habitats"><span style="font-size:1.8rem">🌎</span><b>Habitats e países</b><small>Descubra ambientes e regiões onde os animais vivem naturalmente.</small></button>
+    <button class="category" data-category="Carnívoros"><span style="font-size:1.8rem">🐆</span><b>Carnívoros</b><small>Comem carne: onça, lobo-guará, ariranha. Têm dentes caninos fortes.</small></button>
+    <button class="category" data-category="Herbívoros"><span style="font-size:1.8rem">🦌</span><b>Herbívoros</b><small>Comem plantas: anta, veado, tamanduá (que come formigas!). Vivem em florestas e campos.</small></button>
+    <button class="category" data-category="Roedores"><span style="font-size:1.8rem">🐹</span><b>Roedores</b><small>Têm dentes da frente que não param de crescer: capivara, cutia, paca.</small></button>
+    <button class="category" data-category="Primatas"><span style="font-size:1.8rem">🐒</span><b>Primatas</b><small>Mãos que seguram as coisas e cérebro grande: mico-leão, bugio, macaco-prego.</small></button>
+    <button class="category" data-category="Aquáticos"><span style="font-size:1.8rem">🐬</span><b>Aquáticos</b><small>Mamíferos que vivem na água e respiram ar: boto, peixe-boi, baleia.</small></button>
+    <button class="category" data-category="Domésticos"><span style="font-size:1.8rem">🐕</span><b>Domésticos</b><small>Vivem com a gente: cão e gato. Raça não é o mesmo que espécie!</small></button>
+    <button class="category" data-category="Habitats"><span style="font-size:1.8rem">🌎</span><b>Habitats e países</b><small>Descubra onde cada mamífero vive naturalmente.</small></button>
   </section>
 
   <div class="result-heading">
-    <div><h2>🐣 Conheça os animais</h2><p>Selecione um cartão para ver mais informações.</p></div>
+    <div><h2>🐣 Conheça os mamíferos</h2><p>Selecione um cartão para ver mais informações.</p></div>
     <span class="note">As fotos são carregadas de fontes externas.</span>
   </div>
   <section id="results" class="results" aria-live="polite"></section>
   <section id="detail" class="detail" aria-live="polite"></section>
   <p class="note" style="margin-top:22px">Nota: as informações são educativas e resumidas. As imagens dependem de conexão com a internet; confirme dados específicos com fontes científicas ou instituições de conservação.</p>
 </main>
-<footer>⭐ <strong>Codex</strong> — descubra, respeite e proteja os animais. ⭐<br>Projeto educativo sobre animais filhotes e adultos.</footer>
+<footer>⭐ <strong>Codex</strong> — descubra, respeite e proteja os mamíferos. ⭐<br>Projeto educativo sobre mamíferos filhotes e adultos.</footer>
 <script>
 const animals = [
- {name:"Onça-pintada",group:"Mamíferos",scientific:"Panthera onca",young:"Filhote",adult:"Adulto",habitat:"Florestas, Pantanal, Cerrado e outros ambientes naturais",countries:"Do México ao norte da Argentina, incluindo o Brasil",food:"Carnívora; caça diferentes animais",description:"É o maior felino das Américas. Tem corpo forte, pelagem com rosetas e costuma viver perto de água em muitos ambientes.",fact:"Sua mordida é muito potente para seu tamanho.",image:"https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=1000&q=85"},
- {name:"Ararinha-azul",group:"Aves",scientific:"Cyanopsitta spixii",young:"Filhote",adult:"Adulto",habitat:"Caatinga, especialmente áreas de mata ciliar",countries:"Brasil; a espécie é nativa do país e participa de programas de conservação e reintrodução",food:"Principalmente sementes e frutos",description:"É uma ave brasileira de plumagem azul. É uma espécie criticamente ameaçada e depende de ações de conservação para continuar existindo na natureza.",fact:"A conservação da espécie envolve reprodução planejada e reintrodução monitorada.",image:"https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=1000&q=85"},
- {name:"Capivara",group:"Mamíferos",scientific:"Hydrochoerus hydrochaeris",young:"Filhote",adult:"Adulto",habitat:"Áreas úmidas, margens de rios, lagos e brejos",countries:"Vários países da América do Sul, incluindo o Brasil",food:"Herbívoras; comem principalmente gramíneas e plantas aquáticas",description:"É o maior roedor vivo do mundo. É semiaquática, costuma viver em grupos e usa a água para se refrescar e escapar de perigos.",fact:"Seus dedos têm pequenas membranas que ajudam a nadar.",image:"https://images.unsplash.com/photo-1557431177-36141475c676?auto=format&fit=crop&w=1000&q=85"},
- {name:"Leão",group:"Mamíferos",scientific:"Panthera leo",young:"Filhote de leão",adult:"Leão adulto",habitat:"Savanas e campos africanos; pequena população asiática na Índia",countries:"Principalmente países da África; uma população vive na Índia",food:"Carnívoro",description:"Felino social que vive em grupos chamados bandos. Os machos adultos geralmente desenvolvem juba, embora isso varie.",fact:"É um dos poucos felinos que vivem naturalmente em grupos sociais grandes.",image:"https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=1000&q=85"},
- {name:"Panda-gigante",group:"Mamíferos",scientific:"Ailuropoda melanoleuca",young:"Filhote",adult:"Adulto",habitat:"Florestas temperadas de montanha com bambu",countries:"China",food:"Principalmente bambu",description:"Mamífero conhecido pela pelagem preta e branca. Apesar de pertencer à ordem dos carnívoros, sua alimentação é quase toda composta por bambu.",fact:"Os pandas têm uma estrutura semelhante a um polegar que ajuda a segurar o bambu.",image:"https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?auto=format&fit=crop&w=1000&q=85"},
- {name:"Tartaruga-marinha",group:"Répteis",scientific:"Cheloniidae (família)",young:"Filhote",adult:"Adulto",habitat:"Oceanos tropicais e subtropicais; fêmeas põem ovos em praias",countries:"Mares de muitas regiões do mundo; a distribuição varia conforme a espécie",food:"Varia conforme a espécie: algas, plantas marinhas, invertebrados ou outros animais",description:"Tartarugas marinhas passam a maior parte da vida no oceano e retornam a praias para a reprodução. Muitas espécies enfrentam ameaças causadas por atividades humanas.",fact:"A iluminação artificial nas praias pode desorientar filhotes recém-nascidos.",image:"https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?auto=format&fit=crop&w=1000&q=85"},
- {name:"Cachorro doméstico",group:"Mamíferos",scientific:"Canis lupus familiaris",young:"Filhote",adult:"Adulto",habitat:"Ambientes domésticos e, quando sem tutor, diversos ambientes modificados por humanos",countries:"Presente em todo o mundo",food:"Alimentação formulada para cães; necessidades variam com idade e saúde",description:"Animal domesticado com grande variedade de tamanhos, pelagens e comportamentos. As raças são variedades dentro da mesma espécie domesticada.",fact:"Socialização, enriquecimento e cuidados veterinários ajudam no bem-estar.",image:"https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=1000&q=85"},
- {name:"Gato doméstico",group:"Mamíferos",scientific:"Felis catus",young:"Filhote",adult:"Adulto",habitat:"Ambientes domésticos e áreas urbanas",countries:"Presente em todo o mundo",food:"Carnívoro obrigatório; precisa de dieta apropriada para gatos",description:"Pequeno felino domesticado, com sentidos apurados e comportamento de caça. Pode ter muitos padrões de pelagem.",fact:"Brincadeiras que simulam caça ajudam a estimular o gato com segurança.",image:"https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=1000&q=85"},
- {name:"Tucano-toco",group:"Aves",scientific:"Ramphastos toco",young:"Filhote",adult:"Adulto",habitat:"Cerrado, bordas de florestas e áreas abertas com árvores",countries:"América do Sul central e oriental, incluindo o Brasil",food:"Frutos e também insetos, ovos e pequenos animais",description:"Ave reconhecida pelo bico grande e colorido. O bico ajuda a alcançar alimentos e participa da regulação de calor.",fact:"Apesar do tamanho, o bico é relativamente leve por sua estrutura interna.",image:"https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=1000&q=85"}
+ {"name": "Onça-pintada", "group": "Carnívoros", "scientific": "Panthera onca", "young": "Filhote", "adult": "Adulto", "habitat": "Amazônia, Pantanal, Cerrado e Mata Atlântica", "countries": "Do México ao norte da Argentina, incluindo o Brasil", "food": "Carnívora; caça capivaras, jacarés, veados e peixes", "description": "É o maior felino das Américas. Tem pelagem com rosetas e adora ficar perto da água.", "fact": "Sua mordida é tão forte que quebra o casco de tartarugas.", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Onça-pintada"},
+ {"name": "Lobo-guará", "group": "Carnívoros", "scientific": "Chrysocyon brachyurus", "young": "Filhote", "adult": "Adulto", "habitat": "Cerrado, campos e bordas de mata", "countries": "Brasil, Argentina, Paraguai, Bolívia e Peru", "food": "Onívoro: come frutos (como a lobeira) e pequenos animais", "description": "É o maior canídeo da América do Sul, com pernas longas para enxergar por cima do capim.", "fact": "Está na nota de 200 reais!", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Lobo-guará"},
+ {"name": "Ariranha", "group": "Carnívoros", "scientific": "Pteronura brasiliensis", "young": "Filhote", "adult": "Adulto", "habitat": "Rios e lagos da Amazônia e do Pantanal", "countries": "América do Sul", "food": "Peixes", "description": "É uma lontra gigante que vive em família e conversa com muitos sons diferentes.", "fact": "Cada ariranha tem uma mancha branca no pescoço diferente, como uma digital.", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Ariranha"},
+ {"name": "Anta", "group": "Herbívoros", "scientific": "Tapirus terrestris", "young": "Filhote", "adult": "Adulto", "habitat": "Florestas perto de rios, Amazônia, Cerrado, Pantanal e Mata Atlântica", "countries": "América do Sul", "food": "Folhas, frutos e brotos", "description": "É o maior mamífero terrestre do Brasil e uma ótima nadadora.", "fact": "É chamada de 'jardineira da floresta' porque espalha sementes pelo cocô.", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Anta"},
+ {"name": "Tamanduá-bandeira", "group": "Herbívoros", "scientific": "Myrmecophaga tridactyla", "young": "Filhote", "adult": "Adulto", "habitat": "Cerrado, Pantanal e campos", "countries": "América Central e do Sul", "food": "Formigas e cupins (até 30 mil por dia!)", "description": "Não tem dentes: usa uma língua comprida e pegajosa para comer.", "fact": "A língua pode passar de 60 cm!", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Tamanduá-bandeira"},
+ {"name": "Veado-campeiro", "group": "Herbívoros", "scientific": "Ozotoceros bezoarticus", "young": "Filhote", "adult": "Adulto", "habitat": "Campos do Cerrado e do Pampa", "countries": "Brasil, Argentina, Uruguai, Paraguai e Bolívia", "food": "Capim, folhas e flores", "description": "Veado de campo aberto que vive em pequenos grupos.", "fact": "Só os machos têm chifres, e eles caem e nascem de novo todo ano.", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Veado-campeiro"},
+ {"name": "Capivara", "group": "Roedores", "scientific": "Hydrochoerus hydrochaeris", "young": "Filhote", "adult": "Adulto", "habitat": "Áreas úmidas, margens de rios, lagos e brejos", "countries": "América do Sul, incluindo o Brasil", "food": "Herbívora; come capim e plantas aquáticas", "description": "É o maior roedor do mundo. Vive em grupos e mergulha para fugir de perigos.", "fact": "Seus dedos têm membranas que ajudam a nadar.", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Capivara"},
+ {"name": "Cutia", "group": "Roedores", "scientific": "Dasyprocta leporina", "young": "Filhote", "adult": "Adulto", "habitat": "Florestas da Amazônia e da Mata Atlântica", "countries": "Norte da América do Sul e Brasil", "food": "Frutos e sementes", "description": "Roedor ágil que corre rápido pela floresta.", "fact": "Enterra sementes para comer depois e esquece algumas — que viram árvores!", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Cutia"},
+ {"name": "Paca", "group": "Roedores", "scientific": "Cuniculus paca", "young": "Filhote", "adult": "Adulto", "habitat": "Florestas perto de rios", "countries": "Do México ao sul do Brasil", "food": "Frutos, folhas e raízes", "description": "Roedor noturno com pintas brancas nas laterais do corpo.", "fact": "Quando se assusta, pula na água e fica escondida lá.", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Paca"},
+ {"name": "Mico-leão-dourado", "group": "Primatas", "scientific": "Leontopithecus rosalia", "young": "Filhote", "adult": "Adulto", "habitat": "Mata Atlântica do Rio de Janeiro", "countries": "Só existe no Brasil", "food": "Frutos, insetos e pequenos animais", "description": "Macaquinho de pelo laranja brilhante, parecido com uma juba de leão.", "fact": "Já esteve quase extinto e hoje se recupera graças à conservação.", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Mico-leão-dourado"},
+ {"name": "Bugio", "group": "Primatas", "scientific": "Alouatta guariba", "young": "Filhote", "adult": "Adulto", "habitat": "Mata Atlântica", "countries": "Brasil e Argentina", "food": "Folhas e frutos", "description": "Macaco que vive no alto das árvores e é bem tranquilo.", "fact": "Seu ronco pode ser ouvido a mais de 1 km de distância!", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Bugio"},
+ {"name": "Macaco-prego", "group": "Primatas", "scientific": "Sapajus nigritus", "young": "Filhote", "adult": "Adulto", "habitat": "Mata Atlântica", "countries": "Brasil e Argentina", "food": "Frutos, sementes, insetos", "description": "Um dos macacos mais espertos: usa pedras como ferramenta.", "fact": "Quebra cocos com pedras, como um martelo.", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Macaco-prego"},
+ {"name": "Boto-cor-de-rosa", "group": "Aquáticos", "scientific": "Inia geoffrensis", "young": "Filhote", "adult": "Adulto", "habitat": "Rios da Amazônia", "countries": "Brasil, Peru, Colômbia, Bolívia, Equador e Venezuela", "food": "Peixes", "description": "É o maior golfinho de rio do mundo e fica rosado com a idade.", "fact": "Consegue virar o pescoço, coisa que golfinhos do mar não fazem.", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Boto-cor-de-rosa"},
+ {"name": "Peixe-boi-amazônico", "group": "Aquáticos", "scientific": "Trichechus inunguis", "young": "Filhote", "adult": "Adulto", "habitat": "Rios e lagos da Amazônia", "countries": "Brasil, Peru, Colômbia e Equador", "food": "Plantas aquáticas", "description": "Mamífero aquático grandão e calmo, que precisa subir para respirar.", "fact": "Pode comer até 8% do próprio peso em plantas por dia.", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Peixe-boi-amazônico"},
+ {"name": "Baleia-jubarte", "group": "Aquáticos", "scientific": "Megaptera novaeangliae", "young": "Filhote", "adult": "Adulto", "habitat": "Oceanos; visita o litoral da Bahia para ter filhotes", "countries": "Oceanos do mundo todo", "food": "Krill e pequenos peixes", "description": "Baleia famosa pelos saltos e pelas nadadeiras compridas.", "fact": "Os machos cantam músicas que duram até 20 minutos!", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Baleia-jubarte"},
+ {"name": "Cachorro doméstico", "group": "Domésticos", "scientific": "Canis lupus familiaris", "young": "Filhote", "adult": "Adulto", "habitat": "Casas e cidades", "countries": "Presente em todo o mundo", "food": "Ração para cães; as necessidades mudam com idade e saúde", "description": "Mamífero domesticado com muitas raças, tamanhos e pelagens. Todas as raças são a mesma espécie.", "fact": "O focinho de cada cão é único, como uma impressão digital.", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Cachorro+doméstico"},
+ {"name": "Gato doméstico", "group": "Domésticos", "scientific": "Felis catus", "young": "Filhote", "adult": "Adulto", "habitat": "Casas e cidades", "countries": "Presente em todo o mundo", "food": "Carnívoro; precisa de alimento próprio para gatos", "description": "Pequeno felino domesticado, com sentidos apurados e instinto de caça.", "fact": "Os gatos ronronam também para se acalmar.", "image": "https://placehold.co/800x500/e3f5ff/20202a?text=Gato+doméstico"}
 ];
 let activeGroup="Todos";
 const results=document.getElementById("results"), search=document.getElementById("search"), detail=document.getElementById("detail");
 function render(){
  const q=search.value.trim().toLocaleLowerCase("pt-BR");
- const list=animals.filter(a=>(activeGroup==="Todos"||a.group===activeGroup||activeGroup==="Raças"&&a.name==="Cachorro doméstico"||activeGroup==="Habitats")&&(!q||[a.name,a.group,a.scientific,a.habitat,a.countries,a.food].join(" ").toLocaleLowerCase("pt-BR").includes(q)));
+ const list=animals.filter(a=>(activeGroup==="Todos"||a.group===activeGroup||activeGroup==="Habitats")&&(!q||[a.name,a.group,a.scientific,a.habitat,a.countries,a.food].join(" ").toLocaleLowerCase("pt-BR").includes(q)));
  results.innerHTML="";
- if(!list.length){results.innerHTML='<div class="empty">Não encontrei esse termo no catálogo de demonstração. Tente “onça”, “ararinha”, “país”, “ave” ou “cachorro”.</div>';return}
+ if(!list.length){results.innerHTML='<div class="empty">Não encontrei esse termo no catálogo de demonstração. Tente “onça”, “capivara”, “boto”, “Cerrado” ou “cachorro”.</div>';return}
  list.forEach(a=>{const card=document.createElement("article");card.className="animal-card";card.tabIndex=0;card.innerHTML=`<img src="${a.image}" data-especie="${a.scientific.replace(/ \(.*\)/,"")}" alt="Foto de ${a.name}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x500/e3f5ff/20202a?text=Foto+indisponivel'"><div class="body"><span class="tag">${a.group}</span><span class="tag">Filhote e adulto</span><h3>${a.name}</h3><p>${a.description}</p></div>`;card.addEventListener("click",()=>showDetail(a));card.addEventListener("keydown",e=>{if(e.key==="Enter")showDetail(a)});results.appendChild(card)});
 }
 function showDetail(a){
@@ -131,7 +142,7 @@ document.getElementById("searchBtn").addEventListener("click",render);
 search.addEventListener("input",render);
 search.addEventListener("keydown",e=>{if(e.key==="Enter")render()});
 document.querySelectorAll("#filters .chip").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll("#filters .chip").forEach(b=>b.classList.remove("active"));btn.classList.add("active");activeGroup=btn.dataset.filter;render()}));
-document.querySelectorAll("[data-category]").forEach(btn=>btn.addEventListener("click",()=>{const c=btn.dataset.category;activeGroup=["Mamíferos","Aves","Répteis","Peixes"].includes(c)?c:c==="Raças"?"Raças":"Habitats";document.querySelectorAll("#filters .chip").forEach(b=>b.classList.toggle("active",b.dataset.filter===activeGroup));search.value="";render();document.getElementById("results").scrollIntoView({behavior:"smooth"})}));
+document.querySelectorAll("[data-category]").forEach(btn=>btn.addEventListener("click",()=>{const c=btn.dataset.category;activeGroup=c==="Habitats"?"Habitats":c;document.querySelectorAll("#filters .chip").forEach(b=>b.classList.toggle("active",b.dataset.filter===activeGroup));search.value="";render();document.getElementById("results").scrollIntoView({behavior:"smooth"})}));
 render();
 </script>
 
@@ -188,7 +199,7 @@ button,.chip{min-height:44px}
     foto = f;
     $("previaCodex").innerHTML = `<img src="${URL.createObjectURL(f)}" alt="Foto escolhida">`;
     $("btnDescobrir").disabled = false;
-    $("statusCodex").textContent = "Foto pronta! Agora toque em “Descobrir animal”. 🐾";
+    $("statusCodex").textContent = "Foto pronta! Agora toque em “Descobrir mamífero”. 🐾";
   }
   $("btnCamCodex").onclick = () => $("camCodex").click();
   $("btnGalCodex").onclick = () => $("galCodex").click();
@@ -207,7 +218,7 @@ button,.chip{min-height:44px}
       const dados = await r.json().catch(() => ({}));
       const texto = dados && dados.candidates && dados.candidates[0].content.parts[0].text;
       ultimo = texto ? JSON.parse(texto) : null;
-      $("statusCodex").textContent = ultimo && ultimo.identificado ? "🎉 Animal descoberto!" : "Vamos tentar outra foto? 📷";
+      $("statusCodex").textContent = ultimo && ultimo.identificado ? "🎉 Mamífero descoberto!" : "Vamos tentar outra foto? 📷";
     } catch (e) {
       $("statusCodex").textContent = "Ops! Não consegui falar com o servidor.";
     } finally {
@@ -219,7 +230,7 @@ button,.chip{min-height:44px}
   function desenhar() {
     const caixa = $("meuCodex"), lista = ler();
     caixa.innerHTML = "";
-    if (!lista.length) { caixa.innerHTML = '<div class="empty">🐣 Seu Codex ainda está vazio. Descubra um animal pela foto!</div>'; return; }
+    if (!lista.length) { caixa.innerHTML = '<div class="empty">🐣 Seu Codex ainda está vazio. Descubra um mamífero pela foto!</div>'; return; }
     lista.forEach(a => {
       const card = document.createElement("article"); card.className = "animal-card";
       const img = document.createElement("img"); img.src = a.foto; img.alt = "Foto de " + a.nome;
@@ -261,7 +272,7 @@ button,.chip{min-height:44px}
   pesquisar.append(busca, hCat, q(".category-grid"), q(".result-heading"), q("#results"), q("#detail"));
   [...main.querySelectorAll(":scope > p.note")].forEach(n => pesquisar.append(n));
   const barra = document.createElement("nav"); barra.className = "codex-abas"; barra.setAttribute("aria-label", "Partes do Codex");
-  [["abaDescobrir", "📷 Descobrir pela foto"], ["abaCodex", "📒 Meu Codex"], ["abaPesquisar", "🔎 Pesquisar animais"]].forEach(([id, t], i) => {
+  [["abaDescobrir", "📷 Descobrir pela foto"], ["abaCodex", "📒 Meu Codex"], ["abaPesquisar", "🔎 Pesquisar mamíferos"]].forEach(([id, t], i) => {
     const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.dataset.aba = id; if (!i) b.classList.add("on");
     b.onclick = () => irAba(id); barra.append(b);
   });
