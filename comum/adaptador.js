@@ -206,6 +206,17 @@
       const alvo = o.nome ? c.querySelector(o.nome) : c;
       const f = alvo && fichaPeloNome(alvo.textContent);
       if (!f) return;
+      /* Um botão só: se a figurinha do grupo já tem "Ver detalhes" / "Ver ficha" /
+         "Detalhes", ele continua com a cara do grupo, mas abre a ficha completa
+         (igual à do resultado, com as informações extras do grupo). */
+      const proprio = [...c.querySelectorAll("button,a,[role=button]")].find(x => !x.classList.contains("fp-ver-ficha") && /ver detalhes|detalhes|ver ficha|ficha completa|ver informa/i.test(x.textContent));
+      if (proprio) {
+        if (proprio.dataset.fpFicha) return;
+        proprio.dataset.fpFicha = "1"; c.dataset.fpFicha = "1";
+        proprio.addEventListener("click", e => { const g = fichaPeloNome(alvo.textContent) || f; if (!g) return; e.preventDefault(); e.stopImmediatePropagation(); abrirFicha(g.info, g.foto); }, true);
+        return;
+      }
+      if (c.dataset.fpFicha) return;
       const b = document.createElement("span");
       b.className = "fp-ver-ficha"; b.setAttribute("role", "button"); b.tabIndex = 0; b.textContent = "📖 Ver ficha";
       const abrir = e => { e.preventDefault(); e.stopPropagation(); const g = fichaPeloNome(alvo.textContent) || f; abrirFicha(g.info, g.foto); };
