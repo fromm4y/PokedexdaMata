@@ -78,8 +78,7 @@ footer{text-align:center;color:#634d32;padding:24px 10px;font-size:.9rem}
 <nav class="tabbar" aria-label="Navegação principal">
  <button class="tab active" data-tab="inicio">🏠 <span>Início</span></button>
  <button class="tab" data-tab="pokedex">🦁 <span>Pokédex</span></button>
- <button class="tab" data-tab="foto">📸 <span>Tirar Foto</span></button>
- <button class="tab" data-tab="identificar">🔍 <span>Identificar Animal</span></button>
+ <button class="tab" data-tab="foto">📸 <span>Descobrir animal</span></button>
  <button class="tab" data-tab="favoritos">⭐ <span>Favoritos</span></button>
 </nav>
 
@@ -112,7 +111,7 @@ footer{text-align:center;color:#634d32;padding:24px 10px;font-size:.9rem}
 </section>
 
 <section class="panel tab-page" data-page="foto" id="cameraPanel">
- <h2>📸 Tirar foto de um animal</h2>
+ <h2>📸 Descobrir um animal</h2>
  <p class="help">Abra a câmera do dispositivo, permita o acesso quando solicitado e fotografe o animal. Você também pode escolher uma imagem dos seus arquivos.</p>
  <div class="camera-frame">
   <video id="cameraVideo" autoplay playsinline muted aria-label="Imagem da câmera"></video>
@@ -128,9 +127,9 @@ footer{text-align:center;color:#634d32;padding:24px 10px;font-size:.9rem}
  <canvas id="cameraCanvas" hidden></canvas>
 </section>
 
-<section class="panel tab-page" id="identificar" data-page="identificar">
- <h2>📸 Identifique um animal por foto</h2>
- <p class="help">Envie uma foto nítida de um animal selvagem. A inteligência artificial tentará identificar o animal e contar algumas curiosidades.</p>
+<section class="panel tab-page" id="identificar" data-page="foto">
+ <h2>🔍 Identificar o animal</h2>
+ <p class="help">Confira a foto e toque em “Identificar animal”. O zoólogo vai contar quem é, onde vive e curiosidades.</p>
  <div class="dropzone" id="dropzone">
   <div class="upload-icon">📷</div><h3>Escolha ou arraste uma foto</h3>
   <p>Uma foto de cada vez • JPG, PNG ou WEBP</p>
@@ -156,6 +155,14 @@ footer{text-align:center;color:#634d32;padding:24px 10px;font-size:.9rem}
  </section>
 </section>
 
+<section class="panel tab-page" data-page="inicio" id="savanaPainel">
+ <h2>🌍 A savana africana</h2>
+ <p class="help">A savana é um campo enorme com capim alto e árvores espalhadas, como a acácia. Tem uma estação de chuvas e uma estação seca. Toque nos animais para ver o nome.</p>
+ <div class="savana-grid">
+  <div><div id="savanaCena"></div></div>
+  <div><div id="savanaMapa" class="savana-mapa"></div><p class="help" style="margin-top:8px">📍 Onde ficam as grandes savanas: Quênia, Tanzânia, Botsuana, Namíbia, Zâmbia e África do Sul.</p></div>
+ </div>
+</section>
 <section class="panel tab-page" data-page="inicio">
  <h2>🌿 Código do explorador</h2>
  <p class="help" style="margin-bottom:0">Na natureza, cada animal tem seu espaço. Observe de longe, não ofereça comida, não se aproxime de filhotes e nunca tente separar animais em disputas. A savana fica mais bonita quando todos podem viver em segurança.</p>
@@ -280,6 +287,13 @@ identifyBtn.addEventListener('click',async()=>{
 <style>
 .camera-frame video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
 .camera-frame.ligada video{display:block}.camera-frame.ligada #cameraPlaceholder{display:none}
+#dropzone{display:none}
+.savana-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:start}
+.savana-mapa{height:320px;border-radius:17px;overflow:hidden;border:1px solid #c99b5b}
+.modal-mapa{height:240px;border-radius:14px;overflow:hidden;margin-top:14px;border:1px solid #e1cda5}
+@media(max-width:800px){.savana-grid{grid-template-columns:1fr}}
+#identificar{margin-top:16px}
+#identificar:not(:has(.preview-wrap.show)){display:none}
 #cameraShot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;z-index:2}
 .camera-frame.tirada #cameraShot{display:block}
 .camera-actions button{width:auto;margin-top:0}
@@ -298,6 +312,7 @@ main{max-width:1180px;margin-inline:auto}
     $("captureBtn").disabled = true; $("stopCameraBtn").disabled = true;
   }
   function irPara(aba) {
+    if (aba === "identificar") aba = "foto";   // as duas telas viraram uma só
     abas.forEach(b => { const on = b.dataset.tab === aba; b.classList.toggle("active", on); b.setAttribute("aria-current", on ? "page" : "false"); });
     paginas.forEach(p => p.hidden = p.dataset.page !== aba);
     if (aba !== "foto") pararCamera();
@@ -349,7 +364,8 @@ main{max-width:1180px;margin-inline:auto}
     const f = new File([fotoBlob], "foto-savana.jpg", { type: "image/jpeg" });
     const dt = new DataTransfer(); dt.items.add(f);
     const inp = $("photoInput"); inp.files = dt.files; inp.dispatchEvent(new Event("change", { bubbles: true }));
-    modo(false); irPara("identificar");
+    modo(false); irPara("foto");
+    setTimeout(() => document.getElementById("identificar").scrollIntoView({ behavior: "smooth", block: "start" }), 200);
     msg.textContent = "A câmera pode exigir uma conexão segura (HTTPS) e autorização do navegador.";
   }
   $("startCameraBtn").addEventListener("click", abrir);
@@ -358,8 +374,8 @@ main{max-width:1180px;margin-inline:auto}
   outra.addEventListener("click", abrir);
   usar.addEventListener("click", usarFoto);
   // escolher da galeria na aba da câmera também leva para a identificação
-  $("photoInput").addEventListener("change", () => { if (!document.querySelector('[data-page="identificar"]').hidden) return; irPara("identificar"); });
-  $("anotherPhotoBtn").addEventListener("click", () => irPara("foto"));
+  $("photoInput").addEventListener("change", () => setTimeout(() => document.getElementById("identificar").scrollIntoView({ behavior: "smooth", block: "start" }), 200));
+  $("anotherPhotoBtn").addEventListener("click", () => { irPara("foto"); window.scrollTo({ top: 0, behavior: "smooth" }); abrir(); });
   window.addEventListener("pagehide", pararCamera);
 })();
 </script>
@@ -369,6 +385,44 @@ main{max-width:1180px;margin-inline:auto}
 <script src="/comum/ficha.js"></script>
 <script src="/comum/adaptador.js"></script>
 <script>
+/* Onde cada animal da Pokédex vive (mapa de verdade da África) */
+const LUGARES_SAVANA = {
+  "Leão": [["Tanzânia", -6.3, 34.8], ["Quênia", 0.2, 37.9], ["Botsuana", -22.3, 24.7], ["África do Sul", -24, 31.5]],
+  "Elefante-africano": [["Quênia", 0.2, 37.9], ["Tanzânia", -6.3, 34.8], ["Botsuana", -19.3, 22.9], ["Zâmbia", -13.1, 27.8]],
+  "Rinoceronte": [["África do Sul", -24, 31.5], ["Namíbia", -19.5, 15.5], ["Quênia", 0.2, 37.9]],
+  "Girafa": [["Quênia", 0.2, 37.9], ["Tanzânia", -6.3, 34.8], ["Namíbia", -19.5, 15.5]],
+  "Zebra": [["Quênia", 0.2, 37.9], ["Tanzânia", -6.3, 34.8], ["Botsuana", -19.3, 22.9], ["África do Sul", -24, 31.5]],
+  "Hiena": [["Tanzânia", -6.3, 34.8], ["Quênia", 0.2, 37.9], ["Etiópia", 9.1, 40.5], ["Botsuana", -19.3, 22.9]],
+  "Guepardo": [["Namíbia", -19.5, 15.5], ["Botsuana", -22.3, 24.7], ["Quênia", 0.2, 37.9], ["Tanzânia", -6.3, 34.8]],
+  "Leopardo": [["África do Sul", -24, 31.5], ["Quênia", 0.2, 37.9], ["Zâmbia", -13.1, 27.8], ["Índia", 21, 78]],
+  "Hipopótamo": [["Zâmbia", -13.1, 27.8], ["Tanzânia", -6.3, 34.8], ["Uganda", 1.4, 32.3], ["Botsuana", -19.3, 22.9]],
+  "Avestruz": [["Quênia", 0.2, 37.9], ["Tanzânia", -6.3, 34.8], ["Namíbia", -19.5, 15.5], ["África do Sul", -29, 24]]
+};
+const lugaresDe = nome => (LUGARES_SAVANA[nome] || LUGARES_SAVANA["Leão"]).map(([lugar, lat, lng]) => ({ lugar, lat, lng }));
+// mapa dentro da ficha do catálogo
+(() => {
+  const modal = document.getElementById("animalModal");
+  new MutationObserver(() => {
+    if (!modal.classList.contains("show")) return;
+    const box = modal.querySelector(".modal-box");
+    let m = box.querySelector(".modal-mapa"); if (m) m.remove();
+    const t = document.createElement("h3"); t.className = "modal-mapa-t"; t.style.margin = "16px 0 0"; t.textContent = "🌍 Onde vive na natureza";
+    box.querySelectorAll(".modal-mapa-t").forEach(x => x.remove());
+    m = document.createElement("div"); m.className = "modal-mapa";
+    box.append(t, m);
+    FichaPokedex.mapaMundo(m, lugaresDe(document.getElementById("modalName").textContent.trim()), { zoomMax: 4 });
+  }).observe(modal, { attributes: true, attributeFilter: ["class"] });
+})();
+// Início: savana com os animais andando + mapa
+(() => {
+  const nomes = ["Leão", "Elefante-africano", "Girafa", "Zebra", "Guepardo", "Hipopótamo", "Rinoceronte", "Avestruz"];
+  const ico = { "Leão": "🦁", "Elefante-africano": "🐘", "Girafa": "🦒", "Zebra": "🦓", "Guepardo": "🐆", "Hipopótamo": "🦛", "Rinoceronte": "🦏", "Avestruz": "🐦" };
+  FichaPokedex.configurar({ icone: "🦁", cor: "#e98a3b", cor2: "#f7c75e", escuro: false, claro: { fundo: "#fff7e6", texto: "#4a2c17", suave: "#7a5a3c" } });
+  FichaPokedex.cena(document.getElementById("savanaCena"), { soMundo: true, mundo: { nome: "Savana africana", cenario: "savana" },
+    itens: nomes.map(n => ({ nome: n, img: "", icone: ico[n], fauna: true, biomas: ["Savana africana"] })) });
+  const todos = []; Object.values(LUGARES_SAVANA).forEach(l => l.forEach(([lugar, lat, lng]) => { if (lat < 15 && lng > 0 && lng < 60 && !todos.some(x => x.lugar === lugar)) todos.push({ lugar, lat, lng }); }));
+  FichaPokedex.mapaMundo(document.getElementById("savanaMapa"), todos, { zoomMax: 3 });
+})();
 PokedexAdaptador.iniciar({
   icone: "🦁", fauna: true,
   soMundo: true,   // habitat da ficha focado na savana (sem os biomas do Brasil)

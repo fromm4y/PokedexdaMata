@@ -268,11 +268,11 @@
     const fauna = doBioma.filter(it => it.fauna), flora = doBioma.filter(it => !it.fauna);
     const roam = fauna.map((it, i) => `
       <button class="fp-roam${i % 2 ? " flip" : ""}${it.atual ? " current" : ""}" style="--lane:${42 + ((i * 17) % 14)}%;--spd:${22 + (i % 5) * 4}s;--delay:${-(i * 3.4).toFixed(1)}s;--c:${it.cor}" title="${esc(it.nome)}">
-        <span class="fp-walk"><span class="fp-thumb"><img src="${it.img}" alt=""><span class="fp-emoji">${it.icone}</span></span></span>
+        <span class="fp-walk"><span class="fp-thumb${it.img ? "" : " sem-foto"}">${it.img ? `<img src="${it.img}" alt="">` : ""}<span class="fp-emoji">${it.icone}</span></span></span>
         <span class="fp-tag">${esc(it.nome)}</span></button>`).join("");
     const garden = flora.map((it, i) => `
       <button class="fp-plant${it.atual ? " current" : ""}" style="--gx:${flora.length === 1 ? 50 : 12 + i * (76 / (flora.length - 1))}%;--lane:${38 + ((i * 9) % 8)}%;--c:${it.cor};--gdelay:${(i % 5) * .3}s" title="${esc(it.nome)}">
-        <span class="fp-pthumb"><img src="${it.img}" alt=""><span class="fp-emoji">${it.icone}</span></span>
+        <span class="fp-pthumb${it.img ? "" : " sem-foto"}">${it.img ? `<img src="${it.img}" alt="">` : ""}<span class="fp-emoji">${it.icone}</span></span>
         <span class="fp-tag">${esc(it.nome)}</span></button>`).join("");
     const vazio = doBioma.length ? "" : `<div class="fp-empty"><p>Esta espécie não aparece no(a) <strong>${esc(bioma)}</strong>. Escolha outro bioma acima.</p></div>`;
     const botoes = Object.entries(PERIODOS).map(([k, n]) => `<button data-per="${k}" class="${k === periodo ? "on" : ""}">${n}</button>`).join("");
@@ -786,6 +786,8 @@
 .fp-pthumb{border-radius:50% 50% 50% 8px}
 .fp-thumb img,.fp-pthumb img{width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
 .fp-emoji{position:absolute;right:-6px;bottom:-6px;width:22px;height:22px;border-radius:50%;background:var(--bg-1);display:grid;place-items:center;font-size:13px;border:1px solid var(--c)}
+.fp-thumb.sem-foto,.fp-pthumb.sem-foto{width:58px;height:58px;background:radial-gradient(circle at 35% 30%,#fff,#fff3d6);display:grid;place-items:center}
+.sem-foto .fp-emoji{position:static;width:auto;height:auto;background:none;border:0;font-size:36px;line-height:1}
 .fp-tag{position:absolute;left:50%;top:-8px;transform:translate(-50%,-100%);background:rgba(4,10,7,.94);border:1px solid var(--surface-line);color:#eaf5ee;padding:5px 9px;border-radius:9px;font:600 11.5px 'Hanken Grotesk',system-ui,sans-serif;white-space:nowrap;opacity:0;pointer-events:none;transition:.2s}
 .fp .fp-roam:hover .fp-tag,.fp .fp-roam.show .fp-tag,.fp .fp-plant:hover .fp-tag,.fp .fp-plant.show .fp-tag{opacity:1}
 .fp .fp-plant{position:absolute;z-index:6;bottom:var(--lane);left:var(--gx);border:none;background:none;padding:0;cursor:pointer;transform-origin:bottom center;animation:fpSway 3.9s ease-in-out infinite;animation-delay:var(--gdelay)}

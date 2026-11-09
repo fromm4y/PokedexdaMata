@@ -53,6 +53,23 @@ footer{padding:18px;text-align:center;background:var(--blue);border-top:2px soli
 </style>
 <style id="centralizar">
 /* Conteúdo principal no centro da tela (professora) */
+#tela-inicio .ini-hero{display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:center;background:linear-gradient(120deg,var(--blue),var(--pink) 55%,var(--yellow));border:3px solid var(--line);border-radius:28px;padding:clamp(20px,4vw,40px);box-shadow:6px 6px 0 var(--line)}
+.ini-selo{display:inline-block;background:#fff;border:2px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:800;font-size:14px}
+.ini-txt h1{font-size:clamp(30px,5vw,52px);line-height:1.05;margin:14px 0 10px}.ini-txt h1 b{background:#fff;border:3px solid var(--line);border-radius:14px;padding:0 10px;display:inline-block;transform:rotate(-2deg)}
+.ini-txt p{font-size:18px;line-height:1.5;margin:0 0 18px}
+.ini-cta{font:inherit;font-weight:900;font-size:20px;background:var(--yellow);border:3px solid var(--line);border-radius:16px;padding:14px 24px;box-shadow:4px 4px 0 var(--line);cursor:pointer}
+.ini-cta:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--line)}
+.ini-dia{background:#fff;border:3px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:4px 4px 0 var(--line);cursor:pointer}
+.ini-dia img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--blue)}
+.ini-dia div{padding:12px 14px}.ini-dia small{font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-size:12px}.ini-dia b{display:block;font-size:20px;margin:3px 0}.ini-dia p{margin:0;font-size:14px;line-height:1.4}
+.ini-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.ini-card{font:inherit;text-align:left;cursor:pointer;border:3px solid var(--line);border-radius:22px;padding:18px;box-shadow:4px 4px 0 var(--line);display:flex;flex-direction:column;gap:6px;color:var(--ink)}
+.ini-card span{font-size:38px}.ini-card b{font-size:20px}.ini-card small{font-size:15px;color:#3b3a46}
+.ini-card.c1{background:var(--yellow)}.ini-card.c2{background:var(--pink)}.ini-card.c3{background:var(--blue)}
+.ini-card:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--line)}
+@media(max-width:820px){#tela-inicio .ini-hero{grid-template-columns:1fr}.ini-cards{grid-template-columns:1fr}}
+.abas{display:grid;grid-template-columns:repeat(4,1fr)}
+@media(max-width:640px){.abas{grid-template-columns:repeat(2,1fr)}}
 #tela-descobrir.on{min-height:calc(100vh - 290px);display:flex;flex-direction:column;justify-content:center}
 </style>
 
@@ -63,13 +80,32 @@ footer{padding:18px;text-align:center;background:var(--blue);border-top:2px soli
   <p><strong>Um mundo de mamíferos para descobrir!</strong><br>Pesquise espécies, conheça filhotes e adultos e aprenda sobre habitats, alimentação e conservação. 💙💗💛</p>
 </header>
 <nav class="abas" aria-label="Abas do Codex">
-  <button data-tela="descobrir" class="on">📷 Descobrir pela foto</button>
+  <button data-tela="inicio" class="on">🏠 Início</button>
+  <button data-tela="descobrir">📷 Descobrir pela foto</button>
   <button data-tela="meu">📒 Meu Codex</button>
   <button data-tela="pesquisar">🔎 Pesquisar mamíferos</button>
 </nav>
 <main>
   <!-- DESCOBRIR -->
-  <section class="tela on" id="tela-descobrir">
+  <!-- INÍCIO (tela inicial) -->
+  <section class="tela on" id="tela-inicio">
+    <div class="ini-hero">
+      <div class="ini-txt">
+        <span class="ini-selo">🐾 Codex dos mamíferos</span>
+        <h1>Bem-vindo ao <b>Codex</b>!</h1>
+        <p>Aqui você descobre mamíferos pela foto, guarda cada descoberta no seu Codex e pesquisa filhotes e adultos de várias espécies. 💙💗💛</p>
+        <button class="ini-cta" type="button" data-ir="descobrir">📷 Começar a descobrir</button>
+      </div>
+      <div class="ini-dia" id="iniDia"></div>
+    </div>
+    <div class="ini-cards">
+      <button class="ini-card c1" type="button" data-ir="descobrir"><span>📷</span><b>Descobrir pela foto</b><small>Tire uma foto e o Codex diz qual é o mamífero.</small></button>
+      <button class="ini-card c2" type="button" data-ir="meu"><span>📒</span><b>Meu Codex</b><small id="iniMeu">Seus mamíferos descobertos.</small></button>
+      <button class="ini-card c3" type="button" data-ir="pesquisar"><span>🔎</span><b>Pesquisar mamíferos</b><small id="iniPesq">Filhotes, adultos, habitat e comida.</small></button>
+    </div>
+  </section>
+
+  <section class="tela" id="tela-descobrir">
     <div class="search-panel" style="background:linear-gradient(115deg,#e3f5ff,#ffe2ef 60%,#fff4b8)">
       <div class="scan">
         <div class="scan-preview" id="previaCodex"><div>🐾<small>Sua foto aparece aqui</small></div></div>
@@ -147,9 +183,21 @@ function irPara(t){
   document.querySelectorAll(".abas button").forEach(b => b.classList.toggle("on", b.dataset.tela === t));
   if (t === "meu") desenharMeu();
   if (t === "pesquisar") render();
+  if (t === "inicio") desenharInicio();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 document.querySelectorAll(".abas button").forEach(b => b.onclick = () => irPara(b.dataset.tela));
+document.querySelectorAll("[data-ir]").forEach(b => b.onclick = () => irPara(b.dataset.ir));
+/* Tela inicial: contadores e o "mamífero do dia" */
+function desenharInicio(){
+  const n = (typeof lerMeu === "function" ? lerMeu() : []).length;
+  $("iniMeu").textContent = n ? `Você já tem ${n} mamífero${n > 1 ? "s" : ""} no seu Codex!` : "Seus mamíferos descobertos ficam guardados aqui.";
+  $("iniPesq").textContent = `${animals.length} mamíferos para conhecer: filhotes, adultos, habitat e comida.`;
+  const hoje = new Date(), a = animals[(hoje.getFullYear() * 400 + hoje.getMonth() * 31 + hoje.getDate()) % animals.length];
+  $("iniDia").innerHTML = `<img src="${VAZIA}" data-especie="${esc(a.scientific)}" alt="Foto de ${esc(a.name)}"><div><small>⭐ Mamífero do dia</small><b>${esc(a.name)}</b><p>${esc(String(a.description || "").slice(0, 120))}…</p></div>`;
+  $("iniDia").onclick = () => { irPara("pesquisar"); showDetail(a); };
+  if (window.FichaPokedex) FichaPokedex.trocarFotos($("iniDia"));
+}
 
 /* Meu Codex (álbum) */
 const CHAVE = "codexMeusAnimais";
@@ -260,6 +308,7 @@ PokedexAdaptador.iniciar({
   salvar: () => salvarNoCodex(),
   novaFoto: () => { irPara("descobrir"); document.getElementById("btnGalCodex").click(); }
 });
+desenharInicio();   // tela inicial
 </script>
 </body>
 </html>
