@@ -163,6 +163,7 @@
         <div class="viagem-jogo"><div class="viagem-fruta"><img id="viagemFoto" alt=""><b id="viagemNome"></b></div><div class="viagem-opcoes" id="viagemOpcoes"></div></div>
         <p id="viagemExplica" class="viagem-explica"></p>
         <button type="button" class="acao2" id="viagemProxima" hidden>➡️ Próxima fruta</button>
+        <div id="viagemFim" class="viagem-fim" hidden></div>
       </section>
       <div id="areaDescobrir" hidden>
 
@@ -430,7 +431,7 @@ main{align-items:center!important;padding-top:20px!important}
 })();
 PokedexAdaptador.iniciar({
   semRepetir: ["frutariabr_album"],   // não guarda a mesma espécie duas vezes
-  verAlbum: () => { document.querySelectorAll(".section").forEach(s => s.style.display = "none"); const a = document.getElementById("album"); a.style.display = "block"; a.scrollIntoView({ behavior: "smooth" }); },   // se a espécie já está no álbum, o botão só leva até lá
+  verAlbum: () => window.abaBryan ? abaBryan("album") : document.getElementById("album").scrollIntoView({ behavior: "smooth" }),   // se a espécie já está no álbum, o botão só leva até lá
   albumFicha: { cartao: "#album .fruit-card" },  // "📖 Ver ficha" nas figurinhas do álbum
   // botões por etapa: o de identificar só aparece depois de escolher a foto
   etapas: { foto: ["#analisar"] },
@@ -483,6 +484,7 @@ PokedexAdaptador.iniciar({
   $("foto").addEventListener("change", () => ganhar("foto"));
   desenharConquistas();
   // ===== Viagem pelo mundo das frutas =====
+  // banco com 50 frutas: cada rodada sorteia 5 (pedido da professora)
   const ORIGEM = [
     ["Banana", "Musa acuminata", "Sudeste Asiático", "As primeiras bananas foram cultivadas há milhares de anos na Nova Guiné e no Sudeste Asiático."],
     ["Maçã", "Malus domestica", "Ásia Central", "A maçã nasceu nas montanhas do Cazaquistão, na Ásia Central!"],
@@ -493,7 +495,7 @@ PokedexAdaptador.iniciar({
     ["Abacaxi", "Ananas comosus", "Brasil e América do Sul", "O abacaxi é sul-americano, das regiões do Brasil e do Paraguai!"],
     ["Caju", "Anacardium occidentale", "Brasil (Nordeste)", "O caju é brasileiro, do Nordeste. Os portugueses o levaram para a Índia e a África."],
     ["Açaí", "Euterpe oleracea", "Amazônia (Brasil)", "O açaí vem de uma palmeira da Amazônia."],
-    ["Jabuticaba", "Plinia cauliflora", "Mata Atlântica (Brasil)", "A jabuticaba só existe naturalmente no Brasil!"],
+    ["Jabuticaba", "Plinia cauliflora", "Mata Atlântica (Brasil)", "A jabuticaba só existe naturalmente no Brasil e nasce grudada no tronco!"],
     ["Melancia", "Citrullus lanatus", "África", "A melancia é africana: ela nasceu em regiões quentes da África."],
     ["Mamão", "Carica papaya", "México e América Central", "O mamão é das terras quentes do México e da América Central."],
     ["Abacate", "Persea americana", "México e América Central", "O abacate é mexicano e era comido pelos astecas."],
@@ -501,17 +503,58 @@ PokedexAdaptador.iniciar({
     ["Pêssego", "Prunus persica", "China", "Apesar do nome científico lembrar a Pérsia, o pêssego é da China."],
     ["Maracujá", "Passiflora edulis", "Brasil e América do Sul", "O maracujá é sul-americano, e o Brasil é o maior produtor do mundo."],
     ["Limão", "Citrus limon", "Índia", "O limão surgiu entre a Índia e a região do Himalaia."],
-    ["Cacau", "Theobroma cacao", "Amazônia (Brasil)", "O cacau, do chocolate, nasceu na Amazônia!"]
+    ["Cacau", "Theobroma cacao", "Amazônia (Brasil)", "O cacau, que vira chocolate, nasceu na Amazônia!"],
+    ["Morango", "Fragaria ananassa", "Europa", "O morango que comemos nasceu na França, do cruzamento de dois morangos das Américas."],
+    ["Pera", "Pyrus communis", "Europa", "A pera é cultivada na Europa desde a época dos gregos e romanos."],
+    ["Cereja", "Prunus avium", "Europa", "A cereja vem da Europa e da região perto do Mar Negro."],
+    ["Ameixa", "Prunus domestica", "Europa", "A ameixa que vira ameixa-seca é europeia, das montanhas do Cáucaso."],
+    ["Figo", "Ficus carica", "Oriente Médio", "O figo é uma das frutas mais antigas cultivadas pelos humanos, no Oriente Médio."],
+    ["Romã", "Punica granatum", "Oriente Médio", "A romã vem do Irã e é cheia de sementinhas vermelhas."],
+    ["Tâmara", "Phoenix dactylifera", "Oriente Médio", "A tâmara cresce numa palmeira dos desertos do Oriente Médio."],
+    ["Lichia", "Litchi chinensis", "China", "A lichia é chinesa e tem a casca parecida com um morango duro."],
+    ["Carambola", "Averrhoa carambola", "Sudeste Asiático", "Cortada, a carambola vira uma estrela! Ela vem do Sudeste Asiático."],
+    ["Jaca", "Artocarpus heterophyllus", "Índia", "A jaca é a maior fruta de árvore do mundo e vem da Índia."],
+    ["Fruta-do-conde", "Annona squamosa", "México e América Central", "A fruta-do-conde (pinha) veio da América Central e do Caribe."],
+    ["Goiaba", "Psidium guajava", "México e América Central", "A goiaba é das terras quentes da América Central e tem muita vitamina C."],
+    ["Pitanga", "Eugenia uniflora", "Mata Atlântica (Brasil)", "A pitanga é da Mata Atlântica e tem a forma de uma abóbora pequenininha."],
+    ["Cupuaçu", "Theobroma grandiflorum", "Amazônia (Brasil)", "O cupuaçu é primo do cacau e nasceu na Amazônia."],
+    ["Guaraná", "Paullinia cupana", "Amazônia (Brasil)", "O guaraná é da Amazônia e a fruta parece um olhinho!"],
+    ["Pequi", "Caryocar brasiliense", "Cerrado (Brasil)", "O pequi é do Cerrado. Cuidado: ele tem espinhos dentro do caroço!"],
+    ["Mangaba", "Hancornia speciosa", "Cerrado (Brasil)", "A mangaba é do Cerrado e do Nordeste; o nome quer dizer 'coisa boa de comer'."],
+    ["Buriti", "Mauritia flexuosa", "Amazônia (Brasil)", "O buriti é o fruto de uma palmeira das veredas e da Amazônia."],
+    ["Graviola", "Annona muricata", "México e América Central", "A graviola vem do Caribe e da América Central e é cheia de 'espinhos' moles."],
+    ["Tomate", "Solanum lycopersicum", "Andes (Peru)", "Sim, o tomate é uma fruta! Ele nasceu nos Andes, no Peru."],
+    ["Mirtilo", "Vaccinium corymbosum", "América do Norte", "O mirtilo (blueberry) é da América do Norte."],
+    ["Framboesa", "Rubus idaeus", "Europa", "A framboesa é europeia e cresce em arbustos com espinhos."],
+    ["Tamarindo", "Tamarindus indica", "África", "Apesar do nome 'indica', o tamarindo nasceu na África."],
+    ["Damasco", "Prunus armeniaca", "China", "O damasco nasceu na China e chegou à Europa pela Armênia."],
+    ["Mexerica", "Citrus reticulata", "China", "A mexerica (tangerina) é chinesa e fácil de descascar."],
+    ["Toranja", "Citrus paradisi", "Caribe", "A toranja (grapefruit) apareceu na ilha de Barbados, no Caribe."],
+    ["Acerola", "Malpighia emarginata", "Caribe", "A acerola é do Caribe e é uma das frutas com mais vitamina C do mundo."],
+    ["Pitaya", "Selenicereus undatus", "México e América Central", "A pitaya é a fruta de um cacto do México e da América Central."],
+    ["Umbu", "Spondias tuberosa", "Caatinga (Brasil)", "O umbu é da Caatinga: a árvore guarda água nas raízes para aguentar a seca."],
+    ["Jambo", "Syzygium malaccense", "Sudeste Asiático", "O jambo veio da Malásia, no Sudeste Asiático."],
+    ["Azeitona", "Olea europaea", "Europa", "A azeitona é o fruto da oliveira, das terras perto do Mar Mediterrâneo."],
+    ["Physalis", "Physalis peruviana", "Andes (Peru)", "A physalis nasce dentro de um 'balãozinho' e vem dos Andes, no Peru."]
   ];
   const LUGARES = [...new Set(ORIGEM.map(o => o[2]))];
-  let atual = null, acertos = ler("frutariaViagem", 0);
-  $("viagemPlacar").textContent = acertos + " acertos";
-  function novaFruta() {
-    atual = ORIGEM[Math.floor(Math.random() * ORIGEM.length)];
+  const POR_RODADA = 5;
+  let rodada = [], idx = 0, acertosRodada = 0, atual = null, acertos = ler("frutariaViagem", 0);
+  const ehBR = l => l.includes("Brasil");
+  function placar() { $("viagemPlacar").textContent = rodada.length ? `Fruta ${Math.min(idx + 1, POR_RODADA)} de ${POR_RODADA} · ${acertosRodada} acerto${acertosRodada === 1 ? "" : "s"}` : ""; }
+  function comecarRodada() {
+    rodada = ORIGEM.map(x => [Math.random(), x]).sort((a, b) => a[0] - b[0]).slice(0, POR_RODADA).map(x => x[1]);
+    idx = 0; acertosRodada = 0; mostrarFruta();
+  }
+  function mostrarFruta() {
+    atual = rodada[idx];
+    $("viagemFim").hidden = true; document.querySelector(".viagem-jogo").hidden = false;
     $("viagemNome").textContent = atual[0]; $("viagemExplica").textContent = ""; $("viagemProxima").hidden = true;
     const img = $("viagemFoto"); img.removeAttribute("src"); img.style.visibility = "hidden";
     FichaPokedex.urlDaEspecie(atual[1]).then(u => { if (u) { img.src = u; img.style.visibility = "visible"; } });
-    const erradas = LUGARES.filter(l => l !== atual[2]).sort(() => Math.random() - .5).slice(0, 3);
+    // 3 lugares errados (no máximo 1 outro do Brasil, para não ficar confuso)
+    let br = 0;
+    const erradas = LUGARES.filter(l => l !== atual[2]).sort(() => Math.random() - .5).filter(l => { if (!ehBR(l)) return true; if (br >= 1) return false; br++; return true; }).slice(0, 3);
     $("viagemOpcoes").innerHTML = "";
     [atual[2], ...erradas].sort(() => Math.random() - .5).forEach(l => {
       const b = document.createElement("button"); b.type = "button"; b.textContent = "📍 " + l;
@@ -521,14 +564,25 @@ PokedexAdaptador.iniciar({
         b.classList.add(certo ? "certa" : "errada");
         [...$("viagemOpcoes").children].forEach(x => { if (x.textContent === "📍 " + atual[2]) x.classList.add("certa"); });
         $("viagemExplica").textContent = (certo ? "🎉 Acertou! " : "Quase! ") + atual[3];
-        if (certo) { acertos++; gravar("frutariaViagem", acertos); $("viagemPlacar").textContent = acertos + " acertos"; if (acertos >= 5) ganhar("viajante"); }
-        $("viagemProxima").hidden = false;
+        if (certo) { acertosRodada++; acertos++; gravar("frutariaViagem", acertos); if (acertos >= 5) ganhar("viajante"); }
+        $("viagemProxima").textContent = idx + 1 >= POR_RODADA ? "🏁 Ver resultado" : "➡️ Próxima fruta";
+        $("viagemProxima").hidden = false; placar();
       };
       $("viagemOpcoes").appendChild(b);
     });
+    placar();
   }
-  $("btnViagem").onclick = () => { $("areaDescobrir").hidden = true; $("viagem").hidden = false; novaFruta(); $("viagem").scrollIntoView({ behavior: "smooth", block: "start" }); };
-  $("viagemProxima").onclick = novaFruta;
+  function fimDaRodada() {
+    document.querySelector(".viagem-jogo").hidden = true; $("viagemProxima").hidden = true; $("viagemExplica").textContent = "";
+    const msg = acertosRodada === POR_RODADA ? "PERFEITO! Você é um(a) viajante das frutas! 🌍🏆" : acertosRodada >= 3 ? "Mandou bem! Já conhece muitas origens! ✈️" : "Boa viagem! Jogue de novo para aprender mais lugares. 🍇";
+    $("viagemFim").innerHTML = `<div class="viagem-fim-n">${acertosRodada} de ${POR_RODADA}</div><p>${msg}</p><button type="button" class="acao2" id="viagemDeNovo">🔁 Jogar de novo</button>`;
+    $("viagemFim").hidden = false; $("viagemPlacar").textContent = `${acertos} acerto${acertos === 1 ? "" : "s"} no total`;
+    $("viagemDeNovo").onclick = comecarRodada;
+    if (acertosRodada >= 3) chuvaDeFrutas && chuvaDeFrutas();
+  }
+  window.abrirViagem = comecarRodada;
+  $("btnViagem").onclick = () => { $("areaDescobrir").hidden = true; $("viagem").hidden = false; comecarRodada(); $("viagem").scrollIntoView({ behavior: "smooth", block: "start" }); };
+  $("viagemProxima").onclick = () => { idx++; if (idx >= POR_RODADA) fimDaRodada(); else mostrarFruta(); };
 })();
 </script>
 <style>
@@ -556,5 +610,59 @@ PokedexAdaptador.iniciar({
 @keyframes chuvaCai{to{transform:translateY(115vh) rotate(540deg)}}
 @media(max-width:700px){.tela2-heroi{grid-template-columns:1fr;justify-items:center;text-align:center}.tela2-acoes,.viagem-jogo,.viagem-opcoes{grid-template-columns:1fr}}
 </style>
+
+<!-- ABAS (pedido da professora): cada parte do app numa aba -->
+<style>
+.abas-bryan{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0 16px}
+.abas-bryan button{font:inherit;font-weight:800;font-size:15px;min-height:48px;padding:10px 16px;border-radius:999px;border:0;background:#fff5c9;color:#24431b;box-shadow:0 4px 0 #d2a82e;cursor:pointer}
+.abas-bryan button.on{background:#8fe33d;color:#173a10;box-shadow:0 4px 0 #4f9a1c}
+.tela2-acoes,#areaDescobrir .nav{display:none!important}
+.aba-bryan-sec{display:none!important}
+.aba-bryan-sec.on{display:block!important}
+.viagem-jogo[hidden]{display:none!important}
+.viagem-fim{text-align:center;padding:10px 0}
+.viagem-fim-n{font-size:clamp(40px,8vw,64px);font-weight:900;color:#ffe45e;text-shadow:0 4px 0 #5a3f1a}
+.viagem-fim p{font-size:19px;font-weight:700;margin:6px 0 14px}
+.mapa-frutas{height:320px;border-radius:18px;overflow:hidden;margin:12px 0}
+</style>
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const area = $("areaDescobrir"), viagem = $("viagem");
+  // as seções (álbum, conquistas...) saem de dentro do "Descobrir" e viram abas próprias
+  ["album", "conquistas", "lugares", "info"].forEach(id => { const el = $(id); area.parentNode.insertBefore(el, area.nextSibling); });
+  const SEC = { album: $("album"), conquistas: $("conquistas"), lugares: $("lugares"), info: $("info") };
+  const ABAS = [["descobrir", "🔎 Descobrir"], ["viagem", "🌍 Viagem das frutas"], ["album", "📚 Álbum"], ["conquistas", "🏆 Conquistas"], ["lugares", "🗺️ Onde vive?"], ["sobre", "ℹ️ Sobre"]];
+  const nav = document.createElement("nav"); nav.className = "abas-bryan"; nav.setAttribute("aria-label", "Abas");
+  nav.innerHTML = ABAS.map(([id, t]) => `<button type="button" data-aba="${id}">${t}</button>`).join("");
+  document.querySelector(".tela2-acoes").insertAdjacentElement("afterend", nav);
+  Object.values(SEC).forEach(el => { el.classList.add("aba-bryan-sec"); el.style.display = ""; });
+  let atual = "descobrir";
+  window.abaBryan = id => {
+    if (id === "sobre") { $("btnSobre").click(); return; }
+    atual = id;
+    nav.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.aba === id));
+    area.hidden = id !== "descobrir";
+    viagem.hidden = id !== "viagem";
+    Object.entries(SEC).forEach(([k, el]) => el.classList.toggle("on", k === id));
+    if (id === "viagem" && window.abrirViagem) abrirViagem();
+    if (id === "lugares") desenharMapa();
+  };
+  nav.querySelectorAll("button").forEach(b => b.onclick = () => { abaBryan(b.dataset.aba); nav.scrollIntoView({ behavior: "smooth", block: "start" }); });
+  // salvar no álbum leva para a aba Álbum
+  const salvarOriginal = window.salvarFruta;
+  window.salvarFruta = info => { salvarOriginal(info); abaBryan("album"); };
+  // "Onde vive?": mapa de verdade com os biomas da última fruta
+  function desenharMapa() {
+    const f = PokedexAdaptador.ultimaFicha && PokedexAdaptador.ultimaFicha(), info = f && f.info;
+    const div = document.createElement("div"); div.className = "mapa-frutas";
+    const velho = SEC.lugares.querySelector(".mapa-frutas");
+    if (velho) velho.replaceWith(div); else $("placeInfo").insertAdjacentElement("afterend", div);
+    if (info && info.nome_popular) $("placeInfo").textContent = info.nome_popular + ": " + (info.habitat_descricao || "veja no mapa os biomas onde ela cresce.");
+    FichaPokedex.mapaBiomas(div, info && info.biomas && info.biomas.length ? info.biomas : null, { escuro: true });
+  }
+  abaBryan("descobrir");
+})();
+</script>
 </body>
 </html>
