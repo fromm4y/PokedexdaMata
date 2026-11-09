@@ -12,6 +12,7 @@
    - estilo: "natureza" (calma) ou "jogo" (mais animada, para minigames)
    - botao: mostra um botão flutuante 🎵 para ligar/desligar a música
    - cliques: toca um "plim" suave sempre que um botão é tocado
+   - auto: false para o grupo decidir quando ligar (Musica.ligar())
    O navegador só deixa tocar som depois do primeiro toque na tela: a música
    começa nesse momento (e lembra se a pessoa desligou).
    ========================================================================== */
@@ -132,7 +133,7 @@
     const pronto = () => {
       if (CFG.botao) criarBotao();
       // o navegador só libera som depois do primeiro toque
-      const primeiro = () => { document.removeEventListener("pointerdown", primeiro, true); if (quer()) ligar(); };
+      const primeiro = () => { document.removeEventListener("pointerdown", primeiro, true); if (CFG.auto !== false && quer()) ligar(); };
       document.addEventListener("pointerdown", primeiro, true);
       if (CFG.cliques) document.addEventListener("click", e => {
         const b = e.target.closest && e.target.closest("button,.btn,[role=button],a.button,label[for]");

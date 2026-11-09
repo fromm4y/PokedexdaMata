@@ -1072,7 +1072,7 @@
 
     const CONFIG_PADRAO = {
       folhas: true,
-      musica: false,
+      musica: true,
       minigame: true
     };
 
@@ -1530,7 +1530,20 @@
        MINHAS PLANTAS
        ========================================================= */
 
-    function salvarPlanta() {
+    /* A foto era guardada como um endereço temporário (blob:) que deixava de
+       valer quando outra foto era escolhida: as plantas antigas ficavam sem
+       imagem. Agora a foto é guardada de verdade, em tamanho pequeno. */
+    function fotoPequena(src) {
+      return new Promise(res => {
+        if (!src) return res("");
+        const im = new Image();
+        im.onload = () => { const k = Math.min(1, 420 / Math.max(im.width, im.height)), c = document.createElement("canvas"); c.width = Math.round(im.width * k); c.height = Math.round(im.height * k); c.getContext("2d").drawImage(im, 0, 0, c.width, c.height); res(c.toDataURL("image/jpeg", .78)); };
+        im.onerror = () => res("");
+        im.src = src;
+      });
+    }
+
+    async function salvarPlanta() {
       if (!window.ultimoResultado) return;
 
       const plantas = JSON.parse(
@@ -1539,10 +1552,12 @@
 
       plantas.unshift({
         id: Date.now(),
-        ...window.ultimoResultado
+        ...window.ultimoResultado,
+        foto: await fotoPequena(window.ultimoResultado.foto)
       });
 
-      localStorage.setItem("florestal_plantas", JSON.stringify(plantas));
+      try { localStorage.setItem("florestal_plantas", JSON.stringify(plantas.slice(0, 40))); }
+      catch (e) { alert("O aparelho ficou sem espaço para guardar mais fotos. 🌿"); return; }
 
       alert("Planta salva! 🌿💙");
 
@@ -1570,7 +1585,7 @@
 
       lista.innerHTML = plantas.map(planta => `
         <article class="planta-card">
-          <img src="${planta.foto}" alt="${escaparHTML(planta.nome)}">
+          <img src="${planta.foto && !/^blob:/.test(planta.foto) ? planta.foto : ""}" alt="${escaparHTML(planta.nome)}" onerror="this.style.visibility='hidden'">
 
           <div class="planta-conteudo">
             <h3>🌿 ${escaparHTML(planta.nome)}</h3>
@@ -1822,6 +1837,7 @@ main.tela{padding-bottom:110px}
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
+<script src="/comum/musica.js"></script>
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
@@ -1836,6 +1852,13 @@ PokedexAdaptador.iniciar({
   alerta: () => "As informações são educativas. Nunca use uma planta como remédio sem orientação de um profissional de saúde.",
   salvar: () => salvarPlanta()
 });
+</script>
+<script>
+/* Nicolas: a música de fundo agora toca de verdade (comum/musica.js), ligada pela opção "Música da floresta" */
+Musica.iniciar({ estilo: "natureza", botao: false, cliques: false, auto: false, volume: .5 });
+iniciarSomFloresta = function () { if (configuracoes.musica) Musica.ligar(); };
+pararSomFloresta = function () { Musica.desligar(); };
+document.addEventListener("pointerdown", function primeira() { document.removeEventListener("pointerdown", primeira, true); if (configuracoes.musica) Musica.ligar(); }, true);
 </script>
 </body>
 </html>
