@@ -636,7 +636,10 @@ desenharRaposa();
 .cena-raposa::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34px;background:linear-gradient(180deg,#2f6b3a,#17402a)}
 .raposa-corre{position:absolute;bottom:18px;left:-20%;z-index:2;display:flex;align-items:flex-end;gap:2px;cursor:pointer;animation:raposaCorre 7s linear infinite}
 .raposa-corre .raposa{font-size:58px;transform:scaleX(-1);display:inline-block;animation:pulo .35s ease-in-out infinite alternate}
-.raposa-corre .raposa-img{height:84px;width:auto;animation:pulo .35s ease-in-out infinite alternate}
+.raposa-corre .raposa-img{height:120px;width:auto;animation:puloImg .35s ease-in-out infinite alternate;filter:drop-shadow(0 6px 6px rgba(0,0,0,.45))}
+@keyframes puloImg{to{transform:translateY(-8px)}}
+.raposa-corre:has(.raposa-img) .saco{position:absolute;left:8px;top:-6px;width:40px;height:40px;margin:0;border-radius:50%;animation:none}
+.cena-raposa:has(.raposa-img){height:190px}
 .raposa-corre .saco{width:58px;height:54px;border-radius:45% 45% 40% 40%;background:radial-gradient(circle at 35% 30%,#c79a5b,#8a5a2b);border:2px solid #5e3b1a;display:grid;place-items:center;margin-left:-14px;animation:pulo .35s ease-in-out infinite alternate-reverse}
 .raposa-corre .saco b{color:#fff4d6;font-size:20px;text-shadow:0 2px 4px #000}
 .raposa-corre.vazia .saco{opacity:.35}
