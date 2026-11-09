@@ -41,12 +41,12 @@ function conferirFoto(foto) {
 
 // Missão 5: quando a IA fica em dúvida
 function mensagemDeDuvida(r) {
-  return "🪶 A fadinha ficou com só " + r.confianca + "% de certeza… tente outra foto, com a ave mais pertinho!";
+  return "🐦 A fadinha ficou com só " + r.confianca + "% de certeza… tente outra foto, com a ave mais pertinho!";
 }
 
 // Missão 6: quando a IA acerta
 function mensagemDeAcerto(r) {
-  return "🪶 Boa! É " + r.nome_popular + "! Que bom!";
+  return "🐦 Boa! É " + r.nome_popular + "! Que bom!";
 }
 
 // ----------------------------------------------------------------------------

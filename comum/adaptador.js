@@ -450,5 +450,5 @@
   /* Ao começar uma nova identificação, o resultado antigo volta a ficar escondido. */
   document.addEventListener("change", e => { if (e.target && e.target.type === "file") document.documentElement.classList.toggle("fp-esconder", CFG.esconder.length > 0); }, true);
 
-  window.PokedexAdaptador = { fichaSalva: fichaPeloNome, iniciar, mostrarFront, grupo: GRUPO, lerAlbum, desenharAlbum: desenharAlbumComum, ultimaFicha, abrirFicha };
+  window.PokedexAdaptador = { fichaSalva: fichaPeloNome, salvarNoAlbumComum: info => salvarNoAlbumComum(info || ultimaFicha()), iniciar, mostrarFront, grupo: GRUPO, lerAlbum, desenharAlbum: desenharAlbumComum, ultimaFicha, abrirFicha };
 })();

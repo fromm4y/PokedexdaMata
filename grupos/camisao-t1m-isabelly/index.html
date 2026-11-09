@@ -346,7 +346,7 @@ function salvarNoAlbum(){
 function desenharAlbum(){
   const album = lerAlbum(), caixa = $("listaAlbum");
   caixa.innerHTML = "";
-  if (!album.length) { caixa.innerHTML = '<div class="vazio"><span class="ic">🪶</span>Seu álbum ainda está vazio. Descubra uma ave!</div>'; return; }
+  if (!album.length) { caixa.innerHTML = '<div class="vazio"><span class="ic">🐦</span>Seu álbum ainda está vazio. Descubra uma ave!</div>'; return; }
   album.forEach(a => {
     const el = document.createElement("div"); el.className = "item";
     if (a.foto) { const img = document.createElement("img"); img.src = a.foto; img.alt = ""; el.appendChild(img); }

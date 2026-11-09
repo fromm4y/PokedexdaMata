@@ -324,7 +324,7 @@ function salvarNoAlbum(){
 function desenharAlbum(){
   const album = lerAlbum();
   $("contador").textContent = album.length + (album.length === 1 ? " espécie descoberta" : " espécies descobertas");
-  if (!album.length) { $("album").innerHTML = '<div class="vazio" style="color:#c2d2c7;border-color:#9dc5aa66"><span class="ic">🪺</span>Suas aves identificadas aparecerão aqui.</div>'; return; }
+  if (!album.length) { $("album").innerHTML = '<div class="vazio" style="color:#c2d2c7;border-color:#9dc5aa66"><span class="ic">🐣</span>Suas aves identificadas aparecerão aqui.</div>'; return; }
   $("album").innerHTML = "";
   album.forEach(a => {
     const el = document.createElement("div"); el.className = "figurinha";

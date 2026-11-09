@@ -66,7 +66,7 @@ $("#animalChallenge").addEventListener("click",()=>{progress.challengeDone=true;
 const mapPoints={
  camp:{icon:"🏕️",title:"Acampamento base",text:"Sua expedição começa aqui. Revise o guia, veja as conquistas e escolha a próxima trilha.",open:true,action:"habitat",label:"Voltar ao início"},
  jaguar:{icon:"🐆",title:"Trilha da onça",text:"Aprenda sobre a onça-pintada e outros felinos. Observe sem perturbar os animais.",open:true,action:"habitat",label:"Explorar felinos"},
- river:{icon:"🦫",title:"Rio tranquilo",text:"Os rios são importantes para muitos mamíferos, como capivaras e botos. Descubra mais usando a identificação por foto.",open:true,action:"identify",label:"Identificar mamíferos"},
+ river:{icon:"🐾",title:"Rio tranquilo",text:"Os rios são importantes para muitos mamíferos, como capivaras e botos. Descubra mais usando a identificação por foto.",open:true,action:"identify",label:"Identificar mamíferos"},
  canopy:{icon:"🌳",title:"Mirante das copas",text:"Muitas espécies usam as árvores para encontrar alimento, abrigo e caminhos pela floresta.",open:true,action:"identify",label:"Começar descoberta"},
  deep:{icon:"🔒",title:"Mata profunda",text:"Esta área fica disponível depois de completar um desafio de exploração.",open:false,action:"game",label:"Completar desafio"}
 };

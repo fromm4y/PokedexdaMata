@@ -586,7 +586,7 @@ updateStats();
 renderAlbum();
 
 /* ===== JOGO: a raposa pegou as frutas! (ideia do Eduardo) ===== */
-const FRUTAS_RAPOSA = [["Açaí","Euterpe oleracea","🫐"],["Jabuticaba","Plinia cauliflora","🫐"],["Caju","Anacardium occidentale","🍎"],["Cupuaçu","Theobroma grandiflorum","🥥"],["Pequi","Caryocar brasiliense","🍋"],["Mangaba","Hancornia speciosa","🍐"],["Pitanga","Eugenia uniflora","🍒"],["Buriti","Mauritia flexuosa","🌰"],["Goiaba","Psidium guajava","🍏"],["Maracujá","Passiflora edulis","🟡"],["Graviola","Annona muricata","🍈"],["Acerola","Malpighia emarginata","🍒"]];
+const FRUTAS_RAPOSA = [["Açaí","Euterpe oleracea","🍇"],["Jabuticaba","Plinia cauliflora","🍇"],["Caju","Anacardium occidentale","🍎"],["Cupuaçu","Theobroma grandiflorum","🥥"],["Pequi","Caryocar brasiliense","🍋"],["Mangaba","Hancornia speciosa","🍐"],["Pitanga","Eugenia uniflora","🍒"],["Buriti","Mauritia flexuosa","🌰"],["Goiaba","Psidium guajava","🍏"],["Maracujá","Passiflora edulis","🟡"],["Graviola","Annona muricata","🍈"],["Acerola","Malpighia emarginata","🍒"]];
 const normR = t => String(t || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
 function lerRecuperadas(){ try { return JSON.parse(localStorage.getItem("frutas_raposa") || "{}"); } catch (e) { return {}; } }
 function desenharRaposa(){

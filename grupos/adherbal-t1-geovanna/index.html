@@ -436,7 +436,11 @@
             <div class="camera">
               <div>
                 <div class="camera-icon">📷</div>
-                <button class="primary" id="photoBtn">Escolher uma foto</button>
+                <div class="botoes-foto">
+                  <button class="primary" id="cameraBtn" type="button">📷 Tirar foto</button>
+                  <button class="primary" id="photoBtn">🖼️ Escolher da galeria</button>
+                </div>
+                <input id="photoCam" class="photo-input" type="file" accept="image/*" capture="environment">
                 <input id="photoInput" class="photo-input" type="file" accept="image/jpeg,image/png,image/webp">
               </div>
             </div>
@@ -449,7 +453,10 @@
               <span id="confidence" class="badge"></span>
               <h2 id="birdName" class="blue"></h2>
               <p id="curiosities"></p>
-              <button id="soundBtn" class="primary" style="display:none">🔊 Ouvir o som</button>
+              <div class="botoes-foto">
+                <button id="soundBtn" class="primary" style="display:none">🔊 Ouvir o som</button>
+                <button id="salvarBtn" class="primary" type="button">💾 Salvar no álbum</button>
+              </div>
             </div>
           </div>
 
@@ -698,9 +705,11 @@
     () => window.scrollTo({ top: 0, behavior: "smooth" }),
     () => ir(card("Álbum")),
     () => ir(card("Conquistas")),
+    () => abrirRanking(),
     () => FichaPokedex.aviso({ tipo: "info", icone: "🥇", titulo: "Ranking", texto: "Você tem " + (document.getElementById("points").textContent || "0") + " pontos! Cada ave descoberta vale pontos. Será que você chega ao topo? 🧚‍♀️", acoes: [{ texto: "Bora explorar!", principal: true }] }),
     () => FichaPokedex.aviso({ tipo: "info", icone: "🐦", titulo: "Sobre o Asas do Brasil", texto: "Um app para conhecer as aves do Brasil com a ajuda da fadinha da natureza. Feito por Geovanna, Geovana, Alberto e Daniel. 💜", acoes: [{ texto: "Fechar", principal: true }] })
   ];
+  acoes.splice(4, 1);   // (o aviso antigo de ranking saiu: agora tem a tabela com a posição)
   botoes.forEach((b, i) => b.addEventListener("click", () => {
     botoes.forEach(x => x.classList.toggle("active", x === b));
     if (acoes[i]) acoes[i]();
@@ -713,7 +722,7 @@ PokedexAdaptador.iniciar({
   escuro: () => true,
   noturno: { fundo: "#231c4d", texto: "#fff1fb", suave: "#e9cfe9" },
   carregando: "🧚‍♀️ A fadinha está procurando a ave na foto...",
-  esconder: ["#result", "#error", "#loading"],
+  esconder: ["#error", "#loading"],   // o resultado do grupo fica visível (com Salvar no álbum)
   extras: info => [["🌳 Habitat", info.habitat], ["✨ Ave rara?", info.raro === true ? "Sim! Essa é uma ave rara de ver." : ""]],
   album: { el: "#albumComum", compacto: true, depois: () => document.getElementById("albumComum").closest(".card").scrollIntoView({ behavior: "smooth", block: "start" }) },
   novaFoto: () => document.getElementById("photoBtn").click()
@@ -730,5 +739,49 @@ PokedexAdaptador.iniciar({
   atualizar();
 })();
 </script>
+<script>
+/* ===== Pedidos do grupo ===== */
+(function () {
+  const $ = id => document.getElementById(id);
+  // 1) câmera: o "Tirar foto" entrega a foto ao mesmo campo da galeria
+  $("cameraBtn").onclick = () => $("photoCam").click();
+  $("photoCam").addEventListener("change", e => { const f = e.target.files && e.target.files[0]; if (!f) return; const dt = new DataTransfer(); dt.items.add(f); $("photoInput").files = dt.files; $("photoInput").dispatchEvent(new Event("change", { bubbles: true })); });
+  // 2) salvar no álbum pelo cartão do resultado
+  $("salvarBtn").onclick = () => { PokedexAdaptador.salvarNoAlbumComum(); $("salvarBtn").textContent = "✅ Salva no álbum!"; setTimeout(() => $("salvarBtn").textContent = "💾 Salvar no álbum", 2200); };
+  $("photoInput").addEventListener("change", () => { $("salvarBtn").textContent = "💾 Salvar no álbum"; });
+  // 3) pontos guardados neste aparelho (antes voltavam a 0 ao recarregar)
+  const pts = $("points");
+  try { const salvo = Number(localStorage.getItem("asasPontos") || 0); if (salvo) { points = salvo; pts.textContent = salvo; } } catch (e) {}
+  new MutationObserver(() => { try { localStorage.setItem("asasPontos", String(Number(pts.textContent) || 0)); } catch (e) {} }).observe(pts, { childList: true, characterData: true, subtree: true });
+  // 4) ranking com a posição do jogador entre os exploradores da floresta
+  const RIVAIS = [["🧚‍♀️ Fadinha Lia", 1500], ["🦜 Arara Azulita", 1200], ["🦉 Coruja Sábia", 950], ["🐦 Bem-te-vi Zé", 700], ["🦅 Gavião Tito", 500], ["🐤 Sabiá Nina", 350], ["🦆 Patinho Dudu", 200], ["🐧 Pinguim Pipo", 100]];
+  window.abrirRanking = function () {
+    const meus = Number(pts.textContent) || 0;
+    const lista = RIVAIS.map(r => ({ nome: r[0], pts: r[1] })).concat([{ nome: "⭐ Você", pts: meus, eu: true }]).sort((a, b) => b.pts - a.pts || (a.eu ? -1 : 1));
+    const pos = lista.findIndex(x => x.eu) + 1, acima = lista[pos - 2];
+    const medalha = i => ["🥇", "🥈", "🥉"][i] || (i + 1) + "º";
+    const f = document.createElement("div"); f.className = "ranking-fundo";
+    f.innerHTML = `<div class="ranking-caixa"><h2>🥇 Ranking dos exploradores</h2>
+      <p class="ranking-pos">Você está em <b>${pos}º lugar</b> com <b>${meus}</b> pontos!</p>
+      ${acima ? `<p class="ranking-dica">Faltam <b>${acima.pts - meus + 1}</b> pontos para passar ${acima.nome}. Cada ave vale 50 pontos (e as raras, mais 150)! ✨</p>` : `<p class="ranking-dica">Você está no topo! 🏆 Continue descobrindo aves.</p>`}
+      <ol>${lista.map((x, i) => `<li class="${x.eu ? "eu" : ""}"><span>${medalha(i)}</span><b>${x.nome}</b><em>${x.pts} pts</em></li>`).join("")}</ol>
+      <button class="primary" type="button">Fechar</button></div>`;
+    f.onclick = e => { if (e.target === f || e.target.tagName === "BUTTON") f.remove(); };
+    document.body.appendChild(f);
+  };
+})();
+</script>
+<style>
+.botoes-foto{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.ranking-fundo{position:fixed;inset:0;z-index:99999;background:#120d2bd9;display:grid;place-items:center;padding:18px;backdrop-filter:blur(6px)}
+.ranking-caixa{background:#231c4d;color:#fff1fb;border:2px solid #ef4fa4;border-radius:26px;padding:22px;width:min(520px,100%);max-height:90vh;overflow:auto;box-shadow:0 20px 50px #0008}
+.ranking-caixa h2{margin:0 0 8px;color:#ffd1ec}
+.ranking-pos{font-size:20px;margin:6px 0}.ranking-dica{color:#e9cfe9;margin:4px 0 14px}
+.ranking-caixa ol{list-style:none;padding:0;margin:0 0 16px;display:grid;gap:6px}
+.ranking-caixa li{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:8px;background:#ffffff12;border-radius:14px;padding:10px 12px}
+.ranking-caixa li.eu{background:linear-gradient(90deg,#ef4fa4,#7c63f6);font-size:18px;box-shadow:0 0 18px #ef4fa477}
+.ranking-caixa li span{font-size:22px;text-align:center}.ranking-caixa li em{font-style:normal;font-weight:800}
+.ranking-caixa .primary{width:100%}
+</style>
 </body>
 </html>

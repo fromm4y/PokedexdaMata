@@ -36,7 +36,7 @@ const CERTEZA_MINIMA = 80;
 // Missão 4: o porteiro
 function conferirFoto(foto) {
   if (!foto.type.startsWith("image/")) return "🌳 Ei, shinigami! Isso não é uma foto! Mostre uma árvore pra gente.";
-  if (foto.size > 10000000) return "🪵 Essa foto é mais pesada que um tronco de jequitibá! Escolha uma menor.";
+  if (foto.size > 10000000) return "🌳 Essa foto é mais pesada que um tronco de jequitibá! Escolha uma menor.";
   return "ok";
 }
 
