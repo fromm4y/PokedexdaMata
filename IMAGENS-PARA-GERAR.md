@@ -1,5 +1,7 @@
 # Imagens para gerar
 
+> ✅ Já entregues e no ar: Tokoyami, elfa cientista, cientista explorador, elfa do Dattflower, raposa do Eduardo e os 6 rios do AquaDex.
+
 O código já está pronto para receber estas imagens. Basta gerar, salvar com **exatamente** o nome indicado
 (formato `.webp`, ou `.png`/`.jpg` convertidos para `.webp`) e colocar na pasta indicada.
 Enquanto o arquivo não existir, o app continua mostrando o desenho de hoje — nada quebra.
@@ -39,3 +41,17 @@ com espaço livre no meio. Horizontal, 1200×800.
 | Arquivo | Tamanho | Prompt sugerido |
 |---|---|---|
 | `raposa.webp` | 600×500, **fundo transparente (PNG→WebP)** | Raposa marota em estilo desenho animado, correndo de lado para a direita, carregando um saco de pano nas costas cheio de frutas brasileiras (caju, açaí, maracujá), expressão travessa, fundo transparente, sem texto |
+
+## Guardiões da Floresta (Bryan, Adherbal T2) — `grupos/adherbal-t2-bryan/img/`  (opcionais)
+
+Hoje o fundo é um padrão de frutas e a banana de chapéu é um desenho; as imagens entram no lugar quando existirem.
+
+| Arquivo | Tamanho | Prompt sugerido |
+|---|---|---|
+| `fundo-frutas.webp` | 1920×1080 | Fundo ilustrado colorido com muitas frutas espalhadas (banana, maçã, uva, kiwi, laranja, abacaxi, morango, manga), estilo desenho alegre para crianças, cores vivas, sem texto |
+| `banana-chapeu.webp` | 600×600, **fundo transparente** | Banana sorridente em estilo desenho animado usando um chapéu de explorador marrom, bochechas rosadas, acenando, fundo transparente, sem texto |
+
+## Forest (Heloisa, Emídio T1) — falta o arquivo dos alunos
+
+A Heloisa pediu que o **menu** e a **menina e o menino** fossem os que ela criou no ChatGPT.
+Peça para ela mandar essas imagens (o menu pode ser um print) que eu coloco no lugar dos desenhos de hoje.
