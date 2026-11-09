@@ -247,13 +247,15 @@ function chaveNome(nome,cientifico=''){const base=textoSeguro(cientifico).trim()
 function mostrarTela(id){pararCamera();screenIds.forEach(k=>{screens[k].classList.toggle('active',k===id);screens[k].style.display=k===id?'block':'none'});atualizarPontos();if(id==='loja')renderLoja();if(id==='albumTela')renderAlbum();if(id==='personagem')renderPersonagem();if(id==='menuJogo')renderMenu()}
 function atualizarPontos(){$('pontosMenu').textContent=estado.pontos;document.querySelectorAll('.pontosAtual').forEach(e=>e.textContent=estado.pontos)}
 function renderMenu(){atualizarPontos();const n=Object.keys(estado.descobertas).length;$('resumoProgresso').textContent=`Você já descobriu ${n} ${n===1?'espécie':'espécies'} e tem ${estado.pontos} pontos. Seu progresso fica salvo neste dispositivo.`}
-function tocarSom(freq=620){if(!estado.config.som||Number(estado.config.volume)<=0)return;try{const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)return;audioContext=audioContext||new Ctx();if(audioContext.state==='suspended')audioContext.resume();const osc=audioContext.createOscillator(),gain=audioContext.createGain();osc.type='sine';osc.frequency.value=freq;gain.gain.setValueAtTime(Math.max(.001,Number(estado.config.volume)/100*.06),audioContext.currentTime);gain.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+.16);osc.connect(gain);gain.connect(audioContext.destination);osc.start();osc.stop(audioContext.currentTime+.17)}catch(e){}}
+function tocarSom(){/* agora o som de clique é tocado para todos os botões (comum/musica.js) */}
+function tocarSomAntigo(freq=620){if(!estado.config.som||Number(estado.config.volume)<=0)return;try{const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)return;audioContext=audioContext||new Ctx();if(audioContext.state==='suspended')audioContext.resume();const osc=audioContext.createOscillator(),gain=audioContext.createGain();osc.type='sine';osc.frequency.value=freq;gain.gain.setValueAtTime(Math.max(.001,Number(estado.config.volume)/100*.06),audioContext.currentTime);gain.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+.16);osc.connect(gain);gain.connect(audioContext.destination);osc.start();osc.stop(audioContext.currentTime+.17)}catch(e){}}
 function pararCamera(){if($('abrirCamera'))$('abrirCamera').style.display='';if(cameraStream){cameraStream.getTracks().forEach(t=>t.stop());cameraStream=null}const v=$('cameraVideo');if(v){v.srcObject=null;v.style.display='none'}$('cameraAcoes').style.display='none'}
 function limparFoto(){fotoBase64='';fotoDataUrl='';$('foto').value='';$('preview').style.display='none';$('fotoPreview').removeAttribute('src');$('cameraAviso').textContent='';}
 function abrirExploracao(){limparFoto();mostrarTela('telaFoto')}
 function criarArvoreSvg(){return '<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M43 85 L43 55 L57 55 L57 85 Z" fill="#8b6040"/><path d="M50 8 L19 48 Q14 58 28 58 L18 68 Q14 78 32 78 L68 78 Q86 78 82 68 L72 58 Q86 58 81 48 Z" fill="#6f8d49" stroke="#b2c98a" stroke-width="2"/><circle cx="36" cy="42" r="5" fill="#9caf68"/><circle cx="62" cy="54" r="5" fill="#9caf68"/></svg>'}
+function guardarFotoArvore(chave){if(!fotoDataUrl)return;const im=new Image();im.onload=()=>{const k=Math.min(1,360/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);if(estado.descobertas[chave]){estado.descobertas[chave].foto=c.toDataURL('image/jpeg',.75);salvarEstado();renderAlbum()}};im.src=fotoDataUrl}
 function cartaoArvore(item,mode='discoveries'){
- const d=document.createElement('article');d.className='achievement';const strong=document.createElement('strong');strong.textContent=item.nome||'Árvore descoberta';const p=document.createElement('p');p.className='small';p.textContent=mode==='discoveries'?'Espécie confirmada · descoberta':`Figurinha comprada · ${item.preco||0} pontos`;const b=document.createElement('button');b.className='button secondary';b.style.marginTop='8px';b.textContent='VER DETALHES';b.addEventListener('click',()=>{const detail=$('detalheFigurinha');detail.hidden=false;detail.textContent=[item.nome,item.nomeCientifico,item.descricao,...(item.curiosidades||[])].filter(Boolean).join(' — ')||'Ainda não há curiosidades salvas para esta figurinha.'});d.append(strong,p,b);return d;
+ const d=document.createElement('article');d.className='achievement'+(mode==='discoveries'?' com-foto':'');if(mode==='discoveries'){const fig=document.createElement('div');fig.className='arvore-foto';const im=document.createElement('img');im.alt=item.nome||'Árvore';if(item.foto)im.src=item.foto;else if(item.nomeCientifico){im.dataset.especie=item.nomeCientifico;im.src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E"}fig.appendChild(im);d.appendChild(fig)}const strong=document.createElement('strong');strong.textContent=item.nome||'Árvore descoberta';const p=document.createElement('p');p.className='small';p.textContent=mode==='discoveries'?'Espécie confirmada · descoberta':`Figurinha comprada · ${item.preco||0} pontos`;const b=document.createElement('button');b.className='button secondary';b.style.marginTop='8px';b.textContent='VER DETALHES';b.addEventListener('click',()=>{const detail=$('detalheFigurinha');detail.hidden=false;detail.textContent=[item.nome,item.nomeCientifico,item.descricao,...(item.curiosidades||[])].filter(Boolean).join(' — ')||'Ainda não há curiosidades salvas para esta figurinha.'});d.append(strong,p,b);return d;
 }
 function atualizarDialogo(){const f=falas[passoDialogo];$('nomeFalante').textContent=f[0];$('textoDialogo').textContent=f[1];$('continuarDialogo').textContent=passoDialogo===falas.length-1?'IR AO MENU':'CONTINUAR'}
 $('btnIniciar').addEventListener('click',()=>{passoDialogo=0;atualizarDialogo();mostrarTela('dialogo');tocarSom()});
@@ -322,7 +324,7 @@ $('investigar').addEventListener('click',async()=>{
   [['Onde ocorre',data.regiao],['Importância ecológica',data.importancia],['Flores, frutos e sementes',data.frutosFloresSementes]].forEach(([titulo,valor])=>{if(textoSeguro(valor).trim()){const h=document.createElement('h3');h.className='section-title';h.textContent=titulo;const p=document.createElement('p');p.className='curiosity';p.textContent=textoSeguro(valor);detalhes.append(h,p)}});
   const cb=$('curiosidadesBox');cb.replaceChildren();if(Array.isArray(data.curiosidades)&&data.curiosidades.length){const h=document.createElement('h3');h.className='section-title';h.textContent='Curiosidades';cb.append(h);data.curiosidades.slice(0,4).forEach(c=>{const p=document.createElement('p');p.className='curiosity';p.textContent=textoSeguro(c);cb.append(p)})}
   const pb=$('perigoBox');pb.replaceChildren();if(textoSeguro(data.perigo).trim()){const h=document.createElement('h3');h.className='section-title';h.textContent='Aviso de segurança';const d=document.createElement('div');d.className='danger';d.textContent=textoSeguro(data.perigo);pb.append(h,d)}
-  if(!jaExiste){estado.descobertas[arvoreAtual.chave]={chave:arvoreAtual.chave,nomeKey,cientificoKey,nome:data.nome,nomeCientifico:textoSeguro(data.nomeCientifico),origem,descricao:textoSeguro(data.descricao),regiao:textoSeguro(data.regiao),importancia:textoSeguro(data.importancia),frutosFloresSementes:textoSeguro(data.frutosFloresSementes),curiosidades:Array.isArray(data.curiosidades)?data.curiosidades.slice(0,4).map(textoSeguro):[],perigo:textoSeguro(data.perigo),dataDescoberta:new Date().toISOString()};estado.pontos+=REWARD_DISCOVERY;$('estadoDescoberta').textContent=`Nova descoberta! Você ganhou ${REWARD_DISCOVERY} pontos. A espécie foi salva no álbum.`;$('estadoDescoberta').className='notice';tocarSom(800);salvarEstado()}
+  if(!jaExiste){estado.descobertas[arvoreAtual.chave]={chave:arvoreAtual.chave,nomeKey,cientificoKey,nome:data.nome,nomeCientifico:textoSeguro(data.nomeCientifico),origem,descricao:textoSeguro(data.descricao),regiao:textoSeguro(data.regiao),importancia:textoSeguro(data.importancia),frutosFloresSementes:textoSeguro(data.frutosFloresSementes),curiosidades:Array.isArray(data.curiosidades)?data.curiosidades.slice(0,4).map(textoSeguro):[],perigo:textoSeguro(data.perigo),dataDescoberta:new Date().toISOString()};estado.pontos+=REWARD_DISCOVERY;guardarFotoArvore(arvoreAtual.chave);$('estadoDescoberta').textContent=`Nova descoberta! Você ganhou ${REWARD_DISCOVERY} pontos. A espécie foi salva no álbum.`;$('estadoDescoberta').className='notice';tocarSom(800);salvarEstado()}
   else{$('estadoDescoberta').textContent='Essa espécie já estava no seu álbum. Você não ganhou pontos novamente.';$('estadoDescoberta').className='notice warn'}
   const q=Array.isArray(data.quiz)?data.quiz.filter(x=>x&&typeof x.pergunta==='string'&&Array.isArray(x.alternativas)&&x.alternativas.length>=3&&x.alternativas.length<=4&&Number.isInteger(x.respostaCorreta)&&x.respostaCorreta>=0&&x.respostaCorreta<x.alternativas.length&&typeof x.explicacao==='string').slice(0,3):[];
   arvoreAtual.quiz=q;mostrarTela('resultado');$('fazerQuiz').disabled=!q.length;$('fazerQuiz').textContent=q.length?'FAZER QUIZ':'QUIZ INDISPONÍVEL';if(!q.length){const msg=document.createElement('p');msg.className='small';msg.textContent='A IA não forneceu perguntas confiáveis para esta árvore, então não vamos inventá-las.';$('curiosidadesBox').append(msg)}
@@ -351,7 +353,7 @@ function responderQuiz(index,q,btn){
  const fb=$('quizFeedback');fb.className='notice'+(correto?'':' warn');fb.textContent=(correto?'Correto! ':'Quase! ')+textoSeguro(q.explicacao);
  const next=document.createElement('button');next.className='button';next.style.marginTop='12px';next.textContent=quizIndice===arvoreAtual.quiz.length-1?'VER RESULTADO':'PRÓXIMA PERGUNTA';next.addEventListener('click',()=>{quizIndice++;quizPerguntaRespondida=false;renderPerguntaQuiz()});fb.append(next);if(correto)tocarSom(740);
 }
-function renderAlbum(){const discovered=$('albumDescobertas'),stickers=$('albumFigurinhas');discovered.replaceChildren();stickers.replaceChildren();$('detalheFigurinha').hidden=true;const ds=Object.values(estado.descobertas);
+function renderAlbum(){setTimeout(()=>window.FichaPokedex&&FichaPokedex.trocarFotos($('albumDescobertas')),0);const discovered=$('albumDescobertas'),stickers=$('albumFigurinhas');discovered.replaceChildren();stickers.replaceChildren();$('detalheFigurinha').hidden=true;const ds=Object.values(estado.descobertas);
  if(!ds.length){const p=document.createElement('p');p.className='empty';p.textContent='Nenhuma árvore confirmada ainda. Explore para começar!';discovered.append(p)}else ds.forEach(item=>discovered.append(cartaoArvore(item)));
  const emptySlots=Math.max(0,6-ds.length);for(let i=0;i<emptySlots;i++){const d=document.createElement('div');d.className='achievement';d.innerHTML='<strong>Espaço a descobrir</strong><p class="small">Uma nova árvore pode preencher este lugar.</p>';discovered.append(d)}
  if(!estado.figurinhas.length){const p=document.createElement('p');p.className='empty';p.textContent='Ainda não comprou figurinhas. Visite a loja!';stickers.append(p)}else estado.figurinhas.forEach(id=>{const item=catalogo.find(x=>x.id===id);if(item)stickers.append(cartaoArvore(item,'stickers'))});
@@ -412,10 +414,17 @@ h1{color:#ffe1ea;text-shadow:0 4px 0 #a64e69,0 10px 26px #0006;letter-spacing:.5
 .settings-list label{background:#1b2a1c;border:2px solid #4c6b3b}
 .score-pill{background:#f6c445;color:#4a3000;border-color:#e0a21a}
 @media (prefers-reduced-motion:reduce){.mascote{animation:none}}
+
+/* Heloisa: mais árvores no fundo e foto da árvore no álbum */
+body{background:linear-gradient(180deg,rgba(14,26,14,.55),rgba(14,26,14,.85)),url("https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1800&q=80") center/cover fixed,radial-gradient(circle at top,#303a28 0,#171b16 55%)!important}
+.achievement.com-foto{padding:0 0 12px!important;overflow:hidden}
+.achievement.com-foto>*:not(.arvore-foto){margin-left:12px;margin-right:12px}
+.arvore-foto{height:150px;background:#22301f;margin-bottom:10px}.arvore-foto img{width:100%;height:100%;object-fit:cover;display:block}
 </style>
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
+<script src="/comum/musica.js"></script>
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
@@ -437,6 +446,12 @@ PokedexAdaptador.iniciar({
   ],
   novaFoto: () => document.getElementById("trocarFoto").click()
 });
+</script>
+<script>
+/* Heloisa: música calma de natureza (botão 🎵 no canto) e som em todos os botões */
+Musica.iniciar({ estilo: "natureza", botao: true, cliques: false, volume: Math.max(.15, (estado.config.volume || 45) / 100) });
+document.addEventListener("click", e => { const b = e.target.closest && e.target.closest("button,.button,.menu-button"); if (b && !b.classList.contains("pdm-musica") && estado.config.som) Musica.clique(); }, true);
+document.getElementById("volume").addEventListener("input", e => Musica.definirVolume(Math.max(.05, e.target.value / 100)));
 </script>
 </body>
 </html>
