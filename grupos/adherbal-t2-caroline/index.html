@@ -126,6 +126,7 @@
   </section>
 
   <section id="mainScreen" class="next-screen screen">
+  <button type="button" class="sair" id="btnSair">🚪 Sair</button>
   <div class="hero">
     <div class="chat-critter-row" aria-label="Amiguinhos da floresta">
       <span class="critter">🐿️</span><span class="critter">🐝</span>
@@ -141,7 +142,11 @@
       <div style="font-size:52px">📸🍊</div>
       <h2>Qual fruta você encontrou?</h2>
       <p>Escolha uma foto de uma fruta brasileira.</p>
-      <label class="labelBtn" for="photo">📷 Escolher foto</label>
+      <div class="botoes-foto">
+        <button type="button" class="labelBtn" id="btnCamera">📷 Abrir câmera</button>
+        <label class="labelBtn galeria" for="photo">🖼️ Escolher da galeria</label>
+      </div>
+      <input id="photoCam" type="file" accept="image/*" capture="environment">
       <input id="photo" type="file" accept="image/jpeg,image/jpg,image/*">
       <img id="preview" class="preview" alt="Foto escolhida">
       <div>
@@ -363,5 +368,44 @@ PokedexAdaptador.iniciar({
   novaFoto: () => document.getElementById("again").click()
 });
 </script>
+<script>
+/* ===== Pedidos da Caroline ===== */
+(function () {
+  const $ = id => document.getElementById(id);
+  // câmera: entrega a foto ao mesmo campo da galeria
+  $("btnCamera").onclick = () => $("photoCam").click();
+  $("photoCam").addEventListener("change", e => { const f = e.target.files && e.target.files[0]; if (!f) return; const dt = new DataTransfer(); dt.items.add(f); $("photo").files = dt.files; $("photo").dispatchEvent(new Event("change", { bubbles: true })); });
+  // botão sair: volta para a tela de boas-vindas
+  $("btnSair").onclick = () => {
+    const w = document.getElementById("welcome"), m = document.getElementById("mainScreen");
+    m.classList.remove("show"); document.body.classList.remove("chat-open");
+    w.classList.remove("hidden"); w.style.transform = ""; w.style.opacity = "";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  // frutas típicas do Brasil caindo quando aperta Iniciar
+  const TIPICAS = ["🍍", "🥭", "🍌", "🥥", "🍇", "🍊", "🍈", "🍒", "🍉", "🍋"];
+  $("startBtn").addEventListener("click", () => {
+    const c = document.createElement("div"); c.className = "chuva-tipicas";
+    for (let i = 0; i < 40; i++) { const sp = document.createElement("span"); sp.textContent = TIPICAS[i % TIPICAS.length]; sp.style.left = Math.random() * 100 + "%"; sp.style.animationDelay = (Math.random() * 1.1) + "s"; sp.style.fontSize = (28 + Math.random() * 30) + "px"; c.appendChild(sp); }
+    document.body.appendChild(c); setTimeout(() => c.remove(), 3600);
+  });
+})();
+</script>
+<style>
+/* tons verde, amarelo, roxo e vermelho + frutas típicas no fundo de todas as páginas */
+body{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cg opacity='.5'%3E%3Ctext x='12' y='48' font-size='36'%3E🍍%3C/text%3E%3Ctext x='132' y='42' font-size='32'%3E🥭%3C/text%3E%3Ctext x='70' y='118' font-size='34'%3E🥥%3C/text%3E%3Ctext x='176' y='128' font-size='30'%3E🍌%3C/text%3E%3Ctext x='18' y='196' font-size='32'%3E🍇%3C/text%3E%3Ctext x='120' y='212' font-size='30'%3E🍒%3C/text%3E%3Ctext x='196' y='206' font-size='26'%3E🍈%3C/text%3E%3C/g%3E%3C/svg%3E") repeat,
+  linear-gradient(135deg,#2fa84f 0%,#9fdc3c 22%,#ffd93d 45%,#a855f7 70%,#e0313f 100%) fixed!important}
+.welcome,.next-screen{background:transparent!important}
+.card,.chat-info{background:rgba(255,255,255,.93)!important}
+.botoes-foto{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.botoes-foto .labelBtn{min-height:52px;display:inline-flex;align-items:center}
+.botoes-foto .galeria{background:linear-gradient(120deg,#873bff,#bd74ff)!important;color:#fff!important;box-shadow:0 6px 0 #5e22b8!important}
+#photoCam{display:none}
+.sair{position:fixed;top:14px;right:14px;z-index:60;background:linear-gradient(120deg,#e0313f,#ff7a59)!important;color:#fff!important;box-shadow:0 6px 0 #9c1f2a!important;padding:10px 16px!important}
+#mainScreen:not(.show) .sair{display:none}
+.chuva-tipicas{position:fixed;inset:0;pointer-events:none;z-index:100000;overflow:hidden}
+.chuva-tipicas span{position:absolute;top:-70px;animation:tipicasCaem 2.8s ease-in forwards}
+@keyframes tipicasCaem{to{transform:translateY(118vh) rotate(480deg)}}
+</style>
 </body>
 </html>
