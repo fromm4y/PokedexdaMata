@@ -96,11 +96,11 @@
 
       <section id="view-game" class="view hidden">
         <div class="eyebrow">MINIGAME • REFLEXOS E ATENÇÃO</div><h2>Fuga selvagem</h2>
-        <p class="section-sub">Ajude a onça a dirigir pela estrada e desviar dos obstáculos. Use ← → ou A/D. No celular, toque nas setas.</p>
+        <p class="section-sub">Dirija o jipe explorador pela trilha e desvie dos obstáculos da floresta. Use ← → ou A/D. No celular, toque nas setas.</p>
         <div class="game-stats"><div><small>PONTUAÇÃO</small><strong id="score">0</strong></div><div><small>RECORDE</small><strong id="bestScore">0</strong></div><div><small>VELOCIDADE</small><strong id="speedLabel">1×</strong></div></div>
         <div class="game-wrap">
           <canvas id="gameCanvas" width="720" height="900" aria-label="Jogo de corrida da onça"></canvas>
-          <div id="gameOverlay" class="game-overlay"><div class="overlay-emoji">🐆 🚙</div><h3>Pronto para a fuga?</h3><p>Desvie de troncos e pedras e tente bater seu recorde.</p><button class="btn btn-gold" id="playButton">▶ Jogar</button></div>
+          <div id="gameOverlay" class="game-overlay"><div class="overlay-emoji">🚙</div><h3>Pronto para a fuga?</h3><p>Desvie de troncos, pedras, lama, galhos e cupinzeiros. Tente bater seu recorde! 🎵</p><button class="btn btn-gold" id="playButton">▶ Jogar</button></div>
           <div id="crashOverlay" class="game-overlay hidden"><div class="overlay-emoji">🌿</div><h3>Fim da trilha!</h3><p>Sua pontuação: <strong id="finalScore">0</strong></p><button class="btn btn-gold" id="againButton">↻ Jogar novamente</button></div>
         </div>
         <div class="game-controls"><button class="btn btn-outline" id="leftControl" aria-label="Mover para esquerda">←</button><button class="btn btn-outline" id="pauseButton">Ⅱ Pausar</button><button class="btn btn-outline" id="rightControl" aria-label="Mover para direita">→</button></div>
@@ -149,6 +149,8 @@ html{font-size:17.5px}
 <!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
      (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
 <script src="/comum/ficha.js"></script>
+<script src="/comum/musica.js"></script>
+<script>Musica.iniciar({ estilo: "jogo", botao: false, cliques: false, auto: false, volume: .45 });</script>
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
