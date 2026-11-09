@@ -400,6 +400,9 @@
             </div>
           </div>
 
+          <label class="nome-jogador" for="nomeJogador">🧚‍♀️ Qual é o seu nome de explorador(a)?</label>
+          <input id="nomeJogador" class="nome-input" maxlength="18" placeholder="Digite seu nome" autocomplete="off">
+          <p id="nomeAviso" class="nome-aviso" hidden>Escreva seu nome para entrar no ranking! ✨</p>
           <button class="primary" id="startBtn">✨ Começar a explorar</button>
         </div>
       </div>
@@ -724,7 +727,7 @@ PokedexAdaptador.iniciar({
   carregando: "🧚‍♀️ A fadinha está procurando a ave na foto...",
   esconder: ["#error", "#loading"],   // o resultado do grupo fica visível (com Salvar no álbum)
   extras: info => [["🌳 Habitat", info.habitat], ["✨ Ave rara?", info.raro === true ? "Sim! Essa é uma ave rara de ver." : ""]],
-  album: { el: "#albumComum", compacto: true, depois: () => document.getElementById("albumComum").closest(".card").scrollIntoView({ behavior: "smooth", block: "start" }) },
+  album: { el: "#albumComum", compacto: true, depois: () => window.abrirAba ? abrirAba("album") : document.getElementById("albumComum").closest(".card").scrollIntoView({ behavior: "smooth", block: "start" }) },
   novaFoto: () => document.getElementById("photoBtn").click()
 });
 /* Conquistas de verdade: pontos do topo e a primeira ave salva no álbum. */
@@ -783,5 +786,116 @@ PokedexAdaptador.iniciar({
 .ranking-caixa li span{font-size:22px;text-align:center}.ranking-caixa li em{font-style:normal;font-weight:800}
 .ranking-caixa .primary{width:100%}
 </style>
+
+<!-- ===== Abas + ranking dos exploradores (pedido da professora) ===== -->
+<style>
+.nome-jogador{display:block;font-weight:800;margin:18px 0 8px;font-size:17px}
+.nome-input{width:min(360px,100%);padding:14px 16px;border-radius:16px;border:2px solid #ef4fa4;background:#1b1540;color:#fff1fb;font:inherit;font-size:18px;text-align:center;margin-bottom:6px}
+.nome-aviso{color:#ffd1ec;font-weight:800;margin:4px 0 8px}
+.content.abas-on{display:block!important}
+.content.abas-on>.aba{display:none}
+.content.abas-on>.aba.on{display:block;animation:abaIn .25s ease}
+.content.abas-on>.aba>.card{margin:0 0 18px!important}
+@keyframes abaIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.mapa-aves{height:340px;border-radius:18px;overflow:hidden;margin:10px 0}
+.jogador-topo{font-size:14px;opacity:.9}
+.rk-lista{list-style:none;padding:0;margin:12px 0;display:grid;gap:8px}
+.rk-lista li{display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:10px;background:#ffffff12;border-radius:16px;padding:12px 14px;font-size:17px}
+.rk-lista li.eu{background:linear-gradient(90deg,#ef4fa4,#7c63f6);box-shadow:0 0 18px #ef4fa477}
+.rk-lista li span{font-size:26px;text-align:center}.rk-lista li em{font-style:normal;font-weight:800}
+</style>
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const CH = "asasRankingJogadores", CH_NOME = "asasNomeAtual";
+  const ler = () => { try { const l = JSON.parse(localStorage.getItem(CH) || "[]"); return Array.isArray(l) ? l : []; } catch (e) { return []; } };
+  const gravar = l => { try { localStorage.setItem(CH, JSON.stringify(l)); } catch (e) {} };
+  let jogador = "";
+  try { jogador = localStorage.getItem(CH_NOME) || ""; } catch (e) {}
+  if (jogador) $("nomeJogador").value = jogador;
+
+  // 1) nome obrigatório antes de começar
+  const start = $("startBtn"), novo = start.cloneNode(true);
+  start.replaceWith(novo);
+  novo.addEventListener("click", () => {
+    const nome = $("nomeJogador").value.trim();
+    if (!nome) { $("nomeAviso").hidden = false; $("nomeJogador").focus(); return; }
+    jogador = nome;
+    try { localStorage.setItem(CH_NOME, nome); } catch (e) {}
+    const l = ler(); let eu = l.find(x => x.nome.toLowerCase() === nome.toLowerCase());
+    if (!eu) { eu = { nome, pts: 0 }; l.push(eu); gravar(l); }
+    points = eu.pts; $("points").textContent = eu.pts;
+    $("jogadorNome").textContent = eu.nome;
+    $("introScreen").classList.remove("active"); $("appScreen").classList.add("active");
+    window.scrollTo(0, 0);
+  });
+  $("nomeJogador").addEventListener("keydown", e => { if (e.key === "Enter") novo.click(); });
+  // nome do jogador no topo + trocar de jogador
+  const topo = document.querySelector("#appScreen .points");
+  topo.insertAdjacentHTML("beforeend", '<div class="jogador-topo">🧚‍♀️ <b id="jogadorNome"></b> · <a href="#" id="trocarJogador" style="color:#ffd1ec">trocar</a></div>');
+  $("trocarJogador").onclick = e => { e.preventDefault(); $("appScreen").classList.remove("active"); $("introScreen").classList.add("active"); $("nomeJogador").value = ""; $("nomeJogador").focus(); };
+
+  // 2) pontos de cada jogador guardados no ranking
+  new MutationObserver(() => {
+    if (!jogador) return;
+    const l = ler(), eu = l.find(x => x.nome.toLowerCase() === jogador.toLowerCase());
+    if (eu) { eu.pts = Number($("points").textContent) || 0; gravar(l); }
+  }).observe($("points"), { childList: true, characterData: true, subtree: true });
+
+  // 3) abas: cada botão do menu mostra só a sua parte
+  const content = document.querySelector("#appScreen .content");
+  const cardDe = t => [...content.querySelectorAll(".card")].find(c => (c.querySelector("h2,h3") || {}).textContent.includes(t));
+  const aba = (id, els) => { const d = document.createElement("div"); d.className = "aba"; d.dataset.aba = id; els.filter(Boolean).forEach(e => d.appendChild(e)); return d; };
+  const aviso = content.querySelector(".warning");
+  const cRank = document.createElement("div"); cRank.className = "card"; cRank.innerHTML = '<h3 class="pink">🥇 Ranking dos exploradores</h3><p id="rkPos"></p><ol class="rk-lista" id="rkLista"></ol><p style="opacity:.85">Cada ave vale 50 pontos (e as raras, mais 150)! O ranking fica guardado neste aparelho: cada explorador entra com o seu nome.</p>';
+  const cSobre = document.createElement("div"); cSobre.className = "card"; cSobre.innerHTML = '<h3 class="blue">ℹ️ Sobre o Asas do Brasil</h3><p>Um app para conhecer as aves do Brasil com a ajuda da fadinha da natureza. 🧚‍♀️🐦</p><p>Feito por <b>Geovanna, Geovana, Alberto e Daniel</b>.</p>';
+  const abas = [
+    aba("inicio", [cardDe("Vamos descobrir"), aviso]),
+    aba("onde", [cardDe("Onde vive")]),
+    aba("album", [cardDe("Álbum")]),
+    aba("conquistas", [cardDe("Conquistas"), cardDe("Som da ave")]),
+    aba("ranking", [cRank]),
+    aba("sobre", [cSobre])
+  ];
+  content.innerHTML = ""; abas.forEach(a => content.appendChild(a)); content.classList.add("abas-on");
+  const ids = ["inicio", "album", "conquistas", "ranking", "sobre"];
+  const menu = document.querySelector(".menu");
+  [...menu.querySelectorAll("button")].forEach(b => b.replaceWith(b.cloneNode(true)));   // tira os atalhos antigos
+  const bOnde = document.createElement("button"); bOnde.textContent = "🗺️ Onde vive";
+  menu.insertBefore(bOnde, menu.children[1]); ids.splice(1, 0, "onde");
+  const botoes = [...menu.querySelectorAll("button")];
+  window.abrirAba = id => {
+    botoes.forEach((b, i) => b.classList.toggle("active", ids[i] === id));
+    abas.forEach(a => a.classList.toggle("on", a.dataset.aba === id));
+    if (id === "ranking") desenharRanking();
+    if (id === "onde") desenharMapa();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  botoes.forEach((b, i) => b.addEventListener("click", () => abrirAba(ids[i])));
+  window.abrirRanking = () => abrirAba("ranking");
+  abrirAba("inicio");
+
+  function desenharRanking() {
+    const l = ler().sort((a, b) => b.pts - a.pts);
+    const pos = l.findIndex(x => x.nome.toLowerCase() === jogador.toLowerCase()) + 1;
+    const acima = pos > 1 ? l[pos - 2] : null, meus = pos ? l[pos - 1].pts : 0;
+    $("rkPos").innerHTML = !pos ? "" : pos === 1 ? `🏆 <b>${esc(jogador)}</b>, você está em <b>1º lugar</b> com <b>${meus}</b> pontos!` : `<b>${esc(jogador)}</b>, você está em <b>${pos}º lugar</b>. Faltam <b>${acima.pts - meus + 1}</b> pontos para passar ${esc(acima.nome)}! ✨`;
+    $("rkLista").innerHTML = l.length ? l.map((x, i) => `<li class="${i === pos - 1 ? "eu" : ""}"><span>${["🥇", "🥈", "🥉"][i] || (i + 1) + "º"}</span><b>${esc(x.nome)}</b><em>${x.pts} pts</em></li>`).join("") : "<li><span>🧚‍♀️</span><b>Ninguém jogou ainda</b><em></em></li>";
+  }
+  const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  // 4) "Onde vive?": mapa de verdade com os biomas da última ave
+  const cardOnde = cardDe("Onde vive"), bandeira = cardOnde.querySelector(".map");
+  function desenharMapa() {
+    const f = PokedexAdaptador.ultimaFicha && PokedexAdaptador.ultimaFicha();
+    const info = f && (f.info || f);
+    const biomas = info && Array.isArray(info.biomas) ? info.biomas : [];
+    const div = document.createElement("div"); div.className = "mapa-aves";
+    const antigo = cardOnde.querySelector(".mapa-aves, .map"); antigo.replaceWith(div);
+    if (info && info.nome_popular) $("habitat").innerHTML = `<b>${esc(info.nome_popular)}</b>: ${esc(info.habitat_descricao || info.habitat || "")}`;
+    FichaPokedex.mapaBiomas(div, biomas.length ? biomas : null, { escuro: true });
+  }
+})();
+</script>
 </body>
 </html>
