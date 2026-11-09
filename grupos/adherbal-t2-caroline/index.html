@@ -127,6 +127,10 @@
 
   <section id="mainScreen" class="next-screen screen">
   <button type="button" class="sair" id="btnSair">🚪 Sair</button>
+  <nav class="abas-frutai" aria-label="Abas">
+    <button type="button" data-aba="descobrir" class="on">📸 Descobrir</button>
+    <button type="button" data-aba="minhas">🍓 Minhas frutas <span id="contaFrutas"></span></button>
+  </nav>
   <div class="hero">
     <div class="chat-critter-row" aria-label="Amiguinhos da floresta">
       <span class="critter">🐿️</span><span class="critter">🐝</span>
@@ -352,7 +356,7 @@ button,.labelBtn{min-height:48px}
     lista.unshift({ nome, foto: await miniatura(document.getElementById("preview").src), data: new Date().toLocaleDateString("pt-BR") });
     try { localStorage.setItem(CHAVE, JSON.stringify(lista.slice(0, 30))); } catch (e) {}
     desenhar();
-    document.getElementById("minhasFrutas").scrollIntoView({ behavior: "smooth", block: "start" });
+    if (window.abaFrutai) abaFrutai("minhas"); else document.getElementById("minhasFrutas").scrollIntoView({ behavior: "smooth", block: "start" });
   };
   desenhar();
 })();
@@ -394,8 +398,7 @@ PokedexAdaptador.iniciar({
 </script>
 <style>
 /* tons verde, amarelo, roxo e vermelho + frutas típicas no fundo de todas as páginas */
-body{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cg opacity='.5'%3E%3Ctext x='12' y='48' font-size='36'%3E🍍%3C/text%3E%3Ctext x='132' y='42' font-size='32'%3E🥭%3C/text%3E%3Ctext x='70' y='118' font-size='34'%3E🥥%3C/text%3E%3Ctext x='176' y='128' font-size='30'%3E🍌%3C/text%3E%3Ctext x='18' y='196' font-size='32'%3E🍇%3C/text%3E%3Ctext x='120' y='212' font-size='30'%3E🍒%3C/text%3E%3Ctext x='196' y='206' font-size='26'%3E🍈%3C/text%3E%3C/g%3E%3C/svg%3E") repeat,
-  linear-gradient(135deg,#2fa84f 0%,#9fdc3c 22%,#ffd93d 45%,#a855f7 70%,#e0313f 100%) fixed!important}
+/* (o fundo arco-íris foi trocado por um mais calmo: veja "visual-calmo" no fim) */
 .welcome,.next-screen{background:transparent!important}
 .card,.chat-info{background:rgba(255,255,255,.93)!important}
 .botoes-foto{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:8px 0}
@@ -408,5 +411,41 @@ body{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg
 .chuva-tipicas span{position:absolute;top:-70px;animation:tipicasCaem 2.8s ease-in forwards}
 @keyframes tipicasCaem{to{transform:translateY(118vh) rotate(480deg)}}
 </style>
+
+<!-- VISUAL MAIS CALMO (pedido da professora): mesmas cores e ideia do grupo, sem cansar os olhos -->
+<style id="visual-calmo">
+:root{--fa-verde:#3aa856;--fa-amarelo:#f4c430;--fa-roxo:#7b4bd6;--fa-vermelho:#e0485a;--fa-tinta:#2d2340}
+body{background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360'%3E%3Cg opacity='.13' font-size='34'%3E%3Ctext x='20' y='60'%3E🍍%3C/text%3E%3Ctext x='220' y='110'%3E🥭%3C/text%3E%3Ctext x='110' y='230'%3E🍇%3C/text%3E%3Ctext x='290' y='300'%3E🍌%3C/text%3E%3Ctext x='30' y='330'%3E🍒%3C/text%3E%3C/g%3E%3C/svg%3E"),
+  radial-gradient(circle at 10% 0%,#e8f7e4 0,transparent 40%),radial-gradient(circle at 95% 10%,#f1e8ff 0,transparent 38%),radial-gradient(circle at 50% 100%,#fff4d6 0,transparent 45%),#fffbf3!important;
+  background-attachment:fixed!important;color:var(--fa-tinta)!important}
+header{background:#fff!important;border:2px solid #e9e2f5!important;box-shadow:0 6px 20px #4d267a14!important}
+.logo{color:var(--fa-verde)!important}.logo span{color:var(--fa-roxo)!important}
+.hero h1{color:var(--fa-roxo)!important;text-shadow:none!important}
+.hero p{color:#5b5070!important}
+.card,.chat-info{background:#fff!important;border:2px solid #ece6f6!important;box-shadow:0 10px 28px #4d267a12!important}
+.card h2,.card h3{color:var(--fa-roxo)!important}
+.branch{opacity:.7}
+.abas-frutai{display:flex;gap:10px;justify-content:center;margin:6px auto 4px;flex-wrap:wrap}
+.abas-frutai button{font:inherit;font-weight:800;font-size:17px;padding:12px 22px;border-radius:999px;border:2px solid #e2d8f3;background:#fff;color:var(--fa-tinta);cursor:pointer;box-shadow:0 4px 0 #e2d8f3;min-height:50px}
+.abas-frutai button.on{background:var(--fa-verde);border-color:var(--fa-verde);color:#fff;box-shadow:0 4px 0 #2a7d40}
+.abas-frutai span{background:#ffffff40;border-radius:99px;padding:1px 8px;font-size:14px}
+#mainScreen.aba-minhas>main.card,#mainScreen.aba-minhas>.hero{display:none!important}
+#mainScreen:not(.aba-minhas)>#minhasFrutas{display:none!important}
+</style>
+<script>
+(function () {
+  const tela = document.getElementById("mainScreen"), bts = [...document.querySelectorAll(".abas-frutai button")];
+  const conta = () => { const n = document.querySelectorAll("#albumFrutas .fruta").length; document.getElementById("contaFrutas").textContent = n ? n : ""; };
+  window.abaFrutai = aba => {
+    tela.classList.toggle("aba-minhas", aba === "minhas");
+    bts.forEach(b => b.classList.toggle("on", b.dataset.aba === aba));
+    conta(); window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  bts.forEach(b => b.onclick = () => abaFrutai(b.dataset.aba));
+  new MutationObserver(conta).observe(document.getElementById("albumFrutas"), { childList: true });
+  conta();
+})();
+</script>
 </body>
 </html>
