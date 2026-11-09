@@ -1,6 +1,6 @@
 # Imagens para gerar
 
-> ✅ Já entregues e no ar: Tokoyami, elfa cientista, cientista explorador, elfa do Dattflower, raposa do Eduardo e os 6 rios do AquaDex.
+> ✅ Já entregues e no ar: Tokoyami, elfa cientista, cientista explorador, elfa do Dattflower, raposa do Eduardo, os 6 rios do AquaDex, fundo de frutas e banana de chapéu do Bryan, e o fundo e os personagens da Heloisa (Forest).
 
 O código já está pronto para receber estas imagens. Basta gerar, salvar com **exatamente** o nome indicado
 (formato `.webp`, ou `.png`/`.jpg` convertidos para `.webp`) e colocar na pasta indicada.
@@ -50,8 +50,3 @@ Hoje o fundo é um padrão de frutas e a banana de chapéu é um desenho; as ima
 |---|---|---|
 | `fundo-frutas.webp` | 1920×1080 | Fundo ilustrado colorido com muitas frutas espalhadas (banana, maçã, uva, kiwi, laranja, abacaxi, morango, manga), estilo desenho alegre para crianças, cores vivas, sem texto |
 | `banana-chapeu.webp` | 600×600, **fundo transparente** | Banana sorridente em estilo desenho animado usando um chapéu de explorador marrom, bochechas rosadas, acenando, fundo transparente, sem texto |
-
-## Forest (Heloisa, Emídio T1) — falta o arquivo dos alunos
-
-A Heloisa pediu que o **menu** e a **menina e o menino** fossem os que ela criou no ChatGPT.
-Peça para ela mandar essas imagens (o menu pode ser um print) que eu coloco no lugar dos desenhos de hoje.

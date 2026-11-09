@@ -93,6 +93,7 @@ hr{border:0;border-top:1px solid #59624d;margin:18px 0}
 @media(min-width:650px){.grid,.album-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.profile-items{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:460px){.menu-grid{grid-template-columns:1fr 1fr}.menu-tile{padding:12px 7px;font-size:.9rem}.profile-layout{grid-template-columns:1fr}.profile-preview .mascote{margin-bottom:0}.app{padding:14px 10px 30px}.card{border-radius:18px}}
 </style>
+
 </head>
 <body>
 <main class="app">
@@ -117,7 +118,7 @@ hr{border:0;border-top:1px solid #59624d;margin:18px 0}
       <div class="mascote elf" role="img" aria-label="Detetive elfo"><span class="person-hair"></span><span class="person-ear"></span><span class="person-ear right"></span><span class="person-head"></span><span class="person-eye one"></span><span class="person-eye two"></span><span class="person-smile"></span><span class="person-body"></span></div>
       <div class="mascote human" role="img" aria-label="Detetive humano"><span class="detective-hat"></span><span class="person-hair"></span><span class="person-head"></span><span class="person-eye one"></span><span class="person-eye two"></span><span class="person-smile"></span><span class="person-body"></span></div>
   </div>
-  <div class="dialogue-box"><strong id="nomeFalante">Detetive elfo</strong><p id="textoDialogo" style="margin:8px 0 0"></p></div>
+  <div class="dialogue-box"><strong id="nomeFalante">Detetive elfa</strong><p id="textoDialogo" style="margin:8px 0 0"></p></div>
   <div class="button-row"><button class="button" id="continuarDialogo">CONTINUAR</button></div>
 </section>
 
@@ -212,9 +213,9 @@ const screens = Object.fromEntries(screenIds.map(id => [id,$(id)]));
 const STORE_KEY = 'detetivesNaturezaSaveV2';
 const REWARD_DISCOVERY = 10, REWARD_QUIZ_ANSWER = 5;
 const falas = [
-  ['Detetive elfo','A floresta brasileira guarda árvores incríveis. Vamos descobrir suas histórias!'],
+  ['Detetive elfa','A floresta brasileira guarda árvores incríveis. Vamos descobrir suas histórias!'],
   ['Detetive humano','Tire uma foto nítida de uma árvore. A inteligência artificial vai ajudar a procurar pistas.'],
-  ['Detetive elfo','Quando não tivermos certeza, não vamos chutar. Uma nova foto pode ajudar!'],
+  ['Detetive elfa','Quando não tivermos certeza, não vamos chutar. Uma nova foto pode ajudar!'],
   ['Detetive humano','Cada nova espécie confirmada vale 10 pontos. Depois, você pode fazer um quiz e completar seu álbum!']
 ];
 let passoDialogo = 0, fotoBase64 = '', fotoDataUrl = '', cameraStream = null, arvoreAtual = null, quizIndice = 0, quizAcertos = 0, quizJaRespondeu = false, quizPerguntaRespondida = false, requisicaoEmAndamento = false, audioContext = null;
@@ -244,7 +245,7 @@ function salvarEstado(){try{localStorage.setItem(STORE_KEY,JSON.stringify(estado
 function mostrarAvisoGlobal(mensagem,tipo=''){const el=$('resumoProgresso');if(el){el.textContent=mensagem;el.className='notice '+tipo}}
 function textoSeguro(v){return v===null||v===undefined?'':String(v)}
 function chaveNome(nome,cientifico=''){const base=textoSeguro(cientifico).trim()||textoSeguro(nome).trim();return base.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(sp|spp)\.?\b/g,'').replace(/[^a-z0-9]+/g,' ').trim()}
-function mostrarTela(id){pararCamera();screenIds.forEach(k=>{screens[k].classList.toggle('active',k===id);screens[k].style.display=k===id?'block':'none'});atualizarPontos();if(id==='loja')renderLoja();if(id==='albumTela')renderAlbum();if(id==='personagem')renderPersonagem();if(id==='menuJogo')renderMenu()}
+function mostrarTela(id){document.body.classList.toggle('tela-inicio',id==='inicio');pararCamera();screenIds.forEach(k=>{screens[k].classList.toggle('active',k===id);screens[k].style.display=k===id?'block':'none'});atualizarPontos();if(id==='loja')renderLoja();if(id==='albumTela')renderAlbum();if(id==='personagem')renderPersonagem();if(id==='menuJogo')renderMenu()}
 function atualizarPontos(){$('pontosMenu').textContent=estado.pontos;document.querySelectorAll('.pontosAtual').forEach(e=>e.textContent=estado.pontos)}
 function renderMenu(){atualizarPontos();const n=Object.keys(estado.descobertas).length;$('resumoProgresso').textContent=`Você já descobriu ${n} ${n===1?'espécie':'espécies'} e tem ${estado.pontos} pontos. Seu progresso fica salvo neste dispositivo.`}
 function tocarSom(){/* agora o som de clique é tocado para todos os botões (comum/musica.js) */}
@@ -257,7 +258,7 @@ function guardarFotoArvore(chave){if(!fotoDataUrl)return;const im=new Image();im
 function cartaoArvore(item,mode='discoveries'){
  const d=document.createElement('article');d.className='achievement'+(mode==='discoveries'?' com-foto':'');if(mode==='discoveries'){const fig=document.createElement('div');fig.className='arvore-foto';const im=document.createElement('img');im.alt=item.nome||'Árvore';if(item.foto)im.src=item.foto;else if(item.nomeCientifico){im.dataset.especie=item.nomeCientifico;im.src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E"}fig.appendChild(im);d.appendChild(fig)}const strong=document.createElement('strong');strong.textContent=item.nome||'Árvore descoberta';const p=document.createElement('p');p.className='small';p.textContent=mode==='discoveries'?'Espécie confirmada · descoberta':`Figurinha comprada · ${item.preco||0} pontos`;const b=document.createElement('button');b.className='button secondary';b.style.marginTop='8px';b.textContent='VER DETALHES';b.addEventListener('click',()=>{const detail=$('detalheFigurinha');detail.hidden=false;detail.textContent=[item.nome,item.nomeCientifico,item.descricao,...(item.curiosidades||[])].filter(Boolean).join(' — ')||'Ainda não há curiosidades salvas para esta figurinha.'});d.append(strong,p,b);return d;
 }
-function atualizarDialogo(){const f=falas[passoDialogo];$('nomeFalante').textContent=f[0];$('textoDialogo').textContent=f[1];$('continuarDialogo').textContent=passoDialogo===falas.length-1?'IR AO MENU':'CONTINUAR'}
+function atualizarDialogo(){const f=falas[passoDialogo];document.getElementById('dialogo').dataset.falante=/elf/i.test(f[0])?'elfo':'humano';$('nomeFalante').textContent=f[0];$('textoDialogo').textContent=f[1];$('continuarDialogo').textContent=passoDialogo===falas.length-1?'IR AO MENU':'CONTINUAR'}
 $('btnIniciar').addEventListener('click',()=>{passoDialogo=0;atualizarDialogo();mostrarTela('dialogo');tocarSom()});
 $('continuarDialogo').addEventListener('click',()=>{if(passoDialogo<falas.length-1){passoDialogo++;atualizarDialogo();tocarSom()}else{mostrarTela('menuJogo');tocarSom(740)}});
 $('btnConfiguracao').addEventListener('click',()=>{mostrarTela('configuracao')});
@@ -453,5 +454,53 @@ Musica.iniciar({ estilo: "natureza", botao: true, cliques: false, volume: Math.m
 document.addEventListener("click", e => { const b = e.target.closest && e.target.closest("button,.button,.menu-button"); if (b && !b.classList.contains("pdm-musica") && estado.config.som) Musica.clique(); }, true);
 document.getElementById("volume").addEventListener("input", e => Musica.definirVolume(Math.max(.05, e.target.value / 100)));
 </script>
+<style id="visual-heloisa">
+/* ===== Visual novo do Forest (Heloisa): fundo e personagens criados por ela ===== */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap');
+body{font-family:"Nunito",system-ui,sans-serif!important;background:linear-gradient(180deg,rgba(10,22,12,.35),rgba(10,22,12,.78)),url("img/fundo-floresta.webp") center/cover fixed #171b16!important}
+h1,h2,h3{font-family:"Fredoka","Nunito",sans-serif}
+.app{width:min(100%,1120px)!important;padding:18px 20px 60px!important}
+/* topo: título no meio, menina e menino dos lados */
+header#cabecalho{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:10px;text-align:center;margin-bottom:6px}
+header#cabecalho>.badge,header#cabecalho>h1,header#cabecalho>.sub{grid-column:2}
+header#cabecalho h1{font-size:clamp(2.2rem,5vw,3.6rem)!important;color:#ffe3ec!important;text-shadow:0 3px 0 #8b4d62,0 8px 24px rgba(0,0,0,.6);margin:10px 0 4px}
+header#cabecalho .sub{color:#f3eee3!important;font-weight:700;text-shadow:0 2px 8px rgba(0,0,0,.7)}
+header#cabecalho .badge{justify-self:center;background:rgba(90,62,43,.9)}
+header#cabecalho .mascotes{display:contents!important}
+/* personagens: as imagens da Heloisa no lugar dos bonequinhos desenhados */
+.mascote{width:150px!important;height:300px!important;background:center bottom/contain no-repeat;filter:drop-shadow(0 12px 16px rgba(0,0,0,.55))}
+.mascote>span{display:none!important}
+.mascote.elf{background-image:url("img/menina-elfa.webp")}
+.mascote.human{background-image:url("img/menino.webp")}
+header#cabecalho .mascote.elf{grid-column:1;grid-row:1/4;justify-self:end;animation:respira 4s ease-in-out infinite}
+header#cabecalho .mascote.human{grid-column:3;grid-row:1/4;justify-self:start;animation:respira 4s ease-in-out infinite 1s}
+@keyframes respira{50%{transform:translateY(-6px)}}
+/* nas outras telas o topo fica baixinho (sobra espaço para o conteúdo) */
+body:not(.tela-inicio) header#cabecalho .mascote{height:120px!important;width:70px!important}
+body:not(.tela-inicio) header#cabecalho h1{font-size:2rem!important}
+body:not(.tela-inicio) header#cabecalho .sub{display:none}
+/* cartões no estilo dos outros projetos */
+.card{background:rgba(22,32,20,.86)!important;backdrop-filter:blur(10px);border:1px solid rgba(255,213,225,.28)!important;border-radius:28px!important;box-shadow:0 18px 40px rgba(0,0,0,.45)!important;padding:clamp(18px,3vw,30px)!important}
+.hero h2{font-size:2rem;color:#ffd5e1}
+.menu-button,.button{border-radius:18px!important;font-family:"Fredoka","Nunito",sans-serif;letter-spacing:.5px}
+.menu-tile{border-radius:22px!important;background:rgba(27,33,25,.85)!important;min-height:130px!important;font-size:1.05rem;transition:transform .15s}
+.menu-tile:hover{transform:translateY(-3px)}
+.menu-tile .tile-icon{font-size:2.4rem!important}
+.menu-tile,.menu-tile *{color:#fff9ef!important}.score-pill,.score-pill *{color:#fff3d6!important}
+.score-pill{background:rgba(68,52,33,.9)!important}
+/* diálogo: personagens grandes, quem fala fica em destaque */
+#dialogo .dialogue-stage{min-height:300px;align-items:flex-end;gap:40px}
+#dialogo .mascote{height:290px!important;width:150px!important;transition:transform .3s,filter .3s,opacity .3s}
+#dialogo[data-falante="elfo"] .mascote.human,#dialogo[data-falante="humano"] .mascote.elf{opacity:.55;filter:grayscale(.4) drop-shadow(0 8px 10px rgba(0,0,0,.5));transform:scale(.92)}
+#dialogo[data-falante="elfo"] .mascote.elf,#dialogo[data-falante="humano"] .mascote.human{transform:scale(1.06)}
+.dialogue-box{border-radius:24px!important;font-size:1.08rem}
+/* personalizar: o menino de verdade, com os itens como selos */
+.profile-preview{background:rgba(27,33,25,.85)!important;border-radius:22px!important}
+.profile-preview .mascote{transform:none!important;height:260px!important;width:140px!important;margin:0 auto}
+/* telas centralizadas */
+.screen.active,.status{max-width:980px;margin-left:auto;margin-right:auto}
+@media(max-width:760px){header#cabecalho{grid-template-columns:1fr 1fr}header#cabecalho>.badge,header#cabecalho>h1,header#cabecalho>.sub{grid-column:1/3}
+ header#cabecalho .mascote.elf,header#cabecalho .mascote.human{grid-row:4;justify-self:center;height:200px!important}}
+</style>
 </body>
 </html>
