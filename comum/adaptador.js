@@ -269,10 +269,46 @@
     etapaAtual();
   }
 
+  /* ---------- 8) Não salvar a mesma espécie duas vezes ----------
+     semRepetir: ["chaveDoAlbum", ...] — as listas do grupo no localStorage.
+     - se a espécie já está numa delas, "Salvar no álbum" só avisa (não duplica);
+     - e essas listas nunca guardam o mesmo nome repetido. */
+  const nomeDe = x => typeof x === "string" ? x : x && typeof x === "object" ? (x.nome_popular || x.nomePopular || x.speciesName || x.nome || x.name || x.especie || x.commonName || x.title || (x.info && (x.info.nome_popular || x.info.nome)) || "") : "";
+  const listaDe = v => Array.isArray(v) ? v : (v && typeof v === "object" ? Object.values(v).find(Array.isArray) : null);
+  function jaSalvo(info) {
+    const alvo = normNome(info && (info.nome_popular || info.nome));
+    if (!alvo) return false;
+    const chaves = (CFG.semRepetir || []).concat(CFG.album ? [chaveAlbum()] : []);
+    return chaves.some(k => { try { const l = listaDe(JSON.parse(localStorage.getItem(k) || "null")); return !!l && l.some(x => normNome(nomeDe(x)) === alvo); } catch (e) { return false; } });
+  }
+  const setItemOriginal = Storage.prototype.setItem;
+  Storage.prototype.setItem = function (k, v) {
+    if (this === window.localStorage && (CFG.semRepetir || []).includes(k)) {
+      try {
+        const dado = JSON.parse(v), l = listaDe(dado);
+        if (l) {
+          const vistos = new Set(), limpa = l.filter(x => { const n = normNome(nomeDe(x)); if (!n) return true; if (vistos.has(n)) return false; vistos.add(n); return true; });
+          if (limpa.length !== l.length) { l.splice(0, l.length, ...limpa); v = JSON.stringify(dado); }
+        }
+      } catch (e) {}
+    }
+    return setItemOriginal.call(this, k, v);
+  };
+  function salvarUmaVez(info, salvar) {
+    // só trava quando sabemos levar a pessoa ao álbum (verAlbum ou o álbum comum)
+    if ((CFG.verAlbum || (CFG.album && !CFG.salvar)) && jaSalvo(info)) {
+      FichaPokedex.fechar();
+      if (CFG.verAlbum) CFG.verAlbum(); else if (CFG.album.depois) CFG.album.depois();
+      FichaPokedex.balao("✅ " + (info.nome_popular || "Essa espécie") + " já está no seu álbum!");
+      return;
+    }
+    salvar(info);
+  }
+
   function acoesFinais(info) {
     const lista = [];
-    if (CFG.salvar) lista.push({ texto: "💾 Salvar no álbum", principal: true, aoClicar: () => CFG.salvar(info) });
-    else if (CFG.album) lista.push({ texto: "💾 Salvar no álbum", principal: true, aoClicar: () => salvarNoAlbumComum(info) });
+    if (CFG.salvar) lista.push({ texto: "💾 Salvar no álbum", principal: true, aoClicar: () => salvarUmaVez(info, CFG.salvar) });
+    else if (CFG.album) lista.push({ texto: "💾 Salvar no álbum", principal: true, aoClicar: () => salvarUmaVez(info, salvarNoAlbumComum) });
     if (CFG.som) lista.push(acaoSom(info));
     if (CFG.acoesExtras) lista.push(...(CFG.acoesExtras(info) || []));
     lista.push({ texto: "🔍 Reconhecer outra", principal: !CFG.salvar && !CFG.album, aoClicar: novaFoto });
@@ -401,7 +437,7 @@
     FichaPokedex.configurar({
       icone: CFG.icone, cor: CFG.cor, cor2: CFG.cor2, fauna: !!CFG.fauna,
       escuro: CFG.escuro, claro: CFG.claro || {}, noturno: CFG.noturno || {},
-      aquatico: !!CFG.aquatico, fundosCena: CFG.fundosCena || {}
+      aquatico: !!CFG.aquatico, fundosCena: CFG.fundosCena || {}, soMundo: !!CFG.soMundo
     });
     if (CFG.esconder.length) {
       const s = document.createElement("style");

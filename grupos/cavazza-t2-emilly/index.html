@@ -808,6 +808,8 @@ function desenharMapaFlores(){
   });
 }
 PokedexAdaptador.iniciar({
+  semRepetir: ["dattflowerFavorites", "dattflowerHistory"],   // não guarda a mesma espécie duas vezes
+  verAlbum: () => openFavorites(),   // se a espécie já está no álbum, o botão só leva até lá
   albumFicha: { cartao: "#favoritesList .saved-card, #historyList .saved-card", nome: "h3" },  // "📖 Ver ficha" nas figurinhas do álbum
   icone: "🌸", fauna: false,
   cor: "#f4a7d0", cor2: "#bddd9d",

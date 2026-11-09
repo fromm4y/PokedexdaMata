@@ -380,6 +380,8 @@ function abrirFichaSalva(item){const info=item.ficha;FichaPokedex.mostrar(info,{
  acoes:[{texto:"Fechar",principal:true,aoClicar:()=>{}}]});}
 function saveDiscovery(){
  if(!currentResult)return;const old=JSON.parse(localStorage.getItem("pokedexMataAlbum")||"[]");
+ const nomeNovo=String(currentResult.nome||"Flor").trim().toLowerCase();
+ if(old.some(x=>String(x.name||"").trim().toLowerCase()===nomeNovo)){showToast("✅ Essa flor já está no seu álbum!");go("album");return;}
  old.unshift({id:Date.now(),name:String(currentResult.nome||"Flor"),date:currentResult.date,photo:currentResult.photo,characteristics:String(currentResult.caracteristicas||"Não informado."),curiosity:String(currentResult.curiosidades||"Não informado."),habitat:String(currentResult.habitat||"Não informado."),ficha:(({photo,date,...x})=>x)(currentResult)});
  localStorage.setItem("pokedexMataAlbum",JSON.stringify(old.slice(0,50)));renderAlbum();showToast("🌸 Descoberta guardada no seu álbum!");go("album");
 }

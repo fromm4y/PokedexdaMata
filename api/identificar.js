@@ -214,10 +214,12 @@ const REGRAS_FICHA = `
 - O nome científico deve ser preciso.
 - Em "curiosidades", traga 3 curiosidades verdadeiras, específicas e interessantes — nada genérico.
 - Em "status_conservacao", use a categoria da IUCN em português (ex.: Pouco preocupante, Vulnerável, Em perigo).
-- Em "biomas", liste APENAS os biomas brasileiros onde a espécie ocorre, escolhendo de: "Amazônia", "Cerrado", "Mata Atlântica", "Caatinga", "Pampa", "Pantanal". O primeiro item da lista deve ser o bioma PRINCIPAL (mais associado à espécie). Se for uma espécie cultivada, liste os biomas onde ela é mais cultivada.
-- Em "regioes", liste estados ou regiões brasileiras de ocorrência (ex.: "Norte do Pará", "Mata Atlântica do Sul da Bahia").
+- Em "biomas", liste APENAS os biomas brasileiros onde a espécie ocorre, escolhendo de: "Amazônia", "Cerrado", "Mata Atlântica", "Caatinga", "Pampa", "Pantanal". O primeiro item da lista deve ser o bioma PRINCIPAL (mais associado à espécie). Se for uma espécie cultivada, liste os biomas onde ela é mais cultivada. Se a espécie NÃO vive no Brasil (nem é cultivada ou criada aqui), deixe "biomas" vazio.
+- Em "regioes", liste estados ou regiões brasileiras de ocorrência (ex.: "Norte do Pará", "Mata Atlântica do Sul da Bahia"). Se a espécie não vive no Brasil, liste países ou regiões do mundo (ex.: "Quênia", "Tanzânia").
+- Em "mundo", liste de 1 a 5 lugares do MUNDO onde a espécie vive naturalmente (país, região ou continente, ex.: "Quênia", "Savana do Serengeti", "Sudeste Asiático", "Brasil"), cada um com "lat" e "lng" aproximadas do centro do lugar.
+- Em "habitat_mundo", escreva o nome do ambiente natural principal da espécie no mundo (ex.: "Savana africana", "Floresta Amazônica", "Deserto do Saara", "Floresta temperada", "Recife de coral").
 - Em "habitat_descricao", descreva em 2-3 frases ricas o ambiente onde a espécie vive.
-- Em "cenario_tipo", escolha UM de: "floresta_amazonica","mata_atlantica","cerrado","caatinga","pampa","pantanal","rio","manguezal","urbano","plantacao".
+- Em "cenario_tipo", escolha UM de: "floresta_amazonica","mata_atlantica","cerrado","caatinga","pampa","pantanal","rio","manguezal","urbano","plantacao","savana","deserto","floresta_temperada","gelo","oceano" (os cinco últimos são para espécies de fora do Brasil).
 - Em "cenario_periodo", escolha UM de: "dia","amanhecer","crepusculo","noite".
 - Em "elementos_cenario", liste 4-7 elementos visuais característicos do ambiente.
 - Em "companheiros_habitat", liste 3-5 espécies (animais ou plantas) que dividem o habitat com a identificada.
@@ -231,6 +233,8 @@ const CAMPOS_FICHA = {
   biomas: { type: "array", items: { type: "string" } },
   regioes: { type: "array", items: { type: "string" } },
   habitat_descricao: { type: "string" },
+  mundo: { type: "array", items: { type: "object", properties: { lugar: { type: "string" }, lat: { type: "number" }, lng: { type: "number" } }, required: ["lugar", "lat", "lng"] } },
+  habitat_mundo: { type: "string" },
   cenario_tipo: { type: "string" },
   cenario_periodo: { type: "string" },
   elementos_cenario: { type: "array", items: { type: "string" } },

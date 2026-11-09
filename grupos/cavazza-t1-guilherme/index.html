@@ -249,7 +249,8 @@ nav button{min-height:46px;font-size:15px}
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
-  albumFicha: { cartao: "#albumGrid .animal", nome: "b" },  // "📖 Ver ficha" em cada figurinha salva
+  semRepetir: ["ama_album"],   // não guarda a mesma espécie duas vezes
+  verAlbum: () => go("album"),   // se a espécie já está no álbum, o botão só leva até lá
   icone: "🐆", fauna: true,
   cor: "#39e58c", cor2: "#ffd02f",
   escuro: () => true,
@@ -258,7 +259,6 @@ PokedexAdaptador.iniciar({
   extras: info => [["🧬 Características", info.caracteristicas], ["🍖 Dieta", info.dieta], ["📏 Porte", info.porte]],
   alerta: info => info.perigoso === true ? (info.aviso || "Este animal pode ser perigoso. Observe de longe!") : "",
   salvar: () => go("album"),
-  acoesExtras: () => [{ texto: "🗺️ Ver ficha do robô", aoClicar: () => {} }],
   novaFoto: () => go("scanner")
 });
 </script>

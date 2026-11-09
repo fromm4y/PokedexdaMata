@@ -429,6 +429,8 @@ main{align-items:center!important;padding-top:20px!important}
   };
 })();
 PokedexAdaptador.iniciar({
+  semRepetir: ["frutariabr_album"],   // não guarda a mesma espécie duas vezes
+  verAlbum: () => { document.querySelectorAll(".section").forEach(s => s.style.display = "none"); const a = document.getElementById("album"); a.style.display = "block"; a.scrollIntoView({ behavior: "smooth" }); },   // se a espécie já está no álbum, o botão só leva até lá
   albumFicha: { cartao: "#album .fruit-card" },  // "📖 Ver ficha" nas figurinhas do álbum
   // botões por etapa: o de identificar só aparece depois de escolher a foto
   etapas: { foto: ["#analisar"] },

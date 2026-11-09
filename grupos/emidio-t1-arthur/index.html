@@ -1841,6 +1841,8 @@ main.tela{padding-bottom:110px}
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  semRepetir: ["florestal_plantas"],   // não guarda a mesma espécie duas vezes
+  verAlbum: () => { mostrarPlantas(); abrirTela("plantas"); },   // se a espécie já está no álbum, o botão só leva até lá
   albumFicha: { cartao: "#listaPlantas .planta-card", nome: "h3" },  // "📖 Ver ficha" nas figurinhas do álbum
   icone: "🌿", fauna: false,
   cor: "#26d9d1", cor2: "#a4fffa",

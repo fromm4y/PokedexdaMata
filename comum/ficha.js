@@ -53,6 +53,37 @@
     urbano:             { nome: "Áreas urbanas",        foto: "photo-1620337634371-2a57564f24b5" },
     plantacao:          { nome: "Plantações e pomares", foto: "photo-1591389703635-e15a07b842d7" }
   };
+  /* Cenários de FORA do Brasil (desenhados em SVG: não dependem de internet). */
+  const svgFundo = svg => "data:image/svg+xml," + encodeURIComponent(svg);
+  const FUNDOS_MUNDO = {
+    savana: svgFundo('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6b25a"/><stop offset=".55" stop-color="#fbd98c"/><stop offset="1" stop-color="#f2e2a6"/></linearGradient></defs><rect width="600" height="400" fill="url(#c)"/><circle cx="470" cy="120" r="46" fill="#fff3c4" opacity=".9"/><path d="M0 240 Q120 215 240 232 T480 226 T600 236 V400 H0Z" fill="#c9a24e"/><path d="M0 270 Q150 250 300 266 T600 262 V400 H0Z" fill="#b48a3a"/><path d="M0 310 Q160 296 320 308 T600 304 V400 H0Z" fill="#9c7a33"/><g fill="#5a4a2a"><rect x="128" y="190" width="8" height="70"/><path d="M70 196 Q132 160 196 196 Q132 182 70 196Z"/><rect x="438" y="205" width="6" height="52"/><path d="M398 210 Q441 184 486 210 Q441 199 398 210Z"/></g><g stroke="#8a6d2c" stroke-width="2" opacity=".6"><path d="M40 330 l4 -14 M60 336 l-3 -12 M210 340 l5 -15 M360 334 l-4 -13 M520 338 l3 -14"/></g></svg>'),
+    deserto: svgFundo('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fd0f0"/><stop offset="1" stop-color="#fbe3b0"/></linearGradient></defs><rect width="600" height="400" fill="url(#c)"/><circle cx="120" cy="90" r="40" fill="#fff6c9"/><path d="M0 250 Q150 200 300 245 T600 235 V400 H0Z" fill="#e8bf72"/><path d="M0 300 Q200 255 380 300 T600 290 V400 H0Z" fill="#d9a85a"/><path d="M0 345 Q180 320 360 342 T600 338 V400 H0Z" fill="#c8954a"/><g fill="#4f7d3a"><rect x="470" y="230" width="12" height="70" rx="6"/><rect x="456" y="250" width="10" height="26" rx="5"/><rect x="486" y="242" width="10" height="24" rx="5"/></g></svg>'),
+    gelo: svgFundo('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd6f5"/><stop offset="1" stop-color="#e8f6ff"/></linearGradient></defs><rect width="600" height="400" fill="url(#c)"/><path d="M60 250 L170 120 L260 250Z M300 255 L420 95 L540 255Z" fill="#f4fbff"/><path d="M170 120 L200 160 L150 170Z M420 95 L455 140 L400 150Z" fill="#cfe6f5"/><path d="M0 250 H600 V300 H0Z" fill="#5aa7d6"/><path d="M0 290 Q150 270 300 288 T600 284 V400 H0Z" fill="#f7fcff"/><path d="M80 300 h90 l-15 14 h-60Z M380 296 h120 l-18 16 h-84Z" fill="#dcefff"/></svg>')
+  };
+  Object.assign(CENARIOS, {
+    savana: { nome: "Savana", svg: FUNDOS_MUNDO.savana },
+    deserto: { nome: "Deserto", svg: FUNDOS_MUNDO.deserto },
+    gelo: { nome: "Regiões geladas", svg: FUNDOS_MUNDO.gelo },
+    floresta_temperada: { nome: "Floresta temperada", foto: CENARIOS.mata_atlantica.foto },
+    oceano: { nome: "Oceano", svg: "" }
+  });
+  const COR_MUNDO = "#f0a640";
+  /* lugares do mundo onde a espécie vive (vêm da IA em "mundo") */
+  const pontosMundo = d => lista(d && d.mundo).filter(p => p && isFinite(+p.lat) && isFinite(+p.lng)).map(p => ({ lugar: String(p.lugar || ""), c: [+p.lat, +p.lng] }));
+  const noBrasil = c => c[0] < 6 && c[0] > -34.5 && c[1] > -74.5 && c[1] < -34;
+  /* a espécie vive (também) fora do Brasil? então o mapa mostra o mundo */
+  const ehDoMundo = d => { const pts = pontosMundo(d); return pts.some(p => !noBrasil(p.c)) || (!lista(d && d.biomas).some(b => BIOMAS[b]) && pts.length > 0); };
+  /* qual cenário desenhado combina com o ambiente que a IA indicou */
+  function cenarioDoMundo(d) {
+    const t = String((d && d.habitat_mundo) || "").toLowerCase();
+    if (/savana|estepe|pradaria/.test(t)) return "savana";
+    if (/desert/.test(t)) return "deserto";
+    if (/gel|ártic|artic|antárt|antart|polar|tundra|neve/.test(t)) return "gelo";
+    if (/oceano|mar |marinh|recife|coral/.test(t)) return "oceano";
+    if (/temperad|bosque|taiga|conífer/.test(t)) return "floresta_temperada";
+    if (/tropical|amaz|selva/.test(t)) return "floresta_amazonica";
+    return CENARIOS[d && d.cenario_tipo] ? d.cenario_tipo : "savana";
+  }
   const BIOMA_CENARIO = {
     "Amazônia": "floresta_amazonica", "Cerrado": "cerrado", "Mata Atlântica": "mata_atlantica",
     "Caatinga": "caatinga", "Pampa": "pampa", "Pantanal": "pantanal"
@@ -64,7 +95,7 @@
 
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const lista = v => Array.isArray(v) ? v.filter(Boolean) : (v ? [v] : []);
-  const fotoCenario = id => `https://images.unsplash.com/${(CENARIOS[id] || CENARIOS.floresta_amazonica).foto}?auto=format&fit=crop&w=1100&q=78`;
+  const fotoCenario = id => { const c = CENARIOS[id] || CENARIOS.floresta_amazonica; if (c.svg !== undefined) return c.svg || FUNDO_AQUA; return `https://images.unsplash.com/${c.foto}?auto=format&fit=crop&w=1100&q=78`; };
 
   /* ---------- carregar CSS, fontes e Leaflet uma vez só ---------- */
   function carregarRecursos() {
@@ -103,6 +134,15 @@
     const regioes = lista(d.regioes);
     const legenda = Object.entries(BIOMAS).map(([nome, b]) =>
       `<div class="fp-legend-item ${biomas.includes(nome) ? "on" : ""}" style="--lc:${b.cor}"><span class="fp-swatch" style="background:${b.cor}"></span>${esc(nome)}</div>`).join("");
+    if (ehDoMundo(d)) {
+      const pts = pontosMundo(d);
+      return `<div class="fp-col-img"><div class="fp-map"></div></div><div class="fp-col-info">
+      <p class="fp-map-note">🌍 Os pontos laranja mostram onde <strong>${esc(d.nome_popular)}</strong> vive no mundo${biomas.length ? "; os círculos coloridos são os biomas brasileiros onde ela também aparece" : ""}. Arraste e dê zoom no mapa.</p>
+      ${d.habitat_mundo ? `<div class="fp-section"><div class="fp-label">Ambiente natural</div><div class="fp-chips"><span class="fp-region">🌍 ${esc(d.habitat_mundo)}</span></div></div>` : ""}
+      ${pts.length ? `<div class="fp-section"><div class="fp-label">Onde vive no mundo</div><div class="fp-chips">${pts.map(p => `<span class="fp-region">📍 ${esc(p.lugar)}</span>`).join("")}</div></div>` : ""}
+      ${biomas.length ? `<div class="fp-legend"><div class="fp-label">Biomas brasileiros</div><div class="fp-legend-grid">${legenda}</div></div>` : ""}
+      ${!pts.length && regioes.length ? `<div class="fp-section"><div class="fp-label">Onde costuma ocorrer</div><div class="fp-chips">${regioes.map(r => `<span class="fp-region">${esc(r)}</span>`).join("")}</div></div>` : ""}</div>`;
+    }
     return `<div class="fp-col-img"><div class="fp-map"></div></div><div class="fp-col-info">
       ${biomas.length ? `<p class="fp-map-note">Os focos acesos mostram onde <strong>${esc(d.nome_popular)}</strong> ocorre no Brasil. O ponto pulsante é o bioma principal. Arraste e dê zoom no mapa.</p>` : `<p class="fp-map-note">A IA não indicou biomas brasileiros para esta espécie.</p>`}
       <div class="fp-legend"><div class="fp-label">Biomas onde ocorre</div><div class="fp-legend-grid">${legenda}</div></div>
@@ -127,7 +167,15 @@
         L.marker(b.coord, { icon }).addTo(map).bindTooltip(`<b>${esc(nome)}</b>${i === 0 ? " · principal" : ""}`, { direction: "top", offset: [0, -10] });
         pts.push(b.coord);
       });
-      if (pts.length) { map.fitBounds(L.latLngBounds(pts).pad(.55)); if (pts.length === 1) map.setZoom(5); }
+      const mundo = ehDoMundo(d) ? pontosMundo(d) : [];
+      mundo.forEach((p, i) => {
+        L.circle(p.c, { radius: 650000, color: COR_MUNDO, weight: 1, opacity: .6, fillColor: COR_MUNDO, fillOpacity: .2 }).addTo(map);
+        const icon = L.divIcon({ className: "", iconSize: [24, 24], iconAnchor: [12, 12], html: `<span class="fp-marker ${i === 0 ? "primary" : ""}" style="--mc:${COR_MUNDO}"></span>` });
+        L.marker(p.c, { icon }).addTo(map).bindTooltip(`<b>${esc(p.lugar)}</b>`, { direction: "top", offset: [0, -10] });
+        pts.push(p.c);
+      });
+      if (mundo.length) { map.fitBounds(L.latLngBounds(pts).pad(.45)); if (map.getZoom() > 4) map.setZoom(4); }
+      else if (pts.length) { map.fitBounds(L.latLngBounds(pts).pad(.55)); if (pts.length === 1) map.setZoom(5); }
       else map.setView([-14.5, -52], 3.6);
       setTimeout(() => map.invalidateSize(), 80);
     }).catch(() => { el.innerHTML = '<div class="fp-map-fallback">Não consegui carregar o mapa (verifique a internet).</div>'; });
@@ -173,6 +221,32 @@
     }).catch(() => { el.innerHTML = '<div class="fp-map-fallback">Não consegui carregar o mapa (verifique a internet).</div>'; return null; });
   }
 
+  /* mapaMundo(el, [{ lugar, lat, lng }], { escuro, zoomMax }): mapa de verdade
+     com os lugares do mundo marcados (para temas de fora do Brasil). */
+  function mapaMundo(el, lugares, o) {
+    o = o || {};
+    if (!el) return Promise.resolve(null);
+    carregarRecursos();
+    el.classList.add("fp-mapa-solto");
+    if (o.escuro) el.classList.add("fp-mapa-escuro");
+    return carregarLeaflet().then(() => {
+      const L = window.L;
+      const map = L.map(el, { scrollWheelZoom: false, zoomSnap: 0.25 });
+      map.attributionControl.setPrefix(false);
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 11, attribution: "© OpenStreetMap" }).addTo(map);
+      const pts = pontosMundo({ mundo: lugares });
+      pts.forEach(p => {
+        L.circle(p.c, { radius: o.raio || 450000, color: o.cor || COR_MUNDO, weight: 2, opacity: .8, fillColor: o.cor || COR_MUNDO, fillOpacity: .25 }).addTo(map);
+        const icon = L.divIcon({ className: "", iconSize: [150, 30], iconAnchor: [75, 15], html: `<div style="width:150px;text-align:center"><span class="fp-mapa-rotulo" style="--mc:${o.cor || COR_MUNDO}">${esc(p.lugar)}</span></div>` });
+        L.marker(p.c, { icon }).addTo(map);
+      });
+      const enquadrar = () => { map.invalidateSize(); if (pts.length) { map.fitBounds(L.latLngBounds(pts.map(p => p.c)).pad(.35)); if (map.getZoom() > (o.zoomMax || 5)) map.setZoom(o.zoomMax || 5); } else map.setView([0, 20], 2); };
+      map.setView([0, 20], 2); enquadrar();
+      if (window.ResizeObserver) new ResizeObserver(enquadrar).observe(el);
+      return map;
+    }).catch(() => { el.innerHTML = '<div class="fp-map-fallback">Não consegui carregar o mapa (verifique a internet).</div>'; return null; });
+  }
+
   /* ---------- aba Habitat: a cena do bioma com a espécie ---------- */
   function motes(seed) {
     let out = "";
@@ -185,7 +259,8 @@
   }
   function htmlCena(bioma, periodo, itens, extra) {
     extra = extra || {};
-    const cenario = BIOMA_CENARIO[bioma] || "floresta_amazonica";
+    const mundo = extra.mundo && extra.mundo.nome === bioma ? extra.mundo : null;
+    const cenario = mundo ? mundo.cenario : (BIOMA_CENARIO[bioma] || "floresta_amazonica");
     const fundos = Object.assign({}, CFG.fundosCena || {}, extra.fundos || {});
     const aqua = !!(extra.aquatico || CFG.aquatico);
     const fundoUrl = fundos[bioma] || (aqua ? FUNDO_AQUA : fotoCenario(cenario));
@@ -208,13 +283,14 @@
       <div class="fp-particles">${motes(seed)}</div><div class="fp-vignette"></div>
       ${roam}${garden}${vazio}
       <div class="fp-controls">${botoes}</div>
-      <div class="fp-overlay"><div class="fp-bioma" data-base="${esc(aqua ? "Rios da " + bioma : CENARIOS[cenario].nome)}">${esc(aqua ? "Rios da " + bioma : CENARIOS[cenario].nome)} · ${PERIODOS[periodo]}</div>
+      <div class="fp-overlay"><div class="fp-bioma" data-base="${esc(mundo ? bioma : aqua ? "Rios da " + bioma : CENARIOS[cenario].nome)}">${esc(mundo ? bioma : aqua ? "Rios da " + bioma : CENARIOS[cenario].nome)} · ${PERIODOS[periodo]}</div>
         <div class="fp-scene-title">${fauna.length ? (aqua ? "Toque no peixinho para ver o nome" : "Toque no bichinho para ver o nome") : "Toque na plantinha para ver o nome"}</div></div>
     </div>`;
   }
   function desenharCena(caixa, estado) {
     const box = caixa.querySelector(".fp-safari");
-    box.innerHTML = `<div class="fp-biomes">${Object.entries(BIOMAS).map(([nome, b]) =>
+    const lista_ = (estado.mundo ? [[estado.mundo.nome, { cor: COR_MUNDO }]] : []).concat(estado.soMundo ? [] : Object.entries(BIOMAS));
+    box.innerHTML = `<div class="fp-biomes">${lista_.map(([nome, b]) =>
       `<button class="fp-biome ${nome === estado.bioma ? "active" : ""}" data-bioma="${esc(nome)}" style="--bc:${b.cor}"><span class="fp-dot"></span>${esc(nome)}</button>`).join("")}</div>` +
       htmlCena(estado.bioma, estado.periodo, estado.itens, estado);
     box.querySelectorAll(".fp-biome").forEach(b => b.onclick = () => { estado.bioma = b.dataset.bioma; desenharCena(caixa, estado); if (estado.aoTrocar) estado.aoTrocar(estado.bioma); });
@@ -240,7 +316,9 @@
       fauna: it.fauna !== undefined ? !!it.fauna : CFG.fauna !== false, biomas: lista(it.biomas), atual: !!it.atual }));
     const primeiro = (itens.find(i => i.atual) || itens[0] || {}).biomas;
     const estado = { bioma: o.bioma || (primeiro && primeiro[0]) || "Amazônia", periodo: o.periodo || "dia", itens,
-      aquatico: !!o.aquatico, fundos: o.fundos || {}, aoTrocar: o.aoTrocar };
+      aquatico: !!o.aquatico, fundos: o.fundos || {}, aoTrocar: o.aoTrocar,
+      mundo: o.mundo ? { nome: o.mundo.nome, cenario: CENARIOS[o.mundo.cenario] ? o.mundo.cenario : "savana" } : null, soMundo: !!o.soMundo };
+    if (estado.mundo && !o.bioma && !(primeiro && primeiro[0])) estado.bioma = estado.mundo.nome;
     desenharCena(caixa, estado);
     return estado;
   }
@@ -324,10 +402,13 @@
       <div class="fp-panel" data-panel="habitat">${htmlHabitat(d)}</div>
     </div>`;
 
+    const doMundo = ehDoMundo(d);
+    const mundoCena = doMundo ? { nome: d.habitat_mundo || "Habitat natural", cenario: cenarioDoMundo(d) } : null;
     const estado = {
-      bioma: biomas[0] || "Amazônia",
+      mundo: mundoCena, soMundo: !!(CFG.soMundo && mundoCena),
+      bioma: doMundo && !biomas.length ? mundoCena.nome : (biomas[0] || "Amazônia"),
       periodo: PERIODOS[d.cenario_periodo] ? d.cenario_periodo : "dia",
-      itens: [{ nome: d.nome_popular || d.nome || "Espécie", img: o.foto || "", icone, cor, fauna: !!CFG.fauna, biomas, atual: true }],
+      itens: [{ nome: d.nome_popular || d.nome || "Espécie", img: o.foto || "", icone, cor, fauna: !!CFG.fauna, biomas: mundoCena ? [mundoCena.nome].concat(biomas) : biomas, atual: true }],
       aquatico: !!CFG.aquatico
     };
     const tabs = el.querySelectorAll(".fp-tab"), panels = el.querySelectorAll(".fp-panel");
@@ -759,5 +840,5 @@ html.fp-travado,html.fp-travado body{overflow:hidden}
 @media (max-width:420px){.fp-corpo{padding:0 14px 14px}.fp-pop{padding:8px}.fp{padding:16px}.fp-name{font-size:22px}.fp-foto{width:52px;height:52px}.fp-tab{font-size:11.5px;gap:4px}}
 `;
 
-  window.FichaPokedex = { configurar, mostrar, aviso, carregando, fechar, ligarCamera, escolherArquivo, trocarFotos, urlDaEspecie, mapaBiomas, BIOMAS, cena, somDaEspecie, tocarSom, pararSom, definirVolume, lerVolume: () => volume, balao };
+  window.FichaPokedex = { configurar, mostrar, aviso, carregando, fechar, ligarCamera, escolherArquivo, trocarFotos, urlDaEspecie, mapaBiomas, mapaMundo, BIOMAS, cena, FUNDOS_MUNDO, somDaEspecie, tocarSom, pararSom, definirVolume, lerVolume: () => volume, balao };
 })();

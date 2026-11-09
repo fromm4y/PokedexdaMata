@@ -250,6 +250,7 @@ window.salvarNoCodex = () => {
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  semRepetir: ["codexMeusAnimais"],   // não guarda a mesma espécie duas vezes
   etapas: { foto: ["#btnDescobrir"] },   // o botão de descobrir só aparece depois de escolher a foto
   icone: "🐾", fauna: true,
   cor: "#ff7fb5", cor2: "#5bb8f0",

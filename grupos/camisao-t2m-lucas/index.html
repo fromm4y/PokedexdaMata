@@ -426,6 +426,8 @@ window.reduzirParaAlbum = src => new Promise(res => { const img = new Image(); i
   document.getElementById("choose").addEventListener("click", e => e.preventDefault());
 })();
 PokedexAdaptador.iniciar({
+  semRepetir: ["jardimLeafeonDescobertas"],   // não guarda a mesma espécie duas vezes
+  verAlbum: () => abrirBiblioteca(),   // se a espécie já está no álbum, o botão só leva até lá
   albumFicha: { cartao: ".animal-list .animal-card", nome: "h4" },  // "📖 Ver ficha" nas figurinhas do álbum
   // botões por etapa: o de identificar só aparece depois de escolher a foto
   etapas: { foto: ["#go"] },

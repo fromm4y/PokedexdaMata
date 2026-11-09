@@ -146,6 +146,8 @@ window.reduzirParaAlbum = src => new Promise(res => { const img = new Image(); i
   };
 })();
 PokedexAdaptador.iniciar({
+  semRepetir: ["reptisfera_records"],   // não guarda a mesma espécie duas vezes
+  verAlbum: () => { const a = document.querySelector('[data-view="album"], [data-target="album"], [href="#album"]'); if (a) a.click(); },   // se a espécie já está no álbum, o botão só leva até lá
   albumFicha: { cartao: "#albumGrid .card", nome: "h3" },  // "📖 Ver ficha" em cada figurinha salva
   icone: "🦎", fauna: true,
   cor: "#c5ff38", cor2: "#29b765",

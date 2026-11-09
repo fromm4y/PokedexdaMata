@@ -343,6 +343,7 @@ function desenharAlbum(){
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  semRepetir: ["mataGrandeAlbum"],   // não guarda a mesma espécie duas vezes
   albumFicha: { cartao: "#album .figurinha", nome: "strong" },  // "📖 Ver ficha" nas figurinhas do álbum
   etapas: { foto: ["#btnAnalisar"] },   // o botão de analisar só aparece depois de escolher a foto
   som: true, textoSom: "🔊 Ouvir o canto",

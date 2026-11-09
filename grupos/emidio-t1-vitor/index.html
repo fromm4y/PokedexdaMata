@@ -956,6 +956,8 @@ FichaPokedex.mapaBiomas(document.getElementById("mapaBiomasFruitdex"), null, {
   }
 });
 PokedexAdaptador.iniciar({
+  semRepetir: ["fruitdex_album_v1"],   // não guarda a mesma espécie duas vezes
+  verAlbum: () => document.querySelector('.nav button[data-page="albumPage"]').click(),   // se a espécie já está no álbum, o botão só leva até lá
   albumFicha: { cartao: "#albumContent .fruit-card", nome: "h3" },  // "📖 Ver ficha" nas figurinhas do álbum
   icone: "🍌", fauna: false,
   cor: "#65e9ff", cor2: "#6df05e",

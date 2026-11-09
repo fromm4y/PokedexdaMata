@@ -440,6 +440,7 @@ function desenharMapa(){
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  semRepetir: ["aquadex_album"],   // não guarda a mesma espécie duas vezes
   albumFicha: { cartao: "#albumGrid .fish-card", nome: "strong" },  // "📖 Ver ficha" nas figurinhas do álbum
   etapas: { foto: ["#analisar"] },   // o botão de identificar só aparece depois de escolher a foto
   icone: "🐟", fauna: true,

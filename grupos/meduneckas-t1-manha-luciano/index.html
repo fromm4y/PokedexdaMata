@@ -120,6 +120,8 @@ nav button{white-space:nowrap;padding:10px 10px;min-height:44px}
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  semRepetir: ["raizesDiscoveriesV2", "raizesHistoryV2"],   // não guarda a mesma espécie duas vezes
+  verAlbum: () => showPage("album"),   // se a espécie já está no álbum, o botão só leva até lá
   albumFicha: { cartao: "#discoveryGrid .creature, #historyList .history-item", nome: "h3, strong" },  // "📖 Ver ficha" em cada figurinha salva
   icone: "🐸", fauna: true,
   cor: "#39dc78", cor2: "#ffdf4f",

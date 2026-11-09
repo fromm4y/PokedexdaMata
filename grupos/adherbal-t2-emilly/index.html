@@ -563,6 +563,8 @@ footer{text-align:center;color:#e9f4e7;font-size:12px;padding:0 16px 24px}
    do dispositivo" fica só para escolher arquivo. */
 document.getElementById("photo-input").removeAttribute("capture");
 PokedexAdaptador.iniciar({
+  semRepetir: ["pokedexMataHistory", "pokedexMataFavorites"],   // não guarda a mesma espécie duas vezes
+  verAlbum: () => document.querySelector('.nav-link[data-page="favoritos"]').click(),   // se a espécie já está no álbum, o botão só leva até lá
   albumFicha: { cartao: "#history-list .item-card, #favorites-list .item-card", nome: "h3" },  // "📖 Ver ficha" nas figurinhas do álbum
   // botões por etapa: o de identificar só aparece depois de escolher a foto
   etapas: { inicio: ["#start-camera", "#choose-photo"], camera: ["#capture-photo", "#choose-photo"], foto: ["#identify-btn", "#retake-photo", "#choose-photo"], fotoTirada: ["#capture-photo"], trocar: ["#retake-photo"] },

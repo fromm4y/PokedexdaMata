@@ -647,6 +647,8 @@ window.abrirQuiz=abrirQuiz; window.irPara=irPara;
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  semRepetir: ["ik_album", "ik_discoveries"],   // não guarda a mesma espécie duas vezes
+  verAlbum: () => irPara("album"),   // se a espécie já está no álbum, o botão só leva até lá
   albumFicha: { cartao: "#albumList li", nome: ".ins-nome" },  // "📖 Ver ficha" em cada figurinha salva
   som: true, textoSom: "🔊 Ouvir o som do inseto",  // gravação real da espécie (Wikimedia Commons)
   galeria: { depoisDe: "label.file-label", input: "#photoInput" },

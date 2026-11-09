@@ -404,6 +404,7 @@ atualizarPontos();
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  semRepetir: ["detetivesDePenas"],   // não guarda a mesma espécie duas vezes
   albumFicha: { cartao: "#listaAlbum .item", nome: "strong" },  // "📖 Ver ficha" nas figurinhas do álbum
   etapas: { foto: ["#btnDescobrir"] },   // o botão de descobrir só aparece depois de escolher a foto
   som: true, textoSom: "🔊 Ouvir o canto",  // canto de verdade (Wikimedia Commons)
