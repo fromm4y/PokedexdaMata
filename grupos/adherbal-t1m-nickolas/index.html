@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#9b5427">
+<title>Pokédex da Savana — Animais Selvagens</title>
+<style>
+:root{--sand:#f6d99a;--sun:#ffb347;--gold:#e5a32d;--rust:#9b5427;--earth:#59351f;--leaf:#536b35;--deep:#24351f;--cream:#fff4d9;--panel:#fff8e9;--ink:#352719;--muted:#80684e;--line:#e8d2a8}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;background:linear-gradient(180deg,#f7c879 0%,#f4d89b 38%,#c7a568 68%,#657344 100%);position:relative}
+body:before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse at 78% 12%,#fff0a8 0 5%,#ffbf61 18%,transparent 38%),linear-gradient(180deg,#e99a51 0%,#f3c77e 42%,#c89a59 67%,#697b45 100%)}
+body:after{content:"";position:fixed;z-index:-1;left:0;right:0;bottom:0;height:42vh;opacity:.72;background:linear-gradient(155deg,transparent 0 32%,#8a7044 32.2% 47%,transparent 47.2%),linear-gradient(25deg,transparent 0 35%,#6d633c 35.2% 51%,transparent 51.2%),linear-gradient(180deg,transparent 0 35%,#78814a 35.2% 100%);pointer-events:none}
+main{max-width:1180px;margin:auto;padding:18px}
+header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:8px 0 18px}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;font-size:34px;background:linear-gradient(145deg,#ffd46e,#e77b36);box-shadow:0 7px 18px #75411d40}
+h1{font-size:clamp(1.55rem,4vw,2.25rem);margin:0;color:#59351f;letter-spacing:-.04em}.tagline{margin:3px 0 0;color:#684a2c}
+.pill{border:1px solid #98632f;border-radius:999px;padding:8px 13px;color:#56381e;background:#fff3d5c9;font-size:.9rem;font-weight:700}
+.hero{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:center;padding:clamp(20px,4vw,38px);border:1px solid #c78c48;border-radius:26px;background:linear-gradient(115deg,#fff1d9f2,#f4d49beF);box-shadow:0 18px 45px #57351e25;overflow:hidden}
+.eyebrow{color:#986020;font-size:.78rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
+.hero h2{font-size:clamp(1.8rem,4.2vw,3rem);line-height:1.05;margin:10px 0;color:#633b20}.hero p{color:#6d5034;line-height:1.65;max-width:620px}
+.hero-art{position:relative;min-height:245px;border-radius:20px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;background:radial-gradient(circle at 72% 23%,#fff0a0 0 7%,transparent 8%),linear-gradient(180deg,#e98e4d 0%,#f5c878 54%,#a77a3c 55%,#687342 100%)}
+.hero-art:before{content:"";position:absolute;left:-8%;right:-8%;bottom:28%;height:40%;background:#9a7946;clip-path:polygon(0 100%,0 70%,18% 18%,33% 68%,53% 8%,75% 65%,100% 22%,100% 100%)}
+.hero-art:after{content:"";position:absolute;inset:auto 0 0;height:35%;background:linear-gradient(175deg,#788044,#465d30)}
+.sun{position:absolute;right:17%;top:10%;font-size:3.6rem;filter:drop-shadow(0 0 15px #ffe8a0)}
+.scene-animals{position:relative;z-index:2;font-size:clamp(3.3rem,8vw,5.8rem);display:flex;gap:4px;align-items:end;filter:drop-shadow(0 5px 4px #4b321c55);padding-bottom:22px}
+.tree{position:absolute;z-index:2;bottom:26%;left:7%;font-size:3rem;filter:drop-shadow(0 3px 2px #4b321c55)}
+.hero-copy{position:relative;z-index:3}.hero-copy p{font-size:1.02rem}
+.button-link,button{font:inherit;font-weight:800;border:0;border-radius:12px;padding:11px 16px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;background:linear-gradient(120deg,#f7c75e,#e98a3b);color:#492b17;box-shadow:0 4px 0 #a95e2c;transition:transform .18s,box-shadow .18s}
+button:hover,.button-link:hover{transform:translateY(-2px);box-shadow:0 6px 0 #a95e2c}button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.panel{background:#fff8e9ed;border:1px solid #d7b77d;border-radius:20px;padding:clamp(16px,3vw,24px);margin-top:18px;box-shadow:0 12px 30px #59351e15}
+.panel h2{margin:0 0 7px;color:#633d21}.help{color:var(--muted);margin:0 0 16px;line-height:1.55}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.search{flex:1 1 240px;min-width:0;border:1px solid #c9a66d;border-radius:12px;padding:12px 14px;font:inherit;background:#fffdf7;color:var(--ink);outline-color:#b66b2f}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 18px}.filter{background:#f1e2c2;color:#624321;box-shadow:none;border:1px solid #ddc28e;padding:8px 13px;border-radius:999px;font-size:.9rem}.filter.active{background:#647342;color:#fff8e9;border-color:#647342;box-shadow:0 3px 0 #42522b}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.animal-card{background:#fffdf7;border:1px solid #e4d0a8;border-radius:17px;overflow:hidden;transition:transform .2s,box-shadow .2s;cursor:pointer;min-width:0}
+.animal-card:hover{transform:translateY(-5px);box-shadow:0 12px 24px #66421f25}
+.animal-art{height:142px;display:grid;place-items:center;font-size:5rem;background:linear-gradient(145deg,#f6dca5,#d7b878);position:relative}
+.animal-art:after{content:"";position:absolute;bottom:0;left:0;right:0;height:22px;background:linear-gradient(180deg,transparent,#7d874b55)}
+.card-body{padding:13px}.card-body h3{margin:0 0 4px;color:#633d21}.card-body p{margin:0 0 10px;color:#80684e;font-size:.88rem}.card-meta{display:flex;gap:6px;flex-wrap:wrap}.tag{font-size:.75rem;border-radius:999px;background:#f4e8ce;padding:5px 8px;color:#6b4a25}.card-body button{margin-top:12px;width:100%;padding:9px;font-size:.88rem}
+.empty{padding:25px;text-align:center;color:#80684e;display:none}
+.modal{position:fixed;inset:0;background:#24180dcc;display:none;align-items:center;justify-content:center;padding:18px;z-index:20}.modal.show{display:flex}.modal-box{width:min(560px,100%);max-height:88vh;overflow:auto;background:#fff8e9;border-radius:22px;padding:22px;box-shadow:0 20px 60px #0005;position:relative}.modal-top{display:flex;align-items:center;gap:15px}.modal-emoji{font-size:4rem;background:#f2dfb8;border-radius:17px;padding:8px}.modal h2{margin:0;color:#633d21}.modal-sub{margin:4px 0;color:#80684e}.close{position:absolute;right:14px;top:14px;background:#ead9b7;box-shadow:none;padding:8px 12px}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:17px}.detail{background:#f4e8ce;border-radius:12px;padding:11px}.detail strong{display:block;color:#85501f;font-size:.8rem;margin-bottom:3px}.detail p{margin:0;line-height:1.4}.wide{grid-column:1/-1}
+.dropzone{border:2px dashed #bc8c4c;border-radius:18px;padding:22px 14px;text-align:center;background:#fff2d8;transition:.2s}.dropzone.drag{border-color:#647342;background:#f0edcf}.upload-icon{font-size:40px}.dropzone h3{margin:5px 0}.dropzone p{color:#80684e;margin:4px 0 14px}input[type=file]{display:none}
+.preview-wrap{display:none;margin-top:15px;gap:15px;align-items:center}.preview-wrap.show{display:flex}.preview{width:112px;height:112px;object-fit:cover;border-radius:14px;border:1px solid #d2b17a;background:#f3e2bd}.preview-meta{color:#80684e;font-size:.9rem}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}.secondary{background:#e9dfc8;box-shadow:none;color:#563b20;border:1px solid #d3bd91}
+.status{display:none;margin-top:15px;padding:13px 15px;border-radius:13px;line-height:1.5}.status.show{display:block}.status.info{background:#f1e5c8;border:1px solid #c5a46c}.status.error{background:#f8dfd0;border:1px solid #c57b4b}.status.success{background:#e4edcf;border:1px solid #829452}
+.result{display:none;margin-top:18px}.result.show{display:block}.result-head{display:flex;gap:12px;align-items:center;margin-bottom:12px}.result-head .animal{font-size:2.5rem}.result h2{margin:0;color:#647342;font-size:1.55rem}.result-card{border:1px solid #e1cda5;border-radius:14px;padding:14px;background:#fffdf7;margin-top:10px}.result-card h3{color:#93602b;margin:0 0 6px;font-size:1rem}.result-card p{margin:0;white-space:pre-wrap;line-height:1.55}.safety{border-color:#c59d55;background:#f8edcf}
+footer{text-align:center;color:#634d32;padding:24px 10px;font-size:.9rem}
+
+.tabbar{display:flex;gap:8px;flex-wrap:wrap;padding:10px;margin:4px 0 18px;background:#fff3d5df;border:1px solid #c99b5b;border-radius:17px;box-shadow:0 8px 22px #57351e18;position:sticky;top:8px;z-index:10;backdrop-filter:blur(10px)}
+.tab{flex:1 1 auto;background:transparent;color:#624321;box-shadow:none;border:1px solid transparent;padding:10px 12px;border-radius:11px;white-space:nowrap}
+.tab:hover{box-shadow:none;background:#f3e2bd;transform:translateY(-1px)}
+.tab.active{background:linear-gradient(120deg,#f7c75e,#e98a3b);border-color:#c27b34;box-shadow:0 3px 0 #a95e2c}
+.tab-page{animation:tabIn .28s ease both}
+@keyframes tabIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.tab-page[hidden]{display:none!important}
+.camera-frame{position:relative;min-height:220px;max-height:480px;aspect-ratio:16/9;background:#302719;border-radius:17px;overflow:hidden;display:grid;place-items:center;color:#fff3d5;text-align:center}
+.camera-frame video{width:100%;height:100%;object-fit:contain;display:none}
+.camera-frame video.live{display:block}
+#cameraPlaceholder{padding:20px;font-size:2.4rem;line-height:1.5}
+#cameraPlaceholder small{font-size:.85rem;color:#f5dba9}
+.camera-actions{align-items:center}
+.camera-note{font-size:.88rem;color:#80684e;line-height:1.5}
+.favorite-btn{width:100%;margin-top:8px;background:#f1e2c2;color:#67451f;box-shadow:none;border:1px solid #ddc28e;padding:8px;font-size:.85rem}
+.favorite-btn.saved{background:#e8edcf;color:#40552b;border-color:#9cac72}
+@media(max-width:600px){.tabbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));position:static}.tab{font-size:.83rem;padding:9px 5px}.tab span{display:block;font-size:.72rem}.camera-frame{aspect-ratio:4/3;min-height:190px}}
+
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr}.hero-art{min-height:190px;grid-row:1}.hero-copy{text-align:center}}
+@media(max-width:480px){main{padding:11px}.grid{grid-template-columns:1fr 1fr;gap:9px}.animal-art{height:105px;font-size:3.6rem}.card-body{padding:10px}.card-body h3{font-size:.95rem}.card-body p{font-size:.78rem}.card-meta .tag{font-size:.68rem}.card-body button{font-size:.78rem;padding:8px 5px}.detail-grid{grid-template-columns:1fr}.wide{grid-column:auto}.pill{font-size:.78rem}}
+</style>
+</head>
+<body>
+<main>
+<header>
+ <div class="brand"><div class="logo" aria-hidden="true">🦁</div><div><h1>Pokédex da Savana</h1><p class="tagline">Animais Selvagens • Exploradores da África</p></div></div>
+ <span class="pill">🌅 Explore e aprenda com respeito</span>
+</header>
+<nav class="tabbar" aria-label="Navegação principal">
+ <button class="tab active" data-tab="inicio">🏠 <span>Início</span></button>
+ <button class="tab" data-tab="pokedex">🦁 <span>Pokédex</span></button>
+ <button class="tab" data-tab="foto">📸 <span>Tirar Foto</span></button>
+ <button class="tab" data-tab="identificar">🔍 <span>Identificar Animal</span></button>
+ <button class="tab" data-tab="favoritos">⭐ <span>Favoritos</span></button>
+</nav>
+
+<section class="hero tab-page" data-page="inicio">
+ <div class="hero-copy">
+  <div class="eyebrow">Diário de um explorador</div>
+  <h2>Bem-vindo à savana africana! 🌾</h2>
+  <p>Conheça os gigantes, corredores e caçadores da savana. Descubra como vivem, o que comem e quais são suas incríveis habilidades — sempre observando a natureza com respeito.</p>
+  <a href="#catalogo" class="button-link">🧭 Explorar animais</a>
+ </div>
+ <div class="hero-art" aria-label="Paisagem ilustrada da savana ao pôr do sol">
+  <span class="sun">☀️</span><span class="tree">🌳</span>
+  <div class="scene-animals" aria-hidden="true"><span>🦁</span><span>🐘</span><span>🦏</span></div>
+ </div>
+</section>
+
+<section class="panel tab-page" id="catalogo" data-page="pokedex">
+ <h2>📖 Pokédex de animais selvagens</h2>
+ <p class="help">Pesquise um animal ou escolha uma categoria. Toque em um cartão para abrir a ficha completa do explorador.</p>
+ <div class="toolbar"><input class="search" id="searchInput" type="search" placeholder="🔎 Pesquisar animal..." aria-label="Pesquisar animal"></div>
+ <div class="filters" id="filters">
+  <button class="filter active" data-category="Todos">Todos</button>
+  <button class="filter" data-category="Mamíferos">Mamíferos</button>
+  <button class="filter" data-category="Herbívoros">Herbívoros</button>
+  <button class="filter" data-category="Carnívoros">Carnívoros</button>
+  <button class="filter" data-category="Aves">Aves</button>
+ </div>
+ <div class="grid" id="animalGrid"></div>
+ <div class="empty" id="emptyState">Nenhum animal encontrado. Tente outra pesquisa! 🐾</div>
+</section>
+
+<section class="panel tab-page" data-page="foto" id="cameraPanel">
+ <h2>📸 Tirar foto de um animal</h2>
+ <p class="help">Abra a câmera do dispositivo, permita o acesso quando solicitado e fotografe o animal. Você também pode escolher uma imagem dos seus arquivos.</p>
+ <div class="camera-frame">
+  <video id="cameraVideo" autoplay playsinline muted aria-label="Imagem da câmera"></video>
+  <div id="cameraPlaceholder">📷<br><strong>Sua câmera aparecerá aqui</strong><br><small>Use o botão abaixo para começar.</small></div>
+ </div>
+ <div class="actions camera-actions">
+  <button id="startCameraBtn" type="button">📷 Abrir câmera</button>
+  <button id="captureBtn" type="button" disabled>● TIRAR FOTO</button>
+  <button id="stopCameraBtn" class="secondary" type="button" disabled>Fechar câmera</button>
+  <label class="button-link" for="photoInput">🖼️ Escolher da galeria/arquivos</label>
+ </div>
+ <p class="camera-note" id="cameraMessage" role="status">A câmera pode exigir uma conexão segura (HTTPS) e autorização do navegador.</p>
+ <canvas id="cameraCanvas" hidden></canvas>
+</section>
+
+<section class="panel tab-page" id="identificar" data-page="identificar">
+ <h2>📸 Identifique um animal por foto</h2>
+ <p class="help">Envie uma foto nítida de um animal selvagem. A inteligência artificial tentará identificar o animal e contar algumas curiosidades.</p>
+ <div class="dropzone" id="dropzone">
+  <div class="upload-icon">📷</div><h3>Escolha ou arraste uma foto</h3>
+  <p>Uma foto de cada vez • JPG, PNG ou WEBP</p>
+  <div class="actions" style="justify-content:center">
+   <label class="button-link" for="photoInput">🖼️ Escolher foto</label>
+   <label class="button-link" for="cameraInput">📸 Tirar foto</label>
+  </div>
+  <input id="photoInput" type="file" accept="image/*">
+  <input id="cameraInput" type="file" accept="image/*" capture="environment">
+ </div>
+ <div class="preview-wrap" id="previewWrap">
+  <img class="preview" id="preview" alt="Prévia da foto escolhida">
+  <div><strong id="fileName">Sua foto</strong><p class="preview-meta" id="fileMeta"></p><button class="secondary" id="removeBtn" type="button">Remover foto</button></div>
+ </div>
+ <div class="actions"><button id="identifyBtn" type="button" disabled>✨ Identificar animal</button><button id="anotherPhotoBtn" class="secondary" type="button">📸 Tirar outra foto</button></div>
+ <div class="status" id="status" role="status" aria-live="polite"></div>
+ <section class="result" id="result" aria-live="polite">
+  <div class="result-head"><div class="animal">🐾</div><div><div class="eyebrow">Nova descoberta</div><h2 id="animalName">Animal identificado</h2></div></div>
+  <div class="result-card"><h3>🌟 Curiosidades</h3><p id="animalFacts"></p></div>
+  <div class="result-card"><h3>🌍 Habitat</h3><p id="animalHabitat"></p></div>
+  <div class="result-card safety"><h3>⚠️ Dica do explorador</h3><p id="animalWarning">Observe animais selvagens de longe. Nunca toque nem tente alimentar um animal desconhecido.</p></div>
+  <p style="color:#80684e;font-size:.9rem">A identificação por foto pode errar. Peça ajuda a um adulto para confirmar.</p>
+ </section>
+</section>
+
+<section class="panel tab-page" data-page="inicio">
+ <h2>🌿 Código do explorador</h2>
+ <p class="help" style="margin-bottom:0">Na natureza, cada animal tem seu espaço. Observe de longe, não ofereça comida, não se aproxime de filhotes e nunca tente separar animais em disputas. A savana fica mais bonita quando todos podem viver em segurança.</p>
+</section>
+<section class="panel tab-page" data-page="favoritos" id="favoritesPanel">
+ <h2>⭐ Meus animais favoritos</h2>
+ <p class="help">Guarde os animais que você mais gosta e consulte suas fichas quando quiser.</p>
+ <div class="grid" id="favoritesGrid"></div>
+ <div class="empty" id="favoritesEmpty">Você ainda não salvou favoritos. Abra a Pokédex e toque em ⭐ Salvar favorito!</div>
+ <h2 style="margin-top:26px">📸 Animais que eu fotografei</h2>
+ <p class="help">Cada animal identificado pela foto e salvo aparece aqui, com a sua foto. Toque para ver a ficha.</p>
+ <div id="albumFotos"></div>
+</section>
+<footer>Feito com 🧡 para jovens exploradores da vida selvagem.</footer>
+</main>
+
+<div class="modal" id="animalModal" role="dialog" aria-modal="true" aria-labelledby="modalName">
+ <div class="modal-box">
+  <button class="close" id="closeModal" aria-label="Fechar">✕</button>
+  <div class="modal-top"><div class="modal-emoji" id="modalEmoji">🦁</div><div><div class="eyebrow" id="modalCategory">Mamífero</div><h2 id="modalName">Leão</h2><p class="modal-sub" id="modalSubtitle">O rei da savana</p></div></div>
+  <div class="detail-grid" id="modalDetails"></div>
+ </div>
+</div>
+
+<script>
+(() => {
+const animals = [
+ {name:"Leão",emoji:"🦁",category:"Carnívoros",habitat:"Savanas, campos abertos e áreas de arbustos da África.",food:"Carnívoro: caça principalmente zebras, gnus e antílopes.",weight:"120 a 250 kg",height:"Até 1,2 m na altura dos ombros",speed:"Até 80 km/h em arrancadas curtas",facts:"Vive em grupos chamados alcateias ou bandos. O rugido pode ser ouvido a vários quilômetros.",danger:"Alto — é um grande predador. Nunca se aproxime.",subtitle:"O grande felino da savana"},
+ {name:"Elefante-africano",emoji:"🐘",category:"Herbívoros",habitat:"Savanas, florestas e regiões próximas a fontes de água na África.",food:"Herbívoro: come folhas, cascas, raízes e frutas.",weight:"2.000 a 6.000 kg",height:"Até 4 m na altura dos ombros",speed:"Até 40 km/h",facts:"É o maior animal terrestre. Usa a tromba para respirar, cheirar, beber água e pegar objetos.",danger:"Alto — pode ser perigoso se assustado ou protegendo filhotes.",subtitle:"O gigante gentil — mas poderoso"},
+ {name:"Rinoceronte",emoji:"🦏",category:"Herbívoros",habitat:"Campos, savanas e áreas de vegetação africanas.",food:"Herbívoro: come gramíneas, folhas e brotos.",weight:"800 a 2.300 kg, dependendo da espécie",height:"Até 1,8 m na altura dos ombros",speed:"Até 50 km/h",facts:"Seu chifre é feito de queratina, o mesmo material das unhas humanas. Tem olfato e audição muito bons.",danger:"Alto — pode investir quando se sente ameaçado.",subtitle:"O forte blindado da savana"},
+ {name:"Girafa",emoji:"🦒",category:"Herbívoros",habitat:"Savanas com árvores e áreas abertas da África.",food:"Herbívora: folhas e brotos, especialmente de acácias.",weight:"700 a 1.900 kg",height:"Até cerca de 5,5 m",speed:"Até 60 km/h",facts:"É o animal mais alto do mundo. Sua língua pode ter cerca de 45 cm e ajuda a alcançar folhas entre espinhos.",danger:"Baixo a médio — pode dar coices muito fortes.",subtitle:"A gigante de pescoço comprido"},
+ {name:"Zebra",emoji:"🦓",category:"Herbívoros",habitat:"Savanas e campos da África oriental e austral.",food:"Herbívora: principalmente capim e outras gramíneas.",weight:"175 a 450 kg",height:"1,2 a 1,5 m nos ombros",speed:"Até 65 km/h",facts:"Cada zebra tem um padrão de listras único. As listras ajudam a confundir predadores e podem auxiliar na regulação do calor.",danger:"Baixo a médio — pode morder e dar coices.",subtitle:"Listras que nunca se repetem"},
+ {name:"Hiena",emoji:"🐾",category:"Carnívoros",habitat:"Savanas, campos e regiões semiáridas da África.",food:"Carnívora e oportunista: caça e também aproveita carcaças.",weight:"40 a 86 kg (hiena-malhada)",height:"Até 80 cm nos ombros",speed:"Até 60 km/h",facts:"Tem mandíbulas muito fortes, vive em grupos sociais complexos e emite vocalizações que parecem risadas.",danger:"Médio a alto — é um animal selvagem forte.",subtitle:"A especialista em trabalho em equipe"},
+ {name:"Guepardo",emoji:"🐆",category:"Carnívoros",habitat:"Campos abertos e savanas africanas.",food:"Carnívoro: caça gazelas e outros animais de pequeno e médio porte.",weight:"21 a 72 kg",height:"Até 94 cm nos ombros",speed:"Pode passar de 100 km/h em curtas distâncias",facts:"É o animal terrestre mais rápido. Suas garras ajudam na tração durante as corridas.",danger:"Médio — evita humanos, mas continua sendo um predador selvagem.",subtitle:"O corredor mais veloz da terra"},
+ {name:"Leopardo",emoji:"🐆",category:"Carnívoros",habitat:"Savanas, florestas e áreas rochosas da África.",food:"Carnívoro: caça antílopes, macacos, aves e outros animais.",weight:"17 a 90 kg, dependendo da região e do sexo",height:"45 a 80 cm nos ombros",speed:"Até 58 km/h",facts:"É muito forte para seu tamanho e consegue carregar presas para o alto das árvores.",danger:"Alto — é discreto, ágil e pode reagir se acuado.",subtitle:"O caçador silencioso das árvores"},
+ {name:"Hipopótamo",emoji:"🦛",category:"Herbívoros",habitat:"Rios, lagos e áreas alagadas da África subsaariana.",food:"Principalmente gramíneas; costuma pastar à noite.",weight:"1.300 a 3.200 kg",height:"Até 1,6 m",speed:"Até 30 km/h em terra, em distâncias curtas",facts:"Passa grande parte do dia na água para manter o corpo fresco. Apesar da aparência tranquila, é muito territorial.",danger:"Muito alto — mantenha grande distância, especialmente perto da água.",subtitle:"O gigante dos rios africanos"},
+ {name:"Avestruz",emoji:"🐦",category:"Aves",habitat:"Savanas e regiões abertas e secas da África.",food:"Onívoro: sementes, folhas, flores, insetos e pequenos animais.",weight:"90 a 150 kg",height:"Até 2,7 m",speed:"Até 70 km/h",facts:"É a maior ave viva do mundo e não voa. Seus ovos são os maiores entre as aves atuais.",danger:"Médio — suas pernas fortes podem dar coices perigosos.",subtitle:"A ave gigante que corre"}
+];
+const grid=document.getElementById('animalGrid'), search=document.getElementById('searchInput'), empty=document.getElementById('emptyState');
+let category='Todos';
+const favorites=new Set(JSON.parse(localStorage.getItem('savana-favorites')||'[]'));
+function toggleFavorite(name){if(favorites.has(name))favorites.delete(name);else favorites.add(name);localStorage.setItem('savana-favorites',JSON.stringify([...favorites]));}
+function renderFavorites(){const fg=document.getElementById('favoritesGrid'),fe=document.getElementById('favoritesEmpty');if(!fg)return;fg.innerHTML='';const list=animals.filter(a=>favorites.has(a.name));fe.style.display=list.length?'none':'block';list.forEach(a=>{const card=document.createElement('article');card.className='animal-card';const art=document.createElement('div');art.className='animal-art';art.textContent=a.emoji;const body=document.createElement('div');body.className='card-body';const h=document.createElement('h3');h.textContent=a.name;const p=document.createElement('p');p.textContent=a.subtitle;const b=document.createElement('button');b.textContent='Ver ficha completa';b.addEventListener('click',()=>showAnimal(a));const f=document.createElement('button');f.className='favorite-btn saved';f.textContent='⭐ Remover dos favoritos';f.addEventListener('click',()=>{toggleFavorite(a.name);render();renderFavorites()});body.append(h,p,b,f);card.append(art,body);fg.append(card)})}
+function render(){
+ const q=search.value.trim().toLocaleLowerCase('pt-BR');
+ const list=animals.filter(a=>(category==='Todos'||a.category===category||(category==='Mamíferos'&&a.category!=='Aves'))&&(`${a.name} ${a.habitat} ${a.food}`).toLocaleLowerCase('pt-BR').includes(q));
+ grid.innerHTML='';
+ list.forEach(a=>{
+  const card=document.createElement('article');card.className='animal-card';card.tabIndex=0;card.setAttribute('role','button');card.setAttribute('aria-label',`Ver ficha de ${a.name}`);
+  const art=document.createElement('div');art.className='animal-art';art.textContent=a.emoji;
+  const body=document.createElement('div');body.className='card-body';
+  const title=document.createElement('h3');title.textContent=a.name;
+  const subtitle=document.createElement('p');subtitle.textContent=a.subtitle;
+  const meta=document.createElement('div');meta.className='card-meta';
+  [a.category,a.speed].forEach(t=>{const tag=document.createElement('span');tag.className='tag';tag.textContent=t;meta.append(tag)});
+  const btn=document.createElement('button');btn.type='button';btn.textContent='Ver ficha completa';
+  const fav=document.createElement('button');fav.type='button';fav.className='favorite-btn';fav.textContent=favorites.has(a.name)?'⭐ Remover dos favoritos':'☆ Salvar favorito';if(favorites.has(a.name))fav.classList.add('saved');
+  fav.addEventListener('click',e=>{e.stopPropagation();toggleFavorite(a.name);render();renderFavorites()});
+  const open=()=>showAnimal(a);card.addEventListener('click',open);card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
+  btn.addEventListener('click',e=>{e.stopPropagation();open()});
+  body.append(title,subtitle,meta,btn,fav);card.append(art,body);grid.append(card);
+ });
+ empty.style.display=list.length?'none':'block';
+}
+function showAnimal(a){
+ document.getElementById('modalEmoji').textContent=a.emoji;document.getElementById('modalCategory').textContent=a.category;document.getElementById('modalName').textContent=a.name;document.getElementById('modalSubtitle').textContent=a.subtitle;
+ const details=[['🌍 Habitat',a.habitat],['🍃 Alimentação',a.food],['⚖️ Peso',a.weight],['📏 Altura',a.height],['💨 Velocidade',a.speed],['✨ Curiosidades',a.facts],['⚠️ Perigo na natureza',a.danger]];
+ const box=document.getElementById('modalDetails');box.innerHTML='';
+ details.forEach(([label,value])=>{const item=document.createElement('div');item.className='detail'+(label.includes('Curiosidades')||label.includes('Perigo')?' wide':'');const strong=document.createElement('strong');strong.textContent=label;const p=document.createElement('p');p.textContent=value;item.append(strong,p);box.append(item)});
+ document.getElementById('animalModal').classList.add('show');document.getElementById('closeModal').focus();
+}
+document.getElementById('closeModal').addEventListener('click',()=>document.getElementById('animalModal').classList.remove('show'));
+document.getElementById('animalModal').addEventListener('click',e=>{if(e.target.id==='animalModal')e.currentTarget.classList.remove('show')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('animalModal').classList.remove('show')});
+search.addEventListener('input',render);
+document.querySelectorAll('.filter').forEach(btn=>btn.addEventListener('click',()=>{category=btn.dataset.category;document.querySelectorAll('.filter').forEach(b=>b.classList.toggle('active',b===btn));render()}));
+render();
+
+// Identificação por foto: mantém o endpoint e o formato de requisição do projeto original.
+const input=document.getElementById('photoInput'),cameraInput=document.getElementById('cameraInput'),dropzone=document.getElementById('dropzone'),previewWrap=document.getElementById('previewWrap'),preview=document.getElementById('preview'),fileName=document.getElementById('fileName'),fileMeta=document.getElementById('fileMeta'),identifyBtn=document.getElementById('identifyBtn'),removeBtn=document.getElementById('removeBtn'),statusBox=document.getElementById('status'),result=document.getElementById('result');
+let selectedFile=null,previewURL=null;
+function setStatus(message,type='info'){statusBox.textContent=message;statusBox.className='status show '+type}
+function clearStatus(){statusBox.textContent='';statusBox.className='status'}
+function resetResult(){result.classList.remove('show');['animalName','animalFacts','animalHabitat'].forEach(id=>document.getElementById(id).textContent='');document.getElementById('animalWarning').textContent='Observe animais selvagens de longe. Nunca toque nem tente alimentar um animal desconhecido.'}
+function useFile(file){
+ if(!file)return;if(!file.type.startsWith('image/')){setStatus('Esse arquivo não parece ser uma imagem. Escolha uma foto.','error');return}
+ if(file.size>12*1024*1024){setStatus('Essa foto é muito grande. Escolha uma imagem menor que 12 MB.','error');return}
+ selectedFile=file;if(previewURL)URL.revokeObjectURL(previewURL);previewURL=URL.createObjectURL(file);preview.src=previewURL;fileName.textContent=file.name;fileMeta.textContent=`${(file.size/1024/1024).toFixed(2)} MB`;previewWrap.classList.add('show');identifyBtn.disabled=false;resetResult();clearStatus()
+}
+input.addEventListener('change',()=>useFile(input.files&&input.files[0]));
+cameraInput.addEventListener('change',()=>useFile(cameraInput.files&&cameraInput.files[0]));
+removeBtn.addEventListener('click',()=>{selectedFile=null;input.value='';cameraInput.value='';previewWrap.classList.remove('show');identifyBtn.disabled=true;if(previewURL)URL.revokeObjectURL(previewURL);previewURL=null;preview.removeAttribute('src');clearStatus();resetResult()});
+for(const ev of ['dragenter','dragover'])dropzone.addEventListener(ev,e=>{e.preventDefault();dropzone.classList.add('drag')});
+for(const ev of ['dragleave','drop'])dropzone.addEventListener(ev,e=>{e.preventDefault();dropzone.classList.remove('drag')});
+dropzone.addEventListener('drop',e=>useFile(e.dataTransfer.files&&e.dataTransfer.files[0]));
+function fileToBase64(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onerror=()=>reject(new Error('Não consegui ler essa foto.'));reader.onload=()=>{const value=String(reader.result||'');const comma=value.indexOf(',');if(comma<0)reject(new Error('A foto não abriu direitinho.'));else resolve(value.slice(comma+1))};reader.readAsDataURL(file)})}
+function pickText(obj,keys,fallback='Ainda não temos essa informação.'){for(const key of keys){if(typeof obj[key]==='string'&&obj[key].trim())return obj[key].trim()}return fallback}
+identifyBtn.addEventListener('click',async()=>{
+ if(!selectedFile)return;identifyBtn.disabled=true;resetResult();setStatus('🔎 O explorador está observando a foto com atenção...','info');
+ try{
+  const data=await fileToBase64(selectedFile);
+  const prompt='Observe a foto e identifique um animal selvagem, se houver certeza. Responda em português do Brasil como JSON. Se não houver animal visível ou não for possível identificar com segurança, identificado deve ser false e confianca menor que 80. Nunca invente. Campos: identificado (boolean), confianca (inteiro de 0 a 100), nome (nome comum), curiosidades (duas ou três curiosidades simples), habitat (onde vive, se conhecido), aviso (aviso de segurança para observar sem tocar ou perturbar o animal).';
+  const payload={modelo:'gemini-3.6-flash',body:{contents:[{parts:[{text:prompt},{inline_data:{mime_type:'image/jpeg',data:data}}]}],generationConfig:{temperature:0.2,responseMimeType:'application/json',responseSchema:{type:'object',properties:{identificado:{type:'boolean'},confianca:{type:'integer'},nome:{type:'string'},curiosidades:{type:'string'},habitat:{type:'string'},aviso:{type:'string'}},required:['identificado','confianca']}}}};
+  const response=await fetch('/api/identificar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  if(!response.ok)throw new Error('O serviço está indisponível neste momento. Tente novamente em instantes.');
+  const responseJSON=await response.json(),raw=responseJSON?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if(typeof raw!=='string')throw new Error('Não consegui entender a resposta. Tente outra foto.');
+  let answer;try{answer=JSON.parse(raw)}catch{throw new Error('A resposta veio confusa. Tente tirar outra foto.')}
+  if(answer.identificado!==true||!Number.isFinite(answer.confianca)||answer.confianca<80){setStatus('Não consegui ter certeza de qual animal é. 🐾 Tente outra foto, com boa luz e mostrando o animal!','error');return}
+  document.getElementById('animalName').textContent=pickText(answer,['nome'],'Animal identificado');
+  document.getElementById('animalFacts').textContent=pickText(answer,['curiosidades'],'Ainda não temos curiosidades confirmadas.');
+  document.getElementById('animalHabitat').textContent=pickText(answer,['habitat']);
+  document.getElementById('animalWarning').textContent=pickText(answer,['aviso'],'Observe de longe e nunca tente tocar ou alimentar um animal selvagem.');
+  result.classList.add('show');setStatus(`🎉 Descoberta pronta! A identificação teve ${answer.confianca}% de confiança.`,'success');result.scrollIntoView({behavior:'smooth',block:'nearest'});
+ }catch(err){setStatus('Ops! A conexão falhou. 🌾 '+(err&&err.message?err.message:'Confira sua conexão e tente novamente.'),'error')}
+ finally{identifyBtn.disabled=!selectedFile}
+});
+})();
+</script>
+
+<!-- ABAS + CÂMERA DE VERDADE (pedido do prompt do grupo) -->
+<style>
+.camera-frame video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.camera-frame.ligada video{display:block}.camera-frame.ligada #cameraPlaceholder{display:none}
+#cameraShot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;z-index:2}
+.camera-frame.tirada #cameraShot{display:block}
+.camera-actions button{width:auto;margin-top:0}
+.camera-actions [hidden]{display:none!important}
+main{max-width:1180px;margin-inline:auto}
+</style>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const abas = [...document.querySelectorAll(".tab")], paginas = [...document.querySelectorAll(".tab-page")];
+  let stream = null;
+  function pararCamera() {
+    if (stream) stream.getTracks().forEach(t => t.stop());
+    stream = null; $("cameraVideo").srcObject = null;
+    document.querySelector(".camera-frame").classList.remove("ligada");
+    $("captureBtn").disabled = true; $("stopCameraBtn").disabled = true;
+  }
+  function irPara(aba) {
+    abas.forEach(b => { const on = b.dataset.tab === aba; b.classList.toggle("active", on); b.setAttribute("aria-current", on ? "page" : "false"); });
+    paginas.forEach(p => p.hidden = p.dataset.page !== aba);
+    if (aba !== "foto") pararCamera();
+    if (aba === "favoritos" && window.PokedexAdaptador) PokedexAdaptador.desenharAlbum();
+    if (aba === "favoritos") { const vazio = !document.querySelector("#favoritesGrid > *"); $("favoritesEmpty").style.display = vazio ? "block" : "none"; }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  window.irPara = irPara;
+  abas.forEach(b => b.addEventListener("click", () => irPara(b.dataset.tab)));
+  document.querySelectorAll(".hero .button-link, .hero button, .hero a").forEach(b => b.addEventListener("click", e => { e.preventDefault(); irPara("pokedex"); }));
+  irPara("inicio");
+
+  // câmera ao vivo
+  const frame = document.querySelector(".camera-frame"), msg = $("cameraMessage");
+  const shot = document.createElement("img"); shot.id = "cameraShot"; shot.alt = "Foto tirada"; frame.appendChild(shot);
+  const acoes = document.querySelector(".camera-actions");
+  const outra = document.createElement("button"); outra.type = "button"; outra.className = "secondary"; outra.textContent = "🔁 Tirar outra foto"; outra.hidden = true;
+  const usar = document.createElement("button"); usar.type = "button"; usar.textContent = "✅ Usar esta foto"; usar.hidden = true;
+  acoes.prepend(usar, outra);
+  let fotoBlob = null;
+  function modo(tirada) {
+    frame.classList.toggle("tirada", tirada);
+    outra.hidden = usar.hidden = !tirada;
+    $("startCameraBtn").hidden = $("captureBtn").hidden = $("stopCameraBtn").hidden = tirada;
+  }
+  async function abrir() {
+    modo(false);
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { msg.textContent = "⚠️ Este navegador não abre a câmera. Use “Escolher da galeria/arquivos”."; return; }
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
+      $("cameraVideo").srcObject = stream; frame.classList.add("ligada");
+      $("captureBtn").disabled = false; $("stopCameraBtn").disabled = false;
+      msg.textContent = "📷 Câmera ligada! Enquadre o animal e toque em TIRAR FOTO.";
+    } catch (e) {
+      msg.textContent = e && e.name === "NotAllowedError" ? "🚫 A permissão da câmera foi negada. Libere a câmera no navegador ou escolha uma foto da galeria." : "⚠️ Não consegui abrir a câmera. Confira se ela está conectada ou escolha uma foto da galeria.";
+    }
+  }
+  function tirar() {
+    const v = $("cameraVideo"), c = $("cameraCanvas");
+    if (!v.videoWidth) { msg.textContent = "⏳ A câmera ainda está ligando… tente de novo."; return; }
+    c.width = v.videoWidth; c.height = v.videoHeight; c.getContext("2d").drawImage(v, 0, 0);
+    shot.src = c.toDataURL("image/jpeg", .9);
+    c.toBlob(b => { fotoBlob = b; }, "image/jpeg", .9);
+    pararCamera(); modo(true);
+    msg.textContent = "✨ Foto tirada! Quer usar esta ou tirar outra?";
+  }
+  function usarFoto() {
+    if (!fotoBlob) return;
+    const f = new File([fotoBlob], "foto-savana.jpg", { type: "image/jpeg" });
+    const dt = new DataTransfer(); dt.items.add(f);
+    const inp = $("photoInput"); inp.files = dt.files; inp.dispatchEvent(new Event("change", { bubbles: true }));
+    modo(false); irPara("identificar");
+    msg.textContent = "A câmera pode exigir uma conexão segura (HTTPS) e autorização do navegador.";
+  }
+  $("startCameraBtn").addEventListener("click", abrir);
+  $("captureBtn").addEventListener("click", tirar);
+  $("stopCameraBtn").addEventListener("click", () => { pararCamera(); msg.textContent = "Câmera desligada."; });
+  outra.addEventListener("click", abrir);
+  usar.addEventListener("click", usarFoto);
+  // escolher da galeria na aba da câmera também leva para a identificação
+  $("photoInput").addEventListener("change", () => { if (!document.querySelector('[data-page="identificar"]').hidden) return; irPara("identificar"); });
+  $("anotherPhotoBtn").addEventListener("click", () => irPara("foto"));
+  window.addEventListener("pagehide", pararCamera);
+})();
+</script>
+
+<!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
+     (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
+<script src="/comum/ficha.js"></script>
+<script src="/comum/adaptador.js"></script>
+<script>
+PokedexAdaptador.iniciar({
+  icone: "🦁", fauna: true,
+  cor: "#e98a3b", cor2: "#f7c75e",
+  escuro: () => false,
+  claro: { fundo: "#fff7e6", texto: "#4a2c17", suave: "#7a5a3c" },
+  carregando: "🔎 O zoólogo está observando a foto com atenção...",
+  esconder: ["#result", "#status"],
+  etapas: { foto: ["#identifyBtn"] },
+  som: true, textoSom: "🔊 Ouvir o som",
+  album: { el: "#albumFotos", depois: () => irPara("favoritos") },
+  novaFoto: () => irPara("foto")
+});
+</script>
+</body>
+</html>

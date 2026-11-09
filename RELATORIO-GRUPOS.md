@@ -6,9 +6,9 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 
 | | |
 |---|---|
-| 🧩 Grupos prontos | **29** (todos com as 6 missões funcionando) |
+| 🧩 Grupos prontos | **34** (todos com as 6 missões funcionando) |
 | ✏️ Grupos com mensagens criadas pela professora | **19** (missões que estavam em branco ganharam mensagens divertidas no tema do grupo) |
-| ❌ Sem projeto entregue | Meduneckas T2 Manhã · grupos do Adherbal (manhã) que ainda não foram recebidos |
+| ❌ Sem projeto entregue | Meduneckas T2 Manhã |
 
 **Em todos os grupos:**
 
@@ -18,7 +18,7 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 - **Salvar no álbum** leva para o álbum do grupo;
 - **câmera de verdade** no tablet, **webcam** no computador e **galeria** que abre a galeria (o botão "📁 Escolher arquivo" da webcam foi consertado);
 - revisado no **tablet deitado (1280×800) e em pé (800×1280)**: menus, botões do tamanho do dedo, letras legíveis e nada cortado;
-- testado: acerto, fora do tema, dúvida e arquivo que não é foto — **116 de 116 verificações passando, sem erros**;
+- testado: acerto, fora do tema, dúvida e arquivo que não é foto — **170 de 170 verificações passando, sem erros** (34 grupos);
 - **varredura de 03/11 em todas as escolas:** o álbum de todos os grupos reabre a ficha completa (botão "📖 Ver ficha" ou tocando na figurinha) e guarda a foto enviada; mapas iguais ao da ficha; telas que exigiam descer muito foram reorganizadas (Codex em abas, catálogos mais compactos); botões sem função removidos ou consertados;
 - **varredura de 27/10 em todas as escolas:** todos os álbuns guardam espécies novas (não só as do catálogo) e cabem no navegador (dois grupos guardavam a foto original inteira e o "salvar" falhava); o botão de identificar só aparece depois de escolher a foto; mensagens das missões com acento, "%" e sentido; emojis que o Windows desenhava quebrados foram trocados; menus inteiros no tablet em pé;
 - na dúvida, a porcentagem mostrada fica sempre abaixo da certeza mínima do grupo (antes podia aparecer "Estou em dúvida 95");
@@ -77,6 +77,9 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 | Turma 2 | [Guardiões da Floresta](grupos/adherbal-t2-bryan/) | Frutas brasileiras | Henrique, Bryan e Laís | Painel centralizado (ficava grudado embaixo); botões maiores; galeria no tablet. |
 | Turma 2 | [FrutAI](grupos/adherbal-t2-caroline/) | Frutas brasileiras | Caroline, Manuela, Pedro e Erick | Ganhou o álbum "🍓 Minhas frutas" (não tinha onde salvar); foto menor para caber no tablet deitado. |
 | Turma 2 | [Asas da Arara Azul](grupos/adherbal-t2-emilly/) | Aves | Leonardo, Emilly e Ana | Com tablet em pé, o menu lateral vira barra no topo e o conteúdo usa a tela toda. |
+| Turma 1 - M | [The Winners — Pokédex da Savana](grupos/adherbal-t1m-nickolas/) | Animais da savana | Nickolas e Enzo | Grupo novo (09/11): as abas, a câmera ao vivo (tirar, tirar outra, usar esta foto) e os favoritos foram ligados, como o prompt do grupo pedia; álbum "Animais que eu fotografei". |
+| Turma 2 - M | [Poké Aves Brasileiras](grupos/adherbal-t2m-arthur/) | Aves do Brasil | Ricardo, Arthur, Yuri, Alice e Anthony | Grupo novo (09/11): aceita qualquer ave do Brasil (antes só 4); botão de galeria; "📖 Ver ficha" no álbum; a comemoração aparece depois da ficha. |
+| Turma 2 - M | [Floresta Unida — Pokédex da Mata](grupos/adherbal-t2m-murilo/) | Animais do Brasil | Murilo, Leonardo, Lucas e Enzo | Grupo novo (09/11): quiz virou o jogo **Desafio da Floresta** (pedido do grupo): 3 níveis, 20 s por pergunta, 4 botões coloridos, bônus de rapidez, macaco que comemora/se assusta, ranking com 🥇🥈🥉; fotos reais nos cards; álbum de fotos. |
 
 <details><summary><b>Bleach</b> (Turma 1) — ajustes nas missões e no front</summary>
 
@@ -122,6 +125,30 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 - Missão 5: só foi colocado o "%" depois do número.
 - Missão 6: o grupo escreveu só "Para" no final (provavelmente "Parabéns") — conferir com o grupo.
 - Escritas pela professora (estavam em branco ou incompletas no documento): Missão 3 (número e por quê), Missão 6 (confirmar o final da frase).
+
+</details>
+
+<details><summary><b>The Winners</b> (Turma 1 - M) — ajustes nas missões e no front</summary>
+
+- Missão 4: a mensagem de foto grande falava de "erro ao analisar"; virou aviso de foto grande (com as palavras do grupo).
+- Missão 5: o "80" estava grudado no r.confianca (quebrava o código); saiu, e a frase ganhou o "%".
+- Front: abas, câmera ao vivo e favoritos das fotos ligados, como pedia o prompt "Faça todas as abas e botões funcionarem de verdade".
+
+</details>
+
+<details><summary><b>Poké Aves Brasileiras</b> (Turma 2 - M) — ajustes nas missões e no front</summary>
+
+- Missão 1: ganhou o "em" ("especialista em aves do Brasil").
+- Missão 5: o "65%" e o "(65)" estavam escritos na frase (quebrava o código); o número agora vem da IA e a frase ganhou "Tente outra foto!".
+- Front: o pedido à IA aceitava só arara, tucano, coruja ou águia; agora aceita qualquer ave do Brasil (como na Missão 2).
+
+</details>
+
+<details><summary><b>Floresta Unida</b> (Turma 2 - M) — ajustes nas missões e no front</summary>
+
+- Missão 3: o nome estava escrito "CERTEZA _ MÍNIMA" (quebrava o código); o número 67 é o do grupo.
+- Missão 4: as duas mensagens estavam incompletas/trocadas; foram completadas com as palavras do grupo.
+- Front: as fotos dos cards vinham de um site de fotos aleatórias (às vezes nem era o bicho); agora são da espécie certa. O quiz virou o Desafio da Floresta do Prompt.docx do grupo.
 
 </details>
 
@@ -291,7 +318,6 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 | Escola / turma | Situação |
 |---|---|
 | Meduneckas — Turma 2 - Manhã | Só havia um `api/identificar.js` antigo, sem front e sem documento de missões. |
-| Adherbal — manhã | Grupos ainda não recebidos. |
 
 Quando chegarem, é só seguir o [guia](GUIA-PROFESSORES.md#4-colocar-um-grupo).
 

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#102d2a">
+<title>Poké Aves Brasileiras</title>
+<style>
+:root{
+  --forest:#102d2a;--forest2:#173c35;--leaf:#245747;--moss:#315f4b;
+  --blue:#70d8ed;--purple:#b69aff;--ink:#f4f7ef;--muted:#c1d3c9;
+  --gold:#f6d47a;--panel:rgba(18,43,39,.91);--line:rgba(222,245,231,.14);
+  --shadow:0 18px 55px rgba(0,0,0,.28)
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:Inter,ui-rounded,"Trebuchet MS",Arial,sans-serif;
+ background:
+ radial-gradient(ellipse at 8% 0%,rgba(112,216,237,.16),transparent 30%),
+ radial-gradient(ellipse at 90% 18%,rgba(182,154,255,.15),transparent 30%),
+ linear-gradient(135deg,#0b211f,#102d2a 48%,#17283a);background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;background-image:
+ radial-gradient(ellipse at 10% 22%,#80c69a 0 2px,transparent 3px),
+ radial-gradient(ellipse at 88% 60%,#80c69a 0 2px,transparent 3px);
+ background-size:120px 145px}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{max-width:1180px;margin:auto;padding:22px 20px 42px;position:relative}
+header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:20px}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.logo{width:58px;height:58px;border-radius:19px;display:grid;place-items:center;font-size:31px;
+ background:linear-gradient(145deg,#57c5d6,#7d75c9);box-shadow:0 8px 25px #0005}
+h1{font-size:clamp(21px,4vw,31px);margin:0;letter-spacing:.1px}
+.subtitle{font-size:12px;color:var(--muted);margin-top:5px}
+.points-pill{border:1px solid #e4c97866;background:#3b392b;border-radius:16px;padding:9px 15px;text-align:center;white-space:nowrap}
+.points-pill strong{display:block;font-size:21px;color:var(--gold)}
+.points-pill span{font-size:10px;color:#e9ddbb}
+.hero{display:flex;align-items:center;gap:15px;padding:17px 19px;margin-bottom:18px;border:1px solid var(--line);
+ border-radius:21px;background:linear-gradient(105deg,rgba(32,83,62,.9),rgba(40,47,82,.85));box-shadow:var(--shadow)}
+.hero .mascot{font-size:43px;filter:drop-shadow(0 5px 9px #0005)}
+.hero strong{font-size:16px}.hero p{font-size:13px;color:var(--muted);margin:5px 0 0;line-height:1.5}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:3px 1px 12px;margin-bottom:7px;scrollbar-width:thin}
+.tab{flex:0 0 auto;border:1px solid var(--line);background:#183b35;color:#dcebe2;border-radius:13px;padding:11px 15px;font-weight:750;font-size:13px;transition:.2s}
+.tab:hover{background:#265647;transform:translateY(-1px)}
+.tab.active{background:linear-gradient(100deg,#6acbd9,#9e8ae6);color:#102b2b;border-color:transparent;box-shadow:0 7px 20px #0003}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:21px;box-shadow:var(--shadow);backdrop-filter:blur(10px)}
+.tab-panel{display:none;animation:fadeUp .28s ease}
+.tab-panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+h2{font-size:20px;margin:0 0 7px}h3{margin:0}
+.hint{font-size:13px;color:var(--muted);line-height:1.55;margin:0 0 17px}
+.explore-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.upload{min-height:235px;border:1.5px dashed #78cfd080;border-radius:18px;display:flex;align-items:center;justify-content:center;
+ flex-direction:column;text-align:center;padding:16px;background:linear-gradient(145deg,#244b4166,#30375c55);overflow:hidden}
+.upload img{max-width:100%;max-height:290px;border-radius:13px;object-fit:contain}
+.upload .camera{font-size:52px;margin-bottom:9px}.upload strong{font-size:15px}.upload small{color:var(--muted);margin-top:7px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:13px}
+.btn{border:0;border-radius:13px;padding:12px 16px;font-weight:800;transition:transform .16s,filter .16s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.primary{background:linear-gradient(100deg,#6bd2e3,#a993ed);color:#112c2b;flex:1}
+.secondary{background:#294c42;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.48;cursor:not-allowed;transform:none}
+.status{margin-top:13px;min-height:43px;padding:11px 13px;border-radius:12px;background:#102b29;color:var(--muted);font-size:13px;line-height:1.45}
+.status.error{color:#ffd5df;border:1px solid #b66a7c}.status.good{color:#c6f5d8;border:1px solid #5eaa80}
+.mascot-note{display:flex;align-items:center;gap:12px;background:linear-gradient(110deg,#284d40,#34345b);padding:13px;border-radius:15px;margin-top:15px}
+.mascot-note .bird{font-size:37px}.mascot-note p{font-size:12px;color:var(--muted);margin:4px 0 0;line-height:1.4}
+.result-empty{min-height:280px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;color:var(--muted)}
+.result-empty .big{font-size:48px;margin-bottom:12px}.result-empty strong{color:var(--ink);font-size:15px;margin-bottom:6px}
+.result{display:none}
+.result-top{display:flex;align-items:center;gap:13px;margin-bottom:14px}
+.result-emoji{width:62px;height:62px;border-radius:17px;display:grid;place-items:center;font-size:34px;background:linear-gradient(140deg,#315d51,#514678)}
+.result-top h3{font-size:21px;margin-bottom:5px}.tag{display:inline-block;background:#254d4a;color:#b9f0e5;border-radius:20px;padding:5px 9px;font-size:10px}
+.info{background:#102b29;border:1px solid var(--line);border-radius:14px;padding:13px;margin-top:10px}
+.info b{display:block;font-size:11px;color:var(--blue);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px}
+.info p{font-size:13px;line-height:1.55;margin:0;color:#e7f0e9;white-space:pre-wrap}
+.map-visual{margin-top:10px;min-height:118px;border-radius:13px;padding:13px;display:flex;align-items:center;gap:13px;
+ background:linear-gradient(120deg,#214b3e,#213b53);overflow:hidden}
+.brazil-map{width:76px;height:90px;flex:0 0 76px;filter:drop-shadow(0 5px 7px #0005)}
+.map-visual span{font-size:12px;color:#e1eee6;line-height:1.5}
+.save-note{font-size:12px;color:#bdf0d2;margin-top:12px}
+.section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+.count{font-size:12px;color:var(--blue);white-space:nowrap}
+.album-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px}
+.album-card{border:1px solid var(--line);background:#18352f;border-radius:16px;overflow:hidden;transition:transform .2s}
+.album-card:hover{transform:translateY(-3px)}
+.album-card img{width:100%;height:112px;object-fit:cover;display:block;background:#2a5148}
+.album-placeholder{height:112px;display:grid;place-items:center;font-size:39px;background:linear-gradient(140deg,#2b5145,#39385c)}
+.album-card .card-copy{padding:10px 11px}
+.album-card strong{display:block;font-size:13px;overflow-wrap:anywhere}
+.album-card small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
+.empty-album{padding:35px 15px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:16px;grid-column:1/-1}
+.habitat-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+.habitat-map{border-radius:18px;background:linear-gradient(145deg,#214c40,#20374a);padding:18px;min-height:280px;display:flex;align-items:center;justify-content:center;gap:14px}
+.habitat-map svg{width:min(48%,210px);height:auto;filter:drop-shadow(0 8px 12px #0005)}
+.habitat-map .map-copy{max-width:230px}.map-copy strong{display:block;margin-bottom:7px}.map-copy p{font-size:12px;line-height:1.5;color:var(--muted);margin:0}
+.habitat-list{display:grid;gap:10px}
+.habitat-item{background:#18352f;border:1px solid var(--line);padding:13px;border-radius:14px}
+.habitat-item b{font-size:13px;color:#a9e5d4}.habitat-item p{font-size:12px;line-height:1.5;color:var(--muted);margin:5px 0 0}
+.progress-wrap{margin:16px 0 18px}.progress-line{height:10px;background:#0d2523;border-radius:20px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#70d8ed,#b69aff);border-radius:20px;transition:width .4s}
+.medal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.medal-card{border:1px solid var(--line);border-radius:17px;background:#18352f;padding:16px;opacity:.55;filter:saturate(.5)}
+.medal-card.earned{opacity:1;filter:none;background:linear-gradient(145deg,#38533e,#40365d);border-color:#d7bf7766}
+.medal-icon{font-size:34px;margin-bottom:8px}.medal-card strong{display:block;font-size:14px}.medal-card p{font-size:11px;color:var(--muted);line-height:1.4;margin:5px 0 0}
+.achievement-strip{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
+.achievement{background:#233f39;border:1px solid var(--line);padding:10px 12px;border-radius:12px;font-size:12px;color:#dcebe2}
+.nature{margin-top:18px;padding:13px 15px;border-radius:14px;background:#1d4035;color:#c6efd8;text-align:center;font-size:12px;line-height:1.5}
+footer{text-align:center;color:#9db7a9;font-size:11px;margin-top:17px}
+.overlay{position:fixed;inset:0;background:rgba(5,15,17,.82);display:none;align-items:center;justify-content:center;padding:18px;z-index:20;backdrop-filter:blur(7px)}
+.overlay.show{display:flex;animation:fadeUp .25s ease}
+.celebration{position:relative;overflow:hidden;width:min(480px,100%);text-align:center;padding:28px 23px 23px;border-radius:25px;
+ background:linear-gradient(145deg,#1c5145,#33335e);border:1px solid #b8d6ce55;box-shadow:0 25px 80px #0009}
+.celebration .party-icon{font-size:45px}.celebration h2{font-size:23px;margin:9px 0}.celebration p{color:#e0e9e5;font-size:13px;line-height:1.5}
+.celebration img{width:150px;height:110px;object-fit:cover;border-radius:14px;border:2px solid #ffffff44;margin:8px auto}
+.celebration .new-points{font-size:22px;color:var(--gold);font-weight:900;margin:9px}
+.confetti{position:absolute;top:-15px;width:8px;height:13px;opacity:.9;animation:fall 2.5s linear forwards}
+@keyframes fall{to{transform:translateY(560px) rotate(720deg);opacity:.05}}
+@media(max-width:780px){.explore-grid,.habitat-grid{grid-template-columns:1fr}.app{padding:15px 12px 30px}.panel{padding:16px}.habitat-map{min-height:220px}}
+@media(max-width:420px){header{align-items:flex-start}.logo{width:48px;height:48px}.points-pill{padding:7px 10px}.hero{padding:14px}.tab{padding:10px 12px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+ <div class="brand"><div class="logo">🦜</div><div><h1>Poké Aves Brasileiras</h1><div class="subtitle">Uma expedição pela floresta, uma descoberta de cada vez.</div></div></div>
+ <div class="points-pill"><strong id="points">0</strong><span>⭐ PONTOS</span></div>
+</header>
+<section class="hero"><div class="mascot">🔬🦜</div><div><strong>Bem-vindo, cientista da natureza!</strong><p>Explore as aves do Brasil, registre suas descobertas e cuide dos lugares onde elas vivem.</p></div></section>
+
+<nav class="tabs" aria-label="Áreas do aplicativo">
+ <button class="tab active" data-tab="explorar" type="button">🔎 Explorar aves</button>
+ <button class="tab" data-tab="habitat" type="button">🌳 Habitat das aves</button>
+ <button class="tab" data-tab="medalhas" type="button">🏅 Medalhas</button>
+ <button class="tab" data-tab="album" type="button">📚 Álbum de descobertas</button>
+</nav>
+
+<section class="tab-panel active" id="tab-explorar">
+ <div class="explore-grid">
+  <section class="panel">
+   <h2>📷 Nova expedição</h2><p class="hint">Tire ou escolha uma foto nítida de uma ave do Brasil. A identificação só aparece quando houver confiança suficiente.</p>
+   <div class="upload" id="previewBox"><div class="camera">📷</div><strong>Sua foto aparece aqui</strong><small>Escolha uma imagem para começar a aventura.</small></div>
+   <input id="photoInput" type="file" accept="image/*" capture="environment" hidden>
+   <div class="actions"><button class="btn secondary" id="chooseBtn" type="button">📷 Tirar foto</button><button class="btn primary" id="identifyBtn" type="button" disabled>🔎 Descobrir ave</button></div>
+   <div id="status" class="status" role="status" aria-live="polite">Dica: fotografe com boa luz e observe a ave sem se aproximar demais.</div>
+   <div class="mascot-note"><div class="bird">🦜</div><div><strong>Luma, sua arara cientista</strong><p>Vamos investigar com cuidado e aprender a proteger cada espécie!</p></div></div>
+  </section>
+  <section class="panel">
+   <h2>🧭 Ficha da descoberta</h2><p class="hint">Os detalhes aparecem aqui quando a identificação for confiável.</p>
+   <div class="result-empty" id="emptyResult"><div class="big">🐦</div><strong>Aguardando sua próxima descoberta</strong><span>Uma nova ave pode render pontos e medalhas!</span></div>
+   <div class="result" id="result">
+    <div class="result-top"><div class="result-emoji" id="birdEmoji">🦜</div><div><h3 id="birdName"></h3><span class="tag">IDENTIFICAÇÃO CONFIRMADA</span></div></div>
+    <div class="info"><b>💡 Curiosidade</b><p id="birdFact"></p></div>
+    <div class="info"><b>🌿 Habitat</b><p id="birdHabitat"></p><div class="map-visual"><svg class="brazil-map" viewBox="0 0 100 120" aria-label="Mapa ilustrativo do Brasil"><path d="M45 5 61 12 73 10 78 24 91 31 84 43 88 55 76 66 72 82 60 91 54 110 43 104 37 88 25 80 28 65 17 54 23 39 17 28 31 20 34 9Z" fill="#79b98b" stroke="#c7ecd0" stroke-width="2"/><path d="M34 26 62 30 76 49 65 69 39 77 24 54Z" fill="#a7d4a2" opacity=".45"/></svg><span id="birdRegions">Brasil — região a confirmar conforme a espécie.</span></div></div>
+    <div class="save-note" id="saveNote"></div>
+   </div>
+  </section>
+ </div>
+</section>
+
+<section class="tab-panel" id="tab-habitat">
+ <div class="panel">
+  <div class="section-head"><div><h2>🌳 Habitat das aves</h2><p class="hint">Conheça alguns ambientes brasileiros onde as aves vivem. A ficha da última descoberta também aparece aqui.</p></div></div>
+  <div class="habitat-grid">
+   <div class="habitat-map">
+    <svg viewBox="0 0 180 220" role="img" aria-label="Mapa ilustrativo do Brasil"><path d="M80 5 111 17 132 14 140 39 164 54 151 78 160 100 137 121 130 151 108 169 96 208 76 197 65 169 43 154 48 127 28 108 39 78 27 56 53 40 57 16Z" fill="#7fbd91" stroke="#d6f0d9" stroke-width="3"/><path d="M57 47 112 43 139 82 123 126 76 139 46 103Z" fill="#b0d9a1" opacity=".4"/><circle cx="100" cy="95" r="6" fill="#f6d47a" stroke="#fff" stroke-width="2"/></svg>
+    <div class="map-copy"><strong>🇧🇷 Brasil: muitos lares naturais</strong><p>O país tem florestas, campos, áreas alagadas e outros ambientes. Cada espécie precisa de um lugar adequado para viver.</p></div>
+   </div>
+   <div class="habitat-list">
+    <div class="habitat-item"><b>🌧️ Amazônia</b><p>Grande floresta tropical, com árvores altas, rios e enorme variedade de aves.</p></div>
+    <div class="habitat-item"><b>🌿 Mata Atlântica</b><p>Florestas úmidas que acompanham parte do litoral e abrigam muitas espécies.</p></div>
+    <div class="habitat-item"><b>🌾 Cerrado</b><p>Campos, arbustos e árvores retorcidas, com estações secas e chuvosas.</p></div>
+    <div class="habitat-item"><b>💧 Pantanal</b><p>Planície com períodos de cheia e seca, lagoas e grande diversidade de aves.</p></div>
+   </div>
+  </div>
+  <div class="info" style="margin-top:16px"><b>📍 Habitat da última ave identificada</b><p id="habitatLatest">Faça uma descoberta na aba “Explorar aves” para ver aqui as informações sobre o habitat.</p></div>
+ </div>
+</section>
+
+<section class="tab-panel" id="tab-medalhas">
+ <div class="panel">
+  <h2>🏅 Medalhas e conquistas</h2><p class="hint">Cada nova espécie diferente vale 10 pontos. Continue explorando para desbloquear novas medalhas!</p>
+  <div class="section-head"><div><strong id="progressText">0 de 10 descobertas para a próxima grande conquista</strong><div class="progress-line"><div class="progress-fill" id="progressFill"></div></div></div><span class="count" id="totalSpecies">0 espécies</span></div>
+  <div class="medal-grid" id="medalGrid">
+   <div class="medal-card" data-level="1"><div class="medal-icon">🥉</div><strong>Primeiro voo</strong><p>Descubra sua primeira ave.</p></div>
+   <div class="medal-card" data-level="3"><div class="medal-icon">🥈</div><strong>Observador atento</strong><p>Descubra 3 aves diferentes.</p></div>
+   <div class="medal-card" data-level="5"><div class="medal-icon">🥇</div><strong>Amigo das aves</strong><p>Descubra 5 aves diferentes.</p></div>
+   <div class="medal-card" data-level="10"><div class="medal-icon">🏆</div><strong>Cientista da mata</strong><p>Descubra 10 aves diferentes.</p></div>
+  </div>
+  <div class="achievement-strip"><div class="achievement">⭐ 10 pontos por nova espécie</div><div class="achievement">📚 Álbum atualizado automaticamente</div><div class="achievement">🌱 Respeito à natureza é parte da missão</div></div>
+ </div>
+</section>
+
+<section class="tab-panel" id="tab-album">
+ <div class="panel">
+  <div class="section-head"><div><h2>📚 Álbum de descobertas</h2><p class="hint">Suas aves diferentes ficam reunidas aqui, com a foto e o nome registrados na descoberta.</p></div><span class="count" id="albumCount">0 aves</span></div>
+  <div class="album-grid" id="albumGrid"><div class="empty-album">Seu álbum está esperando a primeira descoberta! 🌟</div></div>
+ </div>
+</section>
+
+<div class="nature">🌿 Lembrete de cientista: observe de longe e respeite a natureza. Não tente pegar as aves nem mexer nos ninhos. 💚</div>
+<footer>Poké Aves Brasileiras • Explorar, aprender e proteger 🇧🇷</footer>
+</div>
+
+<div class="overlay" id="celebration" role="dialog" aria-modal="true" aria-labelledby="celebrateTitle">
+ <div class="celebration" id="celebrationCard">
+  <div class="party-icon">🎉✨🐦</div><h2 id="celebrateTitle">Parabéns! Você descobriu uma nova ave brasileira!</h2>
+  <img id="celebratePhoto" alt="Foto da ave descoberta" hidden>
+  <div id="celebrateEmoji" style="font-size:44px">🦜</div><strong id="celebrateName"></strong>
+  <p id="celebrateInfo">Sua descoberta foi adicionada ao álbum.</p><div class="new-points" id="celebratePoints">+10 pontos ⭐</div>
+  <button class="btn primary" id="closeCelebration" type="button">Continuar explorando</button>
+ </div>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const photoInput = $('photoInput'), chooseBtn = $('chooseBtn'), identifyBtn = $('identifyBtn');
+  const previewBox = $('previewBox'), statusBox = $('status');
+  let selectedFile = null, previewUrl = null, discoveries = loadDiscoveries(), lastResult = null;
+
+  function loadDiscoveries(){
+    try { const data = JSON.parse(localStorage.getItem('pokeAvesAlbumV2') || '[]'); return Array.isArray(data) ? data : []; }
+    catch(_){ return []; }
+  }
+  function saveDiscoveries(){
+    try { localStorage.setItem('pokeAvesAlbumV2', JSON.stringify(discoveries)); }
+    catch(_){ setStatus('Não foi possível guardar todas as fotos neste aparelho. Você ainda pode continuar explorando.', 'error'); }
+  }
+  function setStatus(message,kind=''){ statusBox.textContent=message; statusBox.className='status'+(kind?' '+kind:''); }
+  function plain(value,fallback){ return typeof value==='string' && value.trim() ? value.trim() : fallback; }
+  function birdEmoji(name){
+    const n=(name||'').toLocaleLowerCase('pt-BR');
+    if(n.includes('tucano')) return '🐦';
+    if(n.includes('coruja')) return '🦉';
+    if(n.includes('águia')||n.includes('aguia')||n.includes('gavião')||n.includes('gaviao')) return '🦅';
+    return '🦜';
+  }
+  function switchTab(tab){
+    document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.id==='tab-'+tab));
+  }
+  document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>switchTab(btn.dataset.tab)));
+
+  function render(){
+    $('points').textContent=discoveries.length*10;
+    $('albumCount').textContent=discoveries.length+(discoveries.length===1?' ave':' aves');
+    $('totalSpecies').textContent=discoveries.length+(discoveries.length===1?' espécie':' espécies');
+    const next=[1,3,5,10].find(n=>discoveries.length<n) || 10;
+    $('progressText').textContent=discoveries.length>=10?'Todas as medalhas principais conquistadas!':discoveries.length+' de '+next+' descobertas para a próxima medalha';
+    $('progressFill').style.width=Math.min(100,discoveries.length/10*100)+'%';
+    document.querySelectorAll('.medal-card').forEach(card=>card.classList.toggle('earned',discoveries.length>=Number(card.dataset.level)));
+    const grid=$('albumGrid'); grid.replaceChildren();
+    if(!discoveries.length){const empty=document.createElement('div');empty.className='empty-album';empty.textContent='Seu álbum está esperando a primeira descoberta! 🌟';grid.appendChild(empty);}
+    discoveries.forEach(item=>{
+      const card=document.createElement('article');card.className='album-card';
+      if(item.foto){const img=document.createElement('img');img.src=item.foto;img.alt='Foto de '+(item.nome||'ave');card.appendChild(img);}
+      else {const placeholder=document.createElement('div');placeholder.className='album-placeholder';placeholder.textContent=item.emoji||'🐦';card.appendChild(placeholder);}
+      const copy=document.createElement('div');copy.className='card-copy';
+      const name=document.createElement('strong');name.textContent=item.nome||'Ave brasileira';
+      const detail=document.createElement('small');detail.textContent=item.habitat||'Descoberta registrada';
+      copy.append(name,detail);card.appendChild(copy);grid.appendChild(card);
+    });
+  }
+  function updateHabitat(data){
+    $('habitatLatest').textContent=plain(data.nome,'Ave identificada')+': '+plain(data.habitat,'O habitat não ficou claro na imagem.')+' Regiões: '+plain(data.regioes,'não informadas com segurança')+'.';
+  }
+  async function showResult(data){
+    lastResult=data;
+    const name=plain(data.nome,'Ave brasileira');
+    $('birdName').textContent=name;$('birdEmoji').textContent=birdEmoji(name);
+    $('birdFact').textContent=plain(data.curiosidade,'Continue observando e aprendendo sobre essa ave!');
+    $('birdHabitat').textContent=plain(data.habitat,'O local exato não ficou claro nesta foto.');
+    $('birdRegions').textContent=plain(data.regioes,'Região não informada com segurança.');
+    $('emptyResult').style.display='none';$('result').style.display='block';updateHabitat(data);
+    const key=name.toLocaleLowerCase('pt-BR');
+    const exists=discoveries.some(item=>(item.nome||'').toLocaleLowerCase('pt-BR')===key);
+    if(!exists){
+      const record={nome:name,emoji:birdEmoji(name),habitat:plain(data.habitat,'Habitat não informado'),foto:await makeAlbumThumb(selectedFile)};
+      discoveries.unshift(record);saveDiscoveries();render();
+      celebrate(record);
+      $('saveNote').textContent='⭐ +10 pontos! Nova ave guardada no seu álbum!';
+    }else{
+      $('saveNote').textContent='💜 Você já descobriu essa ave! Ela continua no seu álbum.';
+      setStatus('Essa ave já faz parte do seu álbum. Que tal procurar outra espécie?','good');
+    }
+  }
+  function makeAlbumThumb(file){
+    if(!file)return '';
+    return new Promise(resolve=>{
+      const url=URL.createObjectURL(file),img=new Image();
+      img.onload=()=>{
+        try{const canvas=document.createElement('canvas');const scale=Math.min(1,420/Math.max(img.width,img.height));canvas.width=Math.max(1,img.width*scale);canvas.height=Math.max(1,img.height*scale);canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);resolve(canvas.toDataURL('image/jpeg',.72));}
+        catch(_){resolve('');}
+        URL.revokeObjectURL(url);
+      };
+      img.onerror=()=>{URL.revokeObjectURL(url);resolve('');};img.src=url;
+    });
+  }
+  function imageFileToJpegBase64(file){
+    return new Promise((resolve,reject)=>{
+      const url=URL.createObjectURL(file),img=new Image();
+      img.onload=()=>{
+        try{const maxSide=1600,scale=Math.min(1,maxSide/Math.max(img.naturalWidth,img.naturalHeight));
+          const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));
+          canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);const result=canvas.toDataURL('image/jpeg',.88).split(',')[1];URL.revokeObjectURL(url);resolve(result);}
+        catch(e){URL.revokeObjectURL(url);reject(e);}
+      };img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Imagem inválida'));};img.src=url;
+    });
+  }
+  function celebrate(record){
+    $('celebratePhoto').hidden=true;
+    if(previewUrl){$('celebratePhoto').src=previewUrl;$('celebratePhoto').hidden=false;}
+    $('celebrateEmoji').textContent=record.emoji||'🐦';
+    $('celebrateName').textContent=record.nome;
+    $('celebrateInfo').textContent='A ave foi adicionada ao seu álbum. Suas medalhas e seu progresso foram atualizados!';
+    $('celebratePoints').textContent='+10 pontos ⭐  •  Total: '+(discoveries.length*10);
+    const overlay=$('celebration');overlay.classList.add('show');
+    document.querySelectorAll('.confetti').forEach(el=>el.remove());
+    const colors=['#70d8ed','#b69aff','#f6d47a','#8ee0a7','#ff9ecb'];
+    for(let i=0;i<55;i++){const bit=document.createElement('i');bit.className='confetti';bit.style.left=Math.random()*100+'%';bit.style.background=colors[i%colors.length];bit.style.animationDelay=(Math.random()*.9)+'s';bit.style.transform='rotate('+Math.random()*180+'deg)';$('celebrationCard').appendChild(bit);setTimeout(()=>bit.remove(),3700);}
+  }
+  $('closeCelebration').addEventListener('click',()=>$('celebration').classList.remove('show'));
+  $('celebration').addEventListener('click',e=>{if(e.target===$('celebration'))$('celebration').classList.remove('show');});
+  chooseBtn.addEventListener('click',()=>photoInput.click());
+  photoInput.addEventListener('change',()=>{
+    const file=photoInput.files&&photoInput.files[0];if(!file)return;
+    if(!file.type.startsWith('image/')){selectedFile=null;identifyBtn.disabled=true;setStatus('Escolha um arquivo de imagem, por favor.','error');return;}
+    selectedFile=file;if(previewUrl)URL.revokeObjectURL(previewUrl);previewUrl=URL.createObjectURL(file);
+    previewBox.replaceChildren();const img=document.createElement('img');img.src=previewUrl;img.alt='Foto escolhida para identificar';previewBox.appendChild(img);
+    identifyBtn.disabled=false;setStatus('Foto pronta! Toque em “Descobrir ave” quando quiser.','good');
+  });
+  identifyBtn.addEventListener('click',async()=>{
+    if(!selectedFile)return;identifyBtn.disabled=true;chooseBtn.disabled=true;setStatus('🔬 Luma está observando a foto com atenção... Só um instante!');
+    try{
+      const base64=await imageFileToJpegBase64(selectedFile);
+      const payload={
+        modelo:'gemini-3.6-flash',
+        body:{contents:[{parts:[
+          {text:'Observe a foto com cuidado. Identifique somente se houver certeza de que a foto mostra uma ave do Brasil (por exemplo arara, tucano, coruja, águia, beija-flor, sabiá, bem-te-vi ou papagaio). Se a foto não mostrar claramente uma ave, ou se não houver certeza, retorne identificado=false. Nunca chute. Considere apenas o que é possível ver na imagem. Responda em português do Brasil, com curiosidade curta e segura. Para habitat e regiões, informe apenas o que souber com segurança; não invente localização exata. Retorne um objeto JSON com: identificado (boolean), confianca (integer de 0 a 100), nome (string), curiosidade (string), habitat (string), regioes (string).'},
+          {inline_data:{mime_type:'image/jpeg',data:base64}}
+        ]}],generationConfig:{temperature:.2,responseMimeType:'application/json',responseSchema:{
+          type:'object',properties:{identificado:{type:'boolean'},confianca:{type:'integer'},nome:{type:'string'},curiosidade:{type:'string'},habitat:{type:'string'},regioes:{type:'string'}},
+          required:['identificado','confianca','nome','curiosidade','habitat','regioes']
+        }}}
+      };
+      const response=await fetch('/api/identificar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      if(!response.ok)throw new Error('Servidor indisponível');
+      const resposta=await response.json();
+      const texto=resposta&&resposta.candidates&&resposta.candidates[0]&&resposta.candidates[0].content&&resposta.candidates[0].content.parts&&resposta.candidates[0].content.parts[0]&&resposta.candidates[0].content.parts[0].text;
+      if(typeof texto!=='string')throw new Error('Resposta inesperada');
+      const data=JSON.parse(texto);
+      if(data.identificado!==true||!Number.isInteger(data.confianca)||data.confianca<80){
+        $('result').style.display='none';$('emptyResult').style.display='flex';
+        setStatus('Hmm, não consegui ter certeza dessa ave. 🥺 Tente outra foto, com mais luz e mostrando a ave com clareza!','error');return;
+      }
+      await showResult(data);
+      if(discoveries.some(item=>(item.nome||'').toLocaleLowerCase('pt-BR')===plain(data.nome,'').toLocaleLowerCase('pt-BR')))setStatus('Identificação concluída! Essa ave já está na sua coleção.','good');
+      else setStatus('🎉 Nova descoberta confirmada! Parabéns, cientista!','good');
+    }catch(error){
+      $('result').style.display='none';$('emptyResult').style.display='flex';
+      setStatus('Ops! A conexão falhou ou a foto não pôde ser analisada. Confira a internet e tente novamente. 💜','error');
+    }finally{identifyBtn.disabled=!selectedFile;chooseBtn.disabled=false;}
+  });
+  render();
+})();
+</script>
+
+<!-- A comemoração do grupo espera a ficha (pop-up) fechar, para não abrir uma janela em cima da outra -->
+<script>
+(() => {
+  const cel = document.getElementById("celebration");
+  let esperando = false;
+  new MutationObserver(() => {
+    if (!cel.classList.contains("show") || !document.querySelector(".fp-pop")) return;
+    cel.classList.remove("show");
+    if (esperando) return; esperando = true;
+    const obs = new MutationObserver(() => {
+      if (document.querySelector(".fp-pop")) return;
+      obs.disconnect(); esperando = false; cel.classList.add("show");
+    });
+    obs.observe(document.body, { childList: true });
+  }).observe(cel, { attributes: true, attributeFilter: ["class"] });
+})();
+</script>
+
+<!-- POKÉDEX: ficha padrão em pop-up + ligação com o back-end do grupo
+     (comum/ficha.js e comum/adaptador.js). O resto da página é do grupo. -->
+<script src="/comum/ficha.js"></script>
+<script src="/comum/adaptador.js"></script>
+<script>
+PokedexAdaptador.iniciar({
+  icone: "🦜", fauna: true,
+  cor: "#70d8ed", cor2: "#b69aff",
+  escuro: () => true,
+  noturno: { fundo: "#0f2a2a", texto: "#eefaf7", suave: "#a9cfc6" },
+  carregando: "🔬 Luma está observando a foto com atenção...",
+  som: true, textoSom: "🔊 Ouvir o canto",
+  galeria: { depoisDe: "#chooseBtn", input: "#photoInput" },
+  albumFicha: { cartao: "#albumGrid .album-card", nome: "strong" },
+  salvar: () => document.querySelector('.tab[data-tab="album"]').click(),
+  novaFoto: () => { document.querySelector('.tab[data-tab="explorar"]').click(); document.getElementById("chooseBtn").click(); }
+});
+</script>
+</body>
+</html>
