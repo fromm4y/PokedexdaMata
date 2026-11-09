@@ -279,8 +279,8 @@
   <section class="card camera">
     <h2>🔍 Descobrir uma fruta</h2>
     <p>Tire uma foto ou escolha uma foto da sua galeria.</p>
-    <button id="choosePhotoBtn" type="button">📸 Escolher foto</button>
-    <input id="photoInput" type="file" accept="image/*" aria-label="Escolher uma foto de fruta">
+    <button id="choosePhotoBtn" type="button">📷 Tirar foto</button>
+    <input id="photoInput" type="file" accept="image/*" capture="environment" aria-label="Tirar uma foto de fruta">
     <img id="preview" class="preview" alt="Foto escolhida">
     <button id="identifyBtn" class="secondary" disabled>🦊 Descobrir fruta</button>
     <div id="status" class="status"></div>
@@ -671,6 +671,7 @@ PokedexAdaptador.iniciar({
   albumFicha: { cartao: "#album .album-item", nome: "p" },  // "📖 Ver ficha" nas figurinhas do álbum
   // botões por etapa: o de identificar só aparece depois de escolher a foto
   etapas: { foto: ["#identifyBtn"] },
+  galeria: { depoisDe: "#choosePhotoBtn", input: "#photoInput" },   // 📷 câmera/webcam + 🖼️ galeria
   icone: "🦊", fauna: false,
   cor: "#2f8a45", cor2: "#f08c1b",
   escuro: () => false,

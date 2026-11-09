@@ -378,7 +378,7 @@ document.querySelectorAll("[data-quiz]").forEach(b => b.addEventListener("click"
 /* ---------- álbum (cartões) ---------- */
 function renderAlbum(){
   const list = $("albumList"); list.replaceChildren();
-  if(!album.length){ const li=document.createElement("li"); li.className="empty"; li.innerHTML="<span class='ins-emoji'>🫙</span><b>Seu álbum ainda está vazio.</b><span class='ins-info'>Vá em 📸 Reconhecer e mostre um inseto pro Sukuna!</span>"; list.append(li); }
+  if(!album.length){ const li=document.createElement("li"); li.className="empty"; li.innerHTML="<span class='ins-emoji'>📒</span><b>Seu álbum ainda está vazio.</b><span class='ins-info'>Vá em 📸 Reconhecer e mostre um inseto pro Sukuna!</span>"; list.append(li); }
   album.forEach(item=>{
     const li=document.createElement("li");
     let em;
