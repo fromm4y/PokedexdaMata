@@ -79,7 +79,8 @@
 
       <section id="view-map" class="view hidden">
         <div class="eyebrow">TRILHAS E DESCOBERTAS</div><h2>Mapa da aventura</h2>
-        <p class="section-sub">Selecione um ponto para conhecer uma área. Algumas trilhas precisam de uma conquista.</p>
+        <p class="section-sub">Cada ponto do mapa é uma <b>missão</b>. Complete as missões identificando mamíferos e jogando a Fuga selvagem para abrir a Mata profunda!</p>
+        <div class="trilha-prog"><div class="trilha-barra"><span id="trilhaBarra"></span></div><b id="trilhaTexto">0 de 5 missões</b></div>
         <div class="map-layout">
           <div class="illustrated-map" aria-label="Mapa ilustrado interativo da floresta">
             <div class="river"></div><div class="trail trail-a"></div><div class="trail trail-b"></div><div class="trail trail-c"></div>
@@ -166,6 +167,68 @@ PokedexAdaptador.iniciar({
   esconder: ["#identifyResult", "#identifyMessage"],
   album: { el: "#albumComum", depois: () => showView("album") },
   alerta: info => info.perigoso === true ? "Este animal pode ser perigoso. Observe de longe e chame um adulto." : ""
+});
+</script>
+
+<!-- MAPA DA AVENTURA: cada ponto é uma missão de verdade (pedido da professora) -->
+<style>
+.trilha-prog{display:flex;align-items:center;gap:14px;margin:0 0 16px}
+.trilha-barra{flex:1;height:12px;border-radius:99px;background:#ffffff18;overflow:hidden}
+.trilha-barra span{display:block;height:100%;width:0;background:linear-gradient(90deg,#e2b04a,#7fd36b);transition:width .5s}
+.map-point.feito{border-color:#7fd36b;box-shadow:0 0 0 3px #7fd36b55,0 6px 18px #0004}
+.map-point.feito::after{content:"✅";position:absolute;top:-10px;right:-10px;font-size:18px}
+.map-point.trancado{filter:grayscale(.7);opacity:.75}
+.map-point.ativo{outline:3px solid var(--gold);outline-offset:3px}
+.missao-status{display:inline-block;padding:5px 12px;border-radius:99px;font-weight:800;font-size:.85rem;margin:4px 0 10px}
+.missao-status.ok{background:#7fd36b33;color:#c9f5bd}.missao-status.falta{background:#e2b04a33;color:#ffe3a3}.missao-status.lock{background:#ffffff18;color:#cfd8cf}
+.missao-chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.missao-chips button{border:1px solid #ffffff33;background:#ffffff10;color:#fff;border-radius:99px;padding:7px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function () {   // depois do script.js do grupo (que é "defer")
+  const BIO = info => (info && Array.isArray(info.biomas) ? info.biomas : []);
+  const album = () => (PokedexAdaptador.lerAlbum() || []);
+  const doBioma = lista => album().filter(x => BIO(x.info).some(b => lista.includes(b)));
+  const recorde = () => (typeof progress !== "undefined" && progress.bestScore) || 0;
+  const M = {
+    camp: { icon: "🏕️", titulo: "Acampamento base", missao: "Identifique o seu primeiro mamífero pela foto.", feito: () => album().length >= 1, achados: () => album(), acao: ["identify", "📷 Identificar um mamífero"] },
+    river: { icon: "🐾", titulo: "Rio tranquilo", missao: "Os rios do Pantanal e da Amazônia têm capivaras, ariranhas e antas. Descubra um mamífero do Pantanal ou da Amazônia.", feito: () => doBioma(["Pantanal", "Amazônia"]).length >= 1, achados: () => doBioma(["Pantanal", "Amazônia"]), acao: ["identify", "📷 Procurar mamífero do rio"] },
+    canopy: { icon: "🌳", titulo: "Mirante das copas", missao: "Macacos e preguiças vivem no alto das árvores da Mata Atlântica e do Cerrado. Descubra um mamífero da Mata Atlântica ou do Cerrado.", feito: () => doBioma(["Mata Atlântica", "Cerrado"]).length >= 1, achados: () => doBioma(["Mata Atlântica", "Cerrado"]), acao: ["identify", "📷 Procurar mamífero das árvores"] },
+    jaguar: { icon: "🐆", titulo: "Trilha da onça", missao: "Atravesse a trilha da onça no jipe: faça 300 pontos na Fuga selvagem.", feito: () => recorde() >= 300, prog: () => `Seu recorde: ${recorde()} de 300 pontos`, acao: ["game", "🚙 Jogar Fuga selvagem"] },
+    deep: { icon: "🏆", titulo: "Mata profunda", missao: "Você completou todas as trilhas! Aqui ficam todos os mamíferos que você já descobriu. Você é um(a) Guardião(ã) da Mata!", trancada: () => !["camp", "river", "canopy", "jaguar"].every(k => M[k].feito()), feito: () => ["camp", "river", "canopy", "jaguar"].every(k => M[k].feito()), achados: () => album(), acao: ["album", "📖 Ver meu álbum"] }
+  };
+  const pontos = [...document.querySelectorAll(".map-point")].map(b => { const n = b.cloneNode(true); b.replaceWith(n); return n; });
+  const det = document.getElementById("mapDetail");
+  function pintar() {
+    let feitos = 0;
+    pontos.forEach(b => {
+      const m = M[b.dataset.point]; if (!m) return;
+      const lock = m.trancada && m.trancada(), ok = !lock && m.feito();
+      if (ok) feitos++;
+      b.classList.toggle("feito", ok); b.classList.toggle("trancado", !!lock);
+      b.firstChild.textContent = lock ? "🔒" : m.icon;
+    });
+    document.getElementById("trilhaBarra").style.width = (feitos / 5 * 100) + "%";
+    document.getElementById("trilhaTexto").textContent = `${feitos} de 5 missões`;
+  }
+  function abrir(k) {
+    const m = M[k], lock = m.trancada && m.trancada(), ok = !lock && m.feito();
+    pontos.forEach(b => b.classList.toggle("ativo", b.dataset.point === k));
+    det.innerHTML = `<div class="detail-icon">${lock ? "🔒" : m.icon}</div><h3>${lock ? "Mata profunda (trancada)" : m.titulo}</h3>
+      <span class="missao-status ${lock ? "lock" : ok ? "ok" : "falta"}">${lock ? "🔒 Complete as outras 4 missões" : ok ? "✅ Missão completa!" : "🎯 Missão em andamento"}</span>
+      <p>${lock ? "Termine o Acampamento, o Rio tranquilo, o Mirante das copas e a Trilha da onça para abrir esta área secreta." : m.missao}</p>
+      ${m.prog && !lock ? `<p><b>${m.prog()}</b></p>` : ""}
+      <div class="missao-chips"></div>`;
+    const chips = det.querySelector(".missao-chips");
+    if (!lock && m.achados) m.achados().slice(0, 12).forEach(x => {
+      const c = document.createElement("button"); c.type = "button"; c.textContent = "📖 " + x.nome;
+      c.onclick = () => PokedexAdaptador.abrirFicha(x.info, x.foto); chips.appendChild(c);
+    });
+    if (!lock) { const a = document.createElement("button"); a.className = "btn btn-gold"; a.textContent = m.acao[1]; a.onclick = () => showView(m.acao[0]); det.appendChild(a); }
+  }
+  pontos.forEach(b => b.addEventListener("click", () => abrir(b.dataset.point)));
+  document.querySelectorAll('[data-view="map"]').forEach(b => b.addEventListener("click", () => setTimeout(pintar, 50)));
+  pintar();
 });
 </script>
 </body>
