@@ -159,18 +159,16 @@ footer{text-align:center;color:#9db7a9;font-size:11px;margin-top:17px}
 
 <section class="tab-panel" id="tab-habitat">
  <div class="panel">
-  <div class="section-head"><div><h2>🌳 Habitat das aves</h2><p class="hint">Conheça alguns ambientes brasileiros onde as aves vivem. A ficha da última descoberta também aparece aqui.</p></div></div>
-  <div class="habitat-grid">
-   <div class="habitat-map">
-    <svg viewBox="0 0 180 220" role="img" aria-label="Mapa ilustrativo do Brasil"><path d="M80 5 111 17 132 14 140 39 164 54 151 78 160 100 137 121 130 151 108 169 96 208 76 197 65 169 43 154 48 127 28 108 39 78 27 56 53 40 57 16Z" fill="#7fbd91" stroke="#d6f0d9" stroke-width="3"/><path d="M57 47 112 43 139 82 123 126 76 139 46 103Z" fill="#b0d9a1" opacity=".4"/><circle cx="100" cy="95" r="6" fill="#f6d47a" stroke="#fff" stroke-width="2"/></svg>
-    <div class="map-copy"><strong>🇧🇷 Brasil: muitos lares naturais</strong><p>O país tem florestas, campos, áreas alagadas e outros ambientes. Cada espécie precisa de um lugar adequado para viver.</p></div>
-   </div>
-   <div class="habitat-list">
+  <div class="section-head"><div><h2>🌳 Habitat das aves</h2><p class="hint">Veja as aves que você descobriu voando pelos biomas do Brasil! As aves marcadas com ✨ são convidadas: descubra mais para encher a floresta.</p></div></div>
+  <div class="hab-novo">
+   <div><div id="habCena"></div><p class="hint" id="habInfo" style="margin-top:8px">Toque num bioma (no mapa ou nos botões) para ver quais aves vivem lá.</p></div>
+   <div><div id="habMapa" class="hab-mapa"></div><p class="hint" style="margin-top:8px">🗺️ Mapa de verdade dos biomas do Brasil. Toque num bioma!</p></div>
+  </div>
+  <div class="habitat-list hab-lista">
     <div class="habitat-item"><b>🌧️ Amazônia</b><p>Grande floresta tropical, com árvores altas, rios e enorme variedade de aves.</p></div>
     <div class="habitat-item"><b>🌿 Mata Atlântica</b><p>Florestas úmidas que acompanham parte do litoral e abrigam muitas espécies.</p></div>
     <div class="habitat-item"><b>🌾 Cerrado</b><p>Campos, arbustos e árvores retorcidas, com estações secas e chuvosas.</p></div>
     <div class="habitat-item"><b>💧 Pantanal</b><p>Planície com períodos de cheia e seca, lagoas e grande diversidade de aves.</p></div>
-   </div>
   </div>
   <div class="info" style="margin-top:16px"><b>📍 Habitat da última ave identificada</b><p id="habitatLatest">Faça uma descoberta na aba “Explorar aves” para ver aqui as informações sobre o habitat.</p></div>
  </div>
@@ -402,6 +400,55 @@ PokedexAdaptador.iniciar({
   salvar: () => document.querySelector('.tab[data-tab="album"]').click(),
   novaFoto: () => { document.querySelector('.tab[data-tab="explorar"]').click(); document.getElementById("chooseBtn").click(); }
 });
+</script>
+
+<!-- HABITAT com as aves voando pelo bioma + mapa de verdade; visual maior no tablet (pedido da professora) -->
+<style>
+.hab-novo{display:grid;grid-template-columns:1.25fr 1fr;gap:16px;align-items:start}
+.hab-mapa{height:360px;border-radius:18px;overflow:hidden;border:1px solid #ffffff22}
+.hab-lista{display:grid!important;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.map-visual{display:none!important}
+@media (max-width:1100px){
+  body{font-size:17px}
+  .hint,.subtitle,.habitat-item p,.medal-card p,.card-copy small{font-size:15px!important}
+  .tabs{display:grid!important;grid-template-columns:repeat(2,1fr);gap:10px}
+  .tab{min-height:54px;font-size:16px!important;justify-content:center}
+  .explore-grid{grid-template-columns:1fr!important}
+  .hab-novo{grid-template-columns:1fr}
+  .hab-lista{grid-template-columns:repeat(2,1fr)}
+  .btn{min-height:52px;font-size:17px}
+  #emptyResult{min-height:160px}
+}
+</style>
+<script>
+(function () {
+  const CONVIDADAS = [
+    ["Arara-azul", "🦜", ["Pantanal", "Cerrado"]], ["Tucano-toco", "🐦", ["Cerrado", "Pantanal", "Amazônia"]],
+    ["Bem-te-vi", "🐤", ["Mata Atlântica", "Cerrado", "Caatinga", "Pampa", "Amazônia", "Pantanal"]], ["Coruja-buraqueira", "🦉", ["Cerrado", "Pampa", "Caatinga"]],
+    ["Beija-flor", "🐦", ["Mata Atlântica", "Amazônia"]], ["Gavião-real", "🦅", ["Amazônia", "Mata Atlântica"]],
+    ["Quero-quero", "🐦", ["Pampa", "Cerrado"]], ["Carcará", "🦅", ["Caatinga", "Cerrado", "Pampa"]]
+  ];
+  const lerAlbum = () => { try { return JSON.parse(localStorage.getItem("pokeAvesAlbumV2") || "[]"); } catch (e) { return []; } };
+  let biomaAtual = null, mapaFeito = false;
+  function itens() {
+    const minhas = lerAlbum().map(a => { const f = PokedexAdaptador.fichaSalva && PokedexAdaptador.fichaSalva(a.nome); const bi = f && f.info && f.info.biomas; return { nome: a.nome, img: a.foto || "", icone: a.emoji || "🐦", fauna: true, biomas: bi && bi.length ? bi : ["Amazônia", "Mata Atlântica", "Cerrado", "Caatinga", "Pantanal", "Pampa"], atual: true }; });
+    const nomes = minhas.map(m => m.nome.toLowerCase());
+    return minhas.concat(CONVIDADAS.filter(c => !nomes.includes(c[0].toLowerCase())).map(([nome, icone, biomas]) => ({ nome: "✨ " + nome, img: "", icone, fauna: true, biomas })));
+  }
+  function info(bioma) {
+    const aqui = itens().filter(i => i.biomas.includes(bioma)), minhas = aqui.filter(i => !i.nome.startsWith("✨"));
+    document.getElementById("habInfo").textContent = minhas.length ? `No(a) ${bioma} você já descobriu: ${minhas.map(i => i.nome).join(", ")}.` : `Você ainda não descobriu aves do(a) ${bioma}. As ✨ convidadas mostram quem vive lá!`;
+  }
+  function cena(bioma) {
+    const est = FichaPokedex.cena(document.getElementById("habCena"), { itens: itens(), bioma: bioma || undefined, aoTrocar: b => { biomaAtual = b; info(b); } });
+    if (est) { biomaAtual = est.bioma; info(est.bioma); }
+  }
+  function desenhar() {
+    cena(biomaAtual);
+    if (!mapaFeito) { mapaFeito = true; FichaPokedex.mapaBiomas(document.getElementById("habMapa"), null, { escuro: true, aoClicar: b => { biomaAtual = b; cena(b); } }); }
+  }
+  document.querySelectorAll('.tab[data-tab="habitat"]').forEach(b => b.addEventListener("click", () => setTimeout(desenhar, 30)));
+})();
 </script>
 </body>
 </html>
