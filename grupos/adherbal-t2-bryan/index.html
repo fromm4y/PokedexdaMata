@@ -142,7 +142,30 @@
 
   <main>
     <section class="panel">
-      <h1 id="interactiveTitle">🌈 Bora desvendar os segredos das frutas brasileiras?</h1>
+      <div class="tela2-heroi">
+        <div class="tela2-frase"><h1 id="interactiveTitle">🍇 Bora desvendar os segredos das frutas brasileiras?</h1></div>
+        <figure class="banana-chapeu"><img src="img/banana-chapeu.webp" alt="Banana de chapéu" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><svg viewBox="0 0 220 220" class="banana-svg" aria-hidden="true"><defs><linearGradient id="bnA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff07a"/><stop offset=".6" stop-color="#f7d21d"/><stop offset="1" stop-color="#e2a90f"/></linearGradient></defs>
+<path d="M58 70 C40 120 62 178 120 196 C150 205 178 196 192 182 C160 188 120 176 98 146 C80 120 76 92 84 66 Z" fill="url(#bnA)" stroke="#a87a0b" stroke-width="4" stroke-linejoin="round"/>
+<path d="M84 66 L88 50 L74 48 L70 62" fill="#6b4a1e"/><path d="M192 182 L204 186 L198 176Z" fill="#6b4a1e"/>
+<ellipse cx="90" cy="118" rx="7" ry="9" fill="#2b1d0e"/><ellipse cx="114" cy="128" rx="7" ry="9" fill="#2b1d0e"/><circle cx="92" cy="115" r="2.5" fill="#fff"/><circle cx="116" cy="125" r="2.5" fill="#fff"/>
+<path d="M92 146 Q104 160 120 150" stroke="#2b1d0e" stroke-width="4" fill="none" stroke-linecap="round"/><ellipse cx="80" cy="138" rx="7" ry="4" fill="#f59e7a" opacity=".7"/><ellipse cx="130" cy="150" rx="7" ry="4" fill="#f59e7a" opacity=".7"/>
+<g transform="rotate(-14 86 52)"><ellipse cx="86" cy="58" rx="46" ry="11" fill="#7a5a2b"/><path d="M58 56 C58 26 114 26 114 56Z" fill="#a37a3d"/><rect x="58" y="44" width="56" height="8" fill="#5a3f1a"/><path d="M104 42 l14 -12 l-4 16z" fill="#d94f3d"/></g>
+<path d="M150 150 q22 -10 34 6" stroke="#a87a0b" stroke-width="3" fill="none"/></svg></figure>
+      </div>
+      <div class="tela2-acoes">
+        <button type="button" class="acao2 esquerda" id="btnSobre">ℹ️ Sobre o projeto</button>
+        <button type="button" class="acao2 meio" id="btnViagem">🌍 Viagem pelo mundo das frutas</button>
+        <button type="button" class="acao2 direita" id="btnDescobrir">🔎 Vamos descobrir!</button>
+      </div>
+      <section class="viagem" id="viagem" hidden>
+        <div class="viagem-topo"><h2>🌍 Viagem pelo mundo das frutas</h2><span id="viagemPlacar">0 acertos</span></div>
+        <p>De qual país ou região essa fruta veio? Escolha o lugar de origem! ✈️</p>
+        <div class="viagem-jogo"><div class="viagem-fruta"><img id="viagemFoto" alt=""><b id="viagemNome"></b></div><div class="viagem-opcoes" id="viagemOpcoes"></div></div>
+        <p id="viagemExplica" class="viagem-explica"></p>
+        <button type="button" class="acao2" id="viagemProxima" hidden>➡️ Próxima fruta</button>
+      </section>
+      <div id="areaDescobrir" hidden>
+
       <div class="subtitle">Tire uma foto de uma fruta brasileira e deixe a Frutaria BR descobrir. 🔎</div>
 
       <div class="buttons">
@@ -154,7 +177,7 @@
       <nav class="nav" aria-label="Opções do aplicativo">
         <button type="button" data-section="album">📚 Álbum de frutas</button>
         <button type="button" data-section="conquistas">🏆 Conquistas</button>
-        <button type="button" data-section="info">🌟 Info das frutas</button>
+        <button type="button" data-section="info">🌟 Informações das frutas</button>
         <button type="button" data-section="lugares">🗺️ Onde ela vive?</button>
       </nav>
 
@@ -175,12 +198,8 @@
 
       <section class="section" id="conquistas">
         <h2>🏆 Conquistas do explorador</h2>
-        <ul>
-          <li>📷 <strong>Primeira foto:</strong> tire uma foto para começar.</li>
-          <li>🌱 <strong>Amigo da natureza:</strong> aprenda sobre uma fruta brasileira.</li>
-          <li>🧺 <strong>Grande colecionador:</strong> descubra frutas diferentes.</li>
-        </ul>
-        <p class="small">As medalhas são ilustrativas; este modelo ainda não salva seu progresso.</p>
+        <ul id="listaConquistas"></ul>
+        <p class="small">Cada conquista nova faz chover frutas! 🍎🍌🍇</p>
       </section>
 
       <section class="section" id="info">
@@ -199,6 +218,7 @@
       <div id="status"></div>
       <div id="result"></div>
       <div class="small">A banana sorridente está pronta para a aventura! 🌿</div>
+      </div>
     </section>
   </main>
 </div>
@@ -217,7 +237,7 @@ if (startSplashButton && splashScreen && appScreen) {
 }
 const titleEl = document.getElementById("interactiveTitle");
 const titleMessages = [
-  "🌈 Bora desvendar os segredos das frutas brasileiras?",
+  "🍇 Bora desvendar os segredos das frutas brasileiras?",
   "🍓 Pronto para uma aventura frutal?",
   "🍍 Vamos explorar os sabores do Brasil?",
   "🥭 Que fruta será essa? Vamos descobrir!"
@@ -341,6 +361,7 @@ analisar.addEventListener("click", async () => {
       ? String(dados.local)
       : "Não consegui confirmar onde essa fruta costuma crescer. Consulte uma fonte de confiança para saber mais.";
     statusEl.textContent = "🎉 Descoberta feita!";
+    if (window.registrarDescoberta) registrarDescoberta(dados.nome);
     result.innerHTML = "";
     const h2 = document.createElement("h2");
     h2.textContent = "🍎 " + textoSeguro(dados.nome || "Fruta encontrada");
@@ -424,5 +445,114 @@ PokedexAdaptador.iniciar({
   novaFoto: () => document.querySelector('label[for="foto"]').click()
 });
 </script>
+<script>
+/* ===== Pedidos do grupo (2ª tela) ===== */
+(function () {
+  const $ = id => document.getElementById(id);
+  const ler = (k, v) => { try { const x = localStorage.getItem(k); return x == null ? v : JSON.parse(x); } catch (e) { return v; } };
+  const gravar = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+  // botões da 2ª tela
+  $("btnDescobrir").onclick = () => { $("viagem").hidden = true; $("areaDescobrir").hidden = false; $("areaDescobrir").scrollIntoView({ behavior: "smooth", block: "start" }); };
+  $("btnSobre").onclick = () => FichaPokedex.aviso({ tipo: "info", icone: "🍌", titulo: "Sobre o projeto",
+    texto: "A Frutaria BR é a Pokédex de frutas do grupo Guardiões da Floresta (Henrique, Bryan e Laís). Tire uma foto de uma fruta, descubra o nome, curiosidades e onde ela cresce, guarde no álbum, ganhe conquistas e viaje pelo mundo das frutas! 🍇🇧🇷",
+    acoes: [{ texto: "Fechar", principal: true }] });
+  // conquistas com chuva de frutas
+  const CONQ = [["foto", "📷", "Primeira foto", "Tire uma foto para começar."], ["uma", "🌱", "Amigo da natureza", "Descubra sua primeira fruta."], ["tres", "🧺", "Cesta cheia", "Descubra 3 frutas diferentes."], ["cinco", "🏆", "Grande colecionador", "Descubra 5 frutas diferentes."], ["viajante", "✈️", "Viajante das frutas", "Acerte 5 origens na Viagem pelo mundo das frutas."]];
+  function chuvaDeFrutas() {
+    const c = document.createElement("div"); c.className = "chuva-frutas";
+    const F = ["🍎", "🍌", "🍇", "🥝", "🍊", "🍍", "🥭", "🍓", "🍉", "🍐"];
+    for (let i = 0; i < 34; i++) { const s = document.createElement("span"); s.textContent = F[i % F.length]; s.style.left = Math.random() * 100 + "%"; s.style.animationDelay = (Math.random() * 1.2) + "s"; s.style.fontSize = (26 + Math.random() * 26) + "px"; c.appendChild(s); }
+    document.body.appendChild(c); setTimeout(() => c.remove(), 3800);
+  }
+  function desenharConquistas() {
+    const tem = ler("frutariaConquistas", {});
+    $("listaConquistas").innerHTML = CONQ.map(([id, ic, t, d]) => `<li class="${tem[id] ? "ganhou" : ""}">${ic} <strong>${t}:</strong> ${d} ${tem[id] ? "✅" : "🔒"}</li>`).join("");
+  }
+  function ganhar(id) {
+    const tem = ler("frutariaConquistas", {}); if (tem[id]) return;
+    tem[id] = true; gravar("frutariaConquistas", tem); desenharConquistas(); chuvaDeFrutas();
+    const c = CONQ.find(x => x[0] === id); if (c) FichaPokedex.balao("🏆 Conquista: " + c[2] + "!");
+  }
+  window.registrarDescoberta = nome => {
+    const lista = ler("frutariaDescobertas", []); const n = String(nome || "").toLowerCase();
+    if (n && !lista.includes(n)) lista.push(n); gravar("frutariaDescobertas", lista);
+    ganhar("uma"); if (lista.length >= 3) ganhar("tres"); if (lista.length >= 5) ganhar("cinco");
+  };
+  $("foto").addEventListener("change", () => ganhar("foto"));
+  desenharConquistas();
+  // ===== Viagem pelo mundo das frutas =====
+  const ORIGEM = [
+    ["Banana", "Musa acuminata", "Sudeste Asiático", "As primeiras bananas foram cultivadas há milhares de anos na Nova Guiné e no Sudeste Asiático."],
+    ["Maçã", "Malus domestica", "Ásia Central", "A maçã nasceu nas montanhas do Cazaquistão, na Ásia Central!"],
+    ["Uva", "Vitis vinifera", "Oriente Médio", "A uva vem da região entre o Mar Negro e o Mar Cáspio, no Oriente Médio."],
+    ["Kiwi", "Actinidia deliciosa", "China", "O kiwi é chinês! Ganhou esse nome na Nova Zelândia, por lembrar o pássaro kiwi."],
+    ["Laranja", "Citrus sinensis", "China", "A laranja surgiu no sul da China e chegou ao Brasil com os portugueses."],
+    ["Manga", "Mangifera indica", "Índia", "A manga é da Índia, onde é cultivada há mais de 4 mil anos."],
+    ["Abacaxi", "Ananas comosus", "Brasil e América do Sul", "O abacaxi é sul-americano, das regiões do Brasil e do Paraguai!"],
+    ["Caju", "Anacardium occidentale", "Brasil (Nordeste)", "O caju é brasileiro, do Nordeste. Os portugueses o levaram para a Índia e a África."],
+    ["Açaí", "Euterpe oleracea", "Amazônia (Brasil)", "O açaí vem de uma palmeira da Amazônia."],
+    ["Jabuticaba", "Plinia cauliflora", "Mata Atlântica (Brasil)", "A jabuticaba só existe naturalmente no Brasil!"],
+    ["Melancia", "Citrullus lanatus", "África", "A melancia é africana: ela nasceu em regiões quentes da África."],
+    ["Mamão", "Carica papaya", "México e América Central", "O mamão é das terras quentes do México e da América Central."],
+    ["Abacate", "Persea americana", "México e América Central", "O abacate é mexicano e era comido pelos astecas."],
+    ["Coco", "Cocos nucifera", "Sudeste Asiático", "O coco veio das ilhas do Sudeste Asiático e do Pacífico, flutuando pelo mar!"],
+    ["Pêssego", "Prunus persica", "China", "Apesar do nome científico lembrar a Pérsia, o pêssego é da China."],
+    ["Maracujá", "Passiflora edulis", "Brasil e América do Sul", "O maracujá é sul-americano, e o Brasil é o maior produtor do mundo."],
+    ["Limão", "Citrus limon", "Índia", "O limão surgiu entre a Índia e a região do Himalaia."],
+    ["Cacau", "Theobroma cacao", "Amazônia (Brasil)", "O cacau, do chocolate, nasceu na Amazônia!"]
+  ];
+  const LUGARES = [...new Set(ORIGEM.map(o => o[2]))];
+  let atual = null, acertos = ler("frutariaViagem", 0);
+  $("viagemPlacar").textContent = acertos + " acertos";
+  function novaFruta() {
+    atual = ORIGEM[Math.floor(Math.random() * ORIGEM.length)];
+    $("viagemNome").textContent = atual[0]; $("viagemExplica").textContent = ""; $("viagemProxima").hidden = true;
+    const img = $("viagemFoto"); img.removeAttribute("src"); img.style.visibility = "hidden";
+    FichaPokedex.urlDaEspecie(atual[1]).then(u => { if (u) { img.src = u; img.style.visibility = "visible"; } });
+    const erradas = LUGARES.filter(l => l !== atual[2]).sort(() => Math.random() - .5).slice(0, 3);
+    $("viagemOpcoes").innerHTML = "";
+    [atual[2], ...erradas].sort(() => Math.random() - .5).forEach(l => {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = "📍 " + l;
+      b.onclick = () => {
+        if (!$("viagemProxima").hidden) return;
+        const certo = l === atual[2];
+        b.classList.add(certo ? "certa" : "errada");
+        [...$("viagemOpcoes").children].forEach(x => { if (x.textContent === "📍 " + atual[2]) x.classList.add("certa"); });
+        $("viagemExplica").textContent = (certo ? "🎉 Acertou! " : "Quase! ") + atual[3];
+        if (certo) { acertos++; gravar("frutariaViagem", acertos); $("viagemPlacar").textContent = acertos + " acertos"; if (acertos >= 5) ganhar("viajante"); }
+        $("viagemProxima").hidden = false;
+      };
+      $("viagemOpcoes").appendChild(b);
+    });
+  }
+  $("btnViagem").onclick = () => { $("areaDescobrir").hidden = true; $("viagem").hidden = false; novaFruta(); $("viagem").scrollIntoView({ behavior: "smooth", block: "start" }); };
+  $("viagemProxima").onclick = novaFruta;
+})();
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+/* fundo com frutas variadas (troque por img/fundo-frutas.webp quando tiver a imagem) */
+.app{background:linear-gradient(180deg,rgba(11,42,24,.35),rgba(11,42,24,.6)),var(--fundo-frutas,url("img/fundo-frutas.webp")) center/cover fixed,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Ctext x='10' y='50' font-size='38'%3E🍌%3C/text%3E%3Ctext x='120' y='40' font-size='34'%3E🍎%3C/text%3E%3Ctext x='60' y='110' font-size='36'%3E🍇%3C/text%3E%3Ctext x='160' y='120' font-size='32'%3E🥝%3C/text%3E%3Ctext x='15' y='180' font-size='36'%3E🍊%3C/text%3E%3Ctext x='110' y='200' font-size='34'%3E🍍%3C/text%3E%3Ctext x='175' y='190' font-size='28'%3E🍓%3C/text%3E%3C/svg%3E") repeat,#174a2a!important;min-height:100vh}
+#interactiveTitle{font-family:"Pacifico",cursive!important;font-weight:400!important;font-size:clamp(34px,4.6vw,56px)!important;line-height:1.25!important;letter-spacing:.5px}
+.tela2-heroi{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;margin-bottom:18px}
+.banana-chapeu{margin:0;width:clamp(140px,18vw,220px)}.banana-chapeu img,.banana-chapeu svg{width:100%;height:auto;display:block;filter:drop-shadow(0 10px 14px rgba(0,0,0,.35));animation:bananaBalanca 3s ease-in-out infinite}
+@keyframes bananaBalanca{50%{transform:rotate(-5deg) translateY(-6px)}}
+.tela2-acoes{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:12px;margin:8px 0 18px}
+.acao2{border:0;border-radius:18px;padding:16px 14px;font-size:18px;font-weight:800;cursor:pointer;min-height:58px;color:#0b2a18;background:#f7ffe8;box-shadow:0 6px 0 #0004}
+.acao2.direita{background:linear-gradient(135deg,#ffd23f,#8fe33d)}.acao2.meio{background:linear-gradient(135deg,#7fd3ff,#b98cff);color:#1b1040}
+.viagem{background:#0b2a18d9;border:2px solid #8fe33d;border-radius:22px;padding:18px;margin-bottom:16px}
+.viagem-topo{display:flex;justify-content:space-between;align-items:center;gap:10px}.viagem-topo h2{margin:0}.viagem-topo span{font-weight:800;color:#ffd23f}
+.viagem-jogo{display:grid;grid-template-columns:240px 1fr;gap:16px;align-items:center}
+.viagem-fruta{background:#ffffff14;border-radius:18px;padding:10px;text-align:center}.viagem-fruta img{width:100%;height:170px;object-fit:cover;border-radius:12px;background:#ffffff10;display:block}.viagem-fruta b{display:block;font-size:26px;margin-top:8px}
+.viagem-opcoes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.viagem-opcoes button{border:2px solid #ffffff33;background:#ffffff14;color:#f5ffe9;border-radius:14px;padding:14px;font-size:16px;font-weight:800;cursor:pointer;min-height:56px}
+.viagem-opcoes button.certa{background:#2e9d4a;border-color:#8fe33d}.viagem-opcoes button.errada{background:#a8323e;border-color:#ff8a8a}
+.viagem-explica{font-size:18px;min-height:26px}
+#listaConquistas li{opacity:.55;margin:8px 0}#listaConquistas li.ganhou{opacity:1}
+.chuva-frutas{position:fixed;inset:0;pointer-events:none;z-index:100000;overflow:hidden}
+.chuva-frutas span{position:absolute;top:-60px;animation:chuvaCai 2.6s ease-in forwards}
+@keyframes chuvaCai{to{transform:translateY(115vh) rotate(540deg)}}
+@media(max-width:700px){.tela2-heroi{grid-template-columns:1fr;justify-items:center;text-align:center}.tela2-acoes,.viagem-jogo,.viagem-opcoes{grid-template-columns:1fr}}
+</style>
 </body>
 </html>
