@@ -26,6 +26,13 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 - só o primeiro nome dos alunos no site; os arquivos originais (com nomes completos) foram apagados do repositório e do histórico.
 
 
+**Ajustes de 09/11 (pedidos da professora):**
+
+- **Animais de fora do Brasil:** a ficha agora mostra o mapa do **mundo** com os lugares onde a espécie vive (ex.: leão → Quênia, Tanzânia, Botsuana) e o habitat ganha cenários de fora do Brasil (savana, deserto, gelo).
+- **Salvar no álbum só uma vez:** se a espécie já está no álbum, o botão avisa "✅ já está no seu álbum!" e leva até ele (12 grupos duplicavam).
+- **Mapas de verdade:** Asas do Brasil, Guardiões da Floresta e Poké Aves Brasileiras trocaram o desenho do Brasil pelo mapa real dos biomas.
+- **Por grupo:** abas na Geovanna (com nome do explorador e ranking guardado) e no Bryan (Viagem com 50 frutas, rodadas de 5); mapa de missões no IdentiBicho; uma aba só de foto + savana no Nickolas; visual calmo na Caroline; abas com conteúdos diferentes e YouTube Kids no Murilo; habitat com aves voando no Arthur; tela inicial no Codex; um só "Ver ficha" no Guilherme; FrutaThech sem o campo "Escolher arquivo"; câmera + galeria no Eduardo.
+
 **No painel (página inicial):** filtro por **escola** (fica lembrado no navegador) e grupos organizados por escola e turma.
 
 ## 🏫 Meduneckas
