@@ -274,7 +274,7 @@
       <button class="fp-plant${it.atual ? " current" : ""}" style="--gx:${flora.length === 1 ? 50 : 12 + i * (76 / (flora.length - 1))}%;--lane:${38 + ((i * 9) % 8)}%;--c:${it.cor};--gdelay:${(i % 5) * .3}s" title="${esc(it.nome)}">
         <span class="fp-pthumb${it.img ? "" : " sem-foto"}">${it.img ? `<img src="${it.img}" alt="">` : ""}<span class="fp-emoji">${it.icone}</span></span>
         <span class="fp-tag">${esc(it.nome)}</span></button>`).join("");
-    const vazio = doBioma.length ? "" : `<div class="fp-empty"><p>Esta espécie não aparece no(a) <strong>${esc(bioma)}</strong>. Escolha outro bioma acima.</p></div>`;
+    const vazio = doBioma.length ? "" : extra.vazio === "" ? "" : `<div class="fp-empty"><p>${extra.vazio ? esc(String(extra.vazio).replace("{bioma}", bioma)) : `Esta espécie não aparece no(a) <strong>${esc(bioma)}</strong>. Escolha outro bioma acima.`}</p></div>`;
     const botoes = Object.entries(PERIODOS).map(([k, n]) => `<button data-per="${k}" class="${k === periodo ? "on" : ""}">${n}</button>`).join("");
     const seed = (bioma.charCodeAt(0) || 65) + bioma.length;
     return `<div class="fp-scene per-${periodo}${aqua ? " fp-aqua" : ""}">
@@ -316,7 +316,7 @@
       fauna: it.fauna !== undefined ? !!it.fauna : CFG.fauna !== false, biomas: lista(it.biomas), atual: !!it.atual }));
     const primeiro = (itens.find(i => i.atual) || itens[0] || {}).biomas;
     const estado = { bioma: o.bioma || (primeiro && primeiro[0]) || "Amazônia", periodo: o.periodo || "dia", itens,
-      aquatico: !!o.aquatico, fundos: o.fundos || {}, aoTrocar: o.aoTrocar,
+      aquatico: !!o.aquatico, fundos: o.fundos || {}, aoTrocar: o.aoTrocar, vazio: o.vazio,
       mundo: o.mundo ? { nome: o.mundo.nome, cenario: CENARIOS[o.mundo.cenario] ? o.mundo.cenario : "savana" } : null, soMundo: !!o.soMundo };
     if (estado.mundo && !o.bioma && !(primeiro && primeiro[0])) estado.bioma = estado.mundo.nome;
     desenharCena(caixa, estado);

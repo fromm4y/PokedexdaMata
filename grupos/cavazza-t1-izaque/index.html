@@ -399,6 +399,16 @@ function desenharMapa(){
   biomas.forEach(b=>{const h=document.createElement("h3");h.style.cssText="margin:12px 0 6px;font-size:15px";h.textContent=b;info.appendChild(h);porBioma[b].forEach(n=>{const c=document.createElement("span");c.className="chip";c.textContent=n;info.appendChild(c)})});
 }
 function mostrarBioma(b,porBioma){const info=document.getElementById("mapaInfo");info.innerHTML="";const h=document.createElement("h2");h.textContent="🌿 "+b;info.appendChild(h);(porBioma[b]||[]).forEach(n=>{const c=document.createElement("span");c.className="chip";c.textContent=n;info.appendChild(c)});if(!(porBioma[b]||[]).length){const p=document.createElement("p");p.style.color="var(--suave)";p.textContent="Nenhuma planta da sua coleção vive aqui ainda.";info.appendChild(p)}}
+/* Ao tocar num bioma: a imagem do bioma com as plantas dele (igual à aba Habitat da ficha) */
+const mostrarBiomaTexto=mostrarBioma;
+mostrarBioma=function(b,porBioma){
+  mostrarBiomaTexto(b,porBioma);
+  const info=document.getElementById("mapaInfo");let cena=document.getElementById("cenaBioma");
+  if(!cena){cena=document.createElement("div");cena.id="cenaBioma";cena.style.cssText="margin-top:18px";document.getElementById("mapaPlantas").parentNode.insertAdjacentElement("afterend",cena)}
+  const itens=ler().filter(p=>[].concat((p.ficha&&p.ficha.biomas)||[]).includes(b)).map(p=>({nome:p.nome,img:p.foto||p.img||"",icone:"🌿",fauna:false,biomas:[b]}));
+  FichaPokedex.cena(cena,{bioma:b,itens,vazio:"Nenhuma planta da sua coleção vive no(a) {bioma} ainda. Descubra uma!",aoTrocar:nb=>mostrarBiomaTexto(nb,(()=>{const pb={};ler().forEach(p=>[].concat((p.ficha&&p.ficha.biomas)||[]).forEach(x=>{(pb[x]=pb[x]||[]).push(p.nome)}));return pb})())});
+  cena.scrollIntoView({behavior:"smooth",block:"nearest"});
+};
 const AMBIENTES=[["🌳 Mata fechada","Floresta com sombra, árvores altas e solo úmido. Podem ocorrer ervas, samambaias, folhas medicinais e pequenas flores."],["💧 Margem do rio","Áreas próximas à água, com umidade alta. Podem ocorrer plantas de lugares úmidos, ervas e vegetação de margem."],["☀️ Clareira","Espaço aberto dentro da floresta, com mais sol e solo mais seco. Podem ocorrer flores, ervas e plantas que gostam de luz."]];
 (function(){const box=document.getElementById("ambientes");AMBIENTES.forEach(([t,d],i)=>{const b=document.createElement("button");b.type="button";b.className="ambiente"+(i===0?" on":"");b.innerHTML="<b></b><p></p>";b.querySelector("b").textContent=t;b.querySelector("p").textContent=d;b.onclick=()=>box.querySelectorAll(".ambiente").forEach(x=>x.classList.toggle("on",x===b));box.appendChild(b)})})();
 
