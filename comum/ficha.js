@@ -394,6 +394,7 @@
       </div>
       <div class="fp-panel on" data-panel="sobre">
         ${d.status_conservacao ? `<div class="fp-section"><div class="fp-label">Conservação</div><div class="fp-cons"><span class="fp-cdot"></span>${esc(d.status_conservacao)}</div></div>` : ""}
+        ${d.agressivo && CFG.fauna ? `<div class="fp-section"><div class="fp-label">É agressivo?</div><div class="fp-agressivo ${/^\s*n[aã]o/i.test(d.agressivo) ? "nao" : "sim"}">${/^\s*n[aã]o/i.test(d.agressivo) ? "😊" : "⚠️"} ${esc(d.agressivo)}</div></div>` : ""}
         ${curiosidades.length ? `<div class="fp-section"><div class="fp-label">Você sabia?</div><ul class="fp-facts">${curiosidades.map(c => `<li>${esc(c)}</li>`).join("")}</ul></div>` : ""}
         ${extras.map(([t, v]) => `<div class="fp-section"><div class="fp-label">${esc(t)}</div><p class="fp-text">${esc(v)}</p></div>`).join("")}
         ${parecidas.length ? `<div class="fp-section"><div class="fp-label">Parecidas</div><div class="fp-chips">${parecidas.map(c => `<span class="fp-chip">${esc(c)}</span>`).join("")}</div></div>` : ""}
@@ -729,6 +730,8 @@
 .fp-marker{display:block;width:16px;height:16px;border-radius:50%;background:var(--mc);border:2px solid #04140d;box-shadow:0 0 0 4px color-mix(in srgb,var(--mc) 26%,transparent),0 0 16px var(--mc)}
 .fp-marker.primary{width:20px;height:20px;animation:fpPulse 2s ease-in-out infinite}
 @keyframes fpPulse{50%{box-shadow:0 0 0 10px color-mix(in srgb,var(--mc) 10%,transparent),0 0 28px var(--mc)}}
+.fp-agressivo{padding:10px 13px;border-radius:12px;font-weight:700;font-size:15px;line-height:1.4;background:color-mix(in srgb,#f0a640 16%,transparent);border:1px solid color-mix(in srgb,#f0a640 40%,transparent)}
+.fp-agressivo.nao{background:color-mix(in srgb,#3ccf7a 14%,transparent);border-color:color-mix(in srgb,#3ccf7a 40%,transparent)}
 .fp-map-note{margin:12px 0 14px;font-size:14.5px;line-height:1.5;color:var(--text-dim)}
 .fp-map-note strong{color:var(--text)}
 .fp-map-fallback{display:grid;place-items:center;height:100%;color:var(--text-dim);font-size:13px;padding:20px;text-align:center}

@@ -223,7 +223,8 @@ const REGRAS_FICHA = `
 - Em "cenario_periodo", escolha UM de: "dia","amanhecer","crepusculo","noite".
 - Em "elementos_cenario", liste 4-7 elementos visuais característicos do ambiente.
 - Em "companheiros_habitat", liste 3-5 espécies (animais ou plantas) que dividem o habitat com a identificada.
-- Em "curiosidade_habitat", traga UMA curiosidade marcante sobre como ela usa/depende do habitat.`;
+- Em "curiosidade_habitat", traga UMA curiosidade marcante sobre como ela usa/depende do habitat.
+- Em "agressivo", diga se a espécie é agressiva ou perigosa para pessoas: comece com "Sim", "Não" ou "Às vezes" e explique em UMA frase curta para crianças (ex.: "Não. É tímida e foge quando vê pessoas."). Para plantas, frutas e fungos, fale se é perigosa de tocar ou comer.`;
 const CAMPOS_FICHA = {
   identificado: { type: "boolean" }, confianca: { type: "integer" },
   e_do_tema: { type: "boolean" }, o_que_e: { type: "string" },
@@ -235,6 +236,7 @@ const CAMPOS_FICHA = {
   habitat_descricao: { type: "string" },
   mundo: { type: "array", items: { type: "object", properties: { lugar: { type: "string" }, lat: { type: "number" }, lng: { type: "number" } }, required: ["lugar", "lat", "lng"] } },
   habitat_mundo: { type: "string" },
+  agressivo: { type: "string" },
   cenario_tipo: { type: "string" },
   cenario_periodo: { type: "string" },
   elementos_cenario: { type: "array", items: { type: "string" } },
