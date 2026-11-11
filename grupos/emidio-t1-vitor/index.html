@@ -955,6 +955,20 @@ FichaPokedex.mapaBiomas(document.getElementById("mapaBiomasFruitdex"), null, {
     if (b) { b.click(); document.getElementById("mapBiomeDetail").scrollIntoView({ behavior: "smooth", block: "nearest" }); }
   }
 });
+/* Ao escolher um bioma: a foto do habitat do bioma, com as frutas salvas dele (igual à ficha) */
+document.getElementById("mapBiomeButtons").addEventListener("click", ev => {
+  const btn = ev.target.closest("button"); if (!btn) return;
+  const bioma = btn.textContent.replace("🌿", "").trim();
+  setTimeout(() => {
+    let cena = document.getElementById("cenaBiomaFruit");
+    if (!cena) { cena = document.createElement("div"); cena.id = "cenaBiomaFruit"; cena.style.marginTop = "14px"; document.getElementById("mapBiomeDetail").appendChild(cena); }
+    else document.getElementById("mapBiomeDetail").appendChild(cena);
+    let album = []; try { album = JSON.parse(localStorage.getItem("fruitdex_album_v1") || "[]"); } catch (e) {}
+    const itens = album.filter(f => (f.biomas || []).includes(bioma)).map(f => ({ nome: f.nome, img: f.imageData || f.foto || f.imagem || "", icone: "🍓", fauna: false, biomas: [bioma] }));
+    FichaPokedex.cena(cena, { bioma, itens, vazio: "Nenhuma fruta salva do(a) {bioma} ainda. Descubra uma!",
+      aoTrocar: nb => { const b2 = [...document.querySelectorAll("#mapBiomeButtons button")].find(x => x.textContent.includes(nb)); if (b2 && b2.getAttribute("aria-pressed") !== "true") b2.click(); } });
+  }, 30);
+});
 PokedexAdaptador.iniciar({
   semRepetir: ["fruitdex_album_v1"],   // não guarda a mesma espécie duas vezes
   verAlbum: () => document.querySelector('.nav button[data-page="albumPage"]').click(),   // se a espécie já está no álbum, o botão só leva até lá
@@ -967,7 +981,6 @@ PokedexAdaptador.iniciar({
   extras: info => [["📜 Descrição", info.descricao], ["📍 Onde é encontrada", info.onde_encontrada], ["🍽️ Pode comer?", ({ comestivel: "Sim, é comestível.", nao_comestivel: "Não é comestível.", potencialmente_venenosa: "Pode ser venenosa! Não coma.", nao_confirmada: "Não foi possível confirmar." })[info.comestibilidade] || ""]],
   alerta: info => info.venenosa_ou_nao_comestivel === true ? "Cuidado: esta fruta pode ser venenosa ou não comestível. Não coma sem um adulto." : "",
   salvar: () => { document.getElementById("saveBtn").click(); document.querySelector('.nav button[data-page="albumPage"]').click(); },
-  acoesExtras: () => [{ texto: "🗺️ Ver página da fruta", aoClicar: () => {} }],
   novaFoto: () => document.querySelector('.nav button[data-page="homePage"]').click()
 });
 </script>
