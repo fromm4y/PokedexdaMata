@@ -309,6 +309,41 @@ PokedexAdaptador.iniciar({
   novaFoto: () => { irPara("descobrir"); document.getElementById("btnGalCodex").click(); }
 });
 desenharInicio();   // tela inicial
+/* PESQUISA (pedido da professora): procura em TODAS as categorias e, se você já
+   reconheceu o animal, abre a ficha completa dele. */
+(function () {
+  const inp = $("search"), cat = $("categorias"), titCat = cat.previousElementSibling;
+  function extrasMeus() {
+    const q = norm(inp.value); if (!q) return;
+    const doCatalogo = new Set(animals.map(a => norm(a.name)));
+    lerMeu().filter(m => !doCatalogo.has(norm(m.nome)) && norm([m.nome, m.cientifico].join(" ")).includes(q)).forEach(m => {
+      const card = document.createElement("article"); card.className = "animal-card meu"; card.tabIndex = 0;
+      card.innerHTML = `<img src="${m.foto || VAZIA}" alt="Foto de ${esc(m.nome)}"><div class="body"><span class="tag">Meu Codex</span><span class="tag meu">✅ Escaneado</span><h3>${esc(m.nome)}</h3><p>Toque para ver a ficha completa.</p></div>`;
+      card.onclick = () => abrirMeu(m);
+      const vazio = $("results").querySelector(".empty"); if (vazio) vazio.remove();
+      $("results").prepend(card);
+    });
+  }
+  function abrirMeu(m) { const f = PokedexAdaptador.fichaSalva && PokedexAdaptador.fichaSalva(m.nome); if (f) PokedexAdaptador.abrirFicha(f.info, f.foto || m.foto); }
+  function modoBusca() {
+    const tem = !!norm(inp.value);
+    cat.hidden = titCat.hidden = tem;
+    if (tem && activeGroup !== "Todos") { activeGroup = "Todos"; document.querySelectorAll("#filters .chip").forEach(b => b.classList.toggle("active", b.dataset.filter === "Todos")); render(); }
+    extrasMeus();
+  }
+  function buscar() {
+    const q = norm(inp.value); modoBusca(); if (!q) return;
+    const meus = lerMeu(), achaMeu = meus.find(m => norm(m.nome) === q) || meus.find(m => norm(m.nome).startsWith(q)) || meus.find(m => norm(m.nome).includes(q));
+    const a = animals.find(x => norm(x.name) === q) || animals.find(x => norm(x.name).startsWith(q)) || animals.find(x => norm(x.name).includes(q));
+    const m = a ? meuDe(a) : achaMeu;
+    if (m && PokedexAdaptador.fichaSalva && PokedexAdaptador.fichaSalva(m.nome)) { abrirMeu(m); if (a) showDetail(a); return; }   // já reconhecido: ficha completa
+    if (a) { showDetail(a); return; }
+    $("results").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  inp.addEventListener("input", modoBusca);
+  $("searchBtn").addEventListener("click", buscar);
+  inp.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); buscar(); } });
+})();
 </script>
 </body>
 </html>
