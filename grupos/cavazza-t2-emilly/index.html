@@ -795,7 +795,7 @@ function desenharMapaFlores(){
     ? `<div class="df-biomas">${usados.map(b => `<button type="button" data-b="${b}">${(DF_BIOMAS.find(x => x.nome === b) || {}).ic || ""} ${b} <small>${desc.filter(d => d.biomas.includes(b)).length}</small></button>`).join("")}</div>`
     : `<div class="empty-state">🌸<h3>Nenhuma flor no mapa ainda</h3><p>Descubra uma flor pela foto e ela aparece aqui, no bioma onde vive!</p></div>`;
   document.querySelectorAll("#dfMapaLista [data-b]").forEach(x => x.onclick = () => listar(x.dataset.b));
-  FichaPokedex.mapaBiomas(m, usados.length ? usados : null, { escuro: true, aoClicar: listar }).then(map => {
+  FichaPokedex.mapaBiomas(m, usados.length ? usados : null, { escuro: true, aoClicar: listar, habitat: PokedexAdaptador.itensDoBioma }).then(map => {
     if (!map || !window.L) return;
     desc.forEach((d, k) => d.biomas.forEach(bio => {
       const base = FichaPokedex.BIOMAS[bio]; if (!base) return;

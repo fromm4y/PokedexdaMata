@@ -547,6 +547,7 @@ module.exports = async (req, res) => {
    - ACERTOU: a mensagem de acerto do grupo (Missão 6).
    Devolvemos no MESMO formato do Google (candidates…text), para o app antigo
    e o novo entenderem igual. */
+const temaDoBrasil = m => /brasil|brasileir|amaz[oô]ni|nativ/i.test(String(m.O_QUE_PROCURAR || "") + " " + String((m.GRUPO && m.GRUPO.tema) || ""));
 function aplicarMissoes(missoes, data) {
   const parte = data?.candidates?.[0]?.content?.parts?.[0];
   if (!parte || typeof parte.text !== "string") return data;
@@ -558,6 +559,9 @@ function aplicarMissoes(missoes, data) {
   // Cada front chama o nome de um jeito (nome, name…); a Missão 6 usa
   // r.nome_popular, então garantimos que ele exista.
   r.nome_popular = r.nome_popular || r.nome || r.name || "essa espécie";
+  // Tema só do Brasil ("aves do Brasil", "frutas brasileiras", "animal da
+  // Amazônia"...): o mapa fica só nos biomas brasileiros, sem outros países.
+  if (temaDoBrasil(missoes)) { r.mundo = []; r.habitat_mundo = ""; r.so_brasil = true; }
   if (r.e_do_tema === false) {
     const oque = String(r.o_que_e || "outra coisa").trim();
     r.identificado = false;

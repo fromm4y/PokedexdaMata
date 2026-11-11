@@ -189,6 +189,13 @@
     if (tudo[nome] && foto) { tudo[nome].foto = foto; gravarFichas(tudo); }
     setTimeout(marcarAlbum, 300);
   }
+  /* itensDoBioma(bioma): espécies reconhecidas neste aparelho que vivem no
+     bioma — para a cena do habitat ao lado dos mapas dos grupos. */
+  function itensDoBioma(bioma) {
+    const tudo = lerFichas();
+    return Object.keys(tudo).map(k => tudo[k]).filter(f => f && f.info && [].concat(f.info.biomas || []).includes(bioma))
+      .map(f => ({ nome: f.info.nome_popular || f.info.nome || "Espécie", img: f.foto || "", icone: CFG.icone || "🌿", fauna: !!CFG.fauna, biomas: [].concat(f.info.biomas || []) }));
+  }
   function fichaPeloNome(texto) {
     const n = normNome(texto), tudo = lerFichas();
     if (!n) return null;
@@ -486,5 +493,5 @@
   /* Ao começar uma nova identificação, o resultado antigo volta a ficar escondido. */
   document.addEventListener("change", e => { if (e.target && e.target.type === "file") document.documentElement.classList.toggle("fp-esconder", CFG.esconder.length > 0); }, true);
 
-  window.PokedexAdaptador = { fichaSalva: fichaPeloNome, salvarNoAlbumComum: info => salvarNoAlbumComum(info || ultimaFicha()), iniciar, mostrarFront, grupo: GRUPO, lerAlbum, desenharAlbum: desenharAlbumComum, ultimaFicha, abrirFicha };
+  window.PokedexAdaptador = { itensDoBioma, fichaSalva: fichaPeloNome, salvarNoAlbumComum: info => salvarNoAlbumComum(info || ultimaFicha()), iniciar, mostrarFront, grupo: GRUPO, lerAlbum, desenharAlbum: desenharAlbumComum, ultimaFicha, abrirFicha };
 })();

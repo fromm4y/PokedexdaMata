@@ -893,7 +893,7 @@ PokedexAdaptador.iniciar({
     const div = document.createElement("div"); div.className = "mapa-aves";
     const antigo = cardOnde.querySelector(".mapa-aves, .map"); antigo.replaceWith(div);
     if (info && info.nome_popular) $("habitat").innerHTML = `<b>${esc(info.nome_popular)}</b>: ${esc(info.habitat_descricao || info.habitat || "")}`;
-    FichaPokedex.mapaBiomas(div, biomas.length ? biomas : null, { escuro: true });
+    FichaPokedex.mapaBiomas(div, biomas.length ? biomas : null, { escuro: true, habitat: PokedexAdaptador.itensDoBioma });
   }
 })();
 </script>

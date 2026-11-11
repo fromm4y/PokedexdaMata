@@ -428,7 +428,7 @@ function desenharMapa(){
   const biomas=Object.keys(porBioma);
   const el=document.getElementById("mapaFrutadex"),chave=biomas.join("|");
   if(mapaFeito!==chave){mapaFeito=chave;el.innerHTML="";const novo=document.createElement("div");novo.style.cssText="width:100%;height:100%";el.appendChild(novo);
-    FichaPokedex.mapaBiomas(novo,biomas.length?biomas:null,{escuro:true,aoClicar:mostrarBioma})}
+    FichaPokedex.mapaBiomas(novo,biomas.length?biomas:null,{escuro:true,aoClicar:mostrarBioma,habitat:PokedexAdaptador.itensDoBioma})}
   const box=document.getElementById("biomaLista");
   box.innerHTML=biomas.length?'<h2>🍓 Suas frutas por bioma</h2>':'<h2>🌎 Os biomas do Brasil</h2><p class="small">Quando você salvar frutas no álbum, elas aparecem aqui, no bioma onde vivem.</p>';
   biomas.forEach(b=>{const h=document.createElement("h3");h.textContent=b;box.appendChild(h);porBioma[b].forEach(n=>{const c=document.createElement("span");c.className="chip";c.textContent=n;box.appendChild(c)})});

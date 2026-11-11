@@ -659,7 +659,7 @@ PokedexAdaptador.iniciar({
     const velho = SEC.lugares.querySelector(".mapa-frutas");
     if (velho) velho.replaceWith(div); else $("placeInfo").insertAdjacentElement("afterend", div);
     if (info && info.nome_popular) $("placeInfo").textContent = info.nome_popular + ": " + (info.habitat_descricao || "veja no mapa os biomas onde ela cresce.");
-    FichaPokedex.mapaBiomas(div, info && info.biomas && info.biomas.length ? info.biomas : null, { escuro: true });
+    FichaPokedex.mapaBiomas(div, info && info.biomas && info.biomas.length ? info.biomas : null, { escuro: true, habitat: PokedexAdaptador.itensDoBioma });
   }
   abaBryan("descobrir");
 })();

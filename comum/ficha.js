@@ -187,6 +187,16 @@
   function mapaBiomas(el, nomes, o) {
     o = o || {};
     if (!el) return Promise.resolve(null);
+    // o.habitat: function(bioma) -> itens da cena. Tocar num bioma mostra a
+    // imagem do habitat (com as espécies dele) logo abaixo do mapa.
+    if (o.habitat) {
+      let caixa = el.nextElementSibling && el.nextElementSibling.classList.contains("fp-mapa-habitat") ? el.nextElementSibling : null;
+      if (!caixa) { caixa = document.createElement("div"); caixa.className = "fp-mapa-habitat"; caixa.style.marginTop = "14px"; el.insertAdjacentElement("afterend", caixa); }
+      const mostrar = nome => cena(caixa, { bioma: nome, itens: (o.habitat(nome) || []), vazio: o.habitatVazio || "Toque nos outros biomas para ver quem vive em cada um. Você ainda não descobriu nada do(a) {bioma}.", aoTrocar: nb => { if (o.aoClicar) o.aoClicar(nb); } });
+      const clicarOriginal = o.aoClicar;
+      o = Object.assign({}, o, { aoClicar: nome => { if (clicarOriginal) clicarOriginal(nome); mostrar(nome); caixa.scrollIntoView({ behavior: "smooth", block: "nearest" }); } });
+      mostrar((nomes && nomes.find(n => BIOMAS[n])) || "Amazônia");
+    }
     carregarRecursos();
     el.classList.add("fp-mapa-solto");
     if (o.escuro) el.classList.add("fp-mapa-escuro");
