@@ -687,7 +687,7 @@ PokedexAdaptador.iniciar({
 });
 </script>
 
-<!-- ===== ABAS + abertura animada: a raposa rouba as frutas (pedido de 11/11) ===== -->
+<!-- ===== ABAS + cena da raposa (uma só) + Minhas descobertas com recompensas (11/11) ===== -->
 <style id="abas-eduardo">
 body>header{padding:14px 16px 12px!important}body>header .fox{width:56px!important;height:56px!important;font-size:30px!important;margin:0 auto 4px!important}body>header h1{font-size:clamp(26px,4vw,38px)!important;margin:2px 0!important}body>header p{margin:2px 0!important}
 .abas-edu{position:sticky;top:0;z-index:50;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:10px;margin:0 auto 16px;max-width:980px;background:rgba(18,40,24,.88);backdrop-filter:blur(8px);border-radius:0 0 22px 22px;box-shadow:0 8px 20px #0004}
@@ -696,23 +696,37 @@ body>header{padding:14px 16px 12px!important}body>header .fox{width:56px!importa
 main>.aba-edu{display:none}main>.aba-edu.on{display:block;animation:abaEdu .3s ease}
 @keyframes abaEdu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .aba-edu>section{margin-bottom:18px}
-/* abertura */
-.abertura{position:relative;height:340px;border-radius:24px;overflow:hidden;margin:6px 0 14px;background:linear-gradient(180deg,#bfe6ff 0%,#e9f8ff 55%,#7cc46b 56%,#4f9a45 100%);border:3px solid #fff;box-shadow:0 12px 28px #0004}
-.abertura .sol{position:absolute;top:22px;right:40px;width:64px;height:64px;border-radius:50%;background:radial-gradient(circle,#fff6b0,#ffd23f);box-shadow:0 0 40px #ffd23f}
-.abertura .arv{position:absolute;bottom:42%;font-size:70px;filter:drop-shadow(0 4px 4px #0003)}
-.abertura .chao-frutas{position:absolute;left:0;right:0;bottom:58px;height:60px}
-.abertura .fr{position:absolute;bottom:0;font-size:44px;transition:transform .45s ease,opacity .45s ease;filter:drop-shadow(0 4px 3px #0004)}
-.abertura .fr.pega{transform:translateY(-60px) scale(.3);opacity:0}
-.abertura .rap{position:absolute;bottom:34px;left:-260px;width:220px;filter:drop-shadow(0 8px 8px #0005)}
-.abertura .rap img{width:100%;display:block}
-.abertura .rap .em{font-size:110px;display:block;transform:scaleX(-1)}
-.abertura .rap.corre img,.abertura .rap.corre .em{animation:puloImg .3s ease-in-out infinite alternate}
-.abertura .balao{position:absolute;top:22px;left:50%;transform:translateX(-50%) scale(.8);opacity:0;max-width:min(86%,520px);background:#fff;color:#2b2b2b;font-weight:900;font-size:clamp(17px,2.4vw,22px);padding:14px 20px;border-radius:22px;box-shadow:0 8px 20px #0003;text-align:center;transition:all .35s cubic-bezier(.3,1.6,.6,1)}
-.abertura .balao::after{content:"";position:absolute;bottom:-14px;left:50%;margin-left:-12px;border:12px solid transparent;border-bottom:0;border-top-color:#fff}
-.abertura .balao.on{opacity:1;transform:translateX(-50%) scale(1)}
-.abertura-botoes{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:6px}
-.abertura-botoes button{width:auto!important;margin:0!important}
-@media(max-width:700px){.abertura{height:280px}.abertura .rap{width:160px}.abertura .fr{font-size:34px}}
+/* cena da raposa: maior, com as frutinhas no chão e o balão */
+.cena-raposa{height:270px!important}
+.cena-raposa .frutinha{position:absolute;bottom:40px;z-index:1;width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#fff3d6);border:3px solid #f2c66d;box-shadow:0 0 0 4px rgba(242,198,109,.25),0 0 16px rgba(242,198,109,.6);display:grid;place-items:center;font-size:30px;transition:transform .45s ease,opacity .45s ease;animation:frutinhaBalanca 2.4s ease-in-out infinite}
+.cena-raposa .frutinha.pega{transform:translateY(-70px) scale(.2)!important;opacity:0;animation:none}
+@keyframes frutinhaBalanca{50%{transform:translateY(-5px)}}
+.cena-raposa .balao{position:absolute;top:14px;left:50%;z-index:4;transform:translateX(-50%) scale(.8);opacity:0;max-width:min(88%,520px);background:#fff;color:#2b2b2b;font-weight:900;font-size:clamp(16px,2.2vw,21px);padding:12px 18px;border-radius:20px;box-shadow:0 8px 20px #0004;text-align:center;transition:all .35s cubic-bezier(.3,1.6,.6,1)}
+.cena-raposa .balao::after{content:"";position:absolute;bottom:-12px;left:50%;margin-left:-10px;border:10px solid transparent;border-bottom:0;border-top-color:#fff}
+.cena-raposa .balao.on{opacity:1;transform:translateX(-50%) scale(1)}
+.raposa-corre.manual{animation:none!important}
+.botoes-raposa{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 4px}
+.botoes-raposa button{width:auto!important;margin:0!important}
+/* recompensas */
+.explica{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.explica div{background:rgba(255,255,255,.06);border:1px solid rgba(180,212,144,.25);border-radius:16px;padding:12px 14px}
+.explica div>b{display:block;font-size:17px;margin-bottom:4px}.explica p{margin:0;font-size:15px;line-height:1.45}
+.trilha{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-top:12px}
+.premio{border-radius:18px;padding:14px;text-align:center;background:rgba(255,255,255,.05);border:2px dashed rgba(180,212,144,.35)}
+.premio .ic{font-size:40px;display:block;filter:grayscale(1) opacity(.5)}
+.premio b{display:block;margin:6px 0 2px}.premio small{display:block;opacity:.85;font-size:13.5px}
+.premio .meta{display:inline-block;margin-top:8px;font-weight:800;font-size:13px;padding:4px 10px;border-radius:99px;background:rgba(0,0,0,.3)}
+.premio.ok{border-style:solid;border-color:#f2c66d;background:linear-gradient(160deg,rgba(242,198,109,.18),rgba(255,255,255,.04));box-shadow:0 0 18px rgba(242,198,109,.25)}
+.premio.ok .ic{filter:none}
+.premio label{display:flex;gap:6px;justify-content:center;align-items:center;margin-top:8px;font-weight:700;font-size:14px;cursor:pointer}
+.barra-pts{height:14px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden;margin:6px 0}
+.barra-pts span{display:block;height:100%;background:linear-gradient(90deg,#f08c1b,#f2c66d);transition:width .5s}
+/* efeitos das recompensas */
+body.rec-chapeu .raposa-corre::before,body.rec-chapeu .cena-raposa .rap-chapeu{content:"🎩";position:absolute;top:-34px;left:58%;font-size:34px;z-index:3}
+body.rec-cesta .slot.ok{border-color:#ffd54a!important;box-shadow:0 0 0 2px #ffd54a,0 0 22px rgba(255,213,74,.6)!important}
+body.rec-por-do-sol .cena-raposa{filter:sepia(.35) saturate(1.4) hue-rotate(-15deg)}
+.titulo-mestre{display:inline-block;margin-top:4px;background:linear-gradient(90deg,#f2c66d,#f08c1b);color:#2b1700;font-weight:900;padding:4px 12px;border-radius:99px;font-size:14px}
+@media(max-width:700px){.explica{grid-template-columns:1fr}}
 </style>
 <script>
 (function () {
@@ -721,17 +735,12 @@ main>.aba-edu{display:none}main>.aba-edu.on{display:block;animation:abaEdu .3s e
   const cam = secs.find(x => x.classList.contains("camera")), res = $("result"), jogo = $("raposaJogo");
   const cardDe = t => secs.find(x => (x.querySelector("h2") || {}).textContent && x.querySelector("h2").textContent.includes(t));
   const desc = cardDe("Minhas descobertas"), alb = cardDe("Álbum das frutas");
-  // tela inicial com a abertura
-  const ini = document.createElement("section"); ini.className = "card";
-  ini.innerHTML = `<h2>🍎 O mistério das frutas brasileiras</h2>
-    <div class="abertura" id="abertura"><div class="sol"></div><span class="arv" style="left:4%">🌳</span><span class="arv" style="right:6%">🌴</span>
-      <div class="chao-frutas" id="chaoFrutas"></div>
-      <div class="rap" id="rapAbertura"><img src="img/raposa.webp" alt="Raposa" onerror="this.outerHTML='<span class=&quot;em&quot;>🦊</span>'"></div>
-      <div class="balao" id="balao"></div></div>
-    <div class="abertura-botoes"><button type="button" id="vamosEncontrar">📷 Vamos encontrar as frutas!</button><button type="button" class="secondary" id="verDeNovo">🔁 Ver de novo</button></div>`;
-  const ABAS = [["inicio", "🏠 Início", [ini, jogo]], ["camera", "📷 Câmera", [cam, res]], ["album", "📚 Álbum", [alb]], ["descobertas", "🏆 Minhas descobertas", [desc]]];
-  const nav = document.createElement("nav"); nav.className = "abas-edu"; nav.setAttribute("aria-label", "Abas");
-  main.before(nav);
+  // ---- cena: balão + frutinhas + botões ----
+  const cena = $("cenaRaposa");
+  cena.insertAdjacentHTML("beforeend", '<div class="balao" id="balao"></div><div id="frutinhas"></div>');
+  cena.insertAdjacentHTML("afterend", '<div class="botoes-raposa"><button type="button" id="vamosEncontrar">📷 Vamos encontrar as frutas!</button><button type="button" class="secondary" id="verDeNovo">🔁 Ver a raposa de novo</button></div>');
+  const ABAS = [["inicio", "🏠 Início", [jogo]], ["camera", "📷 Câmera", [cam, res]], ["album", "📚 Álbum", [alb]], ["descobertas", "🏆 Minhas descobertas", [desc]]];
+  const nav = document.createElement("nav"); nav.className = "abas-edu"; nav.setAttribute("aria-label", "Abas"); main.before(nav);
   ABAS.forEach(([id, txt, els]) => {
     const b = document.createElement("button"); b.type = "button"; b.dataset.aba = id; b.textContent = txt; nav.append(b);
     const w = document.createElement("div"); w.className = "aba-edu"; w.dataset.aba = id; els.filter(Boolean).forEach(e => w.append(e)); main.append(w);
@@ -740,37 +749,82 @@ main>.aba-edu{display:none}main>.aba-edu.on{display:block;animation:abaEdu .3s e
     nav.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.aba === id));
     main.querySelectorAll(".aba-edu").forEach(w => w.classList.toggle("on", w.dataset.aba === id));
     if (id === "inicio") abertura();
+    if (id === "descobertas") desenharRecompensas();
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   nav.querySelectorAll("button").forEach(b => b.onclick = () => abaEdu(b.dataset.aba));
   $("vamosEncontrar").onclick = () => abaEdu("camera");
 
-  // ---- a abertura animada ----
+  // ---- animação: as frutinhas no chão, a raposa passa e leva todas ----
   let timers = [], raf = 0;
   const depois = (ms, f) => timers.push(setTimeout(f, ms));
   const balao = t => { const b = $("balao"); b.classList.remove("on"); depois(120, () => { b.textContent = t; b.classList.add("on"); }); };
   function abertura() {
     timers.forEach(clearTimeout); timers = []; cancelAnimationFrame(raf);
-    const chao = $("chaoFrutas"), rap = $("rapAbertura"), caixa = $("abertura");
-    const frutas = FRUTAS_RAPOSA.slice(0, 7);
-    chao.innerHTML = frutas.map((f, i) => `<span class="fr" style="left:${16 + i * 10}%">${f[2]}</span>`).join("");
-    rap.style.transition = "none"; rap.style.left = "-260px"; rap.classList.remove("corre");
+    const rap = $("raposaCorre"), box = $("frutinhas"), rec = lerRecuperadas();
+    const comRaposa = FRUTAS_RAPOSA.filter(f => !rec[f[0]]);
+    if (!comRaposa.length) { box.innerHTML = ""; rap.classList.remove("manual"); balao("🏆 Você recuperou todas as frutas! A raposa está de boca aberta!"); return; }
+    const mostrar = comRaposa.slice(0, 8);
+    box.innerHTML = mostrar.map((f, i) => `<span class="frutinha" style="left:${10 + i * (78 / Math.max(1, mostrar.length - 1 || 1))}%;animation-delay:${i * .2}s" title="${f[0]}">${f[2]}</span>`).join("");
+    rap.classList.add("manual"); rap.style.left = "-260px";
     balao("Aqui estão as frutas brasileiras! 🍇🍍🍒");
-    depois(2600, () => { balao("Hein? Quem vem lá?! 👀"); });
-    depois(3600, () => {
-      rap.classList.add("corre"); const W = caixa.clientWidth, ini0 = performance.now(), dur = 4200;
+    depois(2600, () => balao("Hein? Quem vem lá?! 👀"));
+    depois(3500, () => {
+      const W = cena.clientWidth, t0 = performance.now(), dur = 4500;
       const passo = t => {
-        const k = Math.min(1, (t - ini0) / dur), x = -260 + k * (W + 300); rap.style.left = x + "px";
-        const boca = x + rap.clientWidth * .8;
-        chao.querySelectorAll(".fr").forEach(f => { if (!f.classList.contains("pega") && f.offsetLeft < boca) f.classList.add("pega"); });
-        if (k < 1) raf = requestAnimationFrame(passo); else rap.classList.remove("corre");
+        const k = Math.min(1, (t - t0) / dur), x = -260 + k * (W + 320); rap.style.left = x + "px";
+        const boca = x + rap.offsetWidth * .75;
+        box.querySelectorAll(".frutinha").forEach(f => { if (!f.classList.contains("pega") && f.offsetLeft < boca) f.classList.add("pega"); });
+        if (k < 1) raf = requestAnimationFrame(passo);
+        else { rap.style.left = ""; rap.classList.remove("manual"); }   // volta a correr pela floresta
       };
       raf = requestAnimationFrame(passo);
-      depois(1300, () => balao("Ah não! A raposa pegou as frutas! 🦊💨"));
+      depois(1200, () => balao("Ah não! A raposa pegou as frutas! 🦊💨"));
     });
-    depois(8600, () => balao("Vamos encontrá-las? Escaneie frutas para recuperar! 📷"));
+    depois(8700, () => balao("Vamos encontrá-las? Escaneie frutas para recuperar! 📷"));
   }
   $("verDeNovo").onclick = abertura;
+
+  // ---- Minhas descobertas: o que é cada coisa + para que servem os pontos ----
+  const PREMIOS = [
+    { pts: 30, ic: "🎩", nome: "Chapéu da raposa", txt: "A raposa passa a correr de chapéu na floresta.", cls: "rec-chapeu" },
+    { pts: 60, ic: "🧺", nome: "Cesta dourada", txt: "As frutas recuperadas brilham em dourado na sua cesta.", cls: "rec-cesta" },
+    { pts: 100, ic: "🌅", nome: "Floresta ao pôr do sol", txt: "A cena da raposa fica com as cores do fim de tarde.", cls: "rec-por-do-sol" },
+    { pts: 150, ic: "⭐", nome: "Título: Mestre das Frutas", txt: "Seu título aparece no topo do app.", cls: "rec-titulo" },
+    { pts: 250, ic: "🏆", nome: "Troféu da floresta", txt: "Você zera a trilha! A raposa admite: você é o(a) melhor detetive de frutas.", cls: "rec-trofeu" }
+  ];
+  const CH = "frutas_premios_desligados";
+  const desligados = () => { try { return JSON.parse(localStorage.getItem(CH) || "[]"); } catch (e) { return []; } };
+  const pontos = () => Number(localStorage.getItem("frutas_points") || 0);
+  function aplicar() {
+    const p = pontos(), off = desligados();
+    PREMIOS.forEach(pr => document.body.classList.toggle(pr.cls, p >= pr.pts && !off.includes(pr.cls)));
+    let t = document.querySelector(".titulo-mestre");
+    if (document.body.classList.contains("rec-titulo")) { if (!t) { t = document.createElement("div"); t.className = "titulo-mestre"; t.textContent = "⭐ Mestre das Frutas"; document.querySelector("body>header").appendChild(t); } }
+    else if (t) t.remove();
+  }
+  function desenharRecompensas() {
+    const p = pontos(), lvl = Math.floor(Number(localStorage.getItem("frutas_discovered_count") || 0) / 4) + 1;
+    let box = $("recompensas");
+    if (!box) {
+      box = document.createElement("div"); box.id = "recompensas";
+      desc.querySelector("h2").insertAdjacentHTML("afterend", `<div class="explica">
+        <div><b>⭐ Pontos</b><p>Cada fruta identificada vale <b>+10 pontos</b>. Os pontos abrem os prêmios da <b>Trilha da raposa</b>, logo abaixo.</p></div>
+        <div><b>🧗 Nível</b><p>A cada <b>4 frutas</b> descobertas você sobe <b>1 nível</b> de explorador. O "progresso" mostra quantas faltam.</p></div>
+        <div><b>🏅 Medalhas</b><p>Você ganha <b>1 medalha</b> por fruta identificada. E cada fruta faz a raposa <b>devolver uma do saco</b>!</p></div></div>`);
+      desc.appendChild(box);
+    }
+    const prox = PREMIOS.find(x => p < x.pts), off = desligados();
+    box.innerHTML = `<h3>🦊 Trilha da raposa: para que servem os pontos</h3>
+      <p>${prox ? `Faltam <b>${prox.pts - p} pontos</b> para ganhar <b>${prox.ic} ${prox.nome}</b> (≈ ${Math.ceil((prox.pts - p) / 10)} frutas).` : "🏆 Você ganhou todos os prêmios da trilha!"}</p>
+      <div class="barra-pts"><span style="width:${Math.min(100, p / PREMIOS[PREMIOS.length - 1].pts * 100)}%"></span></div>
+      <div class="trilha">${PREMIOS.map(pr => `<div class="premio ${p >= pr.pts ? "ok" : ""}"><span class="ic">${pr.ic}</span><b>${pr.nome}</b><small>${pr.txt}</small>
+        ${p >= pr.pts ? (pr.cls === "rec-trofeu" ? `<span class="meta">✅ Conquistado!</span>` : `<label><input type="checkbox" data-cls="${pr.cls}" ${off.includes(pr.cls) ? "" : "checked"}> usar</label>`) : `<span class="meta">🔒 ${pr.pts} pontos</span>`}</div>`).join("")}</div>
+      <p style="opacity:.8;font-size:14px;margin-top:10px">Nível atual: <b>${lvl}</b> · Pontos: <b>${p}</b></p>`;
+    box.querySelectorAll("input[data-cls]").forEach(i => i.onchange = () => { let o = desligados().filter(x => x !== i.dataset.cls); if (!i.checked) o.push(i.dataset.cls); try { localStorage.setItem(CH, JSON.stringify(o)); } catch (e) {} aplicar(); });
+  }
+  new MutationObserver(() => { aplicar(); if (document.querySelector('.aba-edu[data-aba="descobertas"].on')) desenharRecompensas(); }).observe($("totalPoints"), { childList: true, characterData: true, subtree: true });
+  aplicar();
   abaEdu("inicio");
 })();
 </script>
