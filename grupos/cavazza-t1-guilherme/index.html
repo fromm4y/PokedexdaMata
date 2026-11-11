@@ -262,4 +262,8 @@ PokedexAdaptador.iniciar({
   novaFoto: () => go("scanner")
 });
 </script>
+
+<!-- Trilha de prêmios: os pontos abrem recompensas (comum/recompensas.js) -->
+<script src="/comum/recompensas.js"></script>
+<script>Recompensas.iniciar({ pontos: () => Number(document.getElementById("xp").textContent) || 0, onde: "#badges", comoGanhar: "Cada animal descoberto pelo robô dá XP (pontos de exploração).", cor: "#39e58c" });</script>
 </body></html>

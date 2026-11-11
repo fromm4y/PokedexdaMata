@@ -419,5 +419,9 @@ PokedexAdaptador.iniciar({
   novaFoto: () => document.getElementById("btnGaleria").click()
 });
 </script>
+
+<!-- Trilha de prêmios: os pontos abrem recompensas (comum/recompensas.js) -->
+<script src="/comum/recompensas.js"></script>
+<script>Recompensas.iniciar({ pontos: () => Number(document.getElementById("pontos").textContent) || 0, onde: "#aba-medalhas", comoGanhar: "Cada ave descoberta e cada medalha dá pontos.", cor: "#1f8f5a" });</script>
 </body>
 </html>

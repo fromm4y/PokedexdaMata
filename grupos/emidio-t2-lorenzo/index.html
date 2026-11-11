@@ -128,4 +128,8 @@ PokedexAdaptador.iniciar({
   novaFoto: () => { document.getElementById("retakeBtn").click(); document.getElementById("takePhotoBtn").click(); }
 });
 </script>
+
+<!-- Trilha de prêmios: os pontos abrem recompensas (comum/recompensas.js) -->
+<script src="/comum/recompensas.js"></script>
+<script>Recompensas.iniciar({ pontos: () => ["explorePoints","quizPoints","achievementPoints"].reduce((t, id) => t + (Number((document.getElementById(id) || {}).textContent) || 0), 0), onde: "#medalhas", comoGanhar: "Descobrir mamíferos, acertar o quiz e ganhar conquistas dá pontos.", cor: "#1769aa" });</script>
 </body></html>

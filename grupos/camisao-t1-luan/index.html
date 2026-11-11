@@ -513,5 +513,9 @@ PokedexAdaptador.iniciar({
 <style id="letras-maiores">/* letras pequenas demais para o tablet (varredura 11/11) */
 .tags .tag{font-size:13px!important}
 </style>
+
+<!-- Trilha de prêmios: os pontos abrem recompensas (comum/recompensas.js) -->
+<script src="/comum/recompensas.js"></script>
+<script>Recompensas.iniciar({ pontos: () => Number(document.getElementById("achPoints").textContent) || 0, onde: "#conquistas", comoGanhar: "Descobrir aves, completar missões e conquistas dá pontos.", cor: "#2f7d43" });</script>
 </body>
 </html>
