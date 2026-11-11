@@ -26,6 +26,28 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 - só o primeiro nome dos alunos no site; os arquivos originais (com nomes completos) foram apagados do repositório e do histórico.
 
 
+**Ajustes de 11/11 (2ª rodada):**
+
+- **Brasil × mundo:**
+  - Temas só do Brasil **não reconhecem** espécies de fora; elas viram "fora do tema: não é do Brasil", e o mapa mostra os biomas brasileiros e o habitat.
+  - Temas gerais reconhecem o mundo todo e marcam **todos os países** onde a espécie vive, junto com os biomas brasileiros.
+- **Eduardo:**
+  - Uma cena só: as frutinhas aparecem em bolinhas, somem quando a raposa passa, e balões contam a história.
+  - "Minhas descobertas" explica pontos, nível e medalhas, e ganhou a Trilha da raposa, com prêmios que os pontos abrem.
+- **Pontos com propósito:** a Trilha de prêmios (`comum/recompensas.js`) entrou em Isabelly, Guilherme, Luan e FaunaVision: título, vagalumes, festa nas descobertas, ficha arco-íris e Lenda da Mata.
+- **Detetives da Natureza:**
+  - As figurinhas viraram **cartas holográficas** com raridade (★/★★/★★★), PV, tipo e número da coleção.
+  - Agora são 14 árvores e 8 itens.
+  - Cada item tem um **poder** quando equipado:
+    - 🤠 +5 por árvore nova
+    - 🎒 quiz em dobro
+    - 🔍 lupa tira uma errada
+    - 🧥 segunda chance
+    - 🌿 20% de desconto
+    - 🥾 +3 por dia
+    - 🔭 +1 por acerto
+    - 🍀 carta surpresa
+
 **Ajustes de 11/11 (pedidos da professora):**
 
 - **Por grupo:**

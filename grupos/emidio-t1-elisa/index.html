@@ -503,7 +503,7 @@ body:not(.tela-inicio) header#cabecalho .sub{display:none}
  header#cabecalho .mascote.elf,header#cabecalho .mascote.human{grid-row:4;justify-self:center;height:200px!important}}
 </style>
 
-<!-- ===== Pedidos de 11/11: botões, voltar no topo, quiz volta à ficha, figurinhas na loja, escolher personagem ===== -->
+<!-- ===== Pedidos de 11/11 e 11/11 (2ª rodada): botões, voltar no topo, quiz volta à ficha, CARTAS especiais, itens com poderes, escolher personagem ===== -->
 <style id="detetives-1111">
 /* botões mais bonitos */
 .button{border:3px solid #fff8!important;border-radius:999px!important;padding:14px 24px!important;font-size:1.02rem!important;letter-spacing:.6px;
@@ -517,22 +517,6 @@ body:not(.tela-inicio) header#cabecalho .sub{display:none}
 .topo-voltar button{font:800 1rem "Fredoka","Nunito",sans-serif;cursor:pointer;border:2px solid #ffd5e1aa;background:#2b3a26e6;color:#fff3f6;border-radius:999px;padding:10px 18px;min-height:46px;box-shadow:0 4px 0 #0005}
 .topo-voltar button:hover{background:#3b4f34}
 .topo-voltar .inicio{margin-left:auto;background:#5a3e2be6}
-/* figurinhas */
-.fig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px}
-.figurinha{position:relative;background:linear-gradient(160deg,#fffdf7,#f6ecd8);color:#3b2a1d;border:5px solid #fff;border-radius:18px;padding:10px 10px 12px;box-shadow:0 0 0 3px #e8b04a,0 10px 22px #0006;transform:rotate(-1.5deg);transition:transform .2s;overflow:hidden}
-.figurinha:nth-child(2n){transform:rotate(1.5deg)}
-.figurinha:hover{transform:rotate(0) scale(1.04)}
-.figurinha::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,#ffffff88 50%,transparent 65%);transform:translateX(-120%);animation:brilho 4s ease-in-out infinite;pointer-events:none}
-@keyframes brilho{60%,100%{transform:translateX(120%)}}
-.figurinha .fig-arte{height:120px;border-radius:12px;background:radial-gradient(circle at 50% 40%,#fff6d4,#9caf68);display:grid;place-items:center;font-size:64px;overflow:hidden}
-.figurinha .fig-arte img{width:100%;height:100%;object-fit:cover}
-.figurinha.item .fig-arte{background:radial-gradient(circle at 50% 40%,#ffe9f0,#f08aa8)}
-.figurinha h4{margin:8px 0 2px;font:700 1.05rem "Fredoka",sans-serif;color:#5a3e2b}
-.figurinha small{display:block;color:#7a6650;font-weight:700}
-.figurinha .fig-num{position:absolute;top:8px;left:8px;background:#e8b04a;color:#fff;font:800 12px "Nunito",sans-serif;padding:3px 8px;border-radius:99px;z-index:2}
-.figurinha .button{margin-top:8px;padding:10px 16px!important;font-size:.9rem!important;width:100%}
-.figurinha.bloqueada{filter:grayscale(1);opacity:.55}
-.figurinha.bloqueada .fig-arte{font-size:44px}
 /* escolher personagem */
 .escolha-pers{display:flex;gap:14px;justify-content:center;margin:4px 0 16px;flex-wrap:wrap}
 .escolha-pers button{cursor:pointer;border:4px solid transparent;border-radius:22px;background:#1b2a1ccc;padding:10px 14px 12px;color:#fff3f6;font:700 1rem "Fredoka",sans-serif;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:150px}
@@ -541,92 +525,210 @@ body:not(.tela-inicio) header#cabecalho .sub{display:none}
 .selos-itens{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
 .selos-itens span{background:#fff;border-radius:99px;padding:4px 10px;font-weight:800;color:#5a3e2b;font-size:.9rem}
 </style>
+<style id="cartas-especiais">
+/* ===== Figurinhas = cartas especiais (holográficas) ===== */
+.fig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:18px;perspective:900px;align-items:start}
+.carta{--c1:#9caf68;--c2:#4e6630;position:relative;border-radius:16px;padding:7px;background:linear-gradient(145deg,#ffe58a,#d9a32b 40%,#fff3b0 55%,#c68a12);box-shadow:0 12px 26px #0007;transform-style:preserve-3d;transition:transform .25s;cursor:default}
+.carta:hover{transform:rotateY(-8deg) rotateX(5deg) translateY(-4px)}
+.carta-in{border-radius:11px;overflow:hidden;background:linear-gradient(170deg,var(--c1),var(--c2));color:#1d1408;padding:8px 8px 10px;position:relative}
+.carta-topo{display:flex;align-items:center;justify-content:space-between;gap:6px;font:800 13px "Nunito",sans-serif}
+.carta-topo b{font:700 15px "Fredoka",sans-serif;color:#1d1408;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.carta-topo .pv{font-weight:900;color:#a3122a;white-space:nowrap}.carta-topo .pv small{font-size:10px}
+.carta-arte{position:relative;height:118px;margin:6px 0;border-radius:8px;border:3px solid #e8c25a;background:radial-gradient(circle at 50% 35%,#fffbe6,#b9d68a);display:grid;place-items:center;font-size:64px;overflow:hidden;box-shadow:inset 0 0 12px #0004}
+.carta-arte img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.carta-arte::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 20%,#ff8de288 30%,#8affd488 40%,#fff59a88 50%,#8ab4ff88 60%,transparent 72%);background-size:250% 250%;mix-blend-mode:color-dodge;animation:holo 4s linear infinite;opacity:.55;pointer-events:none}
+@keyframes holo{0%{background-position:0% 0%}100%{background-position:250% 250%}}
+.carta-tipo{display:inline-block;font:800 11.5px "Nunito",sans-serif;background:#1d1408cc;color:#fff3c4;padding:3px 9px;border-radius:99px;margin-bottom:4px}
+.carta-txt{background:#fffdf3e6;border-radius:8px;padding:7px 8px;font:700 12.5px/1.35 "Nunito",sans-serif;color:#3b2a1d;min-height:52px}
+.carta-txt .poder{display:block;color:#7a2e8f}
+.carta-pe{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font:800 11.5px "Nunito",sans-serif;color:#1d1408}
+.carta-pe .estrelas{color:#fff3a0;text-shadow:0 1px 2px #000a;font-size:15px;letter-spacing:1px}
+.carta.rara{background:linear-gradient(145deg,#d6d6ff,#8f8fff 40%,#fff 55%,#7a7ad6)}
+.carta.lendaria{background:linear-gradient(145deg,#ff9fd3,#ffd36b,#7fffd4,#8ab4ff,#ff9fd3);background-size:300% 300%;animation:lenda 5s linear infinite}
+@keyframes lenda{0%{background-position:0 0}100%{background-position:300% 300%}}
+.carta.lendaria .carta-arte::after{opacity:.85}
+.carta.item .carta-arte{background:radial-gradient(circle at 50% 35%,#fff0f6,#f08aa8)}
+.carta .button{margin-top:8px!important;width:100%;padding:10px!important;font-size:.88rem!important}
+.carta.bloqueada{filter:grayscale(1) brightness(.75)}.carta.bloqueada .carta-arte{font-size:46px}
+.carta .preco-velho{text-decoration:line-through;opacity:.7;margin-right:4px}
+.poder-item{display:block;margin-top:4px;font-size:13px;font-weight:800;color:#ffd5e1}
+.poder-ativo{background:#3b5a2e;border:2px solid #b7cd7c;color:#fff;border-radius:14px;padding:10px 14px;margin:10px 0;font-weight:800}
+.lupa-btn{margin-top:10px}
+</style>
 <script>
 (function () {
-  const CIENT = { "ipê-amarelo": "Handroanthus albus", "pau-brasil": "Paubrasilia echinata", "jabuticabeira": "Plinia cauliflora", "araucaria": "Araucaria angustifolia", "castanheira": "Bertholletia excelsa", "jequitiba": "Cariniana legalis" };
-  const EMO_ARV = { "ipê-amarelo": "🌼", "pau-brasil": "🌳", "jabuticabeira": "🍇", "araucaria": "🌲", "castanheira": "🌰", "jequitiba": "🌳" };
-  const EMO_ITEM = { chapeu: "🤠", capa: "🧥", lupa: "🔍", "coroa-folhas": "🌿", mochila: "🎒", botas: "🥾" };
-  const VAZIO = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E";
-  const el = (t, c, txt) => { const e = document.createElement(t); if (c) e.className = c; if (txt != null) e.textContent = txt; return e; };
-  const figArvore = (item, i) => {
-    const f = el("article", "figurinha"); f.append(el("span", "fig-num", "#" + (i + 1)));
-    const a = el("div", "fig-arte"); const im = document.createElement("img"); im.alt = item.nome; im.src = VAZIO; im.dataset.especie = CIENT[item.id] || item.nome;
-    im.onerror = () => { a.textContent = EMO_ARV[item.id] || "🌳"; }; a.textContent = EMO_ARV[item.id] || "🌳"; a.appendChild(im); im.style.display = "none";
-    im.onload = () => { if (im.src !== VAZIO) { a.firstChild.nodeType === 3 && a.removeChild(a.firstChild); im.style.display = "block"; } };
-    f.append(a, el("h4", null, item.nome), el("small", null, item.descricao)); return f;
+  // ---------- mais árvores e itens (com raridade e bioma) ----------
+  catalogo.push(
+    { id: "sumauma", nome: "Sumaúma", preco: 30, descricao: "A gigante da Amazônia, com raízes enormes.", tipo: "árvore" },
+    { id: "mogno", nome: "Mogno", preco: 25, descricao: "Madeira valiosa; está ameaçado.", tipo: "árvore" },
+    { id: "paineira", nome: "Paineira", preco: 18, descricao: "Tronco com espinhos e flores rosas.", tipo: "árvore" },
+    { id: "cajueiro", nome: "Cajueiro", preco: 12, descricao: "Dá o caju e a castanha.", tipo: "árvore" },
+    { id: "buriti", nome: "Buriti", preco: 18, descricao: "Palmeira das veredas do Cerrado.", tipo: "árvore" },
+    { id: "aroeira", nome: "Aroeira", preco: 12, descricao: "Dá a pimenta-rosa.", tipo: "árvore" },
+    { id: "pitangueira", nome: "Pitangueira", preco: 10, descricao: "Frutinhas vermelhas e azedinhas.", tipo: "árvore" },
+    { id: "jacaranda", nome: "Jacarandá", preco: 22, descricao: "Florada roxa que pinta as ruas.", tipo: "árvore" }
+  );
+  itensCosmeticos.push({ id: "binoculo", nome: "Binóculo", preco: 16, categoria: "Acessório" }, { id: "trevo", nome: "Trevo da sorte", preco: 20, categoria: "Amuleto" });
+  const INFO_ARV = {
+    "ipê-amarelo": ["Handroanthus albus", "Cerrado", 1, "🌼"], "pau-brasil": ["Paubrasilia echinata", "Mata Atlântica", 3, "🌳"], "jabuticabeira": ["Plinia cauliflora", "Mata Atlântica", 2, "🍇"],
+    araucaria: ["Araucaria angustifolia", "Mata Atlântica", 2, "🌲"], castanheira: ["Bertholletia excelsa", "Amazônia", 3, "🌰"], jequitiba: ["Cariniana legalis", "Mata Atlântica", 3, "🌳"],
+    sumauma: ["Ceiba pentandra", "Amazônia", 3, "🌳"], mogno: ["Swietenia macrophylla", "Amazônia", 2, "🌳"], paineira: ["Ceiba speciosa", "Mata Atlântica", 2, "🌸"],
+    cajueiro: ["Anacardium occidentale", "Caatinga", 1, "🍎"], buriti: ["Mauritia flexuosa", "Cerrado", 2, "🌴"], aroeira: ["Schinus terebinthifolia", "Mata Atlântica", 1, "🌿"],
+    pitangueira: ["Eugenia uniflora", "Mata Atlântica", 1, "🍒"], jacaranda: ["Jacaranda mimosifolia", "Cerrado", 2, "💜"]
   };
-  const figItem = (item, i) => { const f = el("article", "figurinha item"); f.append(el("span", "fig-num", "#" + (i + 1)), el("div", "fig-arte", EMO_ITEM[item.id] || "🎁"), el("h4", null, item.nome), el("small", null, item.categoria)); return f; };
-
-  // ---- LOJA: tudo vira figurinha (árvores + itens do detetive) ----
+  const PODER = {
+    chapeu: ["🤠", "+5 pontos em cada árvore nova que você descobrir."],
+    mochila: ["🎒", "Os pontos do quiz valem em DOBRO."],
+    lupa: ["🔍", "No quiz, a lupa elimina uma resposta errada em cada pergunta."],
+    capa: ["🧥", "No quiz, se errar, a capa dá UMA segunda chance."],
+    "coroa-folhas": ["🌿", "20% de desconto em tudo na loja."],
+    botas: ["🥾", "+3 pontos de caminhada por dia ao abrir o menu."],
+    binoculo: ["🔭", "+1 ponto extra por resposta certa no quiz."],
+    trevo: ["🍀", "Ao descobrir uma árvore nova, 30% de chance de ganhar uma figurinha surpresa!"]
+  };
+  const RAR = ["", "comum", "rara", "lendaria"], RAR_TXT = ["", "★", "★★", "★★★"];
+  const usa = id => estado.equipados.includes(id);
+  const preco = it => usa("coroa-folhas") ? Math.ceil(it.preco * .8) : it.preco;
+  const VAZIO = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E";
+  const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
+  const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const TOTAL = () => catalogo.length + itensCosmeticos.length;
+  function cartaArvore(it, n) {
+    const [cien, bio, r, emo] = INFO_ARV[it.id] || [it.nome, "Brasil", 1, "🌳"];
+    const c = el("article", "carta " + RAR[r]); c.style.setProperty("--c1", r === 3 ? "#ffe9a8" : r === 2 ? "#cfe3ff" : "#d9ecb0"); c.style.setProperty("--c2", r === 3 ? "#e8a93a" : r === 2 ? "#7f9be0" : "#86a24f");
+    c.innerHTML = `<div class="carta-in"><div class="carta-topo"><b>${esc(it.nome)}</b><span class="pv"><small>PV</small> ${40 + r * 30 + it.preco}</span></div>
+      <div class="carta-arte">${emo}<img alt="" src="${VAZIO}" data-especie="${esc(cien)}" onload="if(this.naturalWidth<5)this.remove()" onerror="this.remove()"></div>
+      <span class="carta-tipo">🌳 Árvore · ${esc(bio)}</span>
+      <div class="carta-txt">${esc(it.descricao)}<i style="display:block;font-weight:600;opacity:.75;margin-top:2px">${esc(cien)}</i></div>
+      <div class="carta-pe"><span>#${String(n + 1).padStart(2, "0")}/${TOTAL()}</span><span class="estrelas">${RAR_TXT[r]}</span></div></div>`;
+    return c;
+  }
+  function cartaItem(it, n) {
+    const [emo, poder] = PODER[it.id] || ["🎁", ""];
+    const r = it.preco >= 18 ? 2 : 1;
+    const c = el("article", "carta item " + RAR[r]); c.style.setProperty("--c1", "#ffe1ea"); c.style.setProperty("--c2", "#c96b8b");
+    c.innerHTML = `<div class="carta-in"><div class="carta-topo"><b>${esc(it.nome)}</b><span class="pv">⚡</span></div>
+      <div class="carta-arte">${emo}</div><span class="carta-tipo">🎒 Item · ${esc(it.categoria)}</span>
+      <div class="carta-txt"><span class="poder">✨ Poder:</span>${esc(poder)}</div>
+      <div class="carta-pe"><span>#${String(catalogo.length + n + 1).padStart(2, "0")}/${TOTAL()}</span><span class="estrelas">${RAR_TXT[r]}</span></div></div>`;
+    return c;
+  }
+  const msg = (t, warn) => { $("lojaMensagem").className = "notice" + (warn ? " warn" : ""); $("lojaMensagem").textContent = t; };
+  function comprar(it, item) {
+    const lista = item ? estado.itensComprados : estado.figurinhas;
+    if (lista.includes(it.id)) return;
+    const pr = preco(it);
+    if (estado.pontos < pr) { msg("Você ainda não tem pontos suficientes para essa carta.", true); return; }
+    estado.pontos -= pr; lista.push(it.id); salvarEstado(); tocarSom(740);
+    msg(item ? `Nova carta: ${it.nome}! Vá em PERSONAGEM e equipe para usar o poder.` : `Nova carta: ${it.nome}! Ela já está no seu álbum.`);
+    renderLoja(); atualizarPontos();
+  }
+  // ---------- LOJA ----------
   renderLoja = function () {
     atualizarPontos(); const root = $("lojaItens"); root.replaceChildren(); root.className = "";
-    const sec = (titulo, lista, fazer, comprado, comprar) => {
+    if (usa("coroa-folhas")) root.append(el("div", "poder-ativo", "🌿 Coroa de folhas equipada: 20% de desconto em tudo!"));
+    const sec = (titulo, lista, fazer, item) => {
       root.append(el("h3", "section-title", titulo)); const g = el("div", "fig-grid");
-      lista.forEach((item, i) => { const f = fazer(item, i); const ok = comprado(item); const b = el("button", "button" + (ok ? " secondary" : ""), ok ? "✅ NO ÁLBUM" : `COMPRAR · ${item.preco} ⭐`); b.disabled = ok; b.onclick = () => comprar(item); f.append(b); g.append(f); });
+      lista.forEach((it, i) => { const c = fazer(it, i), ok = (item ? estado.itensComprados : estado.figurinhas).includes(it.id), pr = preco(it);
+        const b = el("button", "button" + (ok ? " secondary" : ""), ok ? "✅ NA COLEÇÃO" : `COMPRAR · ${pr !== it.preco ? `<span class="preco-velho">${it.preco}</span>` : ""}${pr} ⭐`); b.disabled = ok; b.onclick = () => comprar(it, item); c.append(b); g.append(c); });
       root.append(g);
     };
-    sec("🌳 Figurinhas de árvores", catalogo, figArvore, it => estado.figurinhas.includes(it.id), it => comprarFigurinha(it.id));
-    sec("🎒 Figurinhas de itens do detetive", itensCosmeticos, figItem, it => estado.itensComprados.includes(it.id), it => comprarItem(it));
+    sec("🌳 Cartas de árvores", catalogo, cartaArvore, false);
+    sec("🎒 Cartas de itens (com poderes!)", itensCosmeticos, cartaItem, true);
     FichaPokedex.trocarFotos(root);
   };
-  function comprarItem(item) {
-    if (estado.itensComprados.includes(item.id)) return;
-    if (estado.pontos < item.preco) { $("lojaMensagem").className = "notice warn"; $("lojaMensagem").textContent = "Você ainda não tem pontos suficientes para essa compra."; tocarSom(220); return; }
-    estado.pontos -= item.preco; estado.itensComprados.push(item.id); salvarEstado(); tocarSom(740);
-    $("lojaMensagem").className = "notice"; $("lojaMensagem").textContent = `Compra realizada! A figurinha ${item.nome} foi para o álbum, e você já pode usar o item em PERSONAGEM.`;
-    renderLoja();
-  }
-  // ---- ÁLBUM: figurinhas compradas no mesmo estilo ----
+  // ---------- ÁLBUM: coleção de cartas ----------
   const albumOrig = renderAlbum;
   renderAlbum = function () {
     albumOrig();
-    const st = $("albumFigurinhas"); st.replaceChildren(); st.className = "fig-grid";
-    let n = 0;
-    catalogo.forEach(it => { if (estado.figurinhas.includes(it.id)) st.append(figArvore(it, n++)); });
-    itensCosmeticos.forEach(it => { if (estado.itensComprados.includes(it.id)) st.append(figItem(it, n++)); });
-    const total = catalogo.length + itensCosmeticos.length;
-    for (let i = n; i < total; i++) { const f = el("article", "figurinha bloqueada"); f.append(el("span", "fig-num", "#" + (i + 1)), el("div", "fig-arte", "❔"), el("h4", null, "Figurinha bloqueada"), el("small", null, "Compre na loja!")); st.append(f); }
+    const st = $("albumFigurinhas"); st.replaceChildren(); st.className = "fig-grid"; let n = 0;
+    catalogo.forEach((it, i) => st.append(estado.figurinhas.includes(it.id) ? (n++, cartaArvore(it, i)) : bloqueada(i)));
+    itensCosmeticos.forEach((it, i) => st.append(estado.itensComprados.includes(it.id) ? (n++, cartaItem(it, i)) : bloqueada(catalogo.length + i)));
+    const tit = st.previousElementSibling; if (tit) tit.textContent = `Minhas cartas (${n} de ${TOTAL()})`;
     FichaPokedex.trocarFotos(st);
   };
-  // ---- PERSONAGEM: escolher quem você quer ser ----
+  function bloqueada(i) { const c = el("article", "carta bloqueada"); c.innerHTML = `<div class="carta-in"><div class="carta-topo"><b>???</b></div><div class="carta-arte">❔</div><div class="carta-txt">Compre na loja para desbloquear esta carta!</div><div class="carta-pe"><span>#${String(i + 1).padStart(2, "0")}/${TOTAL()}</span></div></div>`; return c; }
+  // ---------- PERSONAGEM: escolher quem ser + poder de cada item ----------
   const IMGS = { elfa: "img/menina-elfa.webp", menino: "img/menino.webp" };
   if (!estado.personagem) estado.personagem = "menino";
   const persOrig = renderPersonagem;
   renderPersonagem = function () {
     persOrig();
-    const tela = $("personagem"); let esc = tela.querySelector(".escolha-pers");
-    if (!esc) { esc = el("div", "escolha-pers"); tela.querySelector(".profile-layout").before(el("h3", "section-title", "👤 Escolha quem você quer ser")); tela.querySelector(".profile-layout").before(esc); }
-    esc.replaceChildren();
+    const tela = $("personagem"); let escolha = tela.querySelector(".escolha-pers");
+    if (!escolha) { escolha = el("div", "escolha-pers"); const lay = tela.querySelector(".profile-layout"); lay.before(el("h3", "section-title", "👤 Escolha quem você quer ser")); lay.before(escolha); }
+    escolha.replaceChildren();
     [["elfa", "Detetive elfa"], ["menino", "Detetive humano"]].forEach(([k, nome]) => {
       const b = el("button", estado.personagem === k ? "on" : ""); b.type = "button"; const m = el("span", "mini"); m.style.backgroundImage = `url(${IMGS[k]})`; b.append(m, el("span", null, nome));
-      b.onclick = () => { estado.personagem = k; salvarEstado(); renderPersonagem(); }; esc.append(b);
+      b.onclick = () => { estado.personagem = k; salvarEstado(); renderPersonagem(); }; escolha.append(b);
     });
-    const prev = $("personagemPreview").querySelector(".mascote");
-    if (prev) { prev.className = "mascote " + (estado.personagem === "elfa" ? "elf" : "human"); }
+    const prev = $("personagemPreview").querySelector(".mascote"); if (prev) prev.className = "mascote " + (estado.personagem === "elfa" ? "elf" : "human");
     let selos = $("personagemPreview").querySelector(".selos-itens"); if (!selos) { selos = el("div", "selos-itens"); $("personagemPreview").append(selos); }
-    selos.replaceChildren(); estado.equipados.forEach(id => { const it = itensCosmeticos.find(x => x.id === id); if (it) selos.append(el("span", null, (EMO_ITEM[id] || "🎁") + " " + it.nome)); });
+    selos.replaceChildren(); estado.equipados.forEach(id => { const it = itensCosmeticos.find(x => x.id === id); if (it) selos.append(el("span", null, esc((PODER[id] || ["🎁"])[0] + " " + it.nome))); });
+    // poder escrito em cada item e preço com desconto
+    $("itensPersonagem").querySelectorAll(".item-card").forEach(card => { const it = itensCosmeticos.find(x => x.nome === card.querySelector("h3").textContent); if (it && PODER[it.id]) card.querySelector("h3").after(el("span", "poder-item", "✨ " + esc(PODER[it.id][1]))); });
   };
-  // ---- VOLTAR À ÁRVORE (quiz): volta para a ficha da árvore ----
+  // ---------- PODERES em ação ----------
+  // 🤠 chapéu e 🍀 trevo: quando uma árvore NOVA entra no álbum
+  new MutationObserver(() => {
+    const t = $("estadoDescoberta").textContent;
+    if (!/Nova descoberta/.test(t) || $("estadoDescoberta").dataset.bonus === t) return;
+    let extra = [];
+    if (usa("chapeu")) { estado.pontos += 5; extra.push("🤠 +5 do chapéu"); }
+    if (usa("trevo") && Math.random() < .3) { const livre = catalogo.filter(c => !estado.figurinhas.includes(c.id)); if (livre.length) { const s = livre[Math.floor(Math.random() * livre.length)]; estado.figurinhas.push(s.id); extra.push("🍀 carta surpresa: " + s.nome + "!"); } }
+    if (extra.length) { salvarEstado(); atualizarPontos(); const nt = t + " " + extra.join(" · "); $("estadoDescoberta").dataset.bonus = nt; $("estadoDescoberta").textContent = nt; }
+    else $("estadoDescoberta").dataset.bonus = t;
+  }).observe($("estadoDescoberta"), { childList: true, characterData: true, subtree: true });
+  // 🎒 mochila e 🔭 binóculo: no fim do quiz
+  new MutationObserver(() => {
+    const n = [...$("quizConteudo").querySelectorAll(".notice")].find(x => /Você ganhou (\d+) pontos extras/.test(x.textContent) && !x.dataset.bonus);
+    if (!n) return; n.dataset.bonus = "1";
+    const ganho = +n.textContent.match(/Você ganhou (\d+)/)[1]; let extra = 0, txt = [];
+    if (usa("mochila")) { extra += ganho; txt.push(`🎒 mochila: +${ganho}`); }
+    if (usa("binoculo")) { extra += quizAcertos; txt.push(`🔭 binóculo: +${quizAcertos}`); }
+    if (extra) { estado.pontos += extra; salvarEstado(); atualizarPontos(); n.textContent += " Poderes: " + txt.join(" · ") + "!"; }
+  }).observe($("quizConteudo"), { childList: true, subtree: true });
+  let capaUsada = false;
+  // 🔍 lupa: um botão em cada pergunta que elimina uma resposta errada
+  const perguntaOrig = renderPerguntaQuiz;
+  renderPerguntaQuiz = function () {
+    if (quizIndice === 0) capaUsada = false;   // quiz novo: a capa volta a valer
+    perguntaOrig();
+    const q = arvoreAtual && arvoreAtual.quiz && arvoreAtual.quiz[quizIndice];
+    if (!q || !usa("lupa")) return;
+    const b = el("button", "button secondary lupa-btn", "🔍 Usar a lupa (tira uma errada)"); b.type = "button";
+    b.onclick = () => { const ops = [...$("quizConteudo").querySelectorAll(".quiz-option")].filter((o, i) => i !== q.respostaCorreta && !o.disabled); if (ops.length) { const o = ops[Math.floor(Math.random() * ops.length)]; o.disabled = true; o.style.opacity = ".3"; o.style.textDecoration = "line-through"; } b.remove(); };
+    const fb = $("quizFeedback"); fb.before(b);
+  };
+  // 🧥 capa: uma segunda chance por quiz
+  const responderOrig = responderQuiz;
+  responderQuiz = function (index, q, btn) {
+    if (index !== q.respostaCorreta && usa("capa") && !capaUsada && !quizPerguntaRespondida) {
+      capaUsada = true; btn.disabled = true; btn.classList.add("wrong");
+      const fb = $("quizFeedback"); fb.className = "notice warn"; fb.textContent = "🧥 A capa de explorador te protegeu! Tente outra resposta (só vale uma vez por quiz).";
+      return;
+    }
+    return responderOrig(index, q, btn);
+  };
+  // 🥾 botas: caminhada diária ao abrir o menu
+  const telaOrig = mostrarTela;
+  mostrarTela = function (id) {
+    telaOrig(id);
+    if (id === "menuJogo" && usa("botas")) { const hoje = new Date().toDateString(); if (estado.ultimaCaminhada !== hoje) { estado.ultimaCaminhada = hoje; estado.pontos += 3; salvarEstado(); atualizarPontos(); if (window.FichaPokedex) FichaPokedex.balao("🥾 Caminhada do dia: +3 pontos!"); } }
+  };
+  // ---------- quiz: voltar para a ficha da árvore ----------
   const vq = $("quizVoltarResultado"), novoVq = vq.cloneNode(true); vq.replaceWith(novoVq);
   novoVq.textContent = "VOLTAR À FICHA DA ÁRVORE";
-  novoVq.addEventListener("click", () => {
-    mostrarTela("albumTela");
-    const f = PokedexAdaptador.ultimaFicha && PokedexAdaptador.ultimaFicha();
-    if (f && f.info) PokedexAdaptador.abrirFicha(f.info, f.foto);
-  });
-  // ---- botão VOLTAR no topo de todas as telas ----
+  novoVq.addEventListener("click", () => { mostrarTela("albumTela"); const f = PokedexAdaptador.ultimaFicha && PokedexAdaptador.ultimaFicha(); if (f && f.info) PokedexAdaptador.abrirFicha(f.info, f.foto); });
+  // ---------- VOLTAR no topo de todas as telas ----------
   const PAI = { dialogo: "inicio", configuracao: "inicio", menuJogo: "inicio", telaFoto: "menuJogo", resultado: "menuJogo", quiz: "albumTela", loja: "menuJogo", albumTela: "menuJogo", personagem: "menuJogo", incerteza: "telaFoto", naoValida: "telaFoto", erro: "telaFoto" };
   const NOME = { inicio: "início", menuJogo: "menu", telaFoto: "câmera", albumTela: "álbum" };
   Object.entries(PAI).forEach(([tela, pai]) => {
     const sec = document.getElementById(tela); if (!sec) return;
-    const bar = el("div", "topo-voltar");
-    const v = el("button", null, "⬅ Voltar " + (pai === "albumTela" && tela === "quiz" ? "para a árvore" : "ao " + (NOME[pai] || pai))); v.type = "button";
-    v.onclick = () => { if (tela === "quiz") novoVq.click(); else mostrarTela(pai); };
-    bar.append(v);
+    const bar = el("div", "topo-voltar"); const v = el("button", null, "⬅ Voltar " + (tela === "quiz" ? "para a árvore" : "ao " + (NOME[pai] || pai))); v.type = "button";
+    v.onclick = () => { if (tela === "quiz") novoVq.click(); else mostrarTela(pai); }; bar.append(v);
     if (pai !== "inicio") { const h = el("button", "inicio", "🏠 Início"); h.type = "button"; h.onclick = () => mostrarTela("inicio"); bar.append(h); }
     sec.prepend(bar);
   });
-  // mostra a tela atual com as versões novas
   renderLoja(); renderAlbum(); renderPersonagem();
 })();
 </script>
