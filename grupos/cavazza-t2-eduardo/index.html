@@ -669,7 +669,7 @@ desenharRaposa();
 window.reduzirParaAlbum = src => new Promise(res => { const img = new Image(); img.onload = () => { const k = Math.min(1, 700 / Math.max(img.width, img.height)); const c = document.createElement("canvas"); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); res(c.toDataURL("image/jpeg", .8)); }; img.onerror = () => res(src); img.src = src; });
 PokedexAdaptador.iniciar({
   semRepetir: ["frutas_album"],   // não guarda a mesma espécie duas vezes
-  verAlbum: () => document.getElementById("album").scrollIntoView({ behavior: "smooth" }),   // se a espécie já está no álbum, o botão só leva até lá
+  verAlbum: () => window.abaEdu ? abaEdu("album") : document.getElementById("album").scrollIntoView({ behavior: "smooth" }),   // se a espécie já está no álbum, o botão só leva até lá
   albumFicha: { cartao: "#album .album-item", nome: "p" },  // "📖 Ver ficha" nas figurinhas do álbum
   // botões por etapa: o de identificar só aparece depois de escolher a foto
   etapas: { foto: ["#identifyBtn"] },
@@ -682,9 +682,97 @@ PokedexAdaptador.iniciar({
   esconder: ["#result"],   // as mensagens do Eduardo (nível, raposa) continuam aparecendo
   extras: info => [["🗺️ Onde ela vive?", info.regioes]],
   alerta: info => info.perigo ? (info.aviso || "Esta fruta precisa de cuidado. Não coma sem orientação de um adulto.") : "",
-  salvar: () => { document.getElementById("saveBtn").click(); setTimeout(() => document.getElementById("album").scrollIntoView({ behavior: "smooth" }), 300); },
-  novaFoto: () => document.getElementById("choosePhotoBtn").click()
+  salvar: () => { document.getElementById("saveBtn").click(); if (window.abaEdu) abaEdu("album"); },
+  novaFoto: () => { if (window.abaEdu) abaEdu("camera"); document.getElementById("choosePhotoBtn").click(); }
 });
+</script>
+
+<!-- ===== ABAS + abertura animada: a raposa rouba as frutas (pedido de 11/11) ===== -->
+<style id="abas-eduardo">
+body>header{padding:14px 16px 12px!important}body>header .fox{width:56px!important;height:56px!important;font-size:30px!important;margin:0 auto 4px!important}body>header h1{font-size:clamp(26px,4vw,38px)!important;margin:2px 0!important}body>header p{margin:2px 0!important}
+.abas-edu{position:sticky;top:0;z-index:50;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:10px;margin:0 auto 16px;max-width:980px;background:rgba(18,40,24,.88);backdrop-filter:blur(8px);border-radius:0 0 22px 22px;box-shadow:0 8px 20px #0004}
+.abas-edu button{font:inherit;font-weight:800;font-size:16px;min-height:50px;padding:10px 18px;border-radius:999px;border:2px solid #b4d490;background:#fffdf6;color:#24361d;cursor:pointer;margin:0;width:auto}
+.abas-edu button.on{background:#f08c1b;border-color:#f08c1b;color:#fff;box-shadow:0 4px 0 #b05f08}
+main>.aba-edu{display:none}main>.aba-edu.on{display:block;animation:abaEdu .3s ease}
+@keyframes abaEdu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.aba-edu>section{margin-bottom:18px}
+/* abertura */
+.abertura{position:relative;height:340px;border-radius:24px;overflow:hidden;margin:6px 0 14px;background:linear-gradient(180deg,#bfe6ff 0%,#e9f8ff 55%,#7cc46b 56%,#4f9a45 100%);border:3px solid #fff;box-shadow:0 12px 28px #0004}
+.abertura .sol{position:absolute;top:22px;right:40px;width:64px;height:64px;border-radius:50%;background:radial-gradient(circle,#fff6b0,#ffd23f);box-shadow:0 0 40px #ffd23f}
+.abertura .arv{position:absolute;bottom:42%;font-size:70px;filter:drop-shadow(0 4px 4px #0003)}
+.abertura .chao-frutas{position:absolute;left:0;right:0;bottom:58px;height:60px}
+.abertura .fr{position:absolute;bottom:0;font-size:44px;transition:transform .45s ease,opacity .45s ease;filter:drop-shadow(0 4px 3px #0004)}
+.abertura .fr.pega{transform:translateY(-60px) scale(.3);opacity:0}
+.abertura .rap{position:absolute;bottom:34px;left:-260px;width:220px;filter:drop-shadow(0 8px 8px #0005)}
+.abertura .rap img{width:100%;display:block}
+.abertura .rap .em{font-size:110px;display:block;transform:scaleX(-1)}
+.abertura .rap.corre img,.abertura .rap.corre .em{animation:puloImg .3s ease-in-out infinite alternate}
+.abertura .balao{position:absolute;top:22px;left:50%;transform:translateX(-50%) scale(.8);opacity:0;max-width:min(86%,520px);background:#fff;color:#2b2b2b;font-weight:900;font-size:clamp(17px,2.4vw,22px);padding:14px 20px;border-radius:22px;box-shadow:0 8px 20px #0003;text-align:center;transition:all .35s cubic-bezier(.3,1.6,.6,1)}
+.abertura .balao::after{content:"";position:absolute;bottom:-14px;left:50%;margin-left:-12px;border:12px solid transparent;border-bottom:0;border-top-color:#fff}
+.abertura .balao.on{opacity:1;transform:translateX(-50%) scale(1)}
+.abertura-botoes{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:6px}
+.abertura-botoes button{width:auto!important;margin:0!important}
+@media(max-width:700px){.abertura{height:280px}.abertura .rap{width:160px}.abertura .fr{font-size:34px}}
+</style>
+<script>
+(function () {
+  const main = document.querySelector("main"), $ = id => document.getElementById(id);
+  const secs = [...main.children];
+  const cam = secs.find(x => x.classList.contains("camera")), res = $("result"), jogo = $("raposaJogo");
+  const cardDe = t => secs.find(x => (x.querySelector("h2") || {}).textContent && x.querySelector("h2").textContent.includes(t));
+  const desc = cardDe("Minhas descobertas"), alb = cardDe("Álbum das frutas");
+  // tela inicial com a abertura
+  const ini = document.createElement("section"); ini.className = "card";
+  ini.innerHTML = `<h2>🍎 O mistério das frutas brasileiras</h2>
+    <div class="abertura" id="abertura"><div class="sol"></div><span class="arv" style="left:4%">🌳</span><span class="arv" style="right:6%">🌴</span>
+      <div class="chao-frutas" id="chaoFrutas"></div>
+      <div class="rap" id="rapAbertura"><img src="img/raposa.webp" alt="Raposa" onerror="this.outerHTML='<span class=&quot;em&quot;>🦊</span>'"></div>
+      <div class="balao" id="balao"></div></div>
+    <div class="abertura-botoes"><button type="button" id="vamosEncontrar">📷 Vamos encontrar as frutas!</button><button type="button" class="secondary" id="verDeNovo">🔁 Ver de novo</button></div>`;
+  const ABAS = [["inicio", "🏠 Início", [ini, jogo]], ["camera", "📷 Câmera", [cam, res]], ["album", "📚 Álbum", [alb]], ["descobertas", "🏆 Minhas descobertas", [desc]]];
+  const nav = document.createElement("nav"); nav.className = "abas-edu"; nav.setAttribute("aria-label", "Abas");
+  main.before(nav);
+  ABAS.forEach(([id, txt, els]) => {
+    const b = document.createElement("button"); b.type = "button"; b.dataset.aba = id; b.textContent = txt; nav.append(b);
+    const w = document.createElement("div"); w.className = "aba-edu"; w.dataset.aba = id; els.filter(Boolean).forEach(e => w.append(e)); main.append(w);
+  });
+  window.abaEdu = id => {
+    nav.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.aba === id));
+    main.querySelectorAll(".aba-edu").forEach(w => w.classList.toggle("on", w.dataset.aba === id));
+    if (id === "inicio") abertura();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  nav.querySelectorAll("button").forEach(b => b.onclick = () => abaEdu(b.dataset.aba));
+  $("vamosEncontrar").onclick = () => abaEdu("camera");
+
+  // ---- a abertura animada ----
+  let timers = [], raf = 0;
+  const depois = (ms, f) => timers.push(setTimeout(f, ms));
+  const balao = t => { const b = $("balao"); b.classList.remove("on"); depois(120, () => { b.textContent = t; b.classList.add("on"); }); };
+  function abertura() {
+    timers.forEach(clearTimeout); timers = []; cancelAnimationFrame(raf);
+    const chao = $("chaoFrutas"), rap = $("rapAbertura"), caixa = $("abertura");
+    const frutas = FRUTAS_RAPOSA.slice(0, 7);
+    chao.innerHTML = frutas.map((f, i) => `<span class="fr" style="left:${16 + i * 10}%">${f[2]}</span>`).join("");
+    rap.style.transition = "none"; rap.style.left = "-260px"; rap.classList.remove("corre");
+    balao("Aqui estão as frutas brasileiras! 🍇🍍🍒");
+    depois(2600, () => { balao("Hein? Quem vem lá?! 👀"); });
+    depois(3600, () => {
+      rap.classList.add("corre"); const W = caixa.clientWidth, ini0 = performance.now(), dur = 4200;
+      const passo = t => {
+        const k = Math.min(1, (t - ini0) / dur), x = -260 + k * (W + 300); rap.style.left = x + "px";
+        const boca = x + rap.clientWidth * .8;
+        chao.querySelectorAll(".fr").forEach(f => { if (!f.classList.contains("pega") && f.offsetLeft < boca) f.classList.add("pega"); });
+        if (k < 1) raf = requestAnimationFrame(passo); else rap.classList.remove("corre");
+      };
+      raf = requestAnimationFrame(passo);
+      depois(1300, () => balao("Ah não! A raposa pegou as frutas! 🦊💨"));
+    });
+    depois(8600, () => balao("Vamos encontrá-las? Escaneie frutas para recuperar! 📷"));
+  }
+  $("verDeNovo").onclick = abertura;
+  abaEdu("inicio");
+})();
 </script>
 </body>
 </html>
