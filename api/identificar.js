@@ -185,6 +185,28 @@ let proximoInicio = 0;
 /* chamarGoogle(): faz UMA tentativa — uma chave, um modelo. Devolve a resposta
    crua do Google (ou um "erro de rede" disfarçado de resposta 503, para o
    código de cima não quebrar se a internet do servidor falhar). */
+/* RESPOSTA RÁPIDA: para os grupos desta lista, pedimos à IA um "pensamento
+   curto" (responde mais depressa). Se o Google não aceitar o ajuste nesse
+   modelo, tentamos de novo sem ele — nunca quebra. */
+const GRUPOS_RAPIDOS = new Set(["meduneckas-t1-tarde-thamires"]);
+function comPensamentoCurto(modelo, body) {
+  let cfg = null;
+  if (/^gemini-3/.test(modelo)) cfg = { thinkingLevel: "low" };
+  else if (/^gemini-2\.5-flash/.test(modelo)) cfg = { thinkingBudget: 0 };
+  if (!cfg) return null;
+  const b = JSON.parse(JSON.stringify(body));
+  b.generationConfig = Object.assign({}, b.generationConfig, { thinkingConfig: cfg });
+  return b;
+}
+async function chamarGoogleRapido(modelo, chave, body, rapido) {
+  const curto = rapido ? comPensamentoCurto(modelo, body) : null;
+  if (curto) {
+    const r = await chamarGoogle(modelo, chave, curto);
+    if (r.status !== 400) return r;      // 400 = o modelo não aceitou o ajuste
+  }
+  return chamarGoogle(modelo, chave, body);
+}
+
 async function chamarGoogle(modelo, chave, body) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${chave}`;
   try {
@@ -451,7 +473,7 @@ module.exports = async (req, res) => {
       // O "% chaves.length" faz a lista dar a volta: se começamos na chave 2 de
       // 3, a ordem vira 2 → 3 → 1. Todas são tentadas, só que em outra ordem.
       const indice = (inicio + i) % chaves.length;
-      const r = await chamarGoogle(modeloAtual, chaves[indice], body);
+      const r = await chamarGoogleRapido(modeloAtual, chaves[indice], body, GRUPOS_RAPIDOS.has(grupo));
 
       if (r.status >= 200 && r.status < 300) {
         // Deu certo. Estes dois cabeçalhos são só para DIAGNÓSTICO do
