@@ -719,6 +719,8 @@
   }));
 })();
 PokedexAdaptador.iniciar({
+  inicio: () => abrirAba("inicio"),   // botão 🏠 Início fixo no topo
+  naInicio: () => !!document.querySelector('.aba[data-aba="inicio"].on'),
   som: true, textoSom: "🔊 Ouvir o canto",  // gravação real da espécie (Wikimedia Commons)
   icone: "🐦", fauna: true,
   cor: "#ef4fa4", cor2: "#7c63f6",

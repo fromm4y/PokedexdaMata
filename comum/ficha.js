@@ -61,11 +61,11 @@
     gelo: svgFundo('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd6f5"/><stop offset="1" stop-color="#e8f6ff"/></linearGradient></defs><rect width="600" height="400" fill="url(#c)"/><path d="M60 250 L170 120 L260 250Z M300 255 L420 95 L540 255Z" fill="#f4fbff"/><path d="M170 120 L200 160 L150 170Z M420 95 L455 140 L400 150Z" fill="#cfe6f5"/><path d="M0 250 H600 V300 H0Z" fill="#5aa7d6"/><path d="M0 290 Q150 270 300 288 T600 284 V400 H0Z" fill="#f7fcff"/><path d="M80 300 h90 l-15 14 h-60Z M380 296 h120 l-18 16 h-84Z" fill="#dcefff"/></svg>')
   };
   Object.assign(CENARIOS, {
-    savana: { nome: "Savana", svg: FUNDOS_MUNDO.savana },
-    deserto: { nome: "Deserto", svg: FUNDOS_MUNDO.deserto },
-    gelo: { nome: "Regiões geladas", svg: FUNDOS_MUNDO.gelo },
-    floresta_temperada: { nome: "Floresta temperada", foto: CENARIOS.mata_atlantica.foto },
-    oceano: { nome: "Oceano", svg: "" }
+    savana: { nome: "Savana", svg: FUNDOS_MUNDO.savana, mundo: true },
+    deserto: { nome: "Deserto", svg: FUNDOS_MUNDO.deserto, mundo: true },
+    gelo: { nome: "Regiões geladas", svg: FUNDOS_MUNDO.gelo, mundo: true },
+    floresta_temperada: { nome: "Floresta temperada", foto: CENARIOS.mata_atlantica.foto, mundo: true },
+    oceano: { nome: "Oceano", svg: "", mundo: true }
   });
   const COR_MUNDO = "#f0a640";
   /* lugares do mundo onde a espécie vive (vêm da IA em "mundo") */
@@ -288,7 +288,7 @@
     const botoes = Object.entries(PERIODOS).map(([k, n]) => `<button data-per="${k}" class="${k === periodo ? "on" : ""}">${n}</button>`).join("");
     const seed = (bioma.charCodeAt(0) || 65) + bioma.length;
     return `<div class="fp-scene per-${periodo}${aqua ? " fp-aqua" : ""}">
-      <div class="fp-photo" style="background-image:url(&quot;${fundoUrl}&quot;)"></div>
+      <div class="fp-photo" style="background-image:${CENARIOS[cenario] && CENARIOS[cenario].mundo && !fundos[bioma] ? `url(&quot;/comum/img/biomas/${cenario}.webp&quot;),` : ""}url(&quot;${fundoUrl}&quot;)"></div>
       <div class="fp-grade"></div><div class="fp-rays"></div><div class="fp-stars"></div>
       <div class="fp-particles">${motes(seed)}</div><div class="fp-vignette"></div>
       ${roam}${garden}${vazio}

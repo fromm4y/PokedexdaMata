@@ -439,6 +439,8 @@ FichaPokedex.trocarFotos();
 desenharAlbum();
 
 PokedexAdaptador.iniciar({
+  inicio: () => irPara("inicio"),   // botão 🏠 Início fixo no topo
+  naInicio: () => !!document.querySelector("#inicio.on"),
   semRepetir: ["frutadex_album"],   // não guarda a mesma espécie duas vezes
   albumFicha: { cartao: "#albumGrid .fruit", nome: ".nome" },  // "📖 Ver ficha" em cada figurinha salva
   icone: "🍓", fauna: false,

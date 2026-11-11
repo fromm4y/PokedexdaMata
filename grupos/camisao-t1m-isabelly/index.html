@@ -404,6 +404,8 @@ atualizarPontos();
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  inicio: () => irPara("descobrir"),   // botão 🏠 Início fixo no topo
+  naInicio: () => !!document.querySelector('[data-aba="descobrir"].on, [data-aba="descobrir"].ativo, [data-aba="descobrir"].active'),
   semRepetir: ["detetivesDePenas"],   // não guarda a mesma espécie duas vezes
   albumFicha: { cartao: "#listaAlbum .item", nome: "strong" },  // "📖 Ver ficha" nas figurinhas do álbum
   etapas: { foto: ["#btnDescobrir"] },   // o botão de descobrir só aparece depois de escolher a foto

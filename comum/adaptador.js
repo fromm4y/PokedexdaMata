@@ -452,8 +452,30 @@
       document.head.appendChild(s);
       document.documentElement.classList.add("fp-esconder");
     }
-    const pronto = () => { ligarWebcams(); botaoGaleria(); FichaPokedex.trocarFotos(); desenharAlbumComum(); ligarEtapas(); ligarAlbumFicha(); };
+    const pronto = () => { botaoInicio(); ligarWebcams(); botaoGaleria(); FichaPokedex.trocarFotos(); desenharAlbumComum(); ligarEtapas(); ligarAlbumFicha(); };
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", pronto); else pronto();
+  }
+
+  /* 9) Botão "🏠 Início" fixo no topo (pedido da professora): sempre à mão,
+     em qualquer tela. Uso: inicio: () => irPara("inicio"),
+     naInicio: () => true quando já está na tela inicial (aí ele se esconde
+     enquanto a página está no topo). */
+  function botaoInicio() {
+    if (!CFG.inicio || document.querySelector(".pdm-inicio")) return;
+    const st = document.createElement("style");
+    st.textContent = `.pdm-inicio{position:fixed;top:10px;left:50%;margin-left:-62px;width:124px;justify-content:center;z-index:8999;display:flex;align-items:center;gap:6px;font:800 15px/1 system-ui,sans-serif;padding:11px 16px;border-radius:999px;border:2px solid #fff;background:${CFG.cor || "#2f7d43"};color:#fff;text-shadow:0 1px 2px #0006;box-shadow:0 6px 16px #0005;cursor:pointer;transition:opacity .2s,transform .2s}
+      .pdm-inicio:hover{transform:translateY(-2px)}.pdm-inicio.some{opacity:0;pointer-events:none;transform:translateY(-10px)}
+      html.fp-travado .pdm-inicio{display:none}`;
+    document.head.appendChild(st);
+    const b = document.createElement("button"); b.type = "button"; b.className = "pdm-inicio"; b.textContent = "🏠 Início"; b.setAttribute("aria-label", "Voltar para o início");
+    b.addEventListener("click", () => { try { CFG.inicio(); } catch (e) {} window.scrollTo({ top: 0, behavior: "smooth" }); setTimeout(atualizar, 400); });
+    document.body.appendChild(b);
+    // some só quando está no topo da tela inicial (ou no topo, se o grupo não disse qual é a inicial)
+    const atualizar = () => b.classList.toggle("some", window.scrollY < 80 && (CFG.naInicio ? !!CFG.naInicio() : true));
+    window.addEventListener("scroll", atualizar, { passive: true });
+    document.addEventListener("click", () => setTimeout(atualizar, 150), true);
+    setInterval(atualizar, 800);
+    atualizar();
   }
 
   /* 4) Botão "🖼️ Galeria": quando o único botão de foto do grupo usa um campo

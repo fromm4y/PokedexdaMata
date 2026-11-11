@@ -361,6 +361,8 @@ button,.labelBtn{min-height:48px}
   desenhar();
 })();
 PokedexAdaptador.iniciar({
+  inicio: () => abaFrutai("descobrir"),   // botão 🏠 Início fixo no topo
+  naInicio: () => !document.getElementById("mainScreen").classList.contains("aba-minhas"),
   semRepetir: ["frutai_album"],   // não guarda a mesma espécie duas vezes
   albumFicha: { cartao: "#albumFrutas .fruta", nome: "b" },  // "📖 Ver ficha" nas figurinhas do álbum
   icone: "🍓", fauna: false,

@@ -440,6 +440,8 @@ function desenharMapa(){
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  inicio: () => go("home"),   // botão 🏠 Início fixo no topo
+  naInicio: () => { const e = document.querySelector('#home'); return !e || getComputedStyle(e).display !== "none" && e.getBoundingClientRect().height > 0; },
   semRepetir: ["aquadex_album"],   // não guarda a mesma espécie duas vezes
   albumFicha: { cartao: "#albumGrid .fish-card", nome: "strong" },  // "📖 Ver ficha" nas figurinhas do álbum
   etapas: { foto: ["#analisar"] },   // o botão de identificar só aparece depois de escolher a foto

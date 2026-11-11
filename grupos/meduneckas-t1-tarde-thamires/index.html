@@ -399,5 +399,15 @@ renderAlbum();
 
 function showToast(text){const t=document.getElementById("toast");t.textContent=text;t.classList.add("show");clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove("show"),2600)}
 </script>
+
+<!-- 🏠 Início fixo no topo (pedido da professora) -->
+<style>.pdm-inicio{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:8999;font:800 15px/1 system-ui,sans-serif;padding:11px 16px;border-radius:999px;border:2px solid #fff;background:#a24bd6;color:#fff;box-shadow:0 6px 16px #0005;cursor:pointer;transition:opacity .2s}.pdm-inicio.some{opacity:0;pointer-events:none}</style>
+<script>
+(function(){const b=document.createElement("button");b.type="button";b.className="pdm-inicio";b.textContent="🏠 Início";
+ const naInicio=()=>document.getElementById("inicio").classList.contains("active");
+ const at=()=>b.classList.toggle("some",scrollY<80&&naInicio());
+ b.onclick=()=>{go("inicio");document.querySelectorAll(".nav-btn").forEach(x=>x.classList.toggle("active",x.dataset.screen==="inicio"));scrollTo({top:0,behavior:"smooth"});setTimeout(at,300)};
+ document.body.appendChild(b);addEventListener("scroll",at,{passive:true});document.addEventListener("click",()=>setTimeout(at,150),true);setInterval(at,800);at();})();
+</script>
 </body>
 </html>

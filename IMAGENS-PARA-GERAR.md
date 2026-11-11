@@ -1,5 +1,7 @@
 # Imagens para gerar
 
+> 🆕 **Novas (11/11):** habitats de fora do Brasil, logo abaixo.
+>
 > ✅ Já entregues e no ar: Tokoyami, elfa cientista, cientista explorador, elfa do Dattflower, raposa do Eduardo, os 6 rios do AquaDex, fundo de frutas e banana de chapéu do Bryan, e o fundo e os personagens da Heloisa (Forest).
 
 O código já está pronto para receber estas imagens. Basta gerar, salvar com **exatamente** o nome indicado
@@ -7,6 +9,20 @@ O código já está pronto para receber estas imagens. Basta gerar, salvar com *
 Enquanto o arquivo não existir, o app continua mostrando o desenho de hoje — nada quebra.
 
 Dica: fundo **sem texto** escrito na imagem, cores vivas, estilo amigável para crianças.
+
+## 🆕 Habitats de fora do Brasil — `comum/img/biomas/`  (valem para TODOS os projetos)
+
+Aparecem na aba **Habitat** da ficha quando o animal/planta é de outro país (ex.: leão → savana) e na savana da Pokédex da Savana.
+Cena **vista de lado, sem animais** (os bichinhos do app andam por cima), com o chão na parte de baixo e espaço livre no meio. Horizontal, **1200×800**.
+Hoje o app mostra um desenho simples no lugar.
+
+| Arquivo | Prompt sugerido |
+|---|---|
+| `savana.webp` | Paisagem da savana africana vista de lado ao entardecer, capim dourado alto, acácias de copa achatada, céu laranja e sol baixo, chão de terra na parte de baixo, espaço livre no meio, sem animais, ilustração colorida e amigável para crianças, sem texto |
+| `deserto.webp` | Paisagem de deserto vista de lado, dunas de areia douradas, alguns cactos e pedras, céu azul claro com sol forte, chão de areia na parte de baixo, espaço livre no meio, sem animais, ilustração colorida infantil, sem texto |
+| `gelo.webp` | Paisagem polar vista de lado, montanhas de gelo e neve, mar azul gelado, blocos de gelo flutuando, céu azul claro, chão de neve na parte de baixo, espaço livre no meio, sem animais, ilustração colorida infantil, sem texto |
+| `oceano.webp` | Vista subaquática do oceano, água azul com raios de sol, recife de coral colorido no fundo, areia clara, algas, espaço livre no meio, sem peixes, ilustração colorida infantil, sem texto |
+| `floresta_temperada.webp` | Floresta temperada da Europa/América do Norte vista de lado no outono, árvores com folhas laranja e amarelas, pinheiros, chão com folhas secas e cogumelos, espaço livre no meio, sem animais, ilustração colorida infantil, sem texto |
 
 ## Brasilian Bird — `grupos/meduneckas-t1-tarde-davi/img/`
 

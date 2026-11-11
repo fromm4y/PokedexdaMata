@@ -179,6 +179,8 @@ $("soundToggle").addEventListener("click",()=>{audioOn=!audioOn;$("soundToggle")
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  inicio: () => document.querySelector('.tab[data-tab="discover"]').click(),   // botão 🏠 Início fixo no topo
+  naInicio: () => !!document.querySelector('.tab[data-tab="discover"].active'),
   icone: "🐒", fauna: true,
   cor: "#59d477", cor2: "#ffd84d",
   escuro: () => true,

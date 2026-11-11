@@ -387,6 +387,8 @@ footer{text-align:center;color:#9db7a9;font-size:11px;margin-top:17px}
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  inicio: () => document.querySelector('.tab[data-tab="explorar"]').click(),   // botão 🏠 Início fixo no topo
+  naInicio: () => !!document.querySelector('.tab[data-tab="explorar"].active'),
   semRepetir: ["pokeAvesAlbumV2"],   // não guarda a mesma espécie duas vezes
   verAlbum: () => document.querySelector('.tab[data-tab="album"]').click(),   // se a espécie já está no álbum, o botão só leva até lá
   icone: "🦜", fauna: true,

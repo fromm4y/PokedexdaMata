@@ -1,0 +1,4 @@
+Imagens dos habitats de FORA do Brasil (usadas na aba Habitat da ficha e nas cenas).
+Coloque aqui, com estes nomes exatos (formato .webp, horizontal 1200x800):
+  savana.webp  deserto.webp  gelo.webp  oceano.webp  floresta_temperada.webp
+Enquanto o arquivo não existir, o app mostra o desenho de hoje. Prompts em IMAGENS-PARA-GERAR.md.

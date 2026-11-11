@@ -970,6 +970,8 @@ document.getElementById("mapBiomeButtons").addEventListener("click", ev => {
   }, 30);
 });
 PokedexAdaptador.iniciar({
+  inicio: () => document.querySelector('.nav button[data-page="homePage"]').click(),   // botão 🏠 Início fixo no topo
+  naInicio: () => { const e = document.querySelector('#homePage'); return !e || getComputedStyle(e).display !== "none" && e.getBoundingClientRect().height > 0; },
   semRepetir: ["fruitdex_album_v1"],   // não guarda a mesma espécie duas vezes
   verAlbum: () => document.querySelector('.nav button[data-page="albumPage"]').click(),   // se a espécie já está no álbum, o botão só leva até lá
   albumFicha: { cartao: "#albumContent .fruit-card", nome: "h3" },  // "📖 Ver ficha" nas figurinhas do álbum

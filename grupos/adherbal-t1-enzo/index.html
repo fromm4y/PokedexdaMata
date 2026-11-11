@@ -155,6 +155,8 @@ html{font-size:17.5px}
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  inicio: () => showView("habitat"),   // botão 🏠 Início fixo no topo
+  naInicio: () => { const e = document.querySelector('#view-habitat'); return !e || getComputedStyle(e).display !== "none" && e.getBoundingClientRect().height > 0; },
   som: true, textoSom: "🔊 Ouvir o som",  // gravação real da espécie (Wikimedia Commons)
   // botões por etapa: o de identificar só aparece depois de escolher a foto
   etapas: { foto: ["#identifyButton"] },

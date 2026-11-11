@@ -495,6 +495,8 @@ nav button.active{color:#fff;background:#3a1418;border-radius:12px}
   };
 })();
 PokedexAdaptador.iniciar({
+  inicio: () => mostrar("inicio"),   // botão 🏠 Início fixo no topo
+  naInicio: () => { const e = document.querySelector('#inicio'); return !e || getComputedStyle(e).display !== "none" && e.getBoundingClientRect().height > 0; },
   semRepetir: ["cogumeloExplorerAlbum"],   // não guarda a mesma espécie duas vezes
   verAlbum: () => mostrar("album"),   // se a espécie já está no álbum, o botão só leva até lá
   albumFicha: { cartao: "#albumGrid .fungi", nome: "strong" },  // "📖 Ver ficha" nas figurinhas do álbum
