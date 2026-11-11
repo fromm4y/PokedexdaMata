@@ -742,9 +742,11 @@
 @keyframes fpPulse{50%{box-shadow:0 0 0 10px color-mix(in srgb,var(--mc) 10%,transparent),0 0 28px var(--mc)}}
 .fp-agressivo{padding:10px 13px;border-radius:12px;font-weight:700;font-size:15px;line-height:1.4;background:color-mix(in srgb,#f0a640 16%,transparent);border:1px solid color-mix(in srgb,#f0a640 40%,transparent)}
 .fp-agressivo.nao{background:color-mix(in srgb,#3ccf7a 14%,transparent);border-color:color-mix(in srgb,#3ccf7a 40%,transparent)}
+.fp-cena-solta .fp-biomes{padding:2px 2px 8px}
+.fp-empty p{color:#fff!important;font-size:15px!important;font-weight:700;max-width:320px!important}
 .fp-map-note{margin:12px 0 14px;font-size:14.5px;line-height:1.5;color:var(--text-dim)}
 .fp-map-note strong{color:var(--text)}
-.fp-map-fallback{display:grid;place-items:center;height:100%;color:var(--text-dim);font-size:13px;padding:20px;text-align:center}
+.fp-map-fallback{display:grid;place-items:center;height:100%;color:#fff;background:#24352c;font-size:15px;font-weight:700;padding:20px;text-align:center}
 .fp-legend{margin-top:14px;padding:13px 15px;border-radius:14px;background:var(--surface);border:1px solid var(--surface-line)}
 .fp-legend-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 12px}
 .fp-legend-item{display:flex;align-items:center;gap:9px;font-size:14px;opacity:.4}
@@ -752,7 +754,7 @@
 .fp-swatch{width:14px;height:14px;border-radius:4px;flex-shrink:0}
 .fp-legend-item.on .fp-swatch{box-shadow:0 0 12px var(--lc)}
 .fp .fp-biomes{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-.fp .fp-biome{display:inline-flex;align-items:center;gap:6px;font:600 12px 'Hanken Grotesk',system-ui,sans-serif;padding:6px 11px;border-radius:999px;border:1px solid var(--surface-line);background:var(--surface);color:var(--text-dim);cursor:pointer}
+.fp .fp-biome{display:inline-flex;align-items:center;gap:6px;font:700 14px 'Hanken Grotesk',system-ui,sans-serif;padding:9px 14px;min-height:40px;border-radius:999px;border:1px solid var(--surface-line);background:var(--surface);color:var(--text);cursor:pointer}
 .fp .fp-biome.active{color:var(--text);border-color:color-mix(in srgb,var(--bc) 55%,transparent);background:color-mix(in srgb,var(--bc) 16%,transparent)}
 .fp-dot{width:8px;height:8px;border-radius:50%;background:var(--bc);box-shadow:0 0 8px var(--bc)}
 .fp-scene{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--surface-line);aspect-ratio:3/2;max-height:50vh;width:100%;background:#04100a}
@@ -777,10 +779,10 @@
 @keyframes fpFirefly{0%,100%{opacity:0;transform:translate(0,0)}25%,75%{opacity:1}50%{opacity:.35;transform:translate(var(--fx),var(--fy))}}
 .fp-vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(135% 105% at 50% 24%,transparent 44%,rgba(0,0,0,.46))}
 .fp-overlay{position:absolute;left:0;right:0;bottom:0;z-index:6;padding:18px 14px 13px;background:linear-gradient(180deg,transparent,rgba(4,10,7,.94) 78%)}
-.fp-bioma{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--glow-primary)}
+.fp-bioma{font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--glow-primary)}
 .fp-scene-title{font-family:'Fraunces',Georgia,serif;font-size:16px;font-weight:600;margin-top:3px}
 .fp-controls{position:absolute;top:10px;right:10px;z-index:7;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:5px;max-width:70%}
-.fp .fp-controls button{padding:6px 10px;border-radius:999px;border:1px solid var(--surface-line);background:rgba(4,10,7,.62);color:#eaf5ee;font:700 11px 'Hanken Grotesk',system-ui,sans-serif;cursor:pointer}
+.fp .fp-controls button{padding:6px 10px;border-radius:999px;border:1px solid var(--surface-line);background:rgba(4,10,7,.62);color:#eaf5ee;font:700 14px 'Hanken Grotesk',system-ui,sans-serif;cursor:pointer;min-height:38px;padding:8px 13px}
 .fp .fp-controls button.on{background:color-mix(in srgb,var(--glow-primary) 45%,rgba(4,10,7,.6));border-color:transparent}
 .fp .fp-roam{position:absolute;z-index:6;bottom:var(--lane);left:-12%;border:none;background:none;padding:0;cursor:pointer;animation:fpWalk var(--spd) linear infinite;animation-delay:var(--delay)}
 @keyframes fpWalk{from{left:-12%}to{left:112%}}
@@ -793,7 +795,7 @@
 @keyframes fpNada{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-12px) rotate(4deg)}}
 .fp .fp-aqua .fp-mote{border-radius:50%!important;background:transparent!important;border:1.5px solid #ffffffb0;box-shadow:none!important;width:9px!important;height:9px!important;animation:fpBolha 6s linear infinite!important}
 @keyframes fpBolha{from{transform:translateY(40px);opacity:0}15%{opacity:.9}to{transform:translateY(-260px);opacity:0}}
-.fp-cena-solta{background:none!important;padding:0!important}
+.fp-cena-solta{background:var(--bg-1)!important;padding:10px!important;border-radius:22px!important}
 .fp-cena-solta .fp-scene{max-height:62vh}
 .fp-thumb,.fp-pthumb{position:relative;display:block;width:48px;height:48px;border-radius:50%;overflow:visible;border:2px solid var(--c);background:#04140d;box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 25%,transparent),0 0 18px var(--c)}
 .fp-pthumb{border-radius:50% 50% 50% 8px}
@@ -801,7 +803,7 @@
 .fp-emoji{position:absolute;right:-6px;bottom:-6px;width:22px;height:22px;border-radius:50%;background:var(--bg-1);display:grid;place-items:center;font-size:13px;border:1px solid var(--c)}
 .fp-thumb.sem-foto,.fp-pthumb.sem-foto{width:58px;height:58px;background:radial-gradient(circle at 35% 30%,#fff,#fff3d6);display:grid;place-items:center}
 .sem-foto .fp-emoji{position:static;width:auto;height:auto;background:none;border:0;font-size:36px;line-height:1}
-.fp-tag{position:absolute;left:50%;top:-8px;transform:translate(-50%,-100%);background:rgba(4,10,7,.94);border:1px solid var(--surface-line);color:#eaf5ee;padding:5px 9px;border-radius:9px;font:600 11.5px 'Hanken Grotesk',system-ui,sans-serif;white-space:nowrap;opacity:0;pointer-events:none;transition:.2s}
+.fp-tag{position:absolute;left:50%;top:-8px;transform:translate(-50%,-100%);background:rgba(4,10,7,.94);border:1px solid var(--surface-line);color:#eaf5ee;padding:6px 10px;border-radius:9px;font:700 13.5px 'Hanken Grotesk',system-ui,sans-serif;white-space:nowrap;opacity:0;pointer-events:none;transition:.2s}
 .fp .fp-roam:hover .fp-tag,.fp .fp-roam.show .fp-tag,.fp .fp-plant:hover .fp-tag,.fp .fp-plant.show .fp-tag{opacity:1}
 .fp .fp-plant{position:absolute;z-index:6;bottom:var(--lane);left:var(--gx);border:none;background:none;padding:0;cursor:pointer;transform-origin:bottom center;animation:fpSway 3.9s ease-in-out infinite;animation-delay:var(--gdelay)}
 @keyframes fpSway{0%,100%{transform:translateX(-50%) rotate(-2.4deg)}50%{transform:translateX(-50%) rotate(2.4deg)}}

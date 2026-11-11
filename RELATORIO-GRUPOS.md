@@ -26,6 +26,28 @@ O que foi feito em cada grupo. Este relatório foi gerado a partir dos próprios
 - só o primeiro nome dos alunos no site; os arquivos originais (com nomes completos) foram apagados do repositório e do histórico.
 
 
+**Ajustes de 11/11 (pedidos da professora):**
+
+- **Por grupo:**
+  - **Codex:** a pesquisa abre a ficha completa do animal já reconhecido.
+  - **Izaque e FruitDex:** tocar num bioma do mapa mostra a imagem do habitat.
+  - **Eduardo:** abas e abertura animada da raposa roubando as frutas, com balões.
+  - **Cogumelo Explorer:** mascote novo (cogumelo de sombreiro).
+  - **Detetives da Natureza:** botões novos; Voltar e Início no topo de todas as telas; o quiz volta para a ficha; loja de figurinhas que vão para o álbum; escolha de personagem.
+  - **Os Inteligentes:** rosa de verdade e reconhecimento mais rápido.
+  - **Caçadores de Mamíferos:** tela de boas-vindas maior.
+  - **All Star:** cobra maior e "É agressivo?" no álbum.
+- **Geral:**
+  - Os mapas que só mostravam o mapa agora mostram o habitat ao tocar no bioma.
+  - Botão 🏠 Início fixo no topo nos projetos que não tinham.
+  - Temas só do Brasil não mostram outros países; temas gerais mostram o país certo.
+  - Espaço para imagens de habitats de fora do Brasil (ver IMAGENS-PARA-GERAR.md).
+  - Campo "É agressivo?" na ficha de animais.
+- **Varredura:**
+  - Letras pequenas aumentadas: All Star, Arthur, Murilo, Thamires, Luan e PassaroDex.
+  - Botões dos biomas que ficavam invisíveis em fundo claro foram corrigidos.
+  - Texto cortado no tablet em pé corrigido.
+
 **Ajustes de 09/11 (pedidos da professora):**
 
 - **Animais de fora do Brasil:** a ficha agora mostra o mapa do **mundo** com os lugares onde a espécie vive (ex.: leão → Quênia, Tanzânia, Botsuana) e o habitat ganha cenários de fora do Brasil (savana, deserto, gelo).

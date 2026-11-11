@@ -290,7 +290,7 @@ function renderPlants(filter="todas"){
   const desc=document.createElement("p");desc.className="desc";desc.textContent=p.characteristics;
   const facts=document.createElement("div");facts.className="facts";
   [["🌎 Habitat",p.habitat],["☀️ Luz",p.light],["💧 Água",p.water],["🌱 Cuidados",p.care]].forEach(([a,b])=>{const x=document.createElement("div");x.className="fact";const strong=document.createElement("b");strong.textContent=a;const span=document.createElement("span");span.textContent=b;x.append(strong,span);facts.appendChild(x)});
-  const actions=document.createElement("div");actions.className="card-actions";const details=document.createElement("button");details.className="primary";details.textContent="📖 Ver informações completas";details.onclick=()=>openModal(p);actions.appendChild(details);
+  const actions=document.createElement("div");actions.className="card-actions";const details=document.createElement("button");details.className="primary";details.textContent="📖 Ver ficha";details.onclick=()=>openModal(p);actions.appendChild(details);
   if(p.danger){const warn=document.createElement("div");warn.className="info warning";warn.style.marginTop="12px";warn.textContent="⚠️ Exige cuidado: não consuma e peça orientação de um adulto.";content.append(row,desc,facts,actions,warn)}else content.append(row,desc,facts,actions);
   card.append(ph,content);grid.appendChild(card);
  });
@@ -409,5 +409,9 @@ function showToast(text){const t=document.getElementById("toast");t.textContent=
  b.onclick=()=>{go("inicio");document.querySelectorAll(".nav-btn").forEach(x=>x.classList.toggle("active",x.dataset.screen==="inicio"));scrollTo({top:0,behavior:"smooth"});setTimeout(at,300)};
  document.body.appendChild(b);addEventListener("scroll",at,{passive:true});document.addEventListener("click",()=>setTimeout(at,150),true);setInterval(at,800);at();})();
 </script>
+
+<style id="letras-maiores">/* letras pequenas demais para o tablet (varredura 11/11) */
+.nav-btn small{font-size:13px!important}
+</style>
 </body>
 </html>

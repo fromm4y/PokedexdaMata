@@ -468,10 +468,19 @@
       html.fp-travado .pdm-inicio{display:none}`;
     document.head.appendChild(st);
     const b = document.createElement("button"); b.type = "button"; b.className = "pdm-inicio"; b.textContent = "🏠 Início"; b.setAttribute("aria-label", "Voltar para o início");
+    // texto escuro em cor clara, branco em cor escura (sempre legível)
+    try { const h = (CFG.cor || "#2f7d43").replace("#", ""), v = h.length === 3 ? h.split("").map(c => c + c).join("") : h.slice(0, 6);
+      const [r, g, bb] = [0, 2, 4].map(i => parseInt(v.slice(i, i + 2), 16) / 255).map(x => x <= .03928 ? x / 12.92 : Math.pow((x + .055) / 1.055, 2.4));
+      if (.2126 * r + .7152 * g + .0722 * bb > .35) { b.style.color = "#14231a"; b.style.textShadow = "none"; } } catch (e) {}
     b.addEventListener("click", () => { try { CFG.inicio(); } catch (e) {} window.scrollTo({ top: 0, behavior: "smooth" }); setTimeout(atualizar, 400); });
     document.body.appendChild(b);
     // some só quando está no topo da tela inicial (ou no topo, se o grupo não disse qual é a inicial)
-    const atualizar = () => b.classList.toggle("some", window.scrollY < 80 && (CFG.naInicio ? !!CFG.naInicio() : true));
+    // procura um lugar no topo (meio, esquerda, direita) que não cubra nenhum botão;
+    // se não houver, vai para o canto de baixo à esquerda
+    const LUGARES = [{ top: "10px", left: "50%", ml: "-62px" }, { top: "10px", left: "10px" }, { top: "10px", left: "calc(100% - 136px)" }, { top: "calc(100% - 64px)", left: "12px" }];
+    const cobre = () => { const p = b.getBoundingClientRect(); return [...document.querySelectorAll("button,a,input,select,h1,[role=button],nav")].some(e => { if (e === b || e.closest(".pdm-inicio,.pdm-musica,.fp-pop")) return false; const r = e.getBoundingClientRect(); if (r.width < 2 || r.height < 2) return false; const st = getComputedStyle(e); if (st.visibility === "hidden" || st.opacity === "0") return false; return r.left < p.right && r.right > p.left && r.top < p.bottom && r.bottom > p.top; }); };
+    const posicionar = () => { if (b.classList.contains("some")) return; for (const L of LUGARES) { b.style.top = L.top; b.style.left = L.left; b.style.marginLeft = L.ml || "0"; if (!cobre()) return; } };
+    const atualizar = () => { b.classList.toggle("some", window.scrollY < 80 && (CFG.naInicio ? !!CFG.naInicio() : true)); posicionar(); };
     window.addEventListener("scroll", atualizar, { passive: true });
     document.addEventListener("click", () => setTimeout(atualizar, 150), true);
     setInterval(atualizar, 800);
