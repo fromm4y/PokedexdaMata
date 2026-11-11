@@ -227,6 +227,14 @@ async function chamarGoogle(modelo, chave, body) {
    REGRAS_FICHA explica cada um para a IA; CAMPOS_FICHA é o formato. */
 /* Separar "não é do tema" (ex.: melancia num app de flores) de "é do tema,
    mas a foto está ruim" (borrada, longe, escura). */
+/* Brasil x mundo: tema "do Brasil" só aceita espécies que vivem no Brasil;
+   tema geral aceita o mundo todo e marca todos os países no mapa. */
+const regrasLugar = m => temaDoBrasil(m) ? `
+- Em "ocorre_no_brasil", responda true SOMENTE se a espécie vive naturalmente no Brasil (ou é cultivada/criada comumente aqui). Se for de outro país e não existir no Brasil, use false.
+- Este projeto é SÓ do Brasil: se "ocorre_no_brasil" for false, use "e_do_tema": false e em "o_que_e" escreva o nome com "de fora do Brasil" (ex.: "um canguru, que é da Austrália").
+- Em "mundo", liste só "Brasil".` : `
+- Em "ocorre_no_brasil", diga se a espécie também vive no Brasil.
+- Em "mundo", liste TODOS os principais países ou regiões onde a espécie vive (inclua "Brasil" se ela vive aqui), cada um com "lat" e "lng".`;
 const regrasTema = alvo => `
 - Em "e_do_tema", responda true se a foto mostra ${alvo} (mesmo que borrada, escura ou de longe) e false se mostra claramente outra coisa.
 - Em "o_que_e", diga em poucas palavras, com artigo, o que aparece na foto (ex.: "uma melancia", "um cachorro", "uma rosa").
@@ -258,6 +266,7 @@ const CAMPOS_FICHA = {
   habitat_descricao: { type: "string" },
   mundo: { type: "array", items: { type: "object", properties: { lugar: { type: "string" }, lat: { type: "number" }, lng: { type: "number" } }, required: ["lugar", "lat", "lng"] } },
   habitat_mundo: { type: "string" },
+  ocorre_no_brasil: { type: "boolean" },
   agressivo: { type: "string" },
   cenario_tipo: { type: "string" },
   cenario_periodo: { type: "string" },
@@ -274,7 +283,7 @@ function montarPedido(missoes, imagem, mime, aviso) {
 
 Regras:
 - Em "confianca", dê um número de 0 a 100 dizendo o quanto você tem certeza da identificação. Seja honesto: foto borrada, distante ou ambígua merece número baixo.
-- Se a imagem claramente não contém uma ${missoes.O_QUE_PROCURAR}, defina "identificado" como false e explique de forma gentil no campo "mensagem".` + regrasTema(missoes.O_QUE_PROCURAR) + REGRAS_FICHA;
+- Se a imagem claramente não contém uma ${missoes.O_QUE_PROCURAR}, defina "identificado" como false e explique de forma gentil no campo "mensagem".` + regrasTema(missoes.O_QUE_PROCURAR) + regrasLugar(missoes) + REGRAS_FICHA;
   if (aviso) prompt += `\n- Inclua naturalmente este aviso de segurança em uma das curiosidades: "${aviso}"`;
 
   return {
@@ -303,7 +312,7 @@ function personalizarPedido(missoes, original, aviso) {
     `Em "confianca", dê um número de 0 a 100 dizendo o quanto você tem certeza; seja honesto. ` +
     `Em "nome_popular", escreva o nome popular em português do que você identificou. ` +
     `Se a foto não mostra ${missoes.O_QUE_PROCURAR}, use "identificado": false.` +
-    `\nAlém dos campos pedidos abaixo, preencha também:` + regrasTema(missoes.O_QUE_PROCURAR) + REGRAS_FICHA +
+    `\nAlém dos campos pedidos abaixo, preencha também:` + regrasTema(missoes.O_QUE_PROCURAR) + regrasLugar(missoes) + REGRAS_FICHA +
     (aviso ? `\nInclua este aviso de segurança na resposta: "${aviso}"` : "") +
     (textoLivre ? `\nResponda em JSON. No campo "texto_front", escreva a resposta em texto corrido, do jeito que as instruções do grupo abaixo pedem.` : "");
   if (texto) texto.text = extra + "\n\n" + texto.text;
@@ -547,7 +556,8 @@ module.exports = async (req, res) => {
    - ACERTOU: a mensagem de acerto do grupo (Missão 6).
    Devolvemos no MESMO formato do Google (candidates…text), para o app antigo
    e o novo entenderem igual. */
-const temaDoBrasil = m => /brasil|brasileir|amaz[oô]ni|nativ/i.test(String(m.O_QUE_PROCURAR || "") + " " + String((m.GRUPO && m.GRUPO.tema) || ""));
+function temaDoBrasil(m) { return TEMA_BR(m); }
+const TEMA_BR = m => /brasil|brasileir|amaz[oô]ni|nativ/i.test(String(m.O_QUE_PROCURAR || "") + " " + String((m.GRUPO && m.GRUPO.tema) || ""));
 function aplicarMissoes(missoes, data) {
   const parte = data?.candidates?.[0]?.content?.parts?.[0];
   if (!parte || typeof parte.text !== "string") return data;
@@ -561,7 +571,14 @@ function aplicarMissoes(missoes, data) {
   r.nome_popular = r.nome_popular || r.nome || r.name || "essa espécie";
   // Tema só do Brasil ("aves do Brasil", "frutas brasileiras", "animal da
   // Amazônia"...): o mapa fica só nos biomas brasileiros, sem outros países.
-  if (temaDoBrasil(missoes)) { r.mundo = []; r.habitat_mundo = ""; r.so_brasil = true; }
+  if (temaDoBrasil(missoes)) {
+    // tema só do Brasil: espécie de fora não é reconhecida (vira "fora do tema")
+    if (r.ocorre_no_brasil === false && r.e_do_tema !== false) {
+      r.e_do_tema = false;
+      if (!/fora do brasil|n[aã]o [eé] do brasil|da [A-Z]|de [A-Z]/.test(String(r.o_que_e || ""))) r.o_que_e = (r.o_que_e || r.nome_popular || "uma espécie") + ", que não é do Brasil";
+    }
+    r.mundo = []; r.habitat_mundo = ""; r.so_brasil = true;
+  }
   if (r.e_do_tema === false) {
     const oque = String(r.o_que_e || "outra coisa").trim();
     r.identificado = false;
