@@ -1,8 +1,6 @@
 # Imagens para gerar
 
-> 🆕 **Novas (11/11):** habitats de fora do Brasil, logo abaixo.
->
-> ✅ Já entregues e no ar: Tokoyami, elfa cientista, cientista explorador, elfa do Dattflower, raposa do Eduardo, os 6 rios do AquaDex, fundo de frutas e banana de chapéu do Bryan, e o fundo e os personagens da Heloisa (Forest).
+> ✅ Já entregues e no ar: os 5 habitats de fora do Brasil (savana, deserto, gelo, oceano, floresta temperada), Tokoyami, elfa cientista, cientista explorador, elfa do Dattflower, raposa do Eduardo, os 6 rios do AquaDex, fundo de frutas e banana de chapéu do Bryan, e o fundo e os personagens da Heloisa (Forest).
 
 O código já está pronto para receber estas imagens. Basta gerar, salvar com **exatamente** o nome indicado
 (formato `.webp`, ou `.png`/`.jpg` convertidos para `.webp`) e colocar na pasta indicada.
