@@ -422,6 +422,14 @@
       itens: [{ nome: d.nome_popular || d.nome || "Espécie", img: o.foto || "", icone, cor, fauna: !!CFG.fauna, biomas: mundoCena ? [mundoCena.nome].concat(biomas) : biomas, atual: true }],
       aquatico: !!CFG.aquatico
     };
+    // os outros já reconhecidos neste aparelho dividem o habitat com ela
+    if (CFG.companheiros) {
+      const nomeAtual = String(estado.itens[0].nome).toLowerCase();
+      try {
+        (CFG.companheiros() || []).filter(c => c && c.nome && String(c.nome).toLowerCase() !== nomeAtual).slice(0, 14)
+          .forEach(c => estado.itens.push({ nome: c.nome, img: c.img || "", icone: c.icone || icone, cor, fauna: c.fauna !== undefined ? !!c.fauna : !!CFG.fauna, biomas: lista(c.biomas), atual: false }));
+      } catch (e) {}
+    }
     const tabs = el.querySelectorAll(".fp-tab"), panels = el.querySelectorAll(".fp-panel");
     tabs.forEach(t => t.onclick = () => {
       tabs.forEach(x => x.classList.toggle("active", x === t));

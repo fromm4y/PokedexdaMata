@@ -425,17 +425,20 @@ PokedexAdaptador.iniciar({
 <script>
 (function () {
   const CONVIDADAS = [
-    ["Arara-azul", "🦜", ["Pantanal", "Cerrado"]], ["Tucano-toco", "🐦", ["Cerrado", "Pantanal", "Amazônia"]],
-    ["Bem-te-vi", "🐤", ["Mata Atlântica", "Cerrado", "Caatinga", "Pampa", "Amazônia", "Pantanal"]], ["Coruja-buraqueira", "🦉", ["Cerrado", "Pampa", "Caatinga"]],
-    ["Beija-flor", "🐦", ["Mata Atlântica", "Amazônia"]], ["Gavião-real", "🦅", ["Amazônia", "Mata Atlântica"]],
-    ["Quero-quero", "🐦", ["Pampa", "Cerrado"]], ["Carcará", "🦅", ["Caatinga", "Cerrado", "Pampa"]]
+    ["Arara-azul", "🦜", ["Pantanal", "Cerrado"], "Anodorhynchus hyacinthinus"], ["Tucano-toco", "🐦", ["Cerrado", "Pantanal", "Amazônia"], "Ramphastos toco"],
+    ["Bem-te-vi", "🐤", ["Mata Atlântica", "Cerrado", "Caatinga", "Pampa", "Amazônia", "Pantanal"], "Pitangus sulphuratus"], ["Coruja-buraqueira", "🦉", ["Cerrado", "Pampa", "Caatinga"], "Athene cunicularia"],
+    ["Beija-flor", "🐦", ["Mata Atlântica", "Amazônia"], "Eupetomena macroura"], ["Gavião-real", "🦅", ["Amazônia", "Mata Atlântica"], "Harpia harpyja"],
+    ["Quero-quero", "🐦", ["Pampa", "Cerrado"], "Vanellus chilensis"], ["Carcará", "🦅", ["Caatinga", "Cerrado", "Pampa"], "Caracara plancus"]
   ];
+  // fotos reais das convidadas (da internet); enquanto não chegam, aparece o desenho
+  const FOTO_CONV = {};
+  CONVIDADAS.forEach(c => FichaPokedex.urlDaEspecie(c[3]).then(u => { if (u) { FOTO_CONV[c[0]] = u; if (document.querySelector('.tab[data-tab="habitat"].active')) cena(biomaAtual); } }));
   const lerAlbum = () => { try { return JSON.parse(localStorage.getItem("pokeAvesAlbumV2") || "[]"); } catch (e) { return []; } };
   let biomaAtual = null, mapaFeito = false;
   function itens() {
     const minhas = lerAlbum().map(a => { const f = PokedexAdaptador.fichaSalva && PokedexAdaptador.fichaSalva(a.nome); const bi = f && f.info && f.info.biomas; return { nome: a.nome, img: a.foto || "", icone: a.emoji || "🐦", fauna: true, biomas: bi && bi.length ? bi : ["Amazônia", "Mata Atlântica", "Cerrado", "Caatinga", "Pantanal", "Pampa"], atual: true }; });
     const nomes = minhas.map(m => m.nome.toLowerCase());
-    return minhas.concat(CONVIDADAS.filter(c => !nomes.includes(c[0].toLowerCase())).map(([nome, icone, biomas]) => ({ nome: "✨ " + nome, img: "", icone, fauna: true, biomas })));
+    return minhas.concat(CONVIDADAS.filter(c => !nomes.includes(c[0].toLowerCase())).map(([nome, icone, biomas]) => ({ nome: "✨ " + nome, img: FOTO_CONV[nome] || "", icone, fauna: true, biomas })));
   }
   function info(bioma) {
     const aqui = itens().filter(i => i.biomas.includes(bioma)), minhas = aqui.filter(i => !i.nome.startsWith("✨"));

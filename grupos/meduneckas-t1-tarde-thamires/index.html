@@ -325,7 +325,7 @@ const GRUPO_ID=(location.pathname.match(/\/grupos\/([^/]+)/)||[])[1]||"";
 function reduzirImagem(src,ladoMax,qualidade){return new Promise(res=>{const img=new Image();img.onload=()=>{const k=Math.min(1,ladoMax/Math.max(img.width,img.height));const c=document.createElement("canvas");c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);c.getContext("2d").drawImage(img,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",qualidade))};img.onerror=()=>res(null);img.src=src})}
 function handleFile(file){if(!file)return;currentFile=file;result.style.display="none";statusEl.style.display="none";const ehFoto=(file.type||"").startsWith("image/");preview.style.display=ehFoto?"":"none";if(ehFoto)preview.src=URL.createObjectURL(file);previewWrap.style.display="block";if(!ehFoto)showStatus("📄 Arquivo escolhido: "+file.name+". Toque em Reconhecer para o porteiro conferir.")}
 /* Ficha padrão com as cores deste grupo, no modo claro e no escuro. */
-FichaPokedex.configurar({icone:"🌸",fauna:false,cor:"#ff63ad",cor2:"#a76cff",
+FichaPokedex.configurar({companheiros:()=>{try{return JSON.parse(localStorage.getItem("pokedexMataAlbum")||"[]").map(x=>({nome:x.name,img:x.photo||"",biomas:(x.ficha&&x.ficha.biomas)||[]}))}catch(e){return[]}},icone:"🌸",fauna:false,cor:"#ff63ad",cor2:"#a76cff",
  escuro:()=>document.body.dataset.theme!=="light",
  claro:{fundo:"#fcf8ff",texto:"#35105e",suave:"#654b78",cor:"#d84d9d",cor2:"#7027a8"},
  noturno:{fundo:"#1b0d2e",texto:"#fffaff",suave:"#dbcde8",cor:"#ff63ad",cor2:"#a76cff"}});
@@ -401,9 +401,9 @@ function showToast(text){const t=document.getElementById("toast");t.textContent=
 </script>
 
 <!-- 🏠 Início fixo no topo (pedido da professora) -->
-<style>.pdm-inicio{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:8999;font:800 15px/1 system-ui,sans-serif;padding:11px 16px;border-radius:999px;border:2px solid #fff;background:#a24bd6;color:#fff;box-shadow:0 6px 16px #0005;cursor:pointer;transition:opacity .2s}.pdm-inicio.some{opacity:0;pointer-events:none}</style>
+<style>.pdm-inicio{position:fixed;top:12px;right:14px;z-index:8999;font:600 15px/1 system-ui,sans-serif;padding:11px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.38);background:rgba(10,16,34,.74);color:#fff;backdrop-filter:blur(8px);box-shadow:0 6px 18px rgba(0,0,0,.28);cursor:pointer;transition:opacity .2s}.pdm-inicio.some{opacity:0;pointer-events:none}</style>
 <script>
-(function(){const b=document.createElement("button");b.type="button";b.className="pdm-inicio";b.textContent="🏠 Início";
+(function(){const b=document.createElement("button");b.type="button";b.className="pdm-inicio";b.textContent="← Início";
  const naInicio=()=>document.getElementById("inicio").classList.contains("active");
  const at=()=>b.classList.toggle("some",scrollY<80&&naInicio());
  b.onclick=()=>{go("inicio");document.querySelectorAll(".nav-btn").forEach(x=>x.classList.toggle("active",x.dataset.screen==="inicio"));scrollTo({top:0,behavior:"smooth"});setTimeout(at,300)};

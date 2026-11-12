@@ -191,6 +191,14 @@
   }
   /* itensDoBioma(bioma): espécies reconhecidas neste aparelho que vivem no
      bioma — para a cena do habitat ao lado dos mapas dos grupos. */
+  /* todos os reconhecidos neste aparelho (com a foto que a pessoa mandou),
+     para dividirem o habitat dentro da ficha */
+  function todosReconhecidos() {
+    const tudo = lerFichas();
+    return Object.keys(tudo).map(k => tudo[k]).filter(f => f && f.info).sort((a, b) => b.t - a.t)
+      .map(f => ({ nome: f.info.nome_popular || f.info.nome || "Espécie", img: f.foto || "", icone: CFG.icone || "🌿", fauna: !!CFG.fauna,
+        biomas: [].concat(f.info.biomas || []).concat(f.info.habitat_mundo ? [f.info.habitat_mundo] : []) }));
+  }
   function itensDoBioma(bioma) {
     const tudo = lerFichas();
     return Object.keys(tudo).map(k => tudo[k]).filter(f => f && f.info && [].concat(f.info.biomas || []).includes(bioma))
@@ -444,7 +452,8 @@
     FichaPokedex.configurar({
       icone: CFG.icone, cor: CFG.cor, cor2: CFG.cor2, fauna: !!CFG.fauna,
       escuro: CFG.escuro, claro: CFG.claro || {}, noturno: CFG.noturno || {},
-      aquatico: !!CFG.aquatico, fundosCena: CFG.fundosCena || {}, soMundo: !!CFG.soMundo
+      aquatico: !!CFG.aquatico, fundosCena: CFG.fundosCena || {}, soMundo: !!CFG.soMundo,
+      companheiros: () => todosReconhecidos()
     });
     if (CFG.esconder.length) {
       const s = document.createElement("style");
@@ -463,23 +472,25 @@
   function botaoInicio() {
     if (!CFG.inicio || document.querySelector(".pdm-inicio")) return;
     const st = document.createElement("style");
-    st.textContent = `.pdm-inicio{position:fixed;top:10px;left:50%;margin-left:-62px;width:124px;justify-content:center;z-index:8999;display:flex;align-items:center;gap:6px;font:800 15px/1 system-ui,sans-serif;padding:11px 16px;border-radius:999px;border:2px solid #fff;background:${CFG.cor || "#2f7d43"};color:#fff;text-shadow:0 1px 2px #0006;box-shadow:0 6px 16px #0005;cursor:pointer;transition:opacity .2s,transform .2s}
-      .pdm-inicio:hover{transform:translateY(-2px)}.pdm-inicio.some{opacity:0;pointer-events:none;transform:translateY(-10px)}
+    st.textContent = `.pdm-inicio{position:fixed;top:12px;right:14px;z-index:8999;display:flex;align-items:center;gap:6px;font:600 15px/1 system-ui,-apple-system,"Segoe UI",sans-serif;padding:11px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.38);background:rgba(10,16,34,.74);color:#fff;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 6px 18px rgba(0,0,0,.28);cursor:pointer;transition:opacity .2s,transform .2s,background .2s}
+      .pdm-inicio:hover{background:rgba(10,16,34,.9);transform:translateY(-1px)}.pdm-inicio.some{opacity:0;pointer-events:none;transform:translateY(-8px)}
       html.fp-travado .pdm-inicio{display:none}`;
     document.head.appendChild(st);
-    const b = document.createElement("button"); b.type = "button"; b.className = "pdm-inicio"; b.textContent = "🏠 Início"; b.setAttribute("aria-label", "Voltar para o início");
-    // texto escuro em cor clara, branco em cor escura (sempre legível)
-    try { const h = (CFG.cor || "#2f7d43").replace("#", ""), v = h.length === 3 ? h.split("").map(c => c + c).join("") : h.slice(0, 6);
-      const [r, g, bb] = [0, 2, 4].map(i => parseInt(v.slice(i, i + 2), 16) / 255).map(x => x <= .03928 ? x / 12.92 : Math.pow((x + .055) / 1.055, 2.4));
-      if (.2126 * r + .7152 * g + .0722 * bb > .35) { b.style.color = "#14231a"; b.style.textShadow = "none"; } } catch (e) {}
+    const b = document.createElement("button"); b.type = "button"; b.className = "pdm-inicio"; b.textContent = "← Início"; b.setAttribute("aria-label", "Voltar para o início");
+
     b.addEventListener("click", () => { try { CFG.inicio(); } catch (e) {} window.scrollTo({ top: 0, behavior: "smooth" }); setTimeout(atualizar, 400); });
     document.body.appendChild(b);
     // some só quando está no topo da tela inicial (ou no topo, se o grupo não disse qual é a inicial)
     // procura um lugar no topo (meio, esquerda, direita) que não cubra nenhum botão;
     // se não houver, vai para o canto de baixo à esquerda
-    const LUGARES = [{ top: "10px", left: "50%", ml: "-62px" }, { top: "10px", left: "10px" }, { top: "10px", left: "calc(100% - 136px)" }, { top: "calc(100% - 64px)", left: "12px" }];
-    const cobre = () => { const p = b.getBoundingClientRect(); return [...document.querySelectorAll("button,a,input,select,h1,[role=button],nav")].some(e => { if (e === b || e.closest(".pdm-inicio,.pdm-musica,.fp-pop")) return false; const r = e.getBoundingClientRect(); if (r.width < 2 || r.height < 2) return false; const st = getComputedStyle(e); if (st.visibility === "hidden" || st.opacity === "0") return false; return r.left < p.right && r.right > p.left && r.top < p.bottom && r.bottom > p.top; }); };
-    const posicionar = () => { if (b.classList.contains("some")) return; for (const L of LUGARES) { b.style.top = L.top; b.style.left = L.left; b.style.marginLeft = L.ml || "0"; if (!cobre()) return; } };
+    const LUGARES = [{ top: "12px", right: "14px" }, { top: "12px", left: "14px" }, { top: "12px", left: "50%", ml: "-52px" }, { top: "calc(100% - 64px)", left: "14px" }];
+    const cobre = () => { const p = b.getBoundingClientRect(); return [...document.querySelectorAll("button,a,input,select,h1,[role=button],nav")].some(e => { if (e === b || e.closest(".pdm-inicio,.pdm-musica,.fp-pop")) return false; const r = e.getBoundingClientRect(); if (r.width < 2 || r.height < 2) return false; const st = getComputedStyle(e); if (st.visibility === "hidden" || st.opacity === "0") return false;
+      if (!(r.left < p.right && r.right > p.left && r.top < p.bottom && r.bottom > p.top)) return false;
+      // conteúdo que só passa por baixo ao rolar não conta: só menus fixos (ou o topo da página)
+      if (window.scrollY < 80) return true;
+      for (let n = e; n && n !== document.body; n = n.parentElement) { const ps = getComputedStyle(n).position; if (ps === "fixed" || ps === "sticky") return true; }
+      return false; }); };
+    const posicionar = () => { if (b.classList.contains("some")) return; for (const L of LUGARES) { b.style.top = L.top; b.style.left = L.left || "auto"; b.style.right = L.right || "auto"; b.style.marginLeft = L.ml || "0"; if (!cobre()) return; } };
     const atualizar = () => { b.classList.toggle("some", window.scrollY < 80 && (CFG.naInicio ? !!CFG.naInicio() : true)); posicionar(); };
     window.addEventListener("scroll", atualizar, { passive: true });
     document.addEventListener("click", () => setTimeout(atualizar, 150), true);

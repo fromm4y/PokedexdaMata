@@ -418,8 +418,14 @@ const lugaresDe = nome => (LUGARES_SAVANA[nome] || LUGARES_SAVANA["Leão"]).map(
   const nomes = ["Leão", "Elefante-africano", "Girafa", "Zebra", "Guepardo", "Hipopótamo", "Rinoceronte", "Avestruz"];
   const ico = { "Leão": "🦁", "Elefante-africano": "🐘", "Girafa": "🦒", "Zebra": "🦓", "Guepardo": "🐆", "Hipopótamo": "🦛", "Rinoceronte": "🦏", "Avestruz": "🐦" };
   FichaPokedex.configurar({ icone: "🦁", cor: "#e98a3b", cor2: "#f7c75e", escuro: false, claro: { fundo: "#fff7e6", texto: "#4a2c17", suave: "#7a5a3c" } });
-  FichaPokedex.cena(document.getElementById("savanaCena"), { soMundo: true, mundo: { nome: "Savana africana", cenario: "savana" },
-    itens: nomes.map(n => ({ nome: n, img: "", icone: ico[n], fauna: true, biomas: ["Savana africana"] })) });
+  const CIEN = { "Leão": "Panthera leo", "Elefante-africano": "Loxodonta africana", "Girafa": "Giraffa camelopardalis", "Zebra": "Equus quagga", "Guepardo": "Acinonyx jubatus", "Hipopótamo": "Hippopotamus amphibius", "Rinoceronte": "Diceros bicornis", "Avestruz": "Struthio camelus" };
+  const foto = {};
+  // as fotos que a pessoa tirou (álbum) aparecem também, junto dos bichos da savana
+  const meus = () => (PokedexAdaptador.lerAlbum() || []).map(x => ({ nome: x.nome, img: x.foto || "", icone: "🐾", fauna: true, biomas: ["Savana africana"] }));
+  const desenharSavana = () => FichaPokedex.cena(document.getElementById("savanaCena"), { soMundo: true, mundo: { nome: "Savana africana", cenario: "savana" },
+    itens: meus().concat(nomes.filter(n => !meus().some(m => m.nome === n)).map(n => ({ nome: n, img: foto[n] || "", icone: ico[n], fauna: true, biomas: ["Savana africana"] }))) });
+  desenharSavana();
+  nomes.forEach(n => FichaPokedex.urlDaEspecie(CIEN[n]).then(u => { if (u) { foto[n] = u; clearTimeout(desenharSavana.t); desenharSavana.t = setTimeout(desenharSavana, 300); } }));
   const todos = []; Object.values(LUGARES_SAVANA).forEach(l => l.forEach(([lugar, lat, lng]) => { if (lat < 15 && lng > 0 && lng < 60 && !todos.some(x => x.lugar === lugar)) todos.push({ lugar, lat, lng }); }));
   FichaPokedex.mapaMundo(document.getElementById("savanaMapa"), todos, { zoomMax: 3 });
 })();
