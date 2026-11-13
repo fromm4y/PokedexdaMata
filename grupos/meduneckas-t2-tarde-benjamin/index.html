@@ -155,6 +155,7 @@ window.reduzirParaAlbum = src => new Promise(res => { const img = new Image(); i
   };
 })();
 PokedexAdaptador.iniciar({
+  som: true, textoSom: "🔊 Ouvir o som",   // gravação real da espécie (Wikimedia/Wikidata)
   inicio: () => navigate("inicio"),   // botão 🏠 Início fixo no topo
   naInicio: () => { const e = document.querySelector('#inicio'); return !e || getComputedStyle(e).display !== "none" && e.getBoundingClientRect().height > 0; },
   semRepetir: ["reptisfera_records"],   // não guarda a mesma espécie duas vezes

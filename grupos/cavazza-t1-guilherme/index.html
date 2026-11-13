@@ -249,6 +249,7 @@ nav button{min-height:46px;font-size:15px}
 <script src="/comum/adaptador.js"></script>
 <script>
 PokedexAdaptador.iniciar({
+  som: true, textoSom: "🔊 Ouvir o som",   // gravação real da espécie (Wikimedia/Wikidata)
   semRepetir: ["ama_album"],   // não guarda a mesma espécie duas vezes
   verAlbum: () => go("album"),   // se a espécie já está no álbum, o botão só leva até lá
   icone: "🐆", fauna: true,

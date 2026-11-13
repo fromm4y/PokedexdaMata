@@ -195,6 +195,12 @@ input[type=file]{display:none}
   .actions .btn{width:100%}.result-photo{min-height:230px}
 }
 </style>
+
+<style id="camera-tablet">
+/* tablet deitado: a janela da câmera cabe na área visível de verdade e rola */
+.modal-card{max-height:calc(100dvh - 20px)!important}
+#cameraModal video,.camera-video{max-height:calc(100dvh - 250px)!important;object-fit:contain}
+</style>
 </head>
 <body>
 <div class="app">

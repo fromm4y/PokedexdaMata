@@ -618,7 +618,26 @@
         for (const p of ps) { const d = info(p); if (d.url) return d.url; }
         return null;
       }).catch(() => null);
-    return termos.reduce((p, t) => p.then(u => u || buscar(t)), Promise.resolve(null))
+    // pega o MP3 (toca em qualquer tablet, inclusive iPad) de um arquivo do Commons
+    const arquivoCommons = f => fetch("https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=videoinfo&viprop=url|derivatives&titles=" + encodeURIComponent("File:" + f))
+      .then(r => r.ok ? r.json() : null)
+      .then(j => { const pg = j && j.query && j.query.pages && Object.values(j.query.pages)[0]; const d = (pg && pg.videoinfo && pg.videoinfo[0]) || {};
+        const mp3 = (d.derivatives || []).find(x => /mpeg|mp3/.test((x.type || "") + (x.transcodekey || ""))); return (mp3 && mp3.src) || d.url || ("https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(f)); })
+      .catch(() => "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(f));
+    // 2ª chance: a gravação oficial da espécie no Wikidata (propriedade P51 = áudio)
+    const wikidata = sci => !sci ? Promise.resolve(null) : fetch("https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&origin=*&language=en&type=item&limit=3&search=" + encodeURIComponent(sci))
+      .then(r => r.ok ? r.json() : null)
+      .then(j => { const ids = ((j && j.search) || []).map(x => x.id); if (!ids.length) return null;
+        return fetch("https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&origin=*&props=claims&ids=" + ids.join("|")).then(r => r.ok ? r.json() : null)
+          .then(e => { for (const id of ids) { const c = e && e.entities && e.entities[id] && e.entities[id].claims && e.entities[id].claims.P51; const f = c && c[0] && c[0].mainsnak && c[0].mainsnak.datavalue && c[0].mainsnak.datavalue.value; if (f) return arquivoCommons(f); } return null; }); })
+      .catch(() => null);
+    const buscarSolto = t => buscar(t).then(u => u || fetch("https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=10&gsrsearch="
+        + encodeURIComponent("filetype:audio " + t) + "&prop=videoinfo&viprop=url|mime|derivatives").then(r => r.ok ? r.json() : null)
+      .then(j => { const ps = j && j.query && j.query.pages ? Object.values(j.query.pages).sort((a, b) => (a.index || 0) - (b.index || 0)) : [];
+        for (const p of ps) { const d = (p.videoinfo && p.videoinfo[0]) || {}; const mp3 = (d.derivatives || []).find(x => /mpeg|mp3/.test((x.type || "") + (x.transcodekey || ""))); if (mp3) return mp3.src; if (d.url) return d.url; } return null; }).catch(() => null));
+    const genero = cientifico && String(cientifico).trim().split(/\s+/).length > 1 ? String(cientifico).trim().split(/\s+/)[0] : "";
+    const etapas = [() => cientifico ? buscarSolto(cientifico) : null, () => wikidata(cientifico), () => popular ? buscarSolto(popular) : null, () => genero ? buscarSolto(genero) : null];
+    return etapas.reduce((p, f) => p.then(u => u || f()), Promise.resolve(null))
       .then(u => { if (u) { try { localStorage.setItem(chave, u); } catch (e) {} } return u; });
   }
   let audioAtual = null;
@@ -835,7 +854,7 @@
 /* pop-up */
 html.fp-travado,html.fp-travado body{overflow:hidden}
 .fp-pop{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:16px;background:rgba(10,6,18,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:fpFade .2s ease}
-.fp-box{width:min(1180px,100%);max-height:min(94vh,100%);display:flex;flex-direction:column;padding:0;overflow:hidden;animation:fpSobe .25s ease}
+.fp-box{width:min(1180px,100%);max-height:min(94vh,100%);max-height:calc(100dvh - 16px);display:flex;flex-direction:column;padding:0;overflow:hidden;animation:fpSobe .25s ease}
 @keyframes fpSobe{from{transform:translateY(14px) scale(.98);opacity:0}to{transform:none;opacity:1}}
 .fp-box-aviso{width:min(440px,100%)}
 .fp-top{display:flex;justify-content:flex-end;padding:10px 10px 0;flex-shrink:0}
@@ -853,7 +872,7 @@ html.fp-travado,html.fp-travado body{overflow:hidden}
 .fp-aviso .fp-detalhe{margin-top:10px;font-size:13px;color:var(--text-dim)}
 .fp-spinner{width:46px;height:46px;margin:6px auto 16px;border-radius:50%;border:4px solid color-mix(in srgb,var(--glow-primary) 25%,transparent);border-top-color:var(--glow-primary);animation:fpGira .8s linear infinite}
 @keyframes fpGira{to{transform:rotate(360deg)}}
-.fp-video{width:100%;border-radius:16px;background:#000;max-height:60vh}
+.fp-video{width:100%;border-radius:16px;background:#000;max-height:min(60vh,calc(100dvh - 240px));min-height:150px;object-fit:contain}
 /* tela larga (tablet deitado, notebook): conteúdo em duas colunas, para rolar menos */
 @media (min-width:860px){
   .fp-box-ficha .fp-panel[data-panel="sobre"].on{display:grid;grid-template-columns:1fr 1fr;column-gap:32px;align-items:start}
