@@ -80,7 +80,8 @@ body{
 .bottom-nav{background:rgba(255,255,248,.94);border-color:#dbe6d5;box-shadow:0 10px 30px rgba(55,83,52,.2)}
 .nav-btn{color:#637564}
 .nav-btn.active{background:linear-gradient(145deg,rgba(217,127,150,.2),rgba(130,159,114,.22));color:#344c37}
-.empty{border-color:#cbdac4;color:#5d6d60}
+.empty{border-color:rgba(255,255,255,.35);color:#f3e6ff;background:rgba(255,255,255,.06);font-size:17px}
+body[data-theme="light"] .empty{border-color:#cbdac4;color:#5d4a70;background:rgba(255,255,255,.6)}
 .plant-photo img,.photo-card img,.album-card img{background:#e8eee2}
 @media(max-width:620px){.hero h2{line-height:1.02}}
 
@@ -401,7 +402,7 @@ function showToast(text){const t=document.getElementById("toast");t.textContent=
 </script>
 
 <!-- 🏠 Início fixo no topo (pedido da professora) -->
-<style>.pdm-inicio{position:fixed;top:12px;right:14px;z-index:8999;font:600 15px/1 system-ui,sans-serif;padding:11px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.38);background:rgba(10,16,34,.74);color:#fff;backdrop-filter:blur(8px);box-shadow:0 6px 18px rgba(0,0,0,.28);cursor:pointer;transition:opacity .2s}.pdm-inicio.some{opacity:0;pointer-events:none}</style>
+<style>.pdm-inicio{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:8999;font:600 15px/1 system-ui,sans-serif;padding:11px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.38);background:rgba(10,16,34,.74);color:#fff;backdrop-filter:blur(8px);box-shadow:0 6px 18px rgba(0,0,0,.28);cursor:pointer;transition:opacity .2s}.pdm-inicio.some{opacity:0;pointer-events:none}@media(max-width:900px){.pdm-inicio{top:auto;bottom:100px;left:14px;transform:none}}</style>
 <script>
 (function(){const b=document.createElement("button");b.type="button";b.className="pdm-inicio";b.textContent="← Início";
  const naInicio=()=>document.getElementById("inicio").classList.contains("active");

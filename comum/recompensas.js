@@ -31,7 +31,7 @@
     if (document.getElementById("pdm-premios-css")) return;
     const s = document.createElement("style"); s.id = "pdm-premios-css";
     s.textContent = `
-.pdm-trilha{margin:18px 0;padding:16px;border-radius:20px;background:rgba(0,0,0,.18);border:2px solid ${CFG.cor}55;font-family:inherit;color:inherit}
+.pdm-trilha{margin:18px 0;padding:16px;border-radius:20px;background:rgba(127,127,127,.10);border:2px solid ${CFG.cor}55;font-family:inherit;color:inherit}
 .pdm-trilha h3{margin:0 0 6px;font-size:20px}.pdm-trilha p{margin:4px 0;line-height:1.45}
 .pdm-barra{height:14px;border-radius:99px;background:rgba(127,127,127,.25);overflow:hidden;margin:10px 0}
 .pdm-barra span{display:block;height:100%;background:linear-gradient(90deg,${CFG.cor},#f2c66d)}

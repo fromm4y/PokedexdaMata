@@ -501,12 +501,24 @@
     // procura um lugar no topo (meio, esquerda, direita) que não cubra nenhum botão;
     // se não houver, vai para o canto de baixo à esquerda
     const LUGARES = [{ top: "12px", right: "14px" }, { top: "12px", left: "14px" }, { top: "12px", left: "50%", ml: "-52px" }, { top: "calc(100% - 64px)", left: "14px" }];
-    const cobre = () => { const p = b.getBoundingClientRect(); return [...document.querySelectorAll("button,a,input,select,h1,[role=button],nav")].some(e => { if (e === b || e.closest(".pdm-inicio,.pdm-musica,.fp-pop")) return false; const r = e.getBoundingClientRect(); if (r.width < 2 || r.height < 2) return false; const st = getComputedStyle(e); if (st.visibility === "hidden" || st.opacity === "0") return false;
-      if (!(r.left < p.right && r.right > p.left && r.top < p.bottom && r.bottom > p.top)) return false;
-      // conteúdo que só passa por baixo ao rolar não conta: só menus fixos (ou o topo da página)
-      if (window.scrollY < 80) return true;
-      for (let n = e; n && n !== document.body; n = n.parentElement) { const ps = getComputedStyle(n).position; if (ps === "fixed" || ps === "sticky") return true; }
-      return false; }); };
+    // cobre algo? olha o que está de verdade embaixo do botão (5 pontos) e
+    // ignora só fundos grandes (seções, páginas). Menus fixos sempre contam;
+    // conteúdo que passa por baixo ao rolar só conta no topo da página.
+    const visivel = e => { const st = getComputedStyle(e); if (st.visibility === "hidden" || st.opacity === "0") return false;
+      if (/^(IMG|SVG|BUTTON|A|INPUT|SELECT|LABEL|H1|H2|H3)$/i.test(e.tagName)) return true;
+      if ([...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) return true;
+      const bg = st.backgroundColor; return (bg && bg !== "transparent" && !/rgba\(.*,\s*0\)$/.test(bg)) || st.backgroundImage !== "none" || parseFloat(st.borderTopWidth) > 0; };
+    const cobre = () => { const p = b.getBoundingClientRect(), A = innerWidth * innerHeight * 0.12;
+      const pts = [[p.left + 3, p.top + 3], [p.right - 3, p.top + 3], [p.left + 3, p.bottom - 3], [p.right - 3, p.bottom - 3], [(p.left + p.right) / 2, (p.top + p.bottom) / 2]];
+      b.style.pointerEvents = "none"; let achou = false;
+      for (const [x, y] of pts) { for (const e of document.elementsFromPoint(x, y)) {
+        if (e === b || b.contains(e) || e === document.body || e === document.documentElement || e.closest(".pdm-musica,.fp-pop,.pdm-vagalumes,.pdm-confete")) continue;
+        const r = e.getBoundingClientRect(); if (r.width * r.height > A || r.width < 2 || r.height < 2) continue;
+        if (!visivel(e)) continue;
+        if (window.scrollY < 80) { achou = true; break; }
+        for (let n = e; n && n !== document.body; n = n.parentElement) { const ps = getComputedStyle(n).position; if (ps === "fixed" || ps === "sticky") { achou = true; break; } }
+        if (achou) break; } if (achou) break; }
+      b.style.pointerEvents = ""; return achou; };
     const posicionar = () => { if (b.classList.contains("some")) return; for (const L of LUGARES) { b.style.top = L.top; b.style.left = L.left || "auto"; b.style.right = L.right || "auto"; b.style.marginLeft = L.ml || "0"; if (!cobre()) return; } };
     const atualizar = () => { b.classList.toggle("some", window.scrollY < 80 && (CFG.naInicio ? !!CFG.naInicio() : true)); posicionar(); };
     window.addEventListener("scroll", atualizar, { passive: true });

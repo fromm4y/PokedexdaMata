@@ -45,7 +45,7 @@ dialog{width:min(92vw,600px);max-height:85vh;overflow:auto;background:#0c2142;co
  <article class="card"><div class="card-top"><div class="animal-icon">📚</div><div><h3>Guarde descobertas</h3><span class="pill">Álbum</span></div></div><p>Salve as fotos que você escolheu e volte para vê-las depois neste navegador.</p><button class="outline" onclick="navigate('album')">Abrir álbum</button></article></div>
 </section>
 <section class="view" id="camera"><div class="section-head"><div><div class="tag">CAPTURE UMA DESCOBERTA</div><h2>📷 Câmera</h2><p class="muted">Tire uma foto ou escolha uma imagem salva no aparelho.</p></div></div>
- <div class="camera-layout"><div class="panel"><h3>Vamos explorar?</h3><p class="muted">Escolha uma opção. A câmera pode pedir sua permissão e talvez precise de HTTPS ou localhost para funcionar.</p>
+ <div class="camera-layout"><div class="panel"><h3>Vamos explorar?</h3><p class="muted">Escolha uma opção. Se o tablet perguntar, toque em “Permitir” para usar a câmera.</p>
  <div class="controls"><button class="primary" id="takePhoto">📷 TIRAR FOTO</button><button class="secondary" id="choosePhoto">🖼️ ESCOLHER DA GALERIA</button></div>
  <input id="cameraInput" type="file" accept="image/*" capture="environment" hidden><input id="galleryInput" type="file" accept="image/*" hidden>
  <img id="photoPreview" class="preview" alt="Prévia da imagem selecionada"><div id="photoStatus" class="status" role="status"></div>

@@ -266,7 +266,7 @@ footer{text-align:center;color:#e9f4e7;font-size:12px;padding:0 16px 24px}
   async function startCamera() {
     hideNotice();
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      showNotice("Este navegador não liberou a câmera aqui. Abra o site por HTTPS ou localhost, ou selecione uma imagem do dispositivo.", "warn");
+      showNotice("A câmera não foi liberada. Toque em “Permitir” quando o tablet perguntar, ou escolha uma foto da galeria.", "warn");
       return;
     }
     try {

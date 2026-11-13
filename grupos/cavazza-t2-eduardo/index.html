@@ -251,7 +251,7 @@
   .album-item:hover { transform: translateY(-4px); }
   .album-item img { width: 100%; height: 125px; object-fit: cover; display: block; }
   .album-item p { margin: 0; padding: 11px; font-weight: bold; font-size: 14px; color: #f6e8bd; }
-  .empty { opacity: .8; text-align: center; padding: 22px 15px; color: #d5e5d4; }
+  .empty { opacity: .85; text-align: center; padding: 26px 15px; color: #d5e5d4; grid-column: 1 / -1; font-size: 17px; border: 2px dashed #ffffff30; border-radius: 18px; }
   footer { text-align: center; padding: 24px 18px; color: #d6e4d2; background: rgba(3,15,10,.75); border-top: 1px solid rgba(193,165,95,.25); }
   @keyframes foxFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
   @media (max-width: 600px) {
@@ -502,7 +502,7 @@ O campo perigo deve ser true somente quando houver um aviso importante e verdade
 
     const resposta = await response.json();
     const texto = resposta?.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("") || "";
-    if (!texto) throw new Error("O serviço não retornou uma identificação. Confira a chave da API e tente novamente.");
+    if (!texto) throw new Error("Não consegui identificar agora. Tente de novo em instantes.");
     let dados;
     try {
       dados = JSON.parse(texto);
@@ -559,11 +559,7 @@ O campo perigo deve ser true somente quando houver um aviso importante e verdade
     updateStats();
   } catch (error) {
     console.error("Erro ao identificar fruta:", error);
-    const msg = error?.message || "Falha ao identificar a fruta.";
-    const dica = (location.protocol === "file:")
-      ? " Você abriu o HTML diretamente. Inicie o servidor e abra o jogo pelo endereço http://localhost:3000."
-      : " Confira se o servidor está ligado e se a chave GEMINI_API_KEY está configurada.";
-    showStatus("Ops! 🌧️ " + msg + dica, true);
+    showStatus("Ops! 🌧️ Não consegui identificar a fruta agora. Confira a internet e tente de novo com outra foto.", true);
   } finally {
     identifyBtn.disabled = false;
   }
