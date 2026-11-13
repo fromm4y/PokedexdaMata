@@ -403,6 +403,8 @@ main{align-items:center!important;padding-top:20px!important}
 .nav button{font-size:15px!important;padding:12px 15px!important;min-height:46px}
 .buttons button,.fileBtn{min-height:50px}
 .subtitle{font-size:19px}
+.fruit-card .fruta-foto{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;display:block;margin-bottom:6px}
+.fruit-card.a-descobrir{opacity:.45;filter:grayscale(.6);border-style:dashed}
 /* botão "Ver ficha" cabendo na figurinha estreita */
 .fruit-card .fp-ver-ficha{margin:6px auto 2px!important;padding:5px 9px!important;font-size:11.5px!important}
 </style>
@@ -416,14 +418,29 @@ main{align-items:center!important;padding-top:20px!important}
 (function () {
   const CHAVE = "frutariabr_album";
   const grade = document.querySelector("#album .fruit-grid");
-  const ler = () => { try { return JSON.parse(localStorage.getItem(CHAVE) || "[]"); } catch (e) { return []; } };
-  const cartao = nome => { const d = document.createElement("div"); d.className = "fruit-card"; d.style.borderColor = "#8fe33d"; d.innerHTML = "<span>⭐</span>"; d.append(nome); grade.prepend(d); };
-  ler().reverse().forEach(cartao);
+  // cada item: { nome, foto } (antes era só o nome)
+  const ler = () => { try { return (JSON.parse(localStorage.getItem(CHAVE) || "[]") || []).map(x => typeof x === "string" ? { nome: x, foto: "" } : x); } catch (e) { return []; } };
+  const norm = t => String(t || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+  const EXEMPLOS = [...grade.querySelectorAll(".fruit-card")].map(c => ({ nome: c.textContent.replace(c.querySelector("span").textContent, "").trim(), emo: c.querySelector("span").textContent }));
+  function desenhar() {
+    const lista = ler(), vistos = new Set();
+    grade.innerHTML = "";
+    lista.forEach(x => {
+      if (vistos.has(norm(x.nome))) return; vistos.add(norm(x.nome));
+      const f = PokedexAdaptador.fichaSalva && PokedexAdaptador.fichaSalva(x.nome), foto = x.foto || (f && f.foto) || "";
+      const d = document.createElement("div"); d.className = "fruit-card"; d.style.borderColor = "#8fe33d";
+      d.innerHTML = foto ? `<img class="fruta-foto" src="${foto}" alt="">` : "<span>⭐</span>"; d.append(x.nome); grade.append(d);
+    });
+    // exemplos que ainda faltam descobrir
+    EXEMPLOS.filter(e => !vistos.has(norm(e.nome))).forEach(e => { const d = document.createElement("div"); d.className = "fruit-card a-descobrir"; d.innerHTML = `<span>${e.emo}</span>`; d.append(e.nome); d.title = "Ainda não descoberta"; grade.append(d); });
+  }
+  desenhar();
   window.salvarFruta = info => {
     const nome = info.nome_popular || info.nome || "Fruta";
-    const lista = ler(); lista.unshift(nome);
-    try { localStorage.setItem(CHAVE, JSON.stringify(lista.slice(0, 40))); } catch (e) {}
-    cartao(nome);
+    const u = PokedexAdaptador.ultimaFicha && PokedexAdaptador.ultimaFicha();
+    const lista = ler().filter(x => norm(x.nome) !== norm(nome)); lista.unshift({ nome, foto: (u && u.foto) || "" });
+    for (let n = 40; n > 0; n -= 10) { try { localStorage.setItem(CHAVE, JSON.stringify(lista.slice(0, n))); break; } catch (e) {} }
+    desenhar();
     document.querySelectorAll(".section").forEach(s => s.style.display = "none");
     document.getElementById("album").style.display = "block";
     document.getElementById("album").scrollIntoView({ behavior: "smooth" });

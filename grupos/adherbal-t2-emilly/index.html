@@ -576,7 +576,7 @@ footer{text-align:center;color:#e9f4e7;font-size:12px;padding:0 16px 24px}
 document.getElementById("photo-input").removeAttribute("capture");
 PokedexAdaptador.iniciar({
   som: true, textoSom: "🔊 Ouvir o canto",   // gravação real da espécie (Wikimedia/Wikidata)
-  semRepetir: ["pokedexMataHistory", "pokedexMataFavorites"],   // não guarda a mesma espécie duas vezes
+  semRepetir: ["pokedexMataFavorites"],   // não guarda a mesma espécie duas vezes
   verAlbum: () => document.querySelector('.nav-link[data-page="favoritos"]').click(),   // se a espécie já está no álbum, o botão só leva até lá
   albumFicha: { cartao: "#history-list .item-card, #favorites-list .item-card", nome: "h3" },  // "📖 Ver ficha" nas figurinhas do álbum
   // botões por etapa: o de identificar só aparece depois de escolher a foto

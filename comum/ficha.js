@@ -603,15 +603,17 @@
   /* ---------- som de verdade da espécie (gravações do Wikimedia Commons) ----------
      somDaEspecie("Turdus rufiventris", "Sabiá-laranjeira") -> Promise<url|null>
      tocarSom(cientifico, popular): toca e avisa num balãozinho. */
+  /* gravações que são só alguém FALANDO o nome (pronúncia), não o som do bicho */
+  const ehPronuncia = t => /^file:\s*(ll-q\d|(en|pt|la|de|fr|es|it|nl|ru|sv|pl|ca|eu)(-[a-z]{2,4})?-|lingua libre)|pronunc|pron[úu]ncia|pronounc|aussprache|\((eng|por|lat|deu|fra|spa|ita)\)|spoken|wikipedia|voice|narra/i.test(String(t || ""));
   function somDaEspecie(cientifico, popular) {
     const termos = [cientifico, popular].filter(t => t && String(t).trim().length > 2);
-    const chave = "fpSom:" + termos.join("|");
+    const chave = "fpSom2:" + termos.join("|");
     try { const c = localStorage.getItem(chave); if (c) return Promise.resolve(c); } catch (e) {}
     const buscar = t => fetch("https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=10&gsrsearch="
         + encodeURIComponent('filetype:audio "' + t + '"') + "&prop=videoinfo&viprop=url|mime|derivatives")
       .then(r => r.ok ? r.json() : null)
       .then(j => {
-        const ps = j && j.query && j.query.pages ? Object.values(j.query.pages).sort((a, b) => (a.index || 0) - (b.index || 0)) : [];
+        const ps = j && j.query && j.query.pages ? Object.values(j.query.pages).filter(p => !ehPronuncia(p.title)).sort((a, b) => (a.index || 0) - (b.index || 0)) : [];
         const info = p => (p.videoinfo && p.videoinfo[0]) || {};
         // MP3 primeiro (toca em qualquer tablet, inclusive iPad); depois o arquivo original
         for (const p of ps) { const d = info(p); const mp3 = (d.derivatives || []).find(x => /mpeg|mp3/.test((x.type || "") + (x.transcodekey || ""))); if (mp3) return mp3.src; if (/mpeg|mp3|wav/.test(d.mime || "")) return d.url; }
@@ -629,11 +631,11 @@
       .then(r => r.ok ? r.json() : null)
       .then(j => { const ids = ((j && j.search) || []).map(x => x.id); if (!ids.length) return null;
         return fetch("https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&origin=*&props=claims&ids=" + ids.join("|")).then(r => r.ok ? r.json() : null)
-          .then(e => { for (const id of ids) { const c = e && e.entities && e.entities[id] && e.entities[id].claims && e.entities[id].claims.P51; const f = c && c[0] && c[0].mainsnak && c[0].mainsnak.datavalue && c[0].mainsnak.datavalue.value; if (f) return arquivoCommons(f); } return null; }); })
+          .then(e => { for (const id of ids) { const c = e && e.entities && e.entities[id] && e.entities[id].claims && e.entities[id].claims.P51; const f = c && c[0] && c[0].mainsnak && c[0].mainsnak.datavalue && c[0].mainsnak.datavalue.value; if (f && !ehPronuncia("File:" + f)) return arquivoCommons(f); } return null; }); })
       .catch(() => null);
     const buscarSolto = t => buscar(t).then(u => u || fetch("https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=10&gsrsearch="
         + encodeURIComponent("filetype:audio " + t) + "&prop=videoinfo&viprop=url|mime|derivatives").then(r => r.ok ? r.json() : null)
-      .then(j => { const ps = j && j.query && j.query.pages ? Object.values(j.query.pages).sort((a, b) => (a.index || 0) - (b.index || 0)) : [];
+      .then(j => { const ps = j && j.query && j.query.pages ? Object.values(j.query.pages).filter(p => !ehPronuncia(p.title)).sort((a, b) => (a.index || 0) - (b.index || 0)) : [];
         for (const p of ps) { const d = (p.videoinfo && p.videoinfo[0]) || {}; const mp3 = (d.derivatives || []).find(x => /mpeg|mp3/.test((x.type || "") + (x.transcodekey || ""))); if (mp3) return mp3.src; if (d.url) return d.url; } return null; }).catch(() => null));
     const genero = cientifico && String(cientifico).trim().split(/\s+/).length > 1 ? String(cientifico).trim().split(/\s+/)[0] : "";
     const etapas = [() => cientifico ? buscarSolto(cientifico) : null, () => wikidata(cientifico), () => popular ? buscarSolto(popular) : null, () => genero ? buscarSolto(genero) : null];

@@ -213,6 +213,22 @@
       .find(f => [normNome(f.info.nome_popular || f.info.nome)].concat(f.nomes || []).some(bate));
     return v || null;
   }
+  /* a figurinha mostra a FOTO que a pessoa mandou (e não um emoji/ícone) */
+  const ehEmoji = el => { const t = (el.textContent || "").trim(); return t.length > 0 && t.length <= 4 && !/[a-z0-9]/i.test(t) && !el.querySelector("img"); };
+  function colocarFoto(c, f) {
+    if (!f.foto || c.dataset.fpFoto) return;
+    const temFoto = [...c.querySelectorAll("img")].some(i => /^(data:image\/(jpeg|png|webp)|blob:)/.test(i.getAttribute("src") || ""));
+    if (temFoto) { c.dataset.fpFoto = "1"; return; }
+    // imagem genérica do grupo (svg/emoji em <img>) -> troca a fonte
+    const img = [...c.querySelectorAll("img")].find(i => i.getBoundingClientRect().width > 20);
+    if (img) { img.src = f.foto; img.style.objectFit = "cover"; c.dataset.fpFoto = "1"; return; }
+    // ícone/emoji -> vira a foto
+    const ic = [...c.querySelectorAll("span,div,i,b,em,p")].find(el => el.children.length === 0 && ehEmoji(el));
+    if (!ic) return;
+    const im = document.createElement("img"); im.src = f.foto; im.alt = ""; im.className = "fp-foto-album";
+    ic.replaceWith(im); c.dataset.fpFoto = "1";
+    if (!document.getElementById("fp-foto-album-css")) { const st = document.createElement("style"); st.id = "fp-foto-album-css"; st.textContent = ".fp-foto-album{display:block;width:100%;max-width:220px;aspect-ratio:4/3;object-fit:cover;border-radius:12px;margin:0 auto 8px}"; document.head.appendChild(st); }
+  }
   function marcarAlbum() {
     const o = CFG.albumFicha;
     if (!o) return;
@@ -221,6 +237,7 @@
       const alvo = o.nome ? c.querySelector(o.nome) : c;
       const f = alvo && fichaPeloNome(alvo.textContent);
       if (!f) return;
+      colocarFoto(c, f);
       /* Um botão só: se a figurinha do grupo já tem "Ver detalhes" / "Ver ficha" /
          "Detalhes", ele continua com a cara do grupo, mas abre a ficha completa
          (igual à do resultado, com as informações extras do grupo). */
