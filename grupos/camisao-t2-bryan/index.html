@@ -93,6 +93,7 @@ body:after{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;back
 @keyframes toastOut{to{opacity:0;transform:translate(-50%,-140%)}}
 @media(max-width:600px){.toast{top:10px;width:calc(100% - 20px)}.toast .toast-copy{font-size:13px}.toast .toast-title{font-size:14px}.box,.game-box{backdrop-filter:blur(8px)}}
 
+#camera .preview video{position:absolute;inset:0;width:100%;height:100%}
 </style>
 </head>
 <body>
@@ -135,7 +136,7 @@ function hideMsgs(){$('uncertain').style.display='none';$('error').style.display
 function popupMessage(id,ms=5200){if(id==='uncertain')toast('Não consegui ter certeza da fruta. Tente outra foto com ela mais visível.','warning');else toast('Não foi possível realizar esta ação. Tente novamente.','error');}
 function showFile(f){if(!f)return;file=f;stopCamera();hideMsgs();$('investigate').style.display='none';let r=new FileReader();r.onload=()=>{$('photo').src=r.result;$('photo').style.display='block';$('photo').style.objectFit='contain';$('video').style.display='none';$('cameraEmpty').style.display='none';$('previewLabel').style.display='block';requestAnimationFrame(()=>{$('investigate').style.display='inline-flex'});toast('📸 Foto recebida! Agora confirme sua descoberta.');};r.readAsDataURL(f)}
 $('gallery').onchange=e=>showFile(e.target.files[0]);
-async function openCamera(){hideMsgs();try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});$('video').srcObject=stream;await $('video').play();$('video').style.display='block';$('photo').style.display='none';$('cameraEmpty').style.display='none';$('capture').style.display='inline-flex';$('cancelCamera').style.display='inline-flex';$('openCamera').style.display='none';toast('📷 Câmera pronta!')}catch(e){toast('📸 Não deu para abrir a câmera. Use a galeria.')}}
+async function openCamera(){hideMsgs();try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});$('video').srcObject=stream;await $('video').play();$('video').style.display='block';$('photo').style.display='none';$('cameraEmpty').style.display='none';$('capture').style.display='inline-flex';$('cancelCamera').style.display='inline-flex';$('openCamera').style.display='none';toast('📷 Câmera pronta!');setTimeout(()=>{const pv=document.querySelector('#camera .preview');if(pv)scrollTo({top:Math.max(0,pv.getBoundingClientRect().top+scrollY-80),behavior:'smooth'})},200)}catch(e){toast('📸 Não deu para abrir a câmera. Use a galeria.')}}
 function stopCamera(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}$('capture').style.display='none';$('cancelCamera').style.display='none';$('openCamera').style.display=''}
 $('openCamera').onclick=openCamera;$('cancelCamera').onclick=()=>{stopCamera();if(!file){$('video').style.display='none';$('cameraEmpty').style.display='block';$('previewLabel').style.display='none';$('investigate').style.display='none'}};
 $('capture').onclick=()=>{const v=$('video'),c=$('canvas');if(!v.videoWidth)return; c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0,c.width,c.height);c.toBlob(blob=>{file=new File([blob],'foto.jpg',{type:'image/jpeg'});showFile(file);},'image/jpeg',.9)};

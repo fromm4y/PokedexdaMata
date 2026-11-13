@@ -56,7 +56,7 @@ h1{font-size:clamp(2rem,7vw,3.4rem);margin:12px 0 4px;color:var(--rosa-claro)}
 .settings-list{display:grid;gap:12px}.settings-list label{display:flex;align-items:center;gap:10px;background:#1b2119;padding:12px;border-radius:12px}
 .settings-list input{accent-color:var(--rosa)}
 input[type=file]{display:none}
-.camera-video,.preview img{width:100%;max-height:360px;object-fit:contain;border-radius:18px;border:3px solid var(--marrom);margin-top:12px;background:#111}
+.camera-video,.preview img{width:100%;max-height:min(360px,calc(100dvh - 190px));object-fit:contain;border-radius:18px;border:3px solid var(--marrom);margin-top:12px;background:#111}
 .preview{display:none;margin-top:16px}.preview img{object-fit:contain}
 .status{display:none;text-align:center;padding:20px}
 .loader{font-size:2.3rem;animation:pulo 1s infinite alternate}
@@ -278,7 +278,7 @@ $('trocarFoto').addEventListener('click',()=>{$('foto').click()});
 $('abrirCamera').addEventListener('click',async()=>{
  $('cameraAviso').textContent='';$('foto').removeAttribute('capture');
  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){$('cameraAviso').textContent='A câmera não está disponível neste navegador. Use GALERIA para escolher uma foto.';return}
- try{cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});$('cameraVideo').srcObject=cameraStream;$('cameraVideo').style.display='block';await $('cameraVideo').play().catch(()=>{});$('abrirCamera').style.display='none';$('cameraAcoes').style.display='flex';$('preview').style.display='none'}catch(e){$('cameraAviso').textContent='Não conseguimos abrir a câmera. Confira a permissão ou escolha uma imagem na GALERIA.'}
+ try{cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});$('cameraVideo').srcObject=cameraStream;$('cameraVideo').style.display='block';await $('cameraVideo').play().catch(()=>{});$('abrirCamera').style.display='none';$('cameraAcoes').style.display='flex';$('preview').style.display='none';setTimeout(()=>$('cameraAcoes').scrollIntoView({behavior:'smooth',block:'end'}),250)}catch(e){$('cameraAviso').textContent='Não conseguimos abrir a câmera. Confira a permissão ou escolha uma imagem na GALERIA.'}
 });
 $('fecharCamera').addEventListener('click',pararCamera);
 $('capturarFoto').addEventListener('click',()=>{const v=$('cameraVideo');if(!v.videoWidth||v.readyState<2){v.play().catch(()=>{});$('cameraAviso').textContent='A câmera ainda está abrindo. Tente novamente em um instante.';return}const canvas=document.createElement('canvas');canvas.width=v.videoWidth;canvas.height=v.videoHeight;canvas.getContext('2d').drawImage(v,0,0);fotoDataUrl=canvas.toDataURL('image/jpeg',.9);fotoBase64=fotoDataUrl.split(',')[1]||'';$('fotoPreview').src=fotoDataUrl;$('preview').style.display='block';pararCamera()});
