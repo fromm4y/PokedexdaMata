@@ -377,3 +377,19 @@ Quando chegarem, é só seguir o [guia](GUIA-PROFESSORES.md#4-colocar-um-grupo).
 1. Abrir cada Pokédex **no tablet de verdade** e fazer o grande teste (foto do tema, foto de outra coisa, foto tremida e um arquivo que não é foto).
 2. Mostrar aos grupos as mensagens que foram criadas para eles (topo de cada `missoes.js`) — se quiserem trocar alguma, é só editar o texto entre aspas.
 3. Testar na **rede da escola**: o mapa (OpenStreetMap) e as fotos das espécies (Wikipédia) vêm da internet.
+
+## 13–14/11 — 3 varreduras de QA (tablet deitado e em pé)
+
+**Varredura 1 — visual:** prints de todas as telas dos 34 projetos em 1280×800 e 800×1280.
+- Botão "← Início" agora vê o que está embaixo dele e não cobre mais logo, placar ou seletor de tema.
+- Ajustes: Bleach (balão do esquilo), Brasilian Bird (subtítulo legível), FruitDex (menu de baixo), Jardim de Flores (álbum vazio legível e botão Início), Eduardo (álbum vazio), Pokédex da Savana (caixa da câmera), trilha de prêmios em temas claros.
+- Textos técnicos ("HTTPS/localhost", "chave da API") trocados por instruções simples para quem testa.
+
+**Varredura 2 — fluxo:** identificar → ficha → salvar (sem duplicar) → foto no álbum → habitat → câmera.
+- Pokédex de Frutas: vídeo da câmera cabe na moldura.
+- Detetives da Natureza e Raízes do Amanhã: botão de capturar aparece sem rolar.
+
+**Varredura 3 — recheck num tablet menor (1024×640):**
+- Checagem automática de botões escondidos atrás de menus fixos em todos os projetos.
+- Corrigidos: Pokédex de Frutas, Florestal, FruitDex e Detetives (botão principal agora aparece na primeira tela); Raízes do Amanhã (menu quebra em 2 linhas em vez de esconder botões).
+- Regressão: 170 testes ✅, 0 ❌, nenhum erro de JavaScript.
