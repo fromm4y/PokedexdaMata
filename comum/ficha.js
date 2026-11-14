@@ -511,7 +511,7 @@
     corpo.innerHTML = `<div class="fp-aviso">
       <div class="fp-aviso-ic">${o.icone || t.icone}</div>
       ${(o.titulo ?? t.titulo) ? `<h3>${esc(o.titulo ?? t.titulo)}</h3>` : ""}
-      <p>${esc(o.texto || "")}</p>
+      <p>${esc(String(o.texto || "").replace(/^\s*(?:\p{Extended_Pictographic}\uFE0F?\s*)+/u, ""))}</p>
       ${o.detalhe ? `<p class="fp-detalhe">${esc(o.detalhe)}</p>` : ""}</div>`;
     botoes(acoes, o.acoes || [{ texto: "Tentar outra foto", principal: true }]);
   }
