@@ -22,6 +22,18 @@ Hoje o app mostra um desenho simples no lugar.
 | `oceano.webp` | Vista subaquática do oceano, água azul com raios de sol, recife de coral colorido no fundo, areia clara, algas, espaço livre no meio, sem peixes, ilustração colorida infantil, sem texto |
 | `floresta_temperada.webp` | Floresta temperada da Europa/América do Norte vista de lado no outono, árvores com folhas laranja e amarelas, pinheiros, chão com folhas secas e cogumelos, espaço livre no meio, sem animais, ilustração colorida infantil, sem texto |
 
+### Opcional — biomas brasileiros (mesma pasta `comum/img/biomas/`)
+Só se a internet da escola bloquear as fotos do Unsplash (a cena do Habitat fica escura). Mesmo formato: .webp, 1200×800.
+
+| Arquivo | Prompt sugerido |
+|---|---|
+| `floresta_amazonica.webp` | Floresta amazônica vista de lado, árvores gigantes e cipós, rio calmo ao fundo, luz entrando entre as folhas, chão de folhas na parte de baixo, espaço livre no meio, sem animais, ilustração colorida infantil, sem texto |
+| `cerrado.webp` | Cerrado brasileiro visto de lado, árvores baixas de troncos tortos, capim dourado, ipê amarelo florido, céu azul, chão de terra vermelha na parte de baixo, espaço livre no meio, sem animais, ilustração colorida infantil, sem texto |
+| `mata_atlantica.webp` | Mata Atlântica vista de lado, floresta verde e úmida em morros, bromélias e samambaias, cachoeira pequena ao fundo, chão de folhas na parte de baixo, espaço livre no meio, sem animais, ilustração colorida infantil, sem texto |
+| `caatinga.webp` | Caatinga vista de lado, arbustos secos, mandacaru e xique-xique, céu azul com sol forte, chão de terra clara e pedras na parte de baixo, espaço livre no meio, sem animais, ilustração colorida infantil, sem texto |
+| `pantanal.webp` | Pantanal visto de lado, campos alagados com água rasa, aguapés, árvores esparsas e céu ao entardecer, espaço livre no meio, sem animais, ilustração colorida infantil, sem texto |
+| `pampa.webp` | Pampa gaúcho visto de lado, campos verdes ondulados, poucas árvores, céu azul com nuvens, chão de grama na parte de baixo, espaço livre no meio, sem animais, ilustração colorida infantil, sem texto |
+
 ## Brasilian Bird — `grupos/meduneckas-t1-tarde-davi/img/`
 
 | Arquivo | Tamanho | Prompt sugerido |

@@ -92,6 +92,11 @@
      Pode ser trocado por fotos: configurar({ fundosCena: { "Amazônia": "rio-amazonia.webp" } }). */
   const FUNDO_AQUA = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fd3d6"/><stop offset=".35" stop-color="#2f8f9a"/><stop offset="1" stop-color="#0b3b47"/></linearGradient><linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect width="600" height="400" fill="url(#a)"/><path d="M0 18 Q75 8 150 18 T300 18 T450 18 T600 18 V0 H0Z" fill="#c9f1ee" opacity=".6"/><g fill="url(#r)"><path d="M70 0h40L60 300H30Z"/><path d="M230 0h30L200 280h-26Z"/><path d="M400 0h44L380 320h-34Z"/><path d="M520 0h26L500 260h-20Z"/></g><path d="M0 330 Q90 300 180 325 T360 318 T600 322 V400 H0Z" fill="#c8a66b"/><path d="M0 352 Q120 336 240 352 T480 348 T600 350 V400 H0Z" fill="#a8844f"/><g fill="#2e7d4f"><path d="M40 340 C30 280 60 250 45 200 C70 250 60 290 58 340Z"/><path d="M70 342 C80 300 60 270 78 230 C92 275 86 305 84 342Z"/><path d="M520 336 C505 270 540 240 525 180 C555 240 545 285 540 336Z"/><path d="M552 338 C560 300 545 280 560 250 C572 285 568 310 566 338Z"/><path d="M300 330 C292 300 310 285 302 260 C320 288 315 310 312 330Z"/></g><g fill="#6b5a46" opacity=".8"><ellipse cx="200" cy="345" rx="34" ry="12"/><ellipse cx="430" cy="342" rx="26" ry="10"/></g></svg>');
   const PERIODOS = { dia: "Dia", amanhecer: "Amanhecer", crepusculo: "Crepúsculo", noite: "Noite" };
+  /* Fotos locais dos biomas brasileiros (opcionais): se existir
+     /comum/img/biomas/<cenario>.webp (ex.: mata_atlantica.webp), ela é usada
+     primeiro — assim a cena funciona mesmo se a rede bloquear as fotos da internet. */
+  const LOCAIS_BR = new Set();
+  Object.values(BIOMA_CENARIO).forEach(c => { const im = new Image(); im.onload = () => LOCAIS_BR.add(c); im.onerror = () => {}; im.src = "/comum/img/biomas/" + c + ".webp"; });
 
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const lista = v => Array.isArray(v) ? v.filter(Boolean) : (v ? [v] : []);
@@ -288,7 +293,7 @@
     const botoes = Object.entries(PERIODOS).map(([k, n]) => `<button data-per="${k}" class="${k === periodo ? "on" : ""}">${n}</button>`).join("");
     const seed = (bioma.charCodeAt(0) || 65) + bioma.length;
     return `<div class="fp-scene per-${periodo}${aqua ? " fp-aqua" : ""}">
-      <div class="fp-photo" style="background-image:${CENARIOS[cenario] && CENARIOS[cenario].mundo && !fundos[bioma] ? `url(&quot;/comum/img/biomas/${cenario}.webp&quot;),` : ""}url(&quot;${fundoUrl}&quot;)"></div>
+      <div class="fp-photo" style="background-image:${((CENARIOS[cenario] && CENARIOS[cenario].mundo) || LOCAIS_BR.has(cenario)) && !fundos[bioma] && !aqua ? `url(&quot;/comum/img/biomas/${cenario}.webp&quot;),` : ""}url(&quot;${fundoUrl}&quot;)"></div>
       <div class="fp-grade"></div><div class="fp-rays"></div><div class="fp-stars"></div>
       <div class="fp-particles">${motes(seed)}</div><div class="fp-vignette"></div>
       ${roam}${garden}${vazio}
